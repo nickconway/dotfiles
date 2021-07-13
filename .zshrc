@@ -77,7 +77,8 @@ zstyle :omz:plugins:keychain options -q
 
 source $ZSH/oh-my-zsh.sh
 
-PATH="$HOME/.local/bin:$PATH"
+export SPICETIFY_INSTALL="/home/nick/spicetify-cli"
+PATH="$HOME/.local/bin:$HOME/.emacs.d/bin:/home/nick/spicetify-cli:$PATH"
 
 # User configuration
 
@@ -106,7 +107,6 @@ PATH="$HOME/.local/bin:$PATH"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 eval "$(starship init zsh)"
-export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
 export NO_AT_BRIDGE=1
 export VISUAL=emacs
 export EDITOR="$VISUAL"
