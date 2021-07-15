@@ -110,6 +110,7 @@ eval "$(starship init zsh)"
 export NO_AT_BRIDGE=1
 export VISUAL=emacs
 export EDITOR="$VISUAL"
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
 
 alias ys="yadm status"
 alias ya="yadm add"
