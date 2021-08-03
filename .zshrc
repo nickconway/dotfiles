@@ -120,3 +120,5 @@ alias yca="yadm commit -a"
 alias ycam="yadm commit -a -m"
 alias yp="yadm push"
 alias yl="yadm pull"
+
+alias e="emacs"
