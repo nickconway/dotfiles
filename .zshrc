@@ -78,7 +78,7 @@ zstyle :omz:plugins:keychain options -q
 source $ZSH/oh-my-zsh.sh
 
 export SPICETIFY_INSTALL="/home/nick/spicetify-cli"
-PATH="$HOME/.local/bin:$HOME/.emacs.d/bin:/home/nick/spicetify-cli:$HOME/bin:$PATH"
+PATH="$HOME/.local/bin:$HOME/.emacs.d/bin:/home/nick/spicetify-cli:$PATH"
 
 # User configuration
 
