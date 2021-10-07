@@ -124,3 +124,4 @@ alias ye="yadm encrypt"
 alias yd="yadm decrypt"
 
 alias e="emacs"
+export PATH=~/.local/bin:"$PATH"
