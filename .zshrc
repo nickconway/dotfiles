@@ -72,7 +72,7 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git vi-mode gpg-agent keychain tmux screen npm themes zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
-zstyle :omz:plugins:keychain identities gh.key
+zstyle :omz:plugins:keychain identities gh
 zstyle :omz:plugins:keychain options -q
 
 source $ZSH/oh-my-zsh.sh
