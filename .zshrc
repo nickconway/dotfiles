@@ -122,6 +122,7 @@ alias yp="yadm push"
 alias yl="yadm pull"
 alias ye="yadm encrypt"
 alias yd="yadm decrypt"
+alias yu="yadm upgrade"
 
 alias e="emacs"
 export PATH=~/.local/bin:"$PATH"
