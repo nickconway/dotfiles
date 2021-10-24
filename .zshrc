@@ -124,6 +124,8 @@ alias ye="yadm encrypt"
 alias yd="yadm decrypt"
 alias yu="yadm upgrade"
 
+alias c="clear"
+
 pw() {
     rbw get $1 $2 | clip.exe
 }
