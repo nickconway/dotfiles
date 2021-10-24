@@ -124,7 +124,11 @@ alias ye="yadm encrypt"
 alias yd="yadm decrypt"
 alias yu="yadm upgrade"
 
+pw() {
+    rbw get $1 $2 | clip.exe
+}
+
 alias e="emacs"
-export PATH=~/.local/bin:"$PATH"
+export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"
 
 set -o vi
