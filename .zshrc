@@ -10,7 +10,7 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="random"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -77,9 +77,6 @@ zstyle :omz:plugins:keychain options -q
 
 source $ZSH/oh-my-zsh.sh
 
-export SPICETIFY_INSTALL="/home/nick/spicetify-cli"
-PATH="$HOME/.local/bin:$HOME/.emacs.d/bin:/home/nick/spicetify-cli:$PATH"
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -111,6 +108,8 @@ export NO_AT_BRIDGE=1
 export VISUAL=emacs
 export EDITOR="$VISUAL"
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+
+export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 alias ys="yadm status"
 alias ya="yadm add"
