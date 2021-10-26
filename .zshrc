@@ -134,4 +134,3 @@ export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"
 
 set -o vi
 
-neofetch
