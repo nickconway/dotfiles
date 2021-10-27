@@ -130,7 +130,9 @@ pw() {
 }
 
 alias e="emacs"
-alias o="nvim"
+alias n="nvim"
+alias v="n"
+
 export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"
 
 set -o vi
