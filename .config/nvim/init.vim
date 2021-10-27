@@ -25,7 +25,8 @@ set signcolumn=yes
 let mapleader=" "
 
 nnoremap <leader>s :w<CR>
-nnoremap <leader>q :wq<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>sq :wq<CR>
 
 " Yank cursor to eol
 nnoremap Y y$
