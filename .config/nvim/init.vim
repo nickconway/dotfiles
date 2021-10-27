@@ -66,6 +66,7 @@ highlight Normal guibg=none
 
 
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
+nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
 
 
 " Insert only caps-lock
