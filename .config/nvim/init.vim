@@ -24,6 +24,8 @@ set signcolumn=yes
 
 let mapleader=" "
 
+nnoremap ZS :w<CR>
+
 " Yank cursor to eol
 nnoremap Y y$
 
@@ -66,6 +68,11 @@ highlight Normal guibg=none
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
 
 
+" Insert only caps-lock
+for c in range(char2nr('A'), char2nr('Z'))
+    execute 'lnoremap ' . nr2char(c+32) . ' ' . nr2char(c)
+    execute 'lnoremap ' . nr2char(c) . ' ' . nr2char(c+32)
+endfor
 
 fun! TrimWhitespace()
     let l:save = winsaveview()
@@ -76,4 +83,5 @@ endfun
 augroup MAIN
     autocmd!
     autocmd BufWritePre * :call TrimWhitespace()
+    autocmd InsertLeave * set iminsert=0
 augroup END
