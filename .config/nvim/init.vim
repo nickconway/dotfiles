@@ -24,7 +24,8 @@ set signcolumn=yes
 
 let mapleader=" "
 
-nnoremap ZS :w<CR>
+nnoremap <leader>s :w<CR>
+nnoremap <leader>q :wq<CR>
 
 " Yank cursor to eol
 nnoremap Y y$
@@ -62,7 +63,6 @@ call plug#end()
 
 colorscheme onedark
 highlight Normal guibg=none
-
 
 
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
