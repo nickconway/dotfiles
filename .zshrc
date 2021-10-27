@@ -106,7 +106,7 @@ source $ZSH/oh-my-zsh.sh
 eval "$(starship init zsh)"
 export NO_AT_BRIDGE=1
 export VISUAL=emacs
-export EDITOR="$VISUAL"
+export EDITOR=nvim
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
@@ -130,6 +130,7 @@ pw() {
 }
 
 alias e="emacs"
+alias o="nvim"
 export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"
 
 set -o vi
