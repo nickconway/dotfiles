@@ -123,15 +123,16 @@ alias ye="yadm encrypt"
 alias yd="yadm decrypt"
 alias yu="yadm upgrade"
 
+alias e="emacs"
+alias n="nvim"
+alias v="n"
+alias t="tmux"
+
 alias c="clear"
 
 pw() {
     rbw get $1 $2 | clip.exe
 }
-
-alias e="emacs"
-alias n="nvim"
-alias v="n"
 
 export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"
 

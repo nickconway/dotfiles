@@ -26,7 +26,7 @@ let mapleader=" "
 
 nnoremap <leader>s :w<CR>
 nnoremap <leader>q :q<CR>
-nnoremap <leader>sq :wq<CR>
+nnoremap <leader>st :wq<CR>
 
 " Yank cursor to eol
 nnoremap Y y$
