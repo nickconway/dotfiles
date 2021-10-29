@@ -105,7 +105,7 @@ source $ZSH/oh-my-zsh.sh
 
 eval "$(starship init zsh)"
 export NO_AT_BRIDGE=1
-export VISUAL=emacs
+export VISUAL=nvim
 export EDITOR=nvim
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
 
