@@ -130,6 +130,8 @@ alias t="tmux"
 
 alias c="clear"
 
+bindkey -s ^f "tmux-sessionizer\n"
+
 pw() {
     rbw get $1 $2 | clip.exe
 }
