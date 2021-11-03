@@ -76,10 +76,11 @@ nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
 
 let g:which_key_map = {}
 
+nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
+nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
+nnoremap <leader>q :q<CR>
 nnoremap <leader>ss :w<CR>
 nnoremap <leader>st :wq<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
 
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
@@ -104,6 +105,7 @@ endfun
 
 augroup MAIN
     autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
     autocmd BufWritePre * :call TrimWhitespace()
     autocmd InsertLeave * set iminsert=0
     autocmd FileType which_key set laststatus=0 noshowmode noruler
