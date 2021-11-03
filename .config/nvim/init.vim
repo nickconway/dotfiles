@@ -60,6 +60,8 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'joshdick/onedark.vim'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
@@ -67,7 +69,7 @@ call plug#end()
 
 colorscheme onedark
 highlight Normal guibg=none
-
+let g:airline_theme='deus'
 
 
 nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
@@ -81,7 +83,7 @@ nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Git<CR>
 nnoremap <leader>gc :Git commit -v -q<CR>
 nnoremap <leader>gt :Git commit -v -q %:p<CR>
-nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gd :Git diff<CR>
 nnoremap <leader>ge :Gedit<CR>
 nnoremap <leader>gr :Gread<CR>
 nnoremap <leader>gw :Gwrite<CR><CR>
@@ -90,8 +92,8 @@ nnoremap <leader>gg :Ggrep<Space>
 nnoremap <leader>gm :Gmove<Space>
 nnoremap <leader>gb :Git branch<Space>
 nnoremap <leader>go :Git checkout<Space>
-nnoremap <leader>gp :Git! push<CR>
-nnoremap <leader>gl :Git! pull<CR>
+nnoremap <leader>gp :Git push<CR>
+nnoremap <leader>gl :Git pull<CR>
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>ss :w<CR>
