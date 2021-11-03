@@ -78,9 +78,9 @@ let g:which_key_map = {}
 
 nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
 nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit -v -q<CR>
-nnoremap <leader>gt :Gcommit -v -q %:p<CR>
+nnoremap <leader>gs :Git<CR>
+nnoremap <leader>gc :Git commit -v -q<CR>
+nnoremap <leader>gt :Git commit -v -q %:p<CR>
 nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>ge :Gedit<CR>
 nnoremap <leader>gr :Gread<CR>
