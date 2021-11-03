@@ -24,9 +24,7 @@ set signcolumn=yes
 
 let mapleader=" "
 
-nnoremap <leader>s :w<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>st :wq<CR>
+
 
 " Yank cursor to eol
 nnoremap Y y$
@@ -42,21 +40,26 @@ inoremap ! !<c-g>u
 inoremap ? ?<c-g>u
 
 " Move text
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-inoremap <c-j> <esc>:m .+1<CR>==i
-inoremap <c-k> <esc>:m .-2<CR>==i
-nnoremap <leader>j :m .+1<CR>==
-nnoremap <leader>k :m .-2<CR>==
+vnoremap N :m '>+1<CR>gv=gv
+vnoremap E :m '<-2<CR>gv=gv
+inoremap <c-n> <esc>:m .+1<CR>==i
+inoremap <c-e> <esc>:m .-2<CR>==i
+nnoremap <leader>n :m .+1<CR>==
+nnoremap <leader>e :m .-2<CR>==
 
 
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'neovim/nvim-lsp'
+Plug 'nvim-lua/completion-nvim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'liuchengxu/vim-which-key'
 Plug 'joshdick/onedark.vim'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -66,9 +69,26 @@ colorscheme onedark
 highlight Normal guibg=none
 
 
-nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
+
 nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
 
+
+
+let g:which_key_map = {}
+
+nnoremap <leader>ss :w<CR>
+nnoremap <leader>st :wq<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
+
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
+let g:which_key_map.s = { 'name' : '+save', 's' : 'save file', 't' : 'save file and quit', }
+
+
+
+set completeopt=menuone,noinsert,noselect
+let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 " Insert only caps-lock
 for c in range(char2nr('A'), char2nr('Z'))
@@ -86,4 +106,6 @@ augroup MAIN
     autocmd!
     autocmd BufWritePre * :call TrimWhitespace()
     autocmd InsertLeave * set iminsert=0
+    autocmd FileType which_key set laststatus=0 noshowmode noruler
+    autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 augroup END
