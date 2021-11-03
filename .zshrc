@@ -75,6 +75,8 @@ zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities gh
 zstyle :omz:plugins:keychain options -q
 
+ZSH_TMUX_AUTOSTART=true
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
