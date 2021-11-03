@@ -19,7 +19,7 @@ set incsearch
 set termguicolors
 set scrolloff=8
 set signcolumn=yes
-
+set cmdheight=1
 
 
 let mapleader=" "
@@ -84,10 +84,6 @@ call plug#end()
 
 colorscheme onedark
 highlight Normal guibg=none
-let g:airline_theme='deus'
-
-
-nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
 
 
 
@@ -113,6 +109,7 @@ nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim
 nnoremap <leader>q :q<CR>
 nnoremap <leader>ss :w<CR>
 nnoremap <leader>st :wq<CR>
+nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
 
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
