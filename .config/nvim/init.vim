@@ -77,6 +77,21 @@ nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
 let g:which_key_map = {}
 
 nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
+nnoremap <leader>ga :Git add %:p<CR><CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gc :Gcommit -v -q<CR>
+nnoremap <leader>gt :Gcommit -v -q %:p<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>ge :Gedit<CR>
+nnoremap <leader>gr :Gread<CR>
+nnoremap <leader>gw :Gwrite<CR><CR>
+nnoremap <leader>gy :silent! Glog<CR>:bot copen<CR>
+nnoremap <leader>gg :Ggrep<Space>
+nnoremap <leader>gm :Gmove<Space>
+nnoremap <leader>gb :Git branch<Space>
+nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>gp :Git! push<CR>
+nnoremap <leader>gl :Git! pull<CR>
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>ss :w<CR>
