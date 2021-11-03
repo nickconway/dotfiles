@@ -59,15 +59,24 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'nvim-lua/completion-nvim'
+
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+
 Plug 'liuchengxu/vim-which-key'
-Plug 'joshdick/onedark.vim'
+
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-commentary'
+
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'akinsho/bufferline.nvim'
+Plug 'windwp/nvim-autopairs'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'famiu/feline.nvim'
+
+Plug 'joshdick/onedark.vim'
 
 call plug#end()
 
@@ -134,3 +143,10 @@ augroup MAIN
     autocmd FileType which_key set laststatus=0 noshowmode noruler
     autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 augroup END
+
+lua << EOF
+require("bufferline").setup{}
+require("nvim-autopairs").setup{}
+require("gitsigns").setup{}
+require("feline").setup{}
+EOF
