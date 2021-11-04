@@ -18,7 +18,7 @@ set undofile
 set incsearch
 set termguicolors
 set scrolloff=4
-set signcolumn=yes
+set signcolumn=number
 set cmdheight=1
 
 
@@ -68,6 +68,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'folke/which-key.nvim'
 
 Plug 'tpope/vim-obsession'
+Plug 'dhruvasagar/vim-prosession'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 
@@ -86,6 +87,8 @@ call plug#end()
 
 
 nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
+nnoremap <leader>bn :bn<CR>
+nnoremap <leader>bp :bp<CR>
 nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Git<CR>
 nnoremap <leader>gc :Git commit -v -q<CR>
