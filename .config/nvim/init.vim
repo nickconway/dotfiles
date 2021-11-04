@@ -17,9 +17,10 @@ set undodir=~/.vim/undodir
 set undofile
 set incsearch
 set termguicolors
-set scrolloff=8
-set signcolumn=yes
+set scrolloff=4
+"set signcolumn=yes
 set cmdheight=1
+
 
 
 let mapleader=" "
@@ -76,14 +77,9 @@ Plug 'windwp/nvim-autopairs'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'famiu/feline.nvim'
 
-Plug 'joshdick/onedark.vim'
+Plug 'navarasu/onedark.nvim'
 
 call plug#end()
-
-
-
-colorscheme onedark
-highlight Normal guibg=none
 
 
 
@@ -141,4 +137,11 @@ require("nvim-autopairs").setup{}
 require("gitsigns").setup{}
 require("feline").setup{}
 require("which-key").setup{}
+require("onedark").setup{}
 EOF
+
+let g:onedark_transparent_style = 'v:true'
+let g:onedark_disable_terminal_colors = "v:true"
+colorscheme onedark
+highlight Normal guibg=none
+
