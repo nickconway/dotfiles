@@ -75,7 +75,9 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'akinsho/bufferline.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'lewis6991/gitsigns.nvim'
-Plug 'famiu/feline.nvim'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 Plug 'navarasu/onedark.nvim'
 
@@ -135,7 +137,6 @@ lua << EOF
 require("bufferline").setup{}
 require("nvim-autopairs").setup{}
 require("gitsigns").setup{}
-require("feline").setup{}
 require("which-key").setup{}
 require("onedark").setup{}
 EOF
