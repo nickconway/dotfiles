@@ -128,6 +128,7 @@ alias yu="yadm upgrade"
 alias e="emacs"
 alias n="nvim"
 alias v="n"
+alias vs="v -S Session.vim"
 alias t="tmux"
 
 alias c="clear"

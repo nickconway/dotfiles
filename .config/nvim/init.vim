@@ -18,7 +18,7 @@ set undofile
 set incsearch
 set termguicolors
 set scrolloff=4
-"set signcolumn=yes
+set signcolumn=yes
 set cmdheight=1
 
 
@@ -101,6 +101,7 @@ nnoremap <leader>gb :Git branch<Space>
 nnoremap <leader>go :Git checkout<Space>
 nnoremap <leader>gp :Git push<CR>
 nnoremap <leader>gl :Git pull<CR>
+nnoremap <leader>oo :Obsess<CR>
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
 nnoremap <leader>qq :q<CR>
 nnoremap <leader>ss :w<CR>
@@ -145,4 +146,3 @@ let g:onedark_transparent_style = 'v:true'
 let g:onedark_disable_terminal_colors = "v:true"
 colorscheme onedark
 highlight Normal guibg=none
-
