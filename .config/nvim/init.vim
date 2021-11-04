@@ -64,7 +64,7 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
-Plug 'liuchengxu/vim-which-key'
+Plug 'folke/which-key.nvim'
 
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-fugitive'
@@ -87,8 +87,6 @@ highlight Normal guibg=none
 
 
 
-let g:which_key_map = {}
-
 nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
 nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Git<CR>
@@ -106,14 +104,10 @@ nnoremap <leader>go :Git checkout<Space>
 nnoremap <leader>gp :Git push<CR>
 nnoremap <leader>gl :Git pull<CR>
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
-nnoremap <leader>q :q<CR>
+nnoremap <leader>qq :q<CR>
 nnoremap <leader>ss :w<CR>
 nnoremap <leader>st :wq<CR>
 nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
-
-nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-
-let g:which_key_map.s = { 'name' : '+save', 's' : 'save file', 't' : 'save file and quit', }
 
 
 
@@ -146,4 +140,5 @@ require("bufferline").setup{}
 require("nvim-autopairs").setup{}
 require("gitsigns").setup{}
 require("feline").setup{}
+require("which-key").setup{}
 EOF
