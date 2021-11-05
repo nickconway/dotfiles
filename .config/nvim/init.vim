@@ -169,5 +169,5 @@ let g:onedark_transparent_style = 'v:true'
 let g:onedark_disable_terminal_colors = "v:true"
 colorscheme onedark
 highlight Normal guibg=none
-highlight NonText guifg=none guibg=none
-highlight EndOfBuffer ctermfg=black ctermbg=black
+highlight EndOfBuffer guibg=none guifg=guibg ctermfg=white ctermbg=white
+let &fillchars ..= ',eob: '
