@@ -64,6 +64,7 @@ Plug 'nvim-lua/completion-nvim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
 
 Plug 'folke/which-key.nvim'
 
@@ -87,6 +88,9 @@ call plug#end()
 
 
 nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
+nnoremap <leader>bb :BufferLinePick<CR>
+nnoremap <leader>bfd :bdelete!<CR>
+nnoremap <leader>bd :bdelete<CR>
 nnoremap <leader>bn :bn<CR>
 nnoremap <leader>bp :bp<CR>
 nnoremap <leader>ga :Git add %:p<CR><CR>
@@ -105,11 +109,16 @@ nnoremap <leader>go :Git checkout<Space>
 nnoremap <leader>gp :Git push<CR>
 nnoremap <leader>gl :Git pull<CR>
 nnoremap <leader>oo :Obsess<CR>
-nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep for > ")})<CR>
+nnoremap <leader>pi :PlugInstall<CR>
+tnoremap <leader>qq <C-\><C-n>
 nnoremap <leader>qq :q<CR>
+nnoremap <leader>so :so ~/.config/nvim/init.vim<CR>
 nnoremap <leader>ss :w<CR>
 nnoremap <leader>st :wq<CR>
-nnoremap <c-p> :lua require('telescope.builtin').find_files{}<CR>
+nnoremap <leader>ff :lua require('telescope.builtin').find_files{}<CR>
+nnoremap <leader>fg :lua require('telescope.builtin').live_grep()<CR>
+nnoremap <leader>fb :lua require('telescope.builtin').buffers()<CR>
+nnoremap <leader>fh :lua require('telescope.builtin').help_tags()<CR>
 
 
 
@@ -143,9 +152,22 @@ require("nvim-autopairs").setup{}
 require("gitsigns").setup{}
 require("which-key").setup{}
 require("onedark").setup{}
+require('telescope').setup{
+    extensions = {
+        fzy_native = {
+            override_generic_sorter = false,
+            override_file_sorter = true,
+            }
+        }
+}
+require('telescope').load_extension('fzy_native')
 EOF
 
+let g:airline_powerline_fonts = 1
+let g:airline_theme = "minimalist"
 let g:onedark_transparent_style = 'v:true'
 let g:onedark_disable_terminal_colors = "v:true"
 colorscheme onedark
 highlight Normal guibg=none
+highlight NonText guifg=none guibg=none
+highlight EndOfBuffer ctermfg=black ctermbg=black
