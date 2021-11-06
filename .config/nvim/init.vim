@@ -61,6 +61,8 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'nvim-lua/completion-nvim'
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -116,9 +118,12 @@ nnoremap <leader>so :so ~/.config/nvim/init.vim<CR>
 nnoremap <leader>ss :w<CR>
 nnoremap <leader>st :wq<CR>
 nnoremap <leader>ff :lua require('telescope.builtin').find_files{}<CR>
-nnoremap <leader>fg :lua require('telescope.builtin').live_grep()<CR>
 nnoremap <leader>fb :lua require('telescope.builtin').buffers()<CR>
+nnoremap <leader>fg :lua require('telescope.builtin').git_files()<CR>
 nnoremap <leader>fh :lua require('telescope.builtin').help_tags()<CR>
+nnoremap <leader>fi :lua require('telescope.builtin').file_browser()<CR>
+nnoremap <leader>fp :lua require('telescope.builtin').live_grep()<CR>
+nnoremap <leader>fs :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR><CR>
 
 
 
@@ -161,6 +166,7 @@ require('telescope').setup{
         }
 }
 require('telescope').load_extension('fzy_native')
+require('nvim-treesitter').setup{}
 EOF
 
 let g:airline_powerline_fonts = 1
@@ -169,5 +175,5 @@ let g:onedark_transparent_style = 'v:true'
 let g:onedark_disable_terminal_colors = "v:true"
 colorscheme onedark
 highlight Normal guibg=none
-highlight EndOfBuffer guibg=none guifg=guibg ctermfg=white ctermbg=white
-let &fillchars ..= ',eob: '
+highlight EndOfBuffer guibg=none guifg=guibg
+set fillchars=eob:\ ,
