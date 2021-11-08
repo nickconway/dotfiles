@@ -23,14 +23,14 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 33) / 67)
+let s:l = 32 - ((31 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
-normal! 0
+keepjumps 32
+normal! 019|
 tabnext 1
-badd +143 corneishzen/config/corne-ish_zen.keymap
+badd +0 corneishzen/config/corne-ish_zen.keymap
 badd +6 corneishzen/config/corne-ish_zen_left.conf
 badd +6 corneishzen/config/corne-ish_zen_right.conf
 badd +11 corneishzen/config/west.yml
@@ -44,6 +44,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 let g:this_session = v:this_session
 let g:this_obsession = v:this_session
 doautoall SessionLoadPost

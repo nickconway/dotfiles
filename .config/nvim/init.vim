@@ -18,7 +18,7 @@ set undofile
 set incsearch
 set termguicolors
 set scrolloff=4
-set signcolumn=number
+set signcolumn=yes
 set cmdheight=1
 
 
@@ -80,8 +80,7 @@ Plug 'akinsho/bufferline.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'lewis6991/gitsigns.nvim'
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'navarasu/onedark.nvim'
 
@@ -89,41 +88,41 @@ call plug#end()
 
 
 
-nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
-nnoremap <leader>bb :BufferLinePick<CR>
-nnoremap <leader>bfd :bdelete!<CR>
-nnoremap <leader>bd :bdelete<CR>
-nnoremap <leader>bn :bn<CR>
-nnoremap <leader>bp :bp<CR>
-nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gs :Git<CR>
-nnoremap <leader>gc :Git commit -v -q<CR>
-nnoremap <leader>gt :Git commit -v -q %:p<CR>
-nnoremap <leader>gd :Git diff<CR>
-nnoremap <leader>ge :Gedit<CR>
-nnoremap <leader>gr :Gread<CR>
-nnoremap <leader>gw :Gwrite<CR><CR>
-nnoremap <leader>gy :silent! Glog<CR>:bot copen<CR>
-nnoremap <leader>gg :Ggrep<Space>
-nnoremap <leader>gm :Gmove<Space>
-nnoremap <leader>gb :Git branch<Space>
-nnoremap <leader>go :Git checkout<Space>
-nnoremap <leader>gp :Git push<CR>
-nnoremap <leader>gl :Git pull<CR>
-nnoremap <leader>oo :Obsess<CR>
-nnoremap <leader>pi :PlugInstall<CR>
-tnoremap <leader>qq <C-\><C-n>
-nnoremap <leader>qq :q<CR>
-nnoremap <leader>so :so ~/.config/nvim/init.vim<CR>
-nnoremap <leader>ss :w<CR>
-nnoremap <leader>st :wq<CR>
-nnoremap <leader>ff :lua require('telescope.builtin').find_files{}<CR>
-nnoremap <leader>fb :lua require('telescope.builtin').buffers()<CR>
-nnoremap <leader>fg :lua require('telescope.builtin').git_files()<CR>
-nnoremap <leader>fh :lua require('telescope.builtin').help_tags()<CR>
-nnoremap <leader>fi :lua require('telescope.builtin').file_browser()<CR>
-nnoremap <leader>fp :lua require('telescope.builtin').live_grep()<CR>
-nnoremap <leader>fs :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR><CR>
+nnoremap <silent> <leader><CR> :so ~/.config/nvim/init.vim<CR>
+nnoremap <silent> <leader>bb :BufferLinePick<CR>
+nnoremap <silent> <leader>bfd :bdelete!<CR>
+nnoremap <silent> <leader>bd :bdelete<CR>
+nnoremap <silent> <leader>bn :bn<CR>
+nnoremap <silent> <leader>bp :bp<CR>
+nnoremap <silent> <leader>ga :Git add %:p<CR><CR>
+nnoremap <silent> <leader>gs :Git<CR>
+nnoremap <silent> <leader>gc :Git commit -v -q<CR>
+nnoremap <silent> <leader>gt :Git commit -v -q %:p<CR>
+nnoremap <silent> <leader>gd :Git diff<CR>
+nnoremap <silent> <leader>ge :Gedit<CR>
+nnoremap <silent> <leader>gr :Gread<CR>
+nnoremap <silent> <leader>gw :Gwrite<CR><CR>
+nnoremap <silent> <leader>gy :silent! Glog<CR>:bot copen<CR>
+nnoremap <silent> <leader>gg :Ggrep<Space>
+nnoremap <silent> <leader>gm :Gmove<Space>
+nnoremap <silent> <leader>gb :Git branch<Space>
+nnoremap <silent> <leader>go :Git checkout<Space>
+nnoremap <silent> <leader>gp :Git push<CR>
+nnoremap <silent> <leader>gl :Git pull<CR>
+nnoremap <silent> <leader>oo :Obsess<CR>
+nnoremap <silent> <leader>pi :PlugInstall<CR>
+tnoremap <silent> <leader>qq <C-\><C-n>
+nnoremap <silent> <leader>qq :q<CR>
+nnoremap <silent> <leader>so :so ~/.config/nvim/init.vim<CR>
+nnoremap <silent> <leader>ss :w<CR>
+nnoremap <silent> <leader>st :wq<CR>
+nnoremap <silent> <leader>ff :lua require('telescope.builtin').find_files{}<CR>
+nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers()<CR>
+nnoremap <silent> <leader>fg :lua require('telescope.builtin').git_files()<CR>
+nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags()<CR>
+nnoremap <silent> <leader>fi :lua require('telescope.builtin').file_browser()<CR>
+nnoremap <silent> <leader>fp :lua require('telescope.builtin').live_grep()<CR>
+nnoremap <silent> <leader>fs :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR><CR>
 
 
 
@@ -167,6 +166,7 @@ require('telescope').setup{
 }
 require('telescope').load_extension('fzy_native')
 require('nvim-treesitter').setup{}
+require('lualine').setup{}
 EOF
 
 let g:airline_powerline_fonts = 1
@@ -175,5 +175,6 @@ let g:onedark_transparent_style = 'v:true'
 let g:onedark_disable_terminal_colors = "v:true"
 colorscheme onedark
 highlight Normal guibg=none
+highlight SignColumn guibg=none
 highlight EndOfBuffer guibg=none guifg=guibg
 set fillchars=eob:\ ,

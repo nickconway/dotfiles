@@ -12,7 +12,7 @@ argglobal
 %argdel
 edit ~/.config/nvim/init.vim
 argglobal
-balt ~/.zshrc
+balt ~/.tmux.conf
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -23,17 +23,17 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 178 - ((37 * winheight(0) + 26) / 53)
+let s:l = 169 - ((37 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 178
-normal! 044|
+keepjumps 169
+normal! 025|
 lcd ~/
 tabnext 1
-badd +128 ~/.config/nvim/init.vim
-badd +21 ~/.tmux.conf
-badd +104 ~/.zshrc
+badd +0 ~/.config/nvim/init.vim
+badd +49 ~/.tmux.conf
+badd +1 ~/.zshrc
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
@@ -44,6 +44,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

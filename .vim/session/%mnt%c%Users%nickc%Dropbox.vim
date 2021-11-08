@@ -10,9 +10,9 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-edit Windows/bug.nl/src/Config.ini
+edit Windows/bug.n/src/Config.ini
 argglobal
-balt Windows/bug.nl/src/Config.ini
+balt Windows/bug.n/src/Config.ini
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -23,14 +23,15 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 110 - ((36 * winheight(0) + 26) / 53)
+let s:l = 41 - ((40 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 110
-normal! 044|
+keepjumps 41
+normal! 023|
+lcd /mnt/c/Users/nickc/Dropbox
 tabnext 1
-badd +0 Windows/bug.nl/src/Config.ini
+badd +0 /mnt/c/Users/nickc/Dropbox/Windows/bug.n/src/Config.ini
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
