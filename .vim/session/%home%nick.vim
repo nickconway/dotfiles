@@ -11,6 +11,11 @@ set shortmess=aoO
 argglobal
 %argdel
 edit ~/.config/nvim/init.vim
+let s:save_splitbelow = &splitbelow
+let s:save_splitright = &splitright
+set splitbelow splitright
+let &splitbelow = s:save_splitbelow
+let &splitright = s:save_splitright
 wincmd t
 let s:save_winminheight = &winminheight
 let s:save_winminwidth = &winminwidth
@@ -19,7 +24,6 @@ set winheight=1
 set winminwidth=0
 set winwidth=1
 argglobal
-balt ~/.tmux.conf
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -30,16 +34,16 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 76 - ((4 * winheight(0) + 40) / 80)
+let s:l = 143 - ((21 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 76
-normal! 023|
+keepjumps 143
+normal! 06|
 lcd ~/
 tabnext 1
-badd +76 ~/.config/nvim/init.vim
-badd +103 ~/.tmux.conf
+badd +143 ~/.config/nvim/init.vim
+badd +1 ~/.tmux.conf
 badd +1 ~/.zshrc
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -53,6 +57,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 let g:this_session = v:this_session
 let g:this_obsession = v:this_session
 doautoall SessionLoadPost

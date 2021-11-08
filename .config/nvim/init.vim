@@ -27,30 +27,6 @@ let mapleader=" "
 
 
 
-" Yank cursor to eol
-nnoremap Y y$
-
-" Keep centered
-nnoremap n nzzzv
-nnoremap N Nzzzv
-nnoremap J mzJ`z
-
-" Typing breakpoints
-inoremap , ,<c-g>u
-inoremap . .<c-g>u
-inoremap ! !<c-g>u
-inoremap ? ?<c-g>u
-
-" Move text
-vnoremap N :m '>+1<CR>gv=gv
-vnoremap E :m '<-2<CR>gv=gv
-inoremap <c-n> <esc>:m .+1<CR>==i
-inoremap <c-e> <esc>:m .-2<CR>==i
-nnoremap <leader>n :m .+1<CR>==
-nnoremap <leader>e :m .-2<CR>==
-
-
-
 call plug#begin('~/.vim/plugged')
 
 Plug 'neovim/nvim-lspconfig'
@@ -86,6 +62,28 @@ Plug 'navarasu/onedark.nvim'
 call plug#end()
 
 
+
+" Yank cursor to eol
+nnoremap Y y$
+
+" Keep centered
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
+
+" Typing breakpoints
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
+
+" Move text
+vnoremap N :m '>+1<CR>gv=gv
+vnoremap E :m '<-2<CR>gv=gv
+inoremap <silent> <c-n> <esc>:m .+1<CR>==i
+inoremap <silent> <c-e> <esc>:m .-2<CR>==i
+nnoremap <silent> <leader>e :m .-2<CR>==
+nnoremap <silent><leader>n :m .+1<CR>==
 
 nnoremap <silent> <leader><CR> :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>bb :BufferLinePick<CR>
@@ -150,6 +148,7 @@ augroup MAIN
 augroup END
 
 lua << EOF
+require('lspconfig').vimls.setup{}
 require("bufferline").setup{}
 require("gitsigns").setup{
     current_line_blame = true,

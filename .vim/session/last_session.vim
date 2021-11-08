@@ -23,17 +23,17 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 62 - ((8 * winheight(0) + 40) / 80)
+let s:l = 47 - ((5 * winheight(0) + 40) / 80)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 62
-normal! 0
+keepjumps 47
+normal! 06|
 lcd ~/
 tabnext 1
-badd +0 ~/.config/nvim/init.vim
-badd +103 ~/.tmux.conf
+badd +142 ~/.config/nvim/init.vim
 badd +1 ~/.zshrc
+badd +1 ~/.tmux.conf
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
