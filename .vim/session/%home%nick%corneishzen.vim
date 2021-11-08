@@ -10,9 +10,9 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-edit corneishzen/config/corne-ish_zen.keymap
+edit corneishzen/config/corne-ish_zen_left.conf
 argglobal
-balt corneishzen/config/corne-ish_zen_right.conf
+balt corneishzen/config/corne-ish_zen.keymap
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -23,14 +23,14 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 18 - ((17 * winheight(0) + 40) / 80)
+let s:l = 1 - ((0 * winheight(0) + 40) / 80)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 18
-normal! 018|
+keepjumps 1
+normal! 0
 tabnext 1
-badd +0 corneishzen/config/corne-ish_zen.keymap
+badd +1 corneishzen/config/corne-ish_zen.keymap
 badd +1 corneishzen/config/corne-ish_zen_right.conf
 badd +1 corneishzen/config/corne-ish_zen_left.conf
 badd +1 corneishzen/config/west.yml

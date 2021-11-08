@@ -124,6 +124,7 @@ nnoremap <silent> <leader>fs :lua require('telescope.builtin').current_buffer_fu
 
 
 set completeopt=menuone,noinsert,noselect
+set sessionoptions+=globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 " Insert only caps-lock
@@ -149,6 +150,7 @@ augroup END
 
 lua << EOF
 require('lspconfig').vimls.setup{}
+require('lspconfig').pyright.setup{}
 require("bufferline").setup{}
 require("gitsigns").setup{
     current_line_blame = true,
