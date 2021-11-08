@@ -23,12 +23,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 41 - ((40 * winheight(0) + 27) / 54)
+let s:l = 70 - ((21 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 41
-normal! 023|
+keepjumps 70
+normal! 0111|
 lcd /mnt/c/Users/nickc/Dropbox
 tabnext 1
 badd +0 /mnt/c/Users/nickc/Dropbox/Windows/bug.n/src/Config.ini

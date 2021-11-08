@@ -154,7 +154,12 @@ augroup END
 lua << EOF
 require("bufferline").setup{}
 require("nvim-autopairs").setup{}
-require("gitsigns").setup{}
+require("gitsigns").setup{
+    current_line_blame = true,
+    yadm = {
+        enable = true
+        }
+}
 require("which-key").setup{}
 require("onedark").setup{}
 require('telescope').setup{

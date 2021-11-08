@@ -3,16 +3,16 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~/.vim/plugged/nvim-treesitter
+cd /mnt/c/Users/nickc/Dropbox
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
 argglobal
 %argdel
-edit ~/.config/nvim/init.vim
+edit Windows/bug.n/src/Config.ini
 argglobal
-balt ~/.tmux.conf
+balt Windows/bug.n/src/Config.ini
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -23,17 +23,15 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 173 - ((44 * winheight(0) + 26) / 53)
+let s:l = 70 - ((21 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 173
-normal! 02|
-lcd ~/
+keepjumps 70
+normal! 0111|
+lcd /mnt/c/Users/nickc/Dropbox
 tabnext 1
-badd +173 ~/.config/nvim/init.vim
-badd +49 ~/.tmux.conf
-badd +1 ~/.zshrc
+badd +0 /mnt/c/Users/nickc/Dropbox/Windows/bug.n/src/Config.ini
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
@@ -44,6 +42,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :
