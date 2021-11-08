@@ -23,15 +23,15 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 169 - ((37 * winheight(0) + 33) / 67)
+let s:l = 173 - ((44 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 169
-normal! 025|
+keepjumps 173
+normal! 02|
 lcd ~/
 tabnext 1
-badd +0 ~/.config/nvim/init.vim
+badd +173 ~/.config/nvim/init.vim
 badd +49 ~/.tmux.conf
 badd +1 ~/.zshrc
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
@@ -44,7 +44,6 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

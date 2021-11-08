@@ -35,6 +35,7 @@ nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap J mzJ`z
 
+" Typing breakpoints
 inoremap , ,<c-g>u
 inoremap . .<c-g>u
 inoremap ! !<c-g>u
@@ -169,10 +170,6 @@ require('nvim-treesitter').setup{}
 require('lualine').setup{}
 EOF
 
-let g:airline_powerline_fonts = 1
-let g:airline_theme = "minimalist"
-let g:onedark_transparent_style = 'v:true'
-let g:onedark_disable_terminal_colors = "v:true"
 colorscheme onedark
 highlight Normal guibg=none
 highlight SignColumn guibg=none
