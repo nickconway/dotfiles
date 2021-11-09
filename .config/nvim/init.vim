@@ -122,7 +122,6 @@ nnoremap <silent> <leader>qq :q<CR>
 nnoremap <silent> <leader>so :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>ss :w<CR>
 nnoremap <silent> <leader>st :wq<CR>
-nnoremap <silent> <leader>ycam :! yadm commit -a -m "Update config"<CR>
 
 
 

@@ -31,12 +31,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 125 - ((33 * winheight(0) + 26) / 53)
+let s:l = 125 - ((42 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 125
-normal! 050|
+normal! 0
 tabnext 1
 badd +125 ~/.config/nvim/init.vim
 badd +1 ~/.tmux.conf
