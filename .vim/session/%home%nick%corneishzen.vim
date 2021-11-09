@@ -12,7 +12,7 @@ argglobal
 %argdel
 edit corneishzen/config/corne-ish_zen.keymap
 argglobal
-balt corneishzen/config/corne-ish_zen_left.conf
+balt corneishzen/config/west.yml
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -23,17 +23,17 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 17 - ((16 * winheight(0) + 19) / 38)
+let s:l = 37 - ((35 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 17
-normal! 018|
+keepjumps 37
+normal! 043|
 tabnext 1
 badd +0 corneishzen/config/corne-ish_zen.keymap
-badd +1 corneishzen/config/corne-ish_zen_left.conf
-badd +1 corneishzen/config/corne-ish_zen_right.conf
-badd +1 corneishzen/config/west.yml
+badd +11 corneishzen/config/west.yml
+badd +6 corneishzen/config/corne-ish_zen_left.conf
+badd +6 corneishzen/config/corne-ish_zen_right.conf
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif

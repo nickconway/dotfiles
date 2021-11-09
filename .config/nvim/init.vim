@@ -127,7 +127,68 @@ set completeopt=menuone,noinsert,noselect
 set sessionoptions+=globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
-" Insert only caps-lock
+lua << EOF
+require("bufferline").setup{}
+
+require("gitsigns").setup{
+    current_line_blame = true,
+    yadm = {
+        enable = true
+        }
+}
+
+require("which-key").setup{}
+require("onedark").setup{}
+
+require('telescope').setup{
+    extensions = {
+        fzy_native = {
+            override_generic_sorter = false,
+            override_file_sorter = true,
+            }
+        }
+}
+
+require('telescope').load_extension('fzy_native')
+require('nvim-treesitter').setup{}
+require('lualine').setup{}
+
+local cmp = require('cmp')
+cmp.setup{
+    sources = cmp.config.sources({
+        {name = 'nvim-lsp'},
+        {name = 'buffer'},
+        {name = 'path'},
+    })
+}
+cmp.setup.cmdline('/', {
+    sources = {
+        {name = 'path'},
+        }
+    })
+cmp.setup.cmdline(':', {
+    sources = {
+        {name = 'path'},
+        {name = 'cmdline'}
+        }
+    })
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+require('lspconfig').vimls.setup{
+    capabilities = capabilities
+}
+require('lspconfig').pyright.setup{
+    capabilities = capabilities
+}
+EOF
+
+colorscheme onedark
+highlight Normal guibg=none
+highlight SignColumn guibg=none
+highlight EndOfBuffer guibg=none guifg=guibg
+set fillchars=eob:\ ," Insert only caps-lock
 for c in range(char2nr('A'), char2nr('Z'))
     execute 'lnoremap ' . nr2char(c+32) . ' ' . nr2char(c)
     execute 'lnoremap ' . nr2char(c) . ' ' . nr2char(c+32)
@@ -147,34 +208,3 @@ augroup MAIN
     autocmd FileType which_key set laststatus=0 noshowmode noruler
     autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 augroup END
-
-lua << EOF
-require('lspconfig').vimls.setup{}
-require('lspconfig').pyright.setup{}
-require("bufferline").setup{}
-require("gitsigns").setup{
-    current_line_blame = true,
-    yadm = {
-        enable = true
-        }
-}
-require("which-key").setup{}
-require("onedark").setup{}
-require('telescope').setup{
-    extensions = {
-        fzy_native = {
-            override_generic_sorter = false,
-            override_file_sorter = true,
-            }
-        }
-}
-require('telescope').load_extension('fzy_native')
-require('nvim-treesitter').setup{}
-require('lualine').setup{}
-EOF
-
-colorscheme onedark
-highlight Normal guibg=none
-highlight SignColumn guibg=none
-highlight EndOfBuffer guibg=none guifg=guibg
-set fillchars=eob:\ ,
