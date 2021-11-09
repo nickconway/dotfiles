@@ -1,6 +1,14 @@
 let SessionLoad = 1
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
+let UltiSnipsExpandTrigger = "<tab>"
+let UltiSnipsListSnippets = "<c-tab>"
+let UltiSnipsEditSplit = "normal"
+let UltiSnipsEnableSnipMate =  1 
+let UltiSnipsJumpBackwardTrigger = "<c-k>"
+let UltiSnipsJumpForwardTrigger = "<c-j>"
+let BufferlinePositions = "3,4,2"
+let UltiSnipsRemoveSelectModeMappings =  1 
 silent only
 silent tabonly
 cd ~/.vim/plugged/nvim-treesitter
@@ -10,30 +18,28 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-edit ~/.config/nvim/init.vim
+edit ~/.config/nvim/UltiSnips/vim.snippets
 argglobal
-balt ~/.zshrc
-setlocal fdm=manual
+balt ~/.config/nvim/init.vim
+setlocal fdm=syntax
 setlocal fde=0
 setlocal fmr={{{,}}}
 setlocal fdi=#
-setlocal fdl=0
+setlocal fdl=99
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 185 - ((47 * winheight(0) + 26) / 53)
+let s:l = 1 - ((0 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 185
-normal! 03|
-lcd ~/
+keepjumps 1
+normal! 0
 tabnext 1
-badd +0 ~/.config/nvim/init.vim
-badd +1 ~/.zshrc
+badd +165 ~/.config/nvim/init.vim
 badd +1 ~/.tmux.conf
+badd +1 ~/.zshrc
+badd +0 ~/.config/nvim/UltiSnips/vim.snippets
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
@@ -44,6 +50,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

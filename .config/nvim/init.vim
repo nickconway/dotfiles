@@ -36,7 +36,7 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -44,6 +44,9 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 
 Plug 'folke/which-key.nvim'
+
+Plug 'SirVer/ultisnips'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
@@ -149,15 +152,20 @@ require('telescope').setup{
 }
 
 require('telescope').load_extension('fzy_native')
-require('nvim-treesitter').setup{}
+-- require('nvim-treesitter').setup{}
 require('lualine').setup{}
 
 local cmp = require('cmp')
 cmp.setup{
+    snippet = {
+        expand = function(args)
+            vim.fn['UltiSnips#Anon'](args.body)
+        end,
+        },
     sources = cmp.config.sources({
         {name = 'nvim-lsp'},
         {name = 'buffer'},
-        {name = 'path'},
+        {name = 'ultisnips'},
     })
 }
 cmp.setup.cmdline('/', {
