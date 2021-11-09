@@ -23,12 +23,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 37 - ((35 * winheight(0) + 33) / 67)
+let s:l = 20 - ((19 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 37
-normal! 043|
+keepjumps 20
+normal! 05|
 tabnext 1
 badd +0 corneishzen/config/corne-ish_zen.keymap
 badd +11 corneishzen/config/west.yml
