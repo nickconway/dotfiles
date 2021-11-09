@@ -189,6 +189,7 @@ highlight Normal guibg=none
 highlight SignColumn guibg=none
 highlight EndOfBuffer guibg=none guifg=guibg
 set fillchars=eob:\ ," Insert only caps-lock
+
 for c in range(char2nr('A'), char2nr('Z'))
     execute 'lnoremap ' . nr2char(c+32) . ' ' . nr2char(c)
     execute 'lnoremap ' . nr2char(c) . ' ' . nr2char(c+32)
