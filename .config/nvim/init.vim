@@ -93,6 +93,13 @@ nnoremap <silent> <leader>bfd :bdelete!<CR>
 nnoremap <silent> <leader>bd :bdelete<CR>
 nnoremap <silent> <leader>bn :bn<CR>
 nnoremap <silent> <leader>bp :bp<CR>
+nnoremap <silent> <leader>ff :lua require('telescope.builtin').find_files{}<CR>
+nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers()<CR>
+nnoremap <silent> <leader>fg :lua require('telescope.builtin').git_files()<CR>
+nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags()<CR>
+nnoremap <silent> <leader>fi :lua require('telescope.builtin').file_browser()<CR>
+nnoremap <silent> <leader>fp :lua require('telescope.builtin').live_grep()<CR>
+nnoremap <silent> <leader>fs :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR><CR>
 nnoremap <silent> <leader>ga :Git add %:p<CR><CR>
 nnoremap <silent> <leader>gs :Git<CR>
 nnoremap <silent> <leader>gc :Git commit -v -q<CR>
@@ -115,13 +122,7 @@ nnoremap <silent> <leader>qq :q<CR>
 nnoremap <silent> <leader>so :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>ss :w<CR>
 nnoremap <silent> <leader>st :wq<CR>
-nnoremap <silent> <leader>ff :lua require('telescope.builtin').find_files{}<CR>
-nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers()<CR>
-nnoremap <silent> <leader>fg :lua require('telescope.builtin').git_files()<CR>
-nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags()<CR>
-nnoremap <silent> <leader>fi :lua require('telescope.builtin').file_browser()<CR>
-nnoremap <silent> <leader>fp :lua require('telescope.builtin').live_grep()<CR>
-nnoremap <silent> <leader>fs :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR><CR>
+nnoremap <silent> <leader>ycam :! yadm commit -a -m "Update config"<CR>
 
 
 
