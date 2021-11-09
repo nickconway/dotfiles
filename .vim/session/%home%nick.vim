@@ -1,10 +1,10 @@
 let SessionLoad = 1
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
-let UltiSnipsExpandTrigger = "<tab>"
+let UltiSnipsEnableSnipMate =  1 
 let UltiSnipsListSnippets = "<c-tab>"
 let UltiSnipsEditSplit = "normal"
-let UltiSnipsEnableSnipMate =  1 
+let UltiSnipsExpandTrigger = "<tab>"
 let UltiSnipsJumpBackwardTrigger = "<c-k>"
 let UltiSnipsJumpForwardTrigger = "<c-j>"
 let BufferlinePositions = "3,4,2"
@@ -20,6 +20,7 @@ argglobal
 %argdel
 edit ~/.config/nvim/init.vim
 argglobal
+balt ~/.config/nvim/init.vim
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -30,14 +31,14 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 26) / 53)
+let s:l = 146 - ((4 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
+keepjumps 146
 normal! 0
 tabnext 1
-badd +165 ~/.config/nvim/init.vim
+badd +0 ~/.config/nvim/init.vim
 badd +1 ~/.tmux.conf
 badd +1 ~/.zshrc
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
