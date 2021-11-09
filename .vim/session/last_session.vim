@@ -3,16 +3,16 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd /mnt/c/Users/nickc/Dropbox
+cd ~/
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
 argglobal
 %argdel
-edit Windows/bug.n/src/Config.ini
+edit .config/nvim/init.vim
 argglobal
-balt Windows/bug.n/src/Config.ini
+balt .zshrc
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -23,15 +23,16 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 70 - ((21 * winheight(0) + 27) / 54)
+let s:l = 26 - ((25 * winheight(0) + 19) / 38)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 70
-normal! 0111|
-lcd /mnt/c/Users/nickc/Dropbox
+keepjumps 26
+normal! 017|
 tabnext 1
-badd +0 /mnt/c/Users/nickc/Dropbox/Windows/bug.n/src/Config.ini
+badd +34 .config/nvim/init.vim
+badd +1 .tmux.conf
+badd +1 .zshrc
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif

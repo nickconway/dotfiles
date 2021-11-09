@@ -27,40 +27,15 @@ let mapleader=" "
 
 
 
-" Yank cursor to eol
-nnoremap Y y$
-
-" Keep centered
-nnoremap n nzzzv
-nnoremap N Nzzzv
-nnoremap J mzJ`z
-
-" Typing breakpoints
-inoremap , ,<c-g>u
-inoremap . .<c-g>u
-inoremap ! !<c-g>u
-inoremap ? ?<c-g>u
-
-" Move text
-vnoremap N :m '>+1<CR>gv=gv
-vnoremap E :m '<-2<CR>gv=gv
-inoremap <c-n> <esc>:m .+1<CR>==i
-inoremap <c-e> <esc>:m .-2<CR>==i
-nnoremap <leader>n :m .+1<CR>==
-nnoremap <leader>e :m .-2<CR>==
-
-
-
 call plug#begin('~/.vim/plugged')
 
-Plug 'neovim/nvim-lsp'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'nvim-lua/completion-nvim'
+Plug 'glepnir/lspsaga.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -78,7 +53,6 @@ Plug 'tpope/vim-commentary'
 
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'akinsho/bufferline.nvim'
-Plug 'windwp/nvim-autopairs'
 Plug 'lewis6991/gitsigns.nvim'
 
 Plug 'nvim-lualine/lualine.nvim'
@@ -88,6 +62,28 @@ Plug 'navarasu/onedark.nvim'
 call plug#end()
 
 
+
+" Yank cursor to eol
+nnoremap Y y$
+
+" Keep centered
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
+
+" Typing breakpoints
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
+
+" Move text
+vnoremap N :m '>+1<CR>gv=gv
+vnoremap E :m '<-2<CR>gv=gv
+inoremap <silent> <c-n> <esc>:m .+1<CR>==i
+inoremap <silent> <c-e> <esc>:m .-2<CR>==i
+nnoremap <silent> <leader>e :m .-2<CR>==
+nnoremap <silent><leader>n :m .+1<CR>==
 
 nnoremap <silent> <leader><CR> :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>bb :BufferLinePick<CR>
@@ -128,6 +124,7 @@ nnoremap <silent> <leader>fs :lua require('telescope.builtin').current_buffer_fu
 
 
 set completeopt=menuone,noinsert,noselect
+set sessionoptions+=globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 " Insert only caps-lock
@@ -152,8 +149,9 @@ augroup MAIN
 augroup END
 
 lua << EOF
+require('lspconfig').vimls.setup{}
+require('lspconfig').pyright.setup{}
 require("bufferline").setup{}
-require("nvim-autopairs").setup{}
 require("gitsigns").setup{
     current_line_blame = true,
     yadm = {
