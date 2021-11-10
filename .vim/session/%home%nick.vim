@@ -20,7 +20,7 @@ argglobal
 %argdel
 edit ~/.config/nvim/init.vim
 argglobal
-balt ~/.config/nvim/init.vim
+balt ~/.tmux.conf
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -31,12 +31,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 125 - ((42 * winheight(0) + 26) / 53)
+let s:l = 93 - ((62 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 125
-normal! 0
+keepjumps 93
+normal! 031|
 tabnext 1
 badd +0 ~/.config/nvim/init.vim
 badd +1 ~/.tmux.conf

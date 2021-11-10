@@ -61,6 +61,8 @@ Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'navarasu/onedark.nvim'
 
+Plug 'windwp/nvim-autopairs'
+
 call plug#end()
 
 
@@ -136,19 +138,21 @@ require("gitsigns").setup{
     current_line_blame = true,
     yadm = {
         enable = true
-        }
+    }
 }
 
 require("which-key").setup{}
 require("onedark").setup{}
+
+require('nvim-autopairs').setup{}
 
 require('telescope').setup{
     extensions = {
         fzy_native = {
             override_generic_sorter = false,
             override_file_sorter = true,
-            }
         }
+    }
 }
 
 require('telescope').load_extension('fzy_native')
@@ -161,7 +165,7 @@ cmp.setup{
         expand = function(args)
             vim.fn['UltiSnips#Anon'](args.body)
         end,
-        },
+    },
     sources = cmp.config.sources({
         {name = 'nvim-lsp'},
         {name = 'buffer'},
@@ -171,14 +175,14 @@ cmp.setup{
 cmp.setup.cmdline('/', {
     sources = {
         {name = 'path'},
-        }
-    })
+    }
+})
 cmp.setup.cmdline(':', {
     sources = {
         {name = 'path'},
         {name = 'cmdline'}
-        }
-    })
+    }
+})
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
