@@ -17,9 +17,9 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-edit .config/nvim/init.vim
+edit .tmux.conf
 argglobal
-balt .tmux.conf
+balt .config/nvim/init.vim
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -30,15 +30,15 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 165 - ((45 * winheight(0) + 40) / 80)
+let s:l = 26 - ((25 * winheight(0) + 40) / 80)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 165
-normal! 0
+keepjumps 26
+normal! 055|
 tabnext 1
-badd +0 .config/nvim/init.vim
-badd +1 .tmux.conf
+badd +0 .tmux.conf
+badd +68 .config/nvim/init.vim
 badd +1 .zshrc
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -50,7 +50,6 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
-nohlsearch
 let g:this_session = v:this_session
 let g:this_obsession = v:this_session
 doautoall SessionLoadPost
