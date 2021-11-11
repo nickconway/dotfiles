@@ -4,7 +4,7 @@ set tabstop=4
 set smarttab
 set smartindent
 set shiftwidth=4
-set mouse=a
+" set mouse=a
 set softtabstop=4
 set expandtab
 set nohlsearch
@@ -69,15 +69,6 @@ call plug#end()
 
 
 
-nnoremap <A-Up> :lua require('tmux').move_up()
-nnoremap <A-Down> :lua require('tmux').move_down()
-nnoremap <A-Left> :lua require('tmux').move_left()
-nnoremap <A-Right> :lua require('tmux').move_right()
-nnoremap <M-Up> :lua require('tmux').move_up()
-nnoremap <M-Down> :lua require('tmux').move_down()
-nnoremap <M-Left> :lua require('tmux').move_left()
-nnoremap <M-Right> :lua require('tmux').move_right()
-
 " Yank cursor to eol
 nnoremap Y y$
 
@@ -112,7 +103,7 @@ nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers()<CR>
 nnoremap <silent> <leader>fg :lua require('telescope.builtin').git_files()<CR>
 nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags()<CR>
 nnoremap <silent> <leader>fi :lua require('telescope.builtin').file_browser()<CR>
-nnoremap <silent> <leader>fp :lua require('telescope.builtin').live_grep()<CR>
+nnoremap <silent> <leader>fl :lua require('telescope.builtin').live_grep()<CR>
 nnoremap <silent> <leader>fs :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR><CR>
 nnoremap <silent> <leader>ga :Git add %:p<CR><CR>
 nnoremap <silent> <leader>gs :Git<CR>
@@ -161,10 +152,22 @@ require("onedark").setup{}
 require('nvim-autopairs').setup{}
 
 require('telescope').setup{
+    defaults = {
+        mappings = {
+            i = {
+                ["<esc>"] = require('telescope.actions').close
+            }
+        }
+    },
     extensions = {
         fzy_native = {
             override_generic_sorter = false,
             override_file_sorter = true,
+        }
+    },
+    pickers = {
+        find_files = {
+            hidden = true
         }
     }
 }
@@ -183,6 +186,7 @@ cmp.setup{
     sources = cmp.config.sources({
         {name = 'nvim-lsp'},
         {name = 'buffer'},
+        {name = 'path'},
         {name = 'ultisnips'},
     })
 }
@@ -209,10 +213,10 @@ require('lspconfig').pyright.setup{
 }
 EOF
 
-nnoremap <silent> <A-Up> :lua require('tmux').move_up()<CR>
-nnoremap <silent> <A-Down> :lua require('tmux').move_down()<CR>
-nnoremap <silent> <A-Left> :lua require('tmux').move_left()<CR>
-nnoremap <silent> <A-Right> :lua require('tmux').move_right()<CR>
+nnoremap <silent> <M-Up> :lua require('tmux').move_up()<CR>
+nnoremap <silent> <M-Down> :lua require('tmux').move_down()<CR>
+nnoremap <silent> <M-Left> :lua require('tmux').move_left()<CR>
+nnoremap <silent> <M-Right> :lua require('tmux').move_right()<CR>
 
 colorscheme onedark
 highlight Normal guibg=none
