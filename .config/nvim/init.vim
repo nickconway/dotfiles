@@ -20,7 +20,7 @@ set termguicolors
 set scrolloff=4
 set signcolumn=yes
 set cmdheight=1
-
+set clipboard+=unnamedplus
 
 
 let mapleader=" "
@@ -54,8 +54,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'akinsho/bufferline.nvim'
 Plug 'lewis6991/gitsigns.nvim'
+Plug 'kdheepak/tabline.nvim'
 
 Plug 'nvim-lualine/lualine.nvim'
 
@@ -63,17 +63,22 @@ Plug 'navarasu/onedark.nvim'
 
 Plug 'windwp/nvim-autopairs'
 
+Plug 'nathom/tmux.nvim'
+
 call plug#end()
 
 
 
+let g:tmux_navigator_no_mappings = 1
+" nnoremap <silent> <M-Up> :TmuxNavigateUp<CR>
+nnoremap <silent> <A-Up> gg
 " Yank cursor to eol
 nnoremap Y y$
 
 " Keep centered
-nnoremap n nzzzv
-nnoremap N Nzzzv
-nnoremap J mzJ`z
+nnoremap <silent> n nzzzv
+nnoremap <silent> N Nzzzv
+nnoremap <silent> J mzJ`z
 
 " Typing breakpoints
 inoremap , ,<c-g>u
@@ -124,16 +129,19 @@ nnoremap <silent> <leader>qq :q<CR>
 nnoremap <silent> <leader>so :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>ss :w<CR>
 nnoremap <silent> <leader>st :wq<CR>
+nnoremap <silent> <leader>tt :tabnew<CR>
+nnoremap <silent> <leader>tn :tabnext<CR>
+nnoremap <silent> <leader>tp :tabprevious<CR>
+nnoremap <leader>t, :TablineTabRename<Space>
 
 
 
 set completeopt=menuone,noinsert,noselect
-set sessionoptions+=globals
+set sessionoptions+=tabpages,globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 lua << EOF
-require("bufferline").setup{}
-
+require('tabline').setup{}
 require("gitsigns").setup{
     current_line_blame = true,
     yadm = {
@@ -193,8 +201,12 @@ require('lspconfig').vimls.setup{
 require('lspconfig').pyright.setup{
     capabilities = capabilities
 }
-
 EOF
+
+nnoremap <silent> <A-Up> :lua require('tmux').move_up()<CR>
+nnoremap <silent> <A-Down> :lua require('tmux').move_down()<CR>
+nnoremap <silent> <A-Left> :lua require('tmux').move_left()<CR>
+nnoremap <silent> <A-Right> :lua require('tmux').move_right()<CR>
 
 colorscheme onedark
 highlight Normal guibg=none

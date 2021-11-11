@@ -7,20 +7,19 @@ let UltiSnipsEditSplit = "normal"
 let UltiSnipsExpandTrigger = "<tab>"
 let UltiSnipsJumpBackwardTrigger = "<c-k>"
 let UltiSnipsJumpForwardTrigger = "<c-j>"
-let BufferlinePositions = "3,4,2"
 let UltiSnipsRemoveSelectModeMappings =  1 
 silent only
 silent tabonly
-cd ~/.vim/plugged/nvim-treesitter
+cd ~/
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
 argglobal
 %argdel
-edit ~/.config/nvim/init.vim
+edit .tmux.conf
 argglobal
-balt ~/.tmux.conf
+balt .zshrc
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -31,16 +30,16 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 93 - ((62 * winheight(0) + 33) / 67)
+let s:l = 32 - ((31 * winheight(0) + 40) / 80)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 93
-normal! 031|
+keepjumps 32
+normal! 0
 tabnext 1
-badd +0 ~/.config/nvim/init.vim
-badd +1 ~/.tmux.conf
-badd +1 ~/.zshrc
+badd +0 .tmux.conf
+badd +1 .zshrc
+badd +1 .config/nvim/init.vim
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
@@ -51,7 +50,6 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

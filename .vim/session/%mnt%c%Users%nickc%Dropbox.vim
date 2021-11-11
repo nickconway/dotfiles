@@ -1,6 +1,13 @@
 let SessionLoad = 1
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
+let UltiSnipsEnableSnipMate =  1 
+let UltiSnipsListSnippets = "<c-tab>"
+let UltiSnipsEditSplit = "normal"
+let UltiSnipsExpandTrigger = "<tab>"
+let UltiSnipsJumpBackwardTrigger = "<c-k>"
+let UltiSnipsJumpForwardTrigger = "<c-j>"
+let UltiSnipsRemoveSelectModeMappings =  1 
 silent only
 silent tabonly
 cd /mnt/c/Users/nickc/Dropbox
@@ -11,6 +18,13 @@ set shortmess=aoO
 argglobal
 %argdel
 edit Windows/bug.n/src/Config.ini
+wincmd t
+let s:save_winminheight = &winminheight
+let s:save_winminwidth = &winminwidth
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
 argglobal
 balt Windows/bug.n/src/Config.ini
 setlocal fdm=manual
@@ -23,20 +37,22 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 70 - ((21 * winheight(0) + 27) / 54)
+let s:l = 89 - ((13 * winheight(0) + 19) / 38)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 70
-normal! 0111|
+keepjumps 89
+normal! 0
 lcd /mnt/c/Users/nickc/Dropbox
 tabnext 1
-badd +0 /mnt/c/Users/nickc/Dropbox/Windows/bug.n/src/Config.ini
+badd +89 /mnt/c/Users/nickc/Dropbox/Windows/bug.n/src/Config.ini
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20 shortmess=filnxtToOF
+let &winminheight = s:save_winminheight
+let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
