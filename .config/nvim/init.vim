@@ -134,8 +134,6 @@ nnoremap <silent> <leader>tn :tabnext<CR>
 nnoremap <silent> <leader>tp :tabprevious<CR>
 nnoremap <leader>t, :TablineTabRename<Space>
 
-
-
 set completeopt=menuone,noinsert,noselect
 set sessionoptions+=tabpages,globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
@@ -164,7 +162,7 @@ require('telescope').setup{
 }
 
 require('telescope').load_extension('fzy_native')
--- require('nvim-treesitter').setup{}
+require('nvim-treesitter').setup{}
 require('lualine').setup{}
 
 local cmp = require('cmp')
@@ -212,8 +210,9 @@ colorscheme onedark
 highlight Normal guibg=none
 highlight SignColumn guibg=none
 highlight EndOfBuffer guibg=none guifg=guibg
-set fillchars=eob:\ ," Insert only caps-lock
+set fillchars=eob:\ ,
 
+" Insert only caps-lock
 for c in range(char2nr('A'), char2nr('Z'))
     execute 'lnoremap ' . nr2char(c+32) . ' ' . nr2char(c)
     execute 'lnoremap ' . nr2char(c) . ' ' . nr2char(c+32)

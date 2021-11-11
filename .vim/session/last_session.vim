@@ -1,10 +1,10 @@
 let SessionLoad = 1
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
-let UltiSnipsEnableSnipMate =  1 
+let UltiSnipsExpandTrigger = "<tab>"
 let UltiSnipsListSnippets = "<c-tab>"
 let UltiSnipsEditSplit = "normal"
-let UltiSnipsExpandTrigger = "<tab>"
+let UltiSnipsEnableSnipMate =  1 
 let UltiSnipsJumpBackwardTrigger = "<c-k>"
 let UltiSnipsJumpForwardTrigger = "<c-j>"
 let UltiSnipsRemoveSelectModeMappings =  1 
@@ -17,9 +17,9 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-edit .tmux.conf
+edit .config/nvim/init.vim
 argglobal
-balt .zshrc
+balt .tmux.conf
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -30,16 +30,16 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 32 - ((31 * winheight(0) + 40) / 80)
+let s:l = 165 - ((45 * winheight(0) + 40) / 80)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 32
+keepjumps 165
 normal! 0
 tabnext 1
-badd +0 .tmux.conf
+badd +58 .config/nvim/init.vim
 badd +1 .zshrc
-badd +1 .config/nvim/init.vim
+badd +1 .tmux.conf
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
