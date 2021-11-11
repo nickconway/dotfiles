@@ -69,9 +69,15 @@ call plug#end()
 
 
 
-let g:tmux_navigator_no_mappings = 1
-" nnoremap <silent> <M-Up> :TmuxNavigateUp<CR>
-nnoremap <silent> <A-Up> gg
+nnoremap <A-Up> :lua require('tmux').move_up()
+nnoremap <A-Down> :lua require('tmux').move_down()
+nnoremap <A-Left> :lua require('tmux').move_left()
+nnoremap <A-Right> :lua require('tmux').move_right()
+nnoremap <M-Up> :lua require('tmux').move_up()
+nnoremap <M-Down> :lua require('tmux').move_down()
+nnoremap <M-Left> :lua require('tmux').move_left()
+nnoremap <M-Right> :lua require('tmux').move_right()
+
 " Yank cursor to eol
 nnoremap Y y$
 
@@ -94,6 +100,7 @@ inoremap <silent> <c-e> <esc>:m .-2<CR>==i
 nnoremap <silent> <leader>e :m .-2<CR>==
 nnoremap <silent><leader>n :m .+1<CR>==
 
+nnoremap <silent> ZZ :qa<CR>
 nnoremap <silent> <leader><CR> :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>bb :BufferLinePick<CR>
 nnoremap <silent> <leader>bfd :bdelete!<CR>
@@ -129,8 +136,9 @@ nnoremap <silent> <leader>qq :q<CR>
 nnoremap <silent> <leader>so :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>ss :w<CR>
 nnoremap <silent> <leader>st :wq<CR>
-nnoremap <silent> <leader>tt :tabnew<CR>
+nnoremap <silent> <leader>tt <c-w>T
 nnoremap <silent> <leader>tn :tabnext<CR>
+nnoremap <silent> <leader>to :TablineToggleShowAllBuffers<CR>
 nnoremap <silent> <leader>tp :tabprevious<CR>
 nnoremap <leader>t, :TablineTabRename<Space>
 
