@@ -132,9 +132,10 @@ nnoremap <silent> <leader>tn :tabnext<CR>
 nnoremap <silent> <leader>to :TablineToggleShowAllBuffers<CR>
 nnoremap <silent> <leader>tp :tabprevious<CR>
 nnoremap <leader>t, :TablineTabRename<Space>
-nnoremap <silent> <leader>ww :vsplit<CR>
-nnoremap <silent> <leader>ws :split<CR>
+nnoremap <silent> <leader>ww <c-w>=
 nnoremap <silent> <leader>wc :wq<CR><CR>
+nnoremap <silent> <leader>ws :split<CR>
+nnoremap <silent> <leader>wv :vsplit<CR>
 
 set completeopt=menuone,noinsert,noselect
 set sessionoptions+=tabpages,globals
@@ -246,4 +247,5 @@ augroup MAIN
     autocmd InsertLeave * set iminsert=0
     autocmd FileType which_key set laststatus=0 noshowmode noruler
     autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    autocmd VimResized * wincmd =
 augroup END
