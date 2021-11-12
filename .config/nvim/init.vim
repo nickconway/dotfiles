@@ -4,7 +4,7 @@ set tabstop=4
 set smarttab
 set smartindent
 set shiftwidth=4
-" set mouse=a
+set mouse=a
 set softtabstop=4
 set expandtab
 set nohlsearch
@@ -132,6 +132,9 @@ nnoremap <silent> <leader>tn :tabnext<CR>
 nnoremap <silent> <leader>to :TablineToggleShowAllBuffers<CR>
 nnoremap <silent> <leader>tp :tabprevious<CR>
 nnoremap <leader>t, :TablineTabRename<Space>
+nnoremap <silent> <leader>ww :vsplit<CR>
+nnoremap <silent> <leader>ws :split<CR>
+nnoremap <silent> <leader>wc :wq<CR><CR>
 
 set completeopt=menuone,noinsert,noselect
 set sessionoptions+=tabpages,globals
