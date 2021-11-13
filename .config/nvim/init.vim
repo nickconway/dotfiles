@@ -142,7 +142,11 @@ set sessionoptions+=tabpages,globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 lua << EOF
-require('tabline').setup{}
+require('tabline').setup{
+   options = {
+       show_filename_only = true
+   }
+}
 require("gitsigns").setup{
     current_line_blame = true,
     yadm = {
@@ -178,7 +182,12 @@ require('telescope').setup{
 
 require('telescope').load_extension('fzy_native')
 require('nvim-treesitter').setup{}
-require('lualine').setup{}
+require('lualine').setup{
+--    tabline = {
+--      lualine_c = { 'buffers' },
+--      lualine_x = { 'tabs' }
+--    }
+}
 
 local cmp = require('cmp')
 cmp.setup{
