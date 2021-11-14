@@ -21,7 +21,7 @@ local transparent_one_dark = {
         z = {fg = colors.gray, bg = none},
     },
     normal = {
-        a = {fg = colors.bgnn, bg = none, gui = 'bold'},
+        a = {fg = colors.gray, bg = none, gui = 'bold'},
         b = {fg = colors.gray, bg = none},
         c = {fg = colors.gray, bg = none},
         x = {fg = colors.gray, bg = none},
