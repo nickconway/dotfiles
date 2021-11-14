@@ -20,7 +20,6 @@ set termguicolors
 set scrolloff=4
 set signcolumn=yes
 set cmdheight=1
-set clipboard=unnamedplus
 
 
 
