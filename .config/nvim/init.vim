@@ -20,6 +20,8 @@ set termguicolors
 set scrolloff=4
 set signcolumn=yes
 set cmdheight=1
+set clipboard=unnamedplus
+set showtabline=0
 
 
 
@@ -142,11 +144,6 @@ set sessionoptions+=tabpages,globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 lua << EOF
-require('tabline').setup{
-   options = {
-       show_filename_only = true
-   }
-}
 require("gitsigns").setup{
     current_line_blame = true,
     yadm = {
@@ -188,6 +185,10 @@ require('lualine').setup{
         theme = 'transparent_onedark',
         section_separators = {left = '', right = ''},
         component_separators = {left = '', right = ''}
+    },
+    sections = {
+        lualine_c = {'filename', 'buffers'},
+        lualine_x = {'tabs', 'encoding', 'fileformat', 'filetype'}
     }
 }
 

@@ -45,7 +45,7 @@ local transparent_one_dark = {
         z = {fg = colors.gray, bg = none, gui = 'bold'}
     },
     insert = {
-        a = {fg = colors.bg, bg = colors.blue, gui = 'bold'},
+        a = {fg = colors.bg, bg = colors.green, gui = 'bold'},
         b = {fg = colors.gray, bg = none, gui = 'bold'},
         c = {fg = colors.gray, bg = none, gui = 'bold'},
         x = {fg = colors.gray, bg = none, gui = 'bold'},
