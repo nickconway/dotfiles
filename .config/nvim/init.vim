@@ -182,11 +182,13 @@ require('telescope').setup{
 
 require('telescope').load_extension('fzy_native')
 require('nvim-treesitter').setup{}
+
 require('lualine').setup{
---    tabline = {
---      lualine_c = { 'buffers' },
---      lualine_x = { 'tabs' }
---    }
+    options = {
+        theme = 'transparent_onedark',
+        -- section_separators = {left = '', right = ''},
+        -- component_separators = {left = '', right = ''}
+    }
 }
 
 local cmp = require('cmp')
@@ -214,7 +216,6 @@ cmp.setup.cmdline(':', {
         {name = 'cmdline'}
     }
 })
-
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
