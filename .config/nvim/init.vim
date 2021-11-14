@@ -20,7 +20,8 @@ set termguicolors
 set scrolloff=4
 set signcolumn=yes
 set cmdheight=1
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
+
 
 
 let mapleader=" "
@@ -186,8 +187,8 @@ require('nvim-treesitter').setup{}
 require('lualine').setup{
     options = {
         theme = 'transparent_onedark',
-        -- section_separators = {left = '', right = ''},
-        -- component_separators = {left = '', right = ''}
+        section_separators = {left = '', right = ''},
+        component_separators = {left = '', right = ''}
     }
 }
 

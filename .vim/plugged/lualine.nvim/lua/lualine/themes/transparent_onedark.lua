@@ -13,19 +13,33 @@ local colors = {
 
 local transparent_one_dark = {
     inactive = {
-        a = {fg = colors.gray, bg = colors.bg, gui = 'bold'},
-        b = {fg = colors.gray, bg = colors.bg},
-        c = {fg = colors.gray, bg = c.bg1},
+        a = {fg = colors.gray, bg = none, gui = 'bold'},
+        b = {fg = colors.gray, bg = none},
+        c = {fg = colors.gray, bg = none},
     },
     normal = {
-        a = {fg = colors.fg, bg = none, gui = 'bold'},
-        b = {fg = colors.fg, bg = none},
-        c = {fg = colors.fg, bg = none},
+        a = {fg = colors.gray, bg = none, gui = 'bold'},
+        b = {fg = colors.gray, bg = none},
+        c = {fg = colors.gray, bg = none},
     },
-    visual = {a = {fg = colors.bg, bg = colors.purple, gui = 'bold'}},
-    replace = {a = {fg = colors.bg, bg = colors.red, gui = 'bold'}},
-    insert = {a = {fg = colors.bg, bg = colors.blue, gui = 'bold'}},
-    command = {a = {fg = colors.bg, bg = colors.yellow, gui = 'bold'}}
+    visual = {
+        a = {fg = colors.bg, bg = colors.purple, gui = 'bold'},
+        z = {fg = colors.bg, bg = none, gui = 'bold'}
+    },
+    replace = {
+        a = {fg = colors.bg, bg = colors.red, gui = 'bold'},
+        z = {fg = colors.gray, bg = none, gui = 'bold'}
+    },
+    insert = {
+        a = {fg = colors.bg, bg = colors.blue, gui = 'bold'},
+        x = {fg = colors.gray, bg = none, gui = 'bold'},
+        y = {fg = colors.gray, bg = none, gui = 'bold'},
+        z = {fg = colors.gray, bg = none, gui = 'bold'}
+    },
+    command = {
+        a = {fg = colors.bg, bg = colors.yellow, gui = 'bold'},
+        z = {fg = colors.gray, bg = none, gui = 'bold'}
+    }
 }
 
 return transparent_one_dark;
