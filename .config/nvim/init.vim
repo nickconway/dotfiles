@@ -20,7 +20,7 @@ set termguicolors
 set scrolloff=4
 set signcolumn=yes
 set cmdheight=1
-set clipboard=unnamedplus
+set clipboard+=unnamed,unnamedplus
 set showtabline=0
 
 
@@ -52,7 +52,6 @@ Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 
 Plug 'kyazdani42/nvim-web-devicons'
@@ -66,6 +65,8 @@ Plug 'navarasu/onedark.nvim'
 Plug 'windwp/nvim-autopairs'
 
 Plug 'nathom/tmux.nvim'
+
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 call plug#end()
 
@@ -96,8 +97,8 @@ nnoremap <silent><leader>n :m .+1<CR>==
 nnoremap <silent> ZZ :qa<CR>
 nnoremap <silent> <leader><CR> :so ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>bb :BufferLinePick<CR>
-nnoremap <silent> <leader>bfd :bdelete!<CR>
-nnoremap <silent> <leader>bd :bdelete<CR>
+nnoremap <silent> <leader>bfd :bp\|bd! #<CR>
+nnoremap <silent> <leader>bd :bp\|bd #<CR>
 nnoremap <silent> <leader>bn :bn<CR>
 nnoremap <silent> <leader>bp :bp<CR>
 nnoremap <silent> <leader>ff :lua require('telescope.builtin').find_files{}<CR>
@@ -144,6 +145,10 @@ set sessionoptions+=tabpages,globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 lua << EOF
+require('indent_blankline').setup{
+    show_end_of_line = true
+}
+
 require("gitsigns").setup{
     current_line_blame = true,
     yadm = {
@@ -187,9 +192,37 @@ require('lualine').setup{
         component_separators = {left = '', right = ''}
     },
     sections = {
-        lualine_c = {'filename', 'buffers'},
-        lualine_x = {'tabs', 'encoding', 'fileformat', 'filetype'}
-    }
+        lualine_c = {
+            {
+                'buffers',
+                buffers_color = {
+                    active = 'white',
+                    inactive = 'lualine_a_normal'
+                }
+            }
+        },
+        lualine_x = {
+            {
+                'tabs',
+                tabs_color = {
+                    active = 'white',
+                    inactive = 'lualine_a_normal'
+                }
+            },
+            'encoding',
+            'fileformat',
+            'filetype'
+        },
+        lualine_z = {'location'}
+    },
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {'filename'},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {},
+    },
 }
 
 local cmp = require('cmp')
