@@ -191,21 +191,6 @@ require('lualine').setup{
         component_separators = {left = '', right = ''},
         padding = 1
     },
-    sections = {
-        lualine_x = {
-            {
-                'tabs',
-                tabs_color = {
-                    active = 'lualine_a_normal',
-                    inactive = 'lualine_a_normal'
-                }
-            },
-            'encoding',
-            'fileformat',
-            'filetype'
-        },
-        lualine_z = {'location'}
-    },
     inactive_sections = {
         lualine_a = {},
         lualine_b = {},
