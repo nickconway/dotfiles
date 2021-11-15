@@ -193,19 +193,20 @@ require('lualine').setup{
     },
     sections = {
         lualine_c = {
-            {
-                'buffers',
-                buffers_color = {
-                    active = 'white',
-                    inactive = 'lualine_a_normal'
-                }
-            }
+            'filename',
+            --{
+            --     'buffers',
+            --      buffers_color = {
+            --          active = 'white',
+            --          inactive = 'lualine_a_normal'
+            --      }
+            --}
         },
         lualine_x = {
             {
                 'tabs',
                 tabs_color = {
-                    active = 'white',
+                    active = 'lualine_a_normal',
                     inactive = 'lualine_a_normal'
                 }
             },
