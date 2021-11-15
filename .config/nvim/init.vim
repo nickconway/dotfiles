@@ -66,8 +66,6 @@ Plug 'windwp/nvim-autopairs'
 
 Plug 'nathom/tmux.nvim'
 
-Plug 'lukas-reineke/indent-blankline.nvim'
-
 call plug#end()
 
 
@@ -145,10 +143,6 @@ set sessionoptions+=tabpages,globals
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 lua << EOF
-require('indent_blankline').setup{
-    show_end_of_line = true
-}
-
 require("gitsigns").setup{
     current_line_blame = true,
     yadm = {
@@ -189,7 +183,8 @@ require('lualine').setup{
     options = {
         theme = 'transparent_onedark',
         section_separators = {left = '', right = ''},
-        component_separators = {left = '', right = ''}
+        component_separators = {left = '', right = ''},
+        padding = 1
     },
     sections = {
         lualine_c = {
