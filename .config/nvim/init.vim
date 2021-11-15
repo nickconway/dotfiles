@@ -169,8 +169,6 @@ require("gitsigns").setup{
 require("which-key").setup{}
 require("onedark").setup{}
 
-require('nvim-autopairs').setup{}
-
 require('telescope').setup{
     defaults = {
         mappings = {
@@ -238,7 +236,8 @@ cmp.setup({
         ['<CR>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
-        })
+        }),
+        ['<esc>'] = cmp.mapping.abort()
     },
     sources = {
         { name = 'nvim_lsp' },
@@ -277,6 +276,8 @@ require('lspconfig').vimls.setup{
 require('lspconfig').pyright.setup{
     capabilities = capabilities
 }
+
+require('nvim-autopairs').setup{}
 EOF
 
 
