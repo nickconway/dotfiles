@@ -229,8 +229,8 @@ cmp.setup({
     mapping = {
         ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
@@ -240,34 +240,33 @@ cmp.setup({
             select = true,
         })
     },
-    sources = cmp.config.sources({
+    sources = {
         { name = 'nvim_lsp' },
         --{ name = 'vsnip' }, -- For vsnip users.
         -- { name = 'luasnip' }, -- For luasnip users.
         { name = 'ultisnips' }, -- For ultisnips users.
         -- { name = 'snippy' }, -- For snippy users.
-    }, {
-      { name = 'buffer' },
-      { name = 'path' }
-      tnor
-    })
-  })
+        { name = 'buffer' },
+        { name = 'path' },
+        { name = 'cmdline' }
+    }
+})
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
     sources = {
         { name = 'path' },
-        { name = 'buffer' }
+        { name = 'buffer' },
+        { name = 'cmdline' }
     }
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(':', {
-    sources = cmp.config.sources({
-        { name = 'path' }
-    }, {
+    sources = {
+        { name = 'path' },
         { name = 'cmdline' }
-    })
+    }
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -309,5 +308,5 @@ augroup MAIN
     autocmd FileType which_key set laststatus=0 noshowmode noruler
     autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     autocmd VimResized * wincmd =
-    autocmd InsertLeave * if &readonly == 0 && filereadable(bufname('%')) | silent write | endif " autosave
+    autocmd TextChanged,InsertLeave * if &readonly == 0 && filereadable(bufname('%')) | silent write | endif " autosave
 augroup END
