@@ -196,7 +196,7 @@ require('lualine').setup{
             {
                 'tabs',
                 tabs_color = {
-                    active = 'white',
+                    active = 'lualine_a_normal',
                     inactive = 'lualine_a_normal'
                 }
             },
