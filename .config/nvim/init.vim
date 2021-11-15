@@ -9,6 +9,7 @@ set softtabstop=4
 set expandtab
 set nohlsearch
 set hidden
+set autoindent
 set noerrorbells
 set nowrap
 set noswapfile
@@ -22,6 +23,10 @@ set signcolumn=yes
 set cmdheight=1
 set clipboard+=unnamed,unnamedplus
 set showtabline=0
+set siso=4
+set noshowcmd
+set noshowmode
+" set foldmethod=indent
 
 
 
@@ -287,4 +292,5 @@ augroup MAIN
     autocmd FileType which_key set laststatus=0 noshowmode noruler
     autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     autocmd VimResized * wincmd =
+    autocmd TextChanged,TextChangedI * if &readonly == 0 && filereadable(bufname('%')) | silent write | endif " autosave
 augroup END
