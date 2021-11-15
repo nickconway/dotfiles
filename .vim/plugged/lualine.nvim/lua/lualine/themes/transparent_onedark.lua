@@ -29,7 +29,7 @@ local transparent_one_dark = {
         z = {fg = colors.gray, bg = none},
     },
     visual = {
-        a = {fg = colors.bg, bg = colors.purple, gui = 'bold'},
+        a = {fg = colors.purple, bg = none, gui = 'bold'},
         b = {fg = colors.gray, bg = none, gui = 'bold'},
         c = {fg = colors.gray, bg = none, gui = 'bold'},
         x = {fg = colors.gray, bg = none, gui = 'bold'},
@@ -37,7 +37,7 @@ local transparent_one_dark = {
         z = {fg = colors.gray, bg = none, gui = 'bold'}
     },
     replace = {
-        a = {fg = colors.bg, bg = colors.red, gui = 'bold'},
+        a = {fg = colors.red, bg = none, gui = 'bold'},
         b = {fg = colors.gray, bg = none, gui = 'bold'},
         c = {fg = colors.gray, bg = none, gui = 'bold'},
         x = {fg = colors.gray, bg = none, gui = 'bold'},
@@ -45,7 +45,7 @@ local transparent_one_dark = {
         z = {fg = colors.gray, bg = none, gui = 'bold'}
     },
     insert = {
-        a = {fg = colors.bg, bg = colors.green, gui = 'bold'},
+        a = {fg = colors.green, bg = none, gui = 'bold'},
         b = {fg = colors.gray, bg = none, gui = 'bold'},
         c = {fg = colors.gray, bg = none, gui = 'bold'},
         x = {fg = colors.gray, bg = none, gui = 'bold'},
@@ -53,7 +53,7 @@ local transparent_one_dark = {
         z = {fg = colors.gray, bg = none, gui = 'bold'}
     },
     command = {
-        a = {fg = colors.bg, bg = colors.yellow, gui = 'bold'},
+        a = {fg = colors.yellow, bg = none, gui = 'bold'},
         b = {fg = colors.gray, bg = none, gui = 'bold'},
         c = {fg = colors.gray, bg = none, gui = 'bold'},
         x = {fg = colors.gray, bg = none, gui = 'bold'},
