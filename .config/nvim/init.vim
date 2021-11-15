@@ -192,15 +192,6 @@ require('lualine').setup{
         padding = 1
     },
     sections = {
-        lualine_c = {
-            {
-                'buffers',
-                buffers_color = {
-                    active = 'white',
-                    inactive = 'lualine_a_normal'
-                }
-            }
-        },
         lualine_x = {
             {
                 'tabs',
