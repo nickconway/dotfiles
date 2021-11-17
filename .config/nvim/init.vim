@@ -219,6 +219,10 @@ cmp.setup({
     formatting = {
         format = require('lspkind').cmp_format({with_text = false, maxwidth = 50})
     },
+    experimental = {
+        native_menu = false,
+        ghost_text = true
+    },
     snippet = {
         -- REQUIRED - you must specify a snippet engine
         expand = function(args)
