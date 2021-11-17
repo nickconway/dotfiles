@@ -26,7 +26,8 @@ set showtabline=0
 set siso=4
 set noshowcmd
 set noshowmode
-" set foldmethod=indent
+set foldmethod=indent
+set nofoldenable
 
 
 
@@ -199,6 +200,9 @@ require('lualine').setup{
         section_separators = {left = '', right = ''},
         component_separators = {left = '', right = ''},
         padding = 1
+    },
+    sections = {
+        lualine_x = {'tabs', 'encoding', 'fileformat', 'filetype'}
     },
     inactive_sections = {
         lualine_a = {},
