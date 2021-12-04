@@ -60,7 +60,7 @@ Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
-Plug 'tpope/vim-commentary'
+Plug 'numToStr/Comment.nvim'
 
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'lewis6991/gitsigns.nvim'
@@ -81,9 +81,6 @@ call plug#end()
 
 
 nnoremap x "_x
-
-" Yank cursor to eol
-nnoremap Y y$
 
 " Keep centered
 nnoremap <silent> n nzzzv
@@ -193,6 +190,7 @@ require('telescope').setup{
 
 require('telescope').load_extension('fzy_native')
 require('nvim-treesitter').setup{}
+require("Comment").setup{}
 
 require('lualine').setup{
     options = {
