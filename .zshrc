@@ -125,6 +125,8 @@ alias ye="yadm encrypt"
 alias yd="yadm decrypt"
 alias yu="yadm upgrade"
 
+alias lg="lazygit"
+
 alias e="emacs"
 alias n="nvim"
 alias v="n"
