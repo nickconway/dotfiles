@@ -116,21 +116,7 @@ nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags()<CR>
 nnoremap <silent> <leader>fi :lua require('telescope.builtin').file_browser()<CR>
 nnoremap <silent> <leader>fl :lua require('telescope.builtin').live_grep()<CR>
 nnoremap <silent> <leader>fs :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR><CR>
-nnoremap <silent> <leader>ga :Git add %:p<CR><CR>
-nnoremap <silent> <leader>gs :Git<CR>
-nnoremap <silent> <leader>gc :Git commit -v -q<CR>
-nnoremap <silent> <leader>gt :Git commit -v -q %:p<CR>
-nnoremap <silent> <leader>gd :Git diff<CR>
-nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gw :Gwrite<CR><CR>
-nnoremap <silent> <leader>gy :silent! Glog<CR>:bot copen<CR>
-nnoremap <silent> <leader>gg :Ggrep<Space>
-nnoremap <silent> <leader>gm :Gmove<Space>
-nnoremap <silent> <leader>gb :Git branch<Space>
-nnoremap <silent> <leader>go :Git checkout<Space>
-nnoremap <silent> <leader>gp :Git push<CR>
-nnoremap <silent> <leader>gl :Git pull<CR>
+nnoremap <silent> <leader>gg :lua require('toggleterm.terminal').Terminal:new({ cmd = 'lazygit' }):toggle()<CR>
 nnoremap <silent> <leader>oo :Obsess<CR>
 nnoremap <silent> <leader>pi :PlugInstall<CR>
 tnoremap <silent> <leader>qq <C-\><C-n>
@@ -152,6 +138,11 @@ nnoremap <silent> <M-Up> :lua require('tmux').move_up()<CR>
 nnoremap <silent> <M-Down> :lua require('tmux').move_down()<CR>
 nnoremap <silent> <M-Left> :lua require('tmux').move_left()<CR>
 nnoremap <silent> <M-Right> :lua require('tmux').move_right()<CR>
+tnoremap <silent> <esc> <C-\><C-n>
+tnoremap <silent> <M-Up> <C-\><C-n><C-W>k
+tnoremap <silent> <M-Down> <C-\><C-n><C-W>j
+tnoremap <silent> <M-Left> <C-\><C-n><C-W>h
+tnoremap <silent> <M-Right> <C-\><C-n><C-W>l
 
 set completeopt=menuone,noinsert,noselect
 set sessionoptions+=tabpages,globals
@@ -286,11 +277,13 @@ require('lspconfig').pyright.setup{
 
 require('nvim-autopairs').setup{}
 require('toggleterm').setup{
-    shade_terminals = false
+    size = 20,
+    open_mapping = [[<c-\>]],
+    shade_terminals = false,
+    direction = "horizontal",
+    persist_size = true,
 }
 EOF
-
-
 
 colorscheme onedark
 highlight Normal guibg=none
