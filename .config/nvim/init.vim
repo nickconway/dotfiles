@@ -76,6 +76,7 @@ Plug 'nathom/tmux.nvim'
 
 Plug 'sbdchd/neoformat'
 
+Plug 'akinsho/toggleterm.nvim'
 call plug#end()
 
 
@@ -284,6 +285,9 @@ require('lspconfig').pyright.setup{
 }
 
 require('nvim-autopairs').setup{}
+require('toggleterm').setup{
+    shade_terminals = false
+}
 EOF
 
 
