@@ -34,3 +34,7 @@ vim.opt.sessionoptions:append { 'tabpages', 'globals' }
 
 vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
 
+vim.cmd("colorscheme onedark")
+vim.cmd('highlight Normal guibg=none')
+vim.cmd('highlight SignColumn guibg=none')
+vim.cmd('highlight EndOfBuffer guibg=none')
