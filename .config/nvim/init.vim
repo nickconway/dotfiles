@@ -121,7 +121,7 @@ nnoremap <silent> <leader>oo :Obsess<CR>
 nnoremap <silent> <leader>pi :PlugInstall<CR>
 tnoremap <silent> <leader>qq <C-\><C-n>
 nnoremap <silent> <leader>qq :q<CR>
-nnoremap <silent> <leader>so :so ~/.config/nvim/init.vim<CR>
+nnoremap <silent> <leader>so :so %<CR>
 nnoremap <silent> <leader>ss :w<CR>
 nnoremap <silent> <leader>st :wq<CR>
 nnoremap <silent> <leader>tt <c-w>T
