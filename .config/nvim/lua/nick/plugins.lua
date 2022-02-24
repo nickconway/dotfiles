@@ -52,6 +52,8 @@ return require('packer').startup(function(use)
 
     use { 'akinsho/toggleterm.nvim', config = get_config('toggleterm') }
 
+    use { 'kyazdani42/nvim-tree.lua', config = get_config('nvim-tree') }
+
     if packer_bootstrap then
         require('packer').sync()
     end

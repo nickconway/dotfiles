@@ -21,7 +21,7 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 4
 vim.opt.signcolumn = 'yes'
 vim.opt.cmdheight = 1
-vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
+vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 vim.opt.showtabline = 0
 vim.opt.siso = 4
 vim.opt.showcmd = false
@@ -34,7 +34,12 @@ vim.opt.sessionoptions:append { 'tabpages', 'globals' }
 
 vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
 
-vim.cmd("colorscheme onedark")
-vim.cmd('highlight Normal guibg=none')
-vim.cmd('highlight SignColumn guibg=none')
-vim.cmd('highlight EndOfBuffer guibg=none')
+vim.cmd([[
+    colorscheme onedark
+    highlight Normal guibg=none
+    highlight SignColumn guibg=none
+    highlight EndOfBuffer guibg=none
+    highlight NvimTreeNormal guibg=none
+    highlight NvimTreeEndOfBuffer guibg=none
+    highlight NvimTreeVertSplit guibg=none
+]])
