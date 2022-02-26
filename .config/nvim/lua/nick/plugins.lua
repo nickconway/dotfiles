@@ -23,8 +23,14 @@ return require('packer').startup(function(use)
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
     use 'nvim-lua/popup.nvim'
-    use 'nvim-lua/plenary.nvim'
-    use { 'nvim-telescope/telescope.nvim', config = get_config('telescope') }
+    use { 'nvim-telescope/telescope.nvim',
+            requires = {
+                { "nvim-lua/plenary.nvim" },
+                { "nvim-telescope/telescope-github.nvim" },
+            },
+        config = get_config('telescope')
+    }
+
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
     use { 'folke/which-key.nvim', config = get_config('which-key') }
@@ -46,7 +52,11 @@ return require('packer').startup(function(use)
         'rmagatti/session-lens',
         requires = {'rmagatti/auto-session', 'nvim-telescope/telescope.nvim'},
         config = function()
-            require('session-lens').setup({})
+            require('session-lens').setup({
+                path_display = {'shorten'},
+                theme_conf = { border = false },
+                previewer = false
+            })
         end
     }
 

@@ -40,7 +40,7 @@ vim.api.nvim_set_keymap('n', '<leader>fl', ':lua require(\'telescope.builtin\').
 vim.api.nvim_set_keymap('n', '<leader>fs', ':lua require(\'telescope.builtin\').current_buffer_fuzzy_find()<CR><CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>gg', ':lua require(\'toggleterm.terminal\').Terminal:new({ cmd = \'lazygit\', direction = \'float\' }):toggle()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>oo', ':Obsess<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>pi', ':PlugInstall<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>pp', ':Telescope session-lens search_session<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<leader>qq', '<C-\\><C-n>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>qq', ':q<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>so', ':so %<CR>', { noremap = true, silent = true })
