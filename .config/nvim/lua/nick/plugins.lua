@@ -32,8 +32,24 @@ return require('packer').startup(function(use)
     use 'SirVer/ultisnips'
     use 'quangnguyen30192/cmp-nvim-ultisnips'
 
-    use 'tpope/vim-obsession'
-    use 'dhruvasagar/vim-prosession'
+    use {
+        'rmagatti/auto-session',
+        config = function()
+            require('auto-session').setup {
+                log_level = 'info',
+                auto_session_suppress_dirs = {'~/', '~/Projects'}
+            }
+        end
+    }
+
+    use {
+        'rmagatti/session-lens',
+        requires = {'rmagatti/auto-session', 'nvim-telescope/telescope.nvim'},
+        config = function()
+            require('session-lens').setup({})
+        end
+    }
+
     use { 'numToStr/Comment.nvim', config = get_config('Comment') }
 
     use 'kyazdani42/nvim-web-devicons'
