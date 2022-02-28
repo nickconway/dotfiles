@@ -1,11 +1,11 @@
 local cmp = require('cmp')
 cmp.setup({
     formatting = {
-        format = require('lspkind').cmp_format({with_text = false, maxwidth = 50})
+        format = require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })
     },
     experimental = {
         native_menu = false,
-        ghost_text = true
+        ghost_text = false
     },
     snippet = {
         -- REQUIRED - you must specify a snippet engine
@@ -20,7 +20,9 @@ cmp.setup({
         ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
