@@ -140,6 +140,6 @@ pw() {
     rbw get $1 $2 | clip.exe
 }
 
-export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"
-
 set -o vi
+
+export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"

@@ -44,7 +44,6 @@ return require('packer').startup(function(use)
         config = function()
             require('auto-session').setup {
                 log_level = 'info',
-                auto_session_suppress_dirs = {'~/', '~/Projects'}
             }
         end
     }
@@ -52,13 +51,7 @@ return require('packer').startup(function(use)
     use {
         'rmagatti/session-lens',
         requires = {'rmagatti/auto-session', 'nvim-telescope/telescope.nvim'},
-        config = function()
-            require('session-lens').setup({
-                path_display = {'shorten'},
-                theme_conf = { border = false },
-                previewer = false
-            })
-        end
+        config = get_config('session-lens')
     }
 
     use { 'numToStr/Comment.nvim', config = get_config('Comment') }
