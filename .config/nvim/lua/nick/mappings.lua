@@ -65,6 +65,11 @@ vim.api.nvim_set_keymap('t', '<M-Down>', '<C-\\><C-n><C-W>j', { noremap = true, 
 vim.api.nvim_set_keymap('t', '<M-Left>', '<C-\\><C-n><C-W>h', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<M-Right>', '<C-\\><C-n><C-W>l', { noremap = true, silent = true })
 
+vim.api.nvim_set_keymap('n', '<space>de', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>dq', '<cmd>lua vim.diagnostic.setloclist()<CR>', { noremap = true, silent = true })
+
 vim.api.nvim_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
