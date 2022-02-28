@@ -31,6 +31,8 @@ vim.opt.foldenable = false
 vim.opt.fillchars = 'eob: '
 vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
 vim.opt.sessionoptions:append { 'tabpages', 'globals' }
+vim.opt.list = true
+vim.opt.listchars:append("eol:↴")
 
 vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
 

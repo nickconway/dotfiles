@@ -11,6 +11,7 @@ end
 
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
+    use {'lewis6991/impatient.nvim', config = get_config('impatient') }
 
     use 'onsails/lspkind-nvim'
     use 'neovim/nvim-lspconfig'
@@ -61,6 +62,7 @@ return require('packer').startup(function(use)
 
     use 'kyazdani42/nvim-web-devicons'
     use { 'lewis6991/gitsigns.nvim', config = get_config('gitsigns') }
+
     use 'kdheepak/tabline.nvim'
 
     use { 'nvim-lualine/lualine.nvim', config = get_config('lualine') }
@@ -68,7 +70,7 @@ return require('packer').startup(function(use)
     use { 'navarasu/onedark.nvim', config = get_config('onedark') }
 
     use { 'windwp/nvim-autopairs', config = get_config('autopairs') }
-
+    use { "lukas-reineke/indent-blankline.nvim", config = get_config('indent')}
     use 'nathom/tmux.nvim'
 
     use 'sbdchd/neoformat'
