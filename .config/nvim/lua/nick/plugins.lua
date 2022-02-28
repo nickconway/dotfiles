@@ -21,7 +21,10 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use { 'hrsh7th/nvim-cmp', config = get_config('cmp') }
 
-    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+    use {
+        'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
+        config = get_config('treesitter')
+    }
 
     use 'nvim-lua/popup.nvim'
     use { 'nvim-telescope/telescope.nvim',
