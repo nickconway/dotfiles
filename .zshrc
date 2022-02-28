@@ -143,3 +143,5 @@ pw() {
 set -o vi
 
 export PATH=~/.cargo/bin/:~/.local/bin:"$PATH"
+
+alias luamake=/home/nick/.config/nvim/lua-language-server/3rd/luamake/luamake
