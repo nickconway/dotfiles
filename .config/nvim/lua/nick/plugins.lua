@@ -22,6 +22,9 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use { 'hrsh7th/nvim-cmp', config = get_config('cmp') }
 
+    use { 'hrsh7th/cmp-vsnip' }
+    use { 'hrsh7th/vim-vsnip' }
+
     use {
         'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
         config = get_config('treesitter')
@@ -39,9 +42,6 @@ return require('packer').startup(function(use)
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
     use { 'folke/which-key.nvim', config = get_config('which-key') }
-
-    use 'SirVer/ultisnips'
-    use 'quangnguyen30192/cmp-nvim-ultisnips'
 
     use {
         'rmagatti/auto-session',
