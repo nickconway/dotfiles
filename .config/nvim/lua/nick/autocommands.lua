@@ -10,6 +10,7 @@ vim.cmd([[
     augroup MAIN
         autocmd!
         autocmd BufNewFile,BufRead *.keymap set filetype=dts
+        autocmd BufNewFile,BufRead *.conf set filetype=c
         autocmd BufWritePost plugins.lua source <afile> | PackerSync
         autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
         autocmd BufWritePre * :call TrimWhitespace()
