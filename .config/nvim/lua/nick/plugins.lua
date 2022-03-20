@@ -74,7 +74,7 @@ return require('packer').startup(function(use)
     use 'nathom/tmux.nvim'
 
     use 'sbdchd/neoformat'
-
+    use('kmonad/kmonad-vim')
     use { 'akinsho/toggleterm.nvim', config = get_config('toggleterm') }
 
     use { 'kyazdani42/nvim-tree.lua', config = get_config('nvim-tree') }
