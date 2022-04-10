@@ -33,6 +33,7 @@ vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
 vim.opt.sessionoptions:append { 'tabpages', 'globals' }
 vim.opt.list = true
 vim.opt.listchars:append("eol:↴")
+vim.opt.laststatus = 3
 
 vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
 
