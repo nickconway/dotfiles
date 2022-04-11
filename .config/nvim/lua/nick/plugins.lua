@@ -22,8 +22,8 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use { 'hrsh7th/nvim-cmp', config = get_config('cmp') }
 
-    use { 'hrsh7th/cmp-vsnip' }
-    use { 'hrsh7th/vim-vsnip' }
+    use {'L3MON4D3/LuaSnip', config = get_config('luasnip')}
+    use 'saadparwaiz1/cmp_luasnip'
 
     use {
         'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
@@ -70,7 +70,6 @@ return require('packer').startup(function(use)
     use { 'navarasu/onedark.nvim', config = get_config('onedark') }
 
     use { 'windwp/nvim-autopairs', config = get_config('autopairs') }
-    use { "lukas-reineke/indent-blankline.nvim", config = get_config('indent')}
     use 'nathom/tmux.nvim'
 
     use 'sbdchd/neoformat'
