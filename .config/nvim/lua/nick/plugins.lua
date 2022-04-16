@@ -67,7 +67,7 @@ return require('packer').startup(function(use)
 
     use { 'nvim-lualine/lualine.nvim', config = get_config('lualine') }
 
-    use { 'folke/zen-mode.nvim' }
+    use { 'folke/zen-mode.nvim', config = get_config('zen-mode') }
 
     use { 'navarasu/onedark.nvim', config = get_config('onedark') }
 
