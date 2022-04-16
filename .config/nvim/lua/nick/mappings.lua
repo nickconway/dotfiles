@@ -58,6 +58,7 @@ vim.api.nvim_set_keymap('n', '<leader>ww', '<c-w>=', { noremap = true, silent = 
 vim.api.nvim_set_keymap('n', '<leader>wc', ':wq<CR><CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ws', ':split<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>wv', ':vsplit<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>zm', ':ZenMode<CR>', { noremap = true, silent = true })
 
 vim.api.nvim_set_keymap('n', '<M-Up>', ':lua require(\'tmux\').move_up()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<M-Down>', ':lua require(\'tmux\').move_down()<CR>', { noremap = true, silent = true })

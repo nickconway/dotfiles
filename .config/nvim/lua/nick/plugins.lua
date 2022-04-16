@@ -67,6 +67,8 @@ return require('packer').startup(function(use)
 
     use { 'nvim-lualine/lualine.nvim', config = get_config('lualine') }
 
+    use { 'folke/zen-mode.nvim' }
+
     use { 'navarasu/onedark.nvim', config = get_config('onedark') }
 
     use { 'windwp/nvim-autopairs', config = get_config('autopairs') }
