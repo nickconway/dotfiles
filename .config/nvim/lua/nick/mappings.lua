@@ -5,6 +5,8 @@ vim.g.maplocalleader = " "
 vim.api.nvim_set_keymap('n', 'x', '"_x', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<c-r>0', '<c-r>"', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<c-r><c-p>0', '<c-r><c-p>"', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<C-BS>', '<C-w>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<C-h>', '<C-w>', { noremap = true, silent = true })
 
 -- Keep centered
 vim.api.nvim_set_keymap('n', 'n', 'nzzzv', { noremap = true, silent = true })
