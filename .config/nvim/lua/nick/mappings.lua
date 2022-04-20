@@ -29,12 +29,12 @@ vim.api.nvim_set_keymap('n', '<leader>n', ':m .+1<CR>==', { noremap = true, sile
 
 vim.api.nvim_set_keymap('n', 'ZZ', ':qa<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader><CR>', ':so ~/.config/nvim/init.vim<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>a', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bb', ':BufferLinePick<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bfd', ':bp|bd! #<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bd', ':bp|bd #<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bn', ':bn<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bp', ':bp<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ee', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ff', ':lua require(\'telescope.builtin\').find_files()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fb', ':lua require(\'telescope.builtin\').buffers()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fg', ':lua require(\'telescope.builtin\').git_files()<CR>', { noremap = true, silent = true })
