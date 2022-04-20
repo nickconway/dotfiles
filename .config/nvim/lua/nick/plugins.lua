@@ -38,7 +38,6 @@ return require('packer').startup(function(use)
             },
         config = get_config('telescope')
     }
-
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
     use { 'folke/which-key.nvim', config = get_config('which-key') }
@@ -64,7 +63,6 @@ return require('packer').startup(function(use)
     use { 'lewis6991/gitsigns.nvim', config = get_config('gitsigns') }
 
     use 'kdheepak/tabline.nvim'
-
     use { 'nvim-lualine/lualine.nvim', config = get_config('lualine') }
 
     use { 'folke/zen-mode.nvim', config = get_config('zen-mode') }
@@ -75,7 +73,6 @@ return require('packer').startup(function(use)
     use 'nathom/tmux.nvim'
 
     use 'sbdchd/neoformat'
-    use('kmonad/kmonad-vim')
     use { 'akinsho/toggleterm.nvim', config = get_config('toggleterm') }
 
     use { 'kyazdani42/nvim-tree.lua', config = get_config('nvim-tree') }
