@@ -24,7 +24,7 @@ vim.opt.cmdheight = 1
 vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 vim.opt.showtabline = 0
 vim.opt.siso = 4
-vim.opt.showcmd = true
+vim.opt.showcmd = false
 vim.opt.showmode = false
 vim.opt.foldmethod = 'indent'
 vim.opt.foldenable = false
