@@ -145,3 +145,17 @@ set -o vi
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.local/bin:"$PATH"
 
 alias luamake=/home/nick/.config/nvim/lua-language-server/3rd/luamake/luamake
+
+# Starting Tailscale daemon automatically if not running...
+RUNNING=`ps aux | grep tailscaled | grep -v grep`
+if [ -z "$RUNNING" ]; then
+    sudo tailscaled > /dev/null 2>&1 &
+    disown
+fi
+
+# Starting emacs daemon automatically if not running...
+RUNNING=`ps aux | grep emacs | grep -v grep`
+if [ -z "$RUNNING" ]; then
+    emacs --daemon > /dev/null 2>&1 &
+    disown
+fi
