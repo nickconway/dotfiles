@@ -28,7 +28,8 @@
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
-(setq doom-font "Hack")
+(setq doom-font (font-spec :family "Hack" :size 14)
+      doom-variable-pitch-font (font-spec :family "Hack" :size 14))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -75,3 +76,14 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+(after! centaur-tabs
+  :ensure t
+  :config
+  (setq centaur-tabs-style "bar"
+        centaur-tabs-set-bar 'over
+        centaur-tabs-height 32
+        centaur-tabs-set-icons t
+        centaur-tabs-gray-out-icons 'buffer)
+  (centaur-tabs-headline-match)
+  (centaur-tabs-mode t))
