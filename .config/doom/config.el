@@ -86,6 +86,8 @@
       auto-save-default t
       scroll-margin 4)
 
+(setq which-key-idle-delay 0.25)
+
 (display-time-mode 1)
 
 (defadvice! prompt-for-buffer (&rest _)
