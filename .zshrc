@@ -72,6 +72,7 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git vi-mode gpg-agent keychain screen npm tmux themes zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
+zstyle :omz:plugins:keychain identities id_ed25519
 zstyle :omz:plugins:keychain options -q
 
 ZSH_TMUX_AUTOSTART=true
@@ -108,7 +109,7 @@ eval "$(starship init zsh)"
 export NO_AT_BRIDGE=1
 export VISUAL=nvim
 export EDITOR=nvim
-export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
