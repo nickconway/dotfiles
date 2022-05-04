@@ -24,14 +24,14 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
-       vertico           ; the search engine of the future
+       (vertico +icons)           ; the search engine of the future
 
        :ui
        ;;deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
-       ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;(emoji +unicode)  ; 🙂
+       doom-quit         ; DOOM quit-message prompts when you quit Emacs
+       (emoji +unicode)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        indent-guides     ; highlighted indent columns
@@ -68,7 +68,7 @@
        :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ibuffer         ; interactive buffer management
+       (ibuffer +icons)         ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
@@ -95,12 +95,12 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        lsp               ; M-x vscode
-       magit             ; a git porcelain for Emacs
-       ;;make              ; run make tasks from Emacs
+       (magit +forge)             ; a git porcelain for Emacs
+       make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
-       ;;rgb               ; creating color strings
+       rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        tmux              ; an API for interacting with tmux
@@ -108,7 +108,7 @@
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -143,10 +143,10 @@
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       ;;latex             ; writing papers in Emacs has never been so fun
+       latex             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
@@ -155,7 +155,7 @@
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       python            ; beautiful is better than ugly
+       (python +lsp +pyright)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -175,18 +175,18 @@
        ;;zig               ; C, but simpler
 
        :email
-       ;;(mu4e +org +gmail)
+       (mu4e +org +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
 
        :app
        ;;calendar
        ;;emms
-       ;;everywhere        ; *leave* Emacs!? You must be joking
+       everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
-       ;;literate
+       literate
        (default +bindings +smartparens))

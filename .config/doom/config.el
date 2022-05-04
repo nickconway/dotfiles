@@ -77,6 +77,21 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(setq-default
+ window-combination-resize t
+ x-stretch-cursor t)
+
+(setq undo-limit 80000000
+      evil-want-fine-undo t
+      auto-save-default t
+      scroll-margin 4)
+
+(display-time-mode 1)
+
+(defadvice! prompt-for-buffer (&rest _)
+  :after '(evil-window-split evil-window-vsplit)
+  (consult-buffer))
+
 (after! centaur-tabs
   :ensure t
   :config
@@ -87,3 +102,20 @@
         centaur-tabs-gray-out-icons 'buffer)
   (centaur-tabs-headline-match)
   (centaur-tabs-mode t))
+
+(map! :map global-map
+      "<M-up>" nil
+      "<M-down>" nil
+      "<M-left>" nil
+      "<M-right>" nil)
+
+(map! :map global-map
+ (:desc "Move focus up"
+  "<M-up>" #'evil-window-up)
+ (:desc "Move focus down"
+  "<M-down>" #'evil-window-down)
+ (:desc "Move focus right"
+  "<M-right>" #'evil-window-right)
+ (:desc "Move focus left"
+  "<M-left>" #'evil-window-left)
+)
