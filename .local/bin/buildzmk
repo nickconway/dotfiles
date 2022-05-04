@@ -1,0 +1,7 @@
+#! /bin/sh
+cd /home/nick/zmk/
+west build -s app/ -d build/corne/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=corne_left && \
+west build -s app/ -d build/corne/right -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=corne_right && \
+cd /home/nick/zmk/ && \
+cp /home/nick/zmk/build/corne/left/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/Chocofi/left/ && \
+cp /home/nick/zmk/build/corne/right/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/Chocofi/right/
