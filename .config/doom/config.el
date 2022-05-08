@@ -34,7 +34,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-vibrant)
+(setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -139,7 +139,7 @@
 
   ;; Company appears to override the above keymap based on company-auto-complete-chars.
   ;; Turning it off ensures we have full control.
-  (setq company-auto-complete-chars nil)
+  (setq company-insertion-triggers nil)
 )
 
 (map! :map global-map
