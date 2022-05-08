@@ -142,6 +142,9 @@
   (setq company-insertion-triggers nil)
 )
 
+(add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
+(add-to-list 'auto-mode-alist '("\\.dtsi\\'" . dts-mode))
+
 (map! :map global-map
       "<M-up>" nil
       "<M-down>" nil
