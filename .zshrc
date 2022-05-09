@@ -106,12 +106,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 eval "$(starship init zsh)"
-export NO_AT_BRIDGE=1
-export VISUAL=nvim
-export EDITOR=nvim
-export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
-
-export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 alias ys="yadm status"
 alias ya="yadm add"
@@ -143,6 +137,11 @@ pw() {
 
 set -o vi
 
+export NO_AT_BRIDGE=1
+export VISUAL=e
+export EDITOR=nvim
+export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
+export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.local/bin:"$PATH"
 
 alias luamake=/home/nick/.config/nvim/lua-language-server/3rd/luamake/luamake
