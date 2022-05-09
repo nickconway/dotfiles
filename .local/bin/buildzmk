@@ -3,7 +3,7 @@ cd /home/nick/zmk/
 for var
 do
     cat ~/zmk-config/config/base.conf > ~/zmk-config/config/"${var}".conf
-    if [[ -f ~/zmk/app/boards/shields/${var}/${var}_left.conf ]]
+    if [[ -f ~/zmk/app/**/${var}_left.conf ]]
     then
         west build -s app/ -d build/"${var}"/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD="${var}"_left && \
         west build -s app/ -d build/"${var}"/right -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD="${var}"_right && \
