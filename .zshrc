@@ -138,7 +138,7 @@ pw() {
 set -o vi
 
 export NO_AT_BRIDGE=1
-export VISUAL=e
+export VISUAL=emacs
 export EDITOR=nvim
 export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
