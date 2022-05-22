@@ -120,6 +120,7 @@ alias yd="yadm decrypt"
 alias yu="yadm upgrade"
 
 alias lg="lazygit"
+alias clipqr="xclip -o | qrencode -t utf8"
 
 alias e="emacsclient -cna ''"
 alias n="nvim"
