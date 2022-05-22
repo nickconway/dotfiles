@@ -121,8 +121,7 @@ alias yu="yadm upgrade"
 
 alias lg="lazygit"
 
-alias e="setsid emacsclient -cna 'emacs'"
-alias se="emacs --daemon"
+alias e="emacsclient -cna ''"
 alias n="nvim"
 alias v="n"
 alias t="tmux"
