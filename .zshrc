@@ -135,6 +135,12 @@ pw() {
     rbw get $1 $2 | clip.exe
 }
 
+function ylg() {
+    cd ~
+    yadm enter lazygit
+    cd -
+}
+
 set -o vi
 
 export NO_AT_BRIDGE=1
