@@ -1,19 +1,20 @@
 #! /bin/bash
-cd /home/nick/zmk/
 if [ "$#" -ne 0 ]; then
     for var in "$@"
     do
-        cp ~/zmk-config/config/base.conf ~/zmk-config/config/"${var}".conf
+        cd /home/nick/zmk-config/config/
+        cp includes/base.conf "${var}".conf
+        cd /home/nick/zmk/
         if [ $(find app -name ${var}_left.conf | wc -l) -gt 0 ]; then
             west build -s app/ -d build/"${var}"/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD="${var}"_left && \
             west build -s app/ -d build/"${var}"/right -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD="${var}"_right && \
             mkdir -p /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/ && \
-            cp /home/nick/zmk/build/"${var}"/left/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/left.uf2 && \
-            cp /home/nick/zmk/build/"${var}"/right/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/right.uf2
+            cp build/"${var}"/left/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/left.uf2 && \
+            cp build/"${var}"/right/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/right.uf2
         else
             west build -s app/ -d build/"${var}"/ -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD="${var}" && \
             mkdir -p /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/ && \
-            cp /home/nick/zmk/build/"${var}"/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/
+            cp build/"${var}"/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"${var}"/
         fi
     done
 fi
