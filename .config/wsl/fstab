@@ -1,2 +1,0 @@
-LABEL=cloudimg-rootfs	/	 ext4	defaults	0 0
-sshfs#nick@desktop-wsl:/home/nick /home/nick/desktop
