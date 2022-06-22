@@ -2,8 +2,6 @@
 if [ "$#" -ne 0 ]; then
     for var in "$@"
     do
-        cd /home/nick/zmk-config/config/
-        cp includes/base.conf "${var}".conf
         cd /home/nick/zmk/
         if [ $(find app -name ${var}_left.conf | wc -l) -gt 0 ]; then
             west build -s app/ -d build/"${var}"/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD="${var}"_left && \
