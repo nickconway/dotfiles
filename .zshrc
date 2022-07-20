@@ -176,3 +176,7 @@ if [ -z "$RUNNING" ]; then
     emacs --daemon > /dev/null 2>&1 &
     disown
 fi
+
+eval $(thefuck --alias --enable-experimental-instant-mode)
+[[ -s /home/nick/.autojump/etc/profile.d/autojump.sh ]] && source /home/nick/.autojump/etc/profile.d/autojump.sh
+autoload -U compinit && compinit -u
