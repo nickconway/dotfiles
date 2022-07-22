@@ -1,4 +1,4 @@
 .ssh/
 .config/wsl/
 .config/rbw/
-zmk-config/config/include/leader-secret.dtsi
+zmk-config/config/include/leader-sen.dtsi
