@@ -15,7 +15,14 @@ return require('packer').startup(function(use)
 
     use 'onsails/lspkind-nvim'
     use 'neovim/nvim-lspconfig'
-    use 'williamboman/nvim-lsp-installer'
+    use "williamboman/mason-lspconfig.nvim"
+    use {
+        "williamboman/mason.nvim",
+        config = function()
+            require('mason').setup()
+        end
+    }
+
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
