@@ -41,6 +41,7 @@ return require('packer').startup(function(use)
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
     use { 'folke/which-key.nvim', config = get_config('which-key') }
+    use 'sunjon/shade.nvim'
 
     use {
         'rmagatti/auto-session',
