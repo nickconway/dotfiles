@@ -135,12 +135,6 @@ pw() {
     rbw get $1 $2 | clip.exe
 }
 
-function ylg() {
-    cd ~
-    yadm enter lazygit
-    cd -
-}
-
 replace () {
     if [ $# -lt 2 ]
     then
