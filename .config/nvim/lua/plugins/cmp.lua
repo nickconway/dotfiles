@@ -94,6 +94,10 @@ require('lspconfig').sumneko_lua.setup{
     capabilities = capabilities
 }
 
+require('lspconfig').rust_analyzer.setup{
+    capabilities = capabilities
+}
+
 -- https://github.com/sumneko/lua-language-server/wiki/Build-and-Run-(Standalone)
 USER = vim.fn.expand('$USER')
 
