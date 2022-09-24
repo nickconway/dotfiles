@@ -43,11 +43,13 @@ cmp.setup({
             else
                 fallback()
             end
-        end, { "i", "s" }),        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        end, { "i", "s" }),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<CR>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
         }),
+        ['<esc>'] = cmp.mapping.close()
     },
     sources = {
         { name = 'nvim_lsp' },
