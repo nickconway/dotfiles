@@ -49,7 +49,6 @@ cmp.setup({
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
         }),
-        ['<esc>'] = cmp.mapping.close()
     },
     sources = {
         { name = 'nvim_lsp' },
