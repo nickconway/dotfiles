@@ -180,3 +180,7 @@ fi
 eval $(thefuck --alias --enable-experimental-instant-mode)
 [[ -s /home/nick/.autojump/etc/profile.d/autojump.sh ]] && source /home/nick/.autojump/etc/profile.d/autojump.sh
 autoload -U compinit && compinit -u
+
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH

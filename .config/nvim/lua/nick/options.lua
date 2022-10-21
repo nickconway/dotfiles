@@ -42,7 +42,7 @@ vim.cmd([[
     highlight Normal guibg=none
     highlight SignColumn guibg=none
     highlight EndOfBuffer guibg=none
-    " highlight NvimTreeNormal guibg=none
-    " highlight NvimTreeEndOfBuffer guibg=none
-    " highlight NvimTreeVertSplit guibg=none
+    highlight NvimTreeNormal guibg=none
+    highlight NvimTreeEndOfBuffer guibg=none
+    highlight NvimTreeVertSplit guibg=none
 ]])
