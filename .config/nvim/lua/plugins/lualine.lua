@@ -3,7 +3,8 @@ require('lualine').setup{
         theme = 'transparent_onedark',
         section_separators = {left = '', right = ''},
         component_separators = {left = '', right = ''},
-        padding = 1
+        padding = 1,
+        globalstatus=true,
     },
     sections = {
         lualine_x = {'tabs', 'encoding', 'fileformat', 'filetype'}
