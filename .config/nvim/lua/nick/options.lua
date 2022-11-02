@@ -20,7 +20,7 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 4
 vim.opt.signcolumn = 'yes'
-vim.opt.cmdheight = 1
+vim.opt.cmdheight = 0
 vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 vim.opt.showtabline = 0
 vim.opt.siso = 4
@@ -33,6 +33,7 @@ vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
 vim.opt.sessionoptions:append { 'tabpages', 'globals' }
 vim.opt.list = true
 vim.opt.cursorline = true
+vim.opt.laststatus = 3
 
 vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
 
