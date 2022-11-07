@@ -9,19 +9,30 @@ local function get_config(name)
     return string.format("require('plugins/%s')", name)
 end
 
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+    return
+end
+
+packer.init {
+    display = {
+        open_fn = function()
+            return require("packer.util").float {}
+        end,
+    },
+    git = {
+        clone_timeout = 300,
+    },
+}
+
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
-    use {'lewis6991/impatient.nvim', config = get_config('impatient') }
+    use { 'lewis6991/impatient.nvim', config = get_config('impatient') }
 
     use 'onsails/lspkind-nvim'
     use 'neovim/nvim-lspconfig'
     use "williamboman/mason-lspconfig.nvim"
-    use {
-        "williamboman/mason.nvim",
-        config = function()
-            require('mason').setup()
-        end
-    }
+    use { "williamboman/mason.nvim", config = function() require('mason').setup() end }
 
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-buffer'
@@ -29,13 +40,10 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use { 'hrsh7th/nvim-cmp', config = get_config('cmp') }
 
-    use {'L3MON4D3/LuaSnip', config = get_config('luasnip')}
+    use { 'L3MON4D3/LuaSnip', config = get_config('luasnip') }
     use 'saadparwaiz1/cmp_luasnip'
 
-    use {
-        'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
-        config = get_config('treesitter')
-    }
+    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', config = get_config('treesitter') }
 
     use 'nvim-lua/popup.nvim'
     use { 'nvim-telescope/telescope.nvim',
