@@ -47,6 +47,7 @@ return require('packer').startup(function(use)
         'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
         config = get_config('treesitter')
     }
+    use 'nvim-treesitter/playground'
     use 'nvim-treesitter/nvim-treesitter-context'
 
     use 'nvim-lua/popup.nvim'
