@@ -36,6 +36,7 @@ return require('packer').startup(function(use)
         'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
         config = get_config('treesitter')
     }
+    use 'nvim-treesitter/nvim-treesitter-context'
 
     use 'nvim-lua/popup.nvim'
     use { 'nvim-telescope/telescope.nvim',
@@ -84,7 +85,7 @@ return require('packer').startup(function(use)
     use { 'akinsho/toggleterm.nvim', config = get_config('toggleterm') }
 
     use { 'kyazdani42/nvim-tree.lua', config = get_config('nvim-tree') }
-
+    use "lukas-reineke/indent-blankline.nvim"
     if PACKER_BOOTSTRAP then
         require('packer').sync()
     end
