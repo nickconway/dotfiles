@@ -20,7 +20,7 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 4
 vim.opt.signcolumn = 'yes'
-vim.opt.cmdheight = 0
+-- vim.opt.cmdheight = 0
 vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 vim.opt.showtabline = 0
 vim.opt.siso = 4
