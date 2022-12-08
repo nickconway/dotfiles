@@ -163,13 +163,6 @@ export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.local/bin:~/bin:~/.config/bin:"$PAT
 
 alias luamake=/home/nick/.config/nvim/lua-language-server/3rd/luamake/luamake
 
-# Starting Tailscale daemon automatically if not running...
-RUNNING=`ps aux | grep tailscaled | grep -v grep`
-if [ -z "$RUNNING" ]; then
-    sudo tailscaled > /dev/null 2>&1 &
-    disown
-fi
-
 # Starting emacs daemon automatically if not running...
 RUNNING=`ps aux | grep emacs | grep -v grep`
 if [ -z "$RUNNING" ]; then
@@ -185,3 +178,11 @@ autoload -U compinit && compinit -u
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
