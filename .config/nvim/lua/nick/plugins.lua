@@ -5,10 +5,6 @@ if fn.empty(fn.glob(install_path)) > 0 then
     PACKER_BOOTSTRAP = fn.system({ 'git', 'clone', '--depth', 1, 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
-local function get_config(name)
-    return string.format("require('plugins/%s')", name)
-end
-
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
     return
@@ -27,7 +23,7 @@ packer.init {
 
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
-    use { 'lewis6991/impatient.nvim', config = get_config('impatient') }
+    use 'lewis6991/impatient.nvim'
 
     use 'onsails/lspkind-nvim'
     use 'neovim/nvim-lspconfig'
@@ -38,15 +34,12 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-cmdline'
-    use { 'hrsh7th/nvim-cmp', config = get_config('cmp') }
+    use 'hrsh7th/nvim-cmp'
 
-    use { 'L3MON4D3/LuaSnip', config = get_config('luasnip') }
+    use 'L3MON4D3/LuaSnip'
     use 'saadparwaiz1/cmp_luasnip'
 
-    use {
-        'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
-        config = get_config('treesitter')
-    }
+    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
     use 'nvim-treesitter/playground'
     use 'nvim-treesitter/nvim-treesitter-context'
 
@@ -56,11 +49,10 @@ return require('packer').startup(function(use)
                 { "nvim-lua/plenary.nvim" },
                 { "nvim-telescope/telescope-github.nvim" },
             },
-        config = get_config('telescope')
     }
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
-    use { 'folke/which-key.nvim', config = get_config('which-key') }
+    use 'folke/which-key.nvim'
     use 'sunjon/shade.nvim'
 
     use {
@@ -75,28 +67,27 @@ return require('packer').startup(function(use)
     use {
         'rmagatti/session-lens',
         requires = {'rmagatti/auto-session', 'nvim-telescope/telescope.nvim'},
-        config = get_config('session-lens')
     }
 
-    use { 'numToStr/Comment.nvim', config = get_config('Comment') }
+    use 'numToStr/Comment.nvim'
 
     use 'kyazdani42/nvim-web-devicons'
-    use { 'lewis6991/gitsigns.nvim', config = get_config('gitsigns') }
+    use 'lewis6991/gitsigns.nvim'
 
     use 'kdheepak/tabline.nvim'
-    use { 'nvim-lualine/lualine.nvim', config = get_config('lualine') }
+    use 'nvim-lualine/lualine.nvim'
 
-    use { 'folke/zen-mode.nvim', config = get_config('zen-mode') }
+    use 'folke/zen-mode.nvim'
 
-    use { 'navarasu/onedark.nvim', config = get_config('onedark') }
+    use 'navarasu/onedark.nvim'
 
-    use { 'windwp/nvim-autopairs', config = get_config('autopairs') }
+    use 'windwp/nvim-autopairs'
     use 'nathom/tmux.nvim'
 
     use 'sbdchd/neoformat'
-    use { 'akinsho/toggleterm.nvim', config = get_config('toggleterm') }
+    use 'akinsho/toggleterm.nvim'
 
-    use { 'kyazdani42/nvim-tree.lua', config = get_config('nvim-tree') }
+    use 'kyazdani42/nvim-tree.lua'
     use "lukas-reineke/indent-blankline.nvim"
 
     use {
