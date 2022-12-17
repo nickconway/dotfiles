@@ -1,48 +1,41 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.tabstop = 4
-vim.opt.smarttab = true
-vim.opt.smartindent = true
-vim.opt.shiftwidth = 4
+
 vim.opt.mouse = 'a'
+
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
+
+vim.opt.smartindent = true
+
 vim.opt.hlsearch = false
-vim.opt.hidden = true
-vim.opt.autoindent = true
-vim.opt.errorbells = false
+vim.opt.incsearch = true
+
 vim.opt.wrap = false
+
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = "/home/nick/.config/nvim/undodir"
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
-vim.opt.incsearch = true
-vim.opt.termguicolors = true
-vim.opt.scrolloff = 4
-vim.opt.signcolumn = 'yes'
--- vim.opt.cmdheight = 0
+
+vim.opt.scrolloff = 8
+vim.opt.cmdheight = 0
 vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
-vim.opt.showtabline = 0
-vim.opt.siso = 4
-vim.opt.showcmd = false
-vim.opt.showmode = false
+
 vim.opt.foldmethod = 'indent'
 vim.opt.foldenable = false
 vim.opt.fillchars = 'eob: '
-vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
-vim.opt.sessionoptions:append { 'tabpages', 'globals' }
-vim.opt.list = true
-vim.opt.cursorline = true
 vim.opt.laststatus = 3
 
-vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
+vim.opt.updatetime = 50
 
-vim.cmd([[
-    colorscheme onedark
-    highlight Normal guibg=none
-    highlight SignColumn guibg=none
-    highlight EndOfBuffer guibg=none
-    highlight NvimTreeNormal guibg=none
-    highlight NvimTreeEndOfBuffer guibg=none
-    highlight NvimTreeVertSplit guibg=none
-]])
+vim.cmd.colorscheme("onedark")
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
