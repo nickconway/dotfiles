@@ -58,6 +58,8 @@ return require('packer').startup(function(use)
     use 'nvim-treesitter/playground'
     use 'nvim-treesitter/nvim-treesitter-context'
 
+    use 'RRethy/vim-illuminate'
+
     use { 'nvim-telescope/telescope.nvim',
         requires = {
             { "nvim-lua/plenary.nvim" },
