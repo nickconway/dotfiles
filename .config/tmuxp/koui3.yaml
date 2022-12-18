@@ -1,13 +1,13 @@
 session_name: koui3
 windows:
-  - window_name: editor
+  - window_name: Editor
     layout: tiled
     shell_command_before:
       - cd ~/koui3
     panes:
       - shell_command:
           - nvim
-  - window_name: serve
+  - window_name: Serve
     layout: tiled
     shell_command_before:
       - cd ~/koui3
