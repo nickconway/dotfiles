@@ -31,10 +31,10 @@ vim.api.nvim_create_autocmd(
     { command = ":call TrimWhitespace()", group = ag }
 )
 vim.api.nvim_create_autocmd(
-    "VimResized",
+    { "VimResized" },
     { command = "wincmd =", group = ag }
 )
 vim.api.nvim_create_autocmd(
-    "InsertLeave",
+    { "InsertLeave" },
     { command = ":call ILeave()", group = ag }
 )
