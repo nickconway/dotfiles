@@ -67,6 +67,7 @@ return require('packer').startup(function(use)
             { "nvim-telescope/telescope-fzy-native.nvim" },
         },
     }
+    use { "nvim-telescope/telescope-file-browser.nvim" }
 
     use 'folke/which-key.nvim'
 

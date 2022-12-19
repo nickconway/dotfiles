@@ -4,20 +4,37 @@ vim.cmd([[
         keeppatterns %s/\s\+$//e
         call winrestview(l:save)
     endfun
+
+    fun! ILeave()
+        call TrimWhitespace()
+        lua vim.lsp.buf.format()
+        w
+    endfun
 ]])
 
-vim.cmd([[
-    augroup MAIN
-        autocmd!
-        autocmd BufNewFile,BufRead *.keymap set filetype=dts
-        autocmd BufNewFile,BufRead *.conf set filetype=c
-        autocmd BufWritePost plugins.lua source <afile> | PackerSync
-        autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
-        autocmd BufWritePre * :call TrimWhitespace()
-        autocmd InsertLeave * set iminsert=0
-        autocmd FileType which_key set laststatus=0 noshowmode noruler
-        autocmd BufLeave <buffer> set laststatus=3 showmode ruler
-        autocmd VimResized * wincmd =
-        autocmd TextChanged,InsertLeave * if &readonly == 0 && filereadable(bufname('%')) | silent write | endif " autosave
-    augroup END
-]])
+ag = vim.api.nvim_create_augroup("Main", { clear = true })
+
+vim.api.nvim_create_autocmd(
+    { "BufNewFile", "BufRead" },
+    { pattern = "*.keymap", command = "set filetype=dts", group = ag }
+)
+vim.api.nvim_create_autocmd(
+    "BufWritePost",
+    { pattern = "plugins.lua", command = "source <afile> | PackerSync", group = ag }
+)
+vim.api.nvim_create_autocmd(
+    "TextYankPost",
+    { callback = function() require("vim.highlight").on_yank({ timeout = 40 }) end, group = ag }
+)
+vim.api.nvim_create_autocmd(
+    { "BufWritePre" },
+    { command = ":call TrimWhitespace()", group = ag }
+)
+vim.api.nvim_create_autocmd(
+    "VimResized",
+    { command = "wincmd =", group = ag }
+)
+vim.api.nvim_create_autocmd(
+    "InsertLeave",
+    { command = ":call ILeave()", group = ag }
+)
