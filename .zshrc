@@ -73,6 +73,7 @@ zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities id_ed25519
 zstyle :omz:plugins:keychain options -q
 
+export DISABLE_AUTO_TITLE='true'
 if [[ -n $SSH_CONNECTION ]]; then
     ZSH_TMUX_AUTOSTART=false
 else

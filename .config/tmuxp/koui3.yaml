@@ -7,7 +7,7 @@ windows:
     panes:
       - shell_command:
           - nvim
-  - window_name: Serve
+  - window_name: Server
     layout: tiled
     shell_command_before:
       - cd ~/koui3
