@@ -1,5 +1,3 @@
-[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -10,7 +8,7 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -75,7 +73,11 @@ zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities id_ed25519
 zstyle :omz:plugins:keychain options -q
 
-ZSH_TMUX_AUTOSTART=true
+if [[ -n $SSH_CONNECTION ]]; then
+    ZSH_TMUX_AUTOSTART=false
+else
+    ZSH_TMUX_AUTOSTART=true
+fi
 
 source $ZSH/oh-my-zsh.sh
 
@@ -155,10 +157,14 @@ replace () {
 set -o vi
 
 export NO_AT_BRIDGE=1
-export VISUAL=emacs
+
+export VISUAL=nvim
 export EDITOR=nvim
+
 export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
+
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
+
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.local/bin:~/bin:~/.config/bin:"$PATH"
 
 alias luamake=/home/nick/.config/nvim/lua-language-server/3rd/luamake/luamake
@@ -179,10 +185,9 @@ export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Load Angular CLI autocompletion.
 source <(ng completion script)
