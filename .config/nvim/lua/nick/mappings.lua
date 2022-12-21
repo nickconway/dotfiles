@@ -20,8 +20,6 @@ vim.keymap.set('n', '<leader>bd', ':bp|bd #<CR>', opts)
 vim.keymap.set('n', '<leader>bn', ':bn<CR>', opts)
 vim.keymap.set('n', '<leader>bp', ':bp<CR>', opts)
 
-vim.keymap.set('n', '<leader>pv', ':Ex<CR>', opts)
-
 vim.keymap.set('n', '<leader>qq', ':q<CR>', opts)
 
 vim.keymap.set('n', '<leader>so', ':so %<CR>', opts)
