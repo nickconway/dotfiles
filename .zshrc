@@ -73,7 +73,11 @@ zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities id_ed25519
 zstyle :omz:plugins:keychain options -q
 
-ZSH_TMUX_AUTOSTART=true
+if [[ -n $SSH_CONNECTION ]]; then
+    ZSH_TMUX_AUTOSTART=true
+else
+    ZSH_TMUX_AUTOSTART=false
+end
 
 source $ZSH/oh-my-zsh.sh
 
