@@ -68,17 +68,10 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode gpg-agent keychain screen npm themes tmux zsh-autosuggestions zsh-syntax-highlighting autojump)
+plugins=(git vi-mode gpg-agent keychain screen npm themes zsh-autosuggestions zsh-syntax-highlighting autojump)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities id_ed25519
 zstyle :omz:plugins:keychain options -q
-
-export DISABLE_AUTO_TITLE='true'
-if [[ -n $SSH_CONNECTION ]]; then
-    ZSH_TMUX_AUTOSTART=false
-else
-    ZSH_TMUX_AUTOSTART=true
-fi
 
 source $ZSH/oh-my-zsh.sh
 
@@ -168,15 +161,6 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.local/bin:~/bin:~/.config/bin:"$PATH"
 
-alias luamake=/home/nick/.config/nvim/lua-language-server/3rd/luamake/luamake
-
-# Starting emacs daemon automatically if not running...
-RUNNING=`ps aux | grep emacs | grep -v grep`
-if [ -z "$RUNNING" ]; then
-    emacs --daemon > /dev/null 2>&1 &
-    disown
-fi
-
 eval $(thefuck --alias --enable-experimental-instant-mode)
 
 [[ -s /home/nick/.autojump/etc/profile.d/autojump.sh ]] && source /home/nick/.autojump/etc/profile.d/autojump.sh
@@ -192,3 +176,10 @@ export NVM_DIR="$HOME/.nvm"
 
 # Load Angular CLI autocompletion.
 source <(ng completion script)
+
+if [[ -n $SSH_CONNECTION ]]; then
+    if [ "$TMUX" = "" ]; then; fi
+else
+    if [ "$TMUX" = "" ]; then tmux; fi
+fi
+
