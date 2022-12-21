@@ -68,10 +68,12 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode gpg-agent keychain screen npm themes zsh-autosuggestions zsh-syntax-highlighting autojump)
+plugins=(git vi-mode gpg-agent keychain tmux npm themes zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities id_ed25519
 zstyle :omz:plugins:keychain options -q
+
+ZSH_TMUX_AUTOSTART=true
 
 source $ZSH/oh-my-zsh.sh
 
@@ -111,8 +113,9 @@ alias yca="yadm commit -a"
 alias ycam="yadm commit -a -m"
 alias yp="yadm push"
 alias yl="yadm pull"
-alias ye="yadm encrypt"
-alias yd="yadm decrypt"
+alias yd="yadm diff"
+alias yenc="yadm encrypt"
+alias ydec="yadm decrypt"
 alias yu="yadm upgrade"
 
 alias lg="lazygit"
@@ -148,8 +151,6 @@ replace () {
     vim -u NONE -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(ag $1 -l)
 }
 
-set -o vi
-
 export NO_AT_BRIDGE=1
 
 export VISUAL=nvim
@@ -161,11 +162,6 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.local/bin:~/bin:~/.config/bin:"$PATH"
 
-eval $(thefuck --alias --enable-experimental-instant-mode)
-
-[[ -s /home/nick/.autojump/etc/profile.d/autojump.sh ]] && source /home/nick/.autojump/etc/profile.d/autojump.sh
-autoload -U compinit && compinit -u
-
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
@@ -176,10 +172,3 @@ export NVM_DIR="$HOME/.nvm"
 
 # Load Angular CLI autocompletion.
 source <(ng completion script)
-
-if [[ -n $SSH_CONNECTION ]]; then
-    if [ "$TMUX" = "" ]; then; fi
-else
-    if [ "$TMUX" = "" ]; then tmux; fi
-fi
-
