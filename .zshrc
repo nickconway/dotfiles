@@ -74,10 +74,10 @@ zstyle :omz:plugins:keychain identities id_ed25519
 zstyle :omz:plugins:keychain options -q
 
 if [[ -n $SSH_CONNECTION ]]; then
-    ZSH_TMUX_AUTOSTART=true
-else
     ZSH_TMUX_AUTOSTART=false
-end
+else
+    ZSH_TMUX_AUTOSTART=true
+fi
 
 source $ZSH/oh-my-zsh.sh
 
