@@ -31,7 +31,6 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 vim.opt.scrolloff = 8
-vim.opt.cmdheight = 0
 vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 
 vim.opt.foldmethod = 'indent'
