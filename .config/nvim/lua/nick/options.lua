@@ -1,6 +1,3 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -17,8 +14,6 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-
-vim.opt.termguicolors = true
 
 vim.opt.wrap = false
 
