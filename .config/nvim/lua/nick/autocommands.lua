@@ -4,15 +4,9 @@ vim.cmd([[
         keeppatterns %s/\s\+$//e
         call winrestview(l:save)
     endfun
-
-    fun! ILeave()
-        call TrimWhitespace()
-        lua vim.lsp.buf.format()
-        w
-    endfun
 ]])
 
-ag = vim.api.nvim_create_augroup("Main", { clear = true })
+ag = vim.api.nvim_create_augroup("main", { clear = true })
 
 vim.api.nvim_create_autocmd(
     { "BufNewFile", "BufRead" },
@@ -27,14 +21,16 @@ vim.api.nvim_create_autocmd(
     { callback = function() require("vim.highlight").on_yank({ timeout = 40 }) end, group = ag }
 )
 vim.api.nvim_create_autocmd(
-    { "BufWritePre" },
-    { command = ":call TrimWhitespace()", group = ag }
-)
-vim.api.nvim_create_autocmd(
-    { "VimResized" },
+    "VimResized",
     { command = "wincmd =", group = ag }
 )
 vim.api.nvim_create_autocmd(
-    { "InsertLeave" },
-    { command = ":call ILeave()", group = ag }
+    { "TextChanged", "FocusLost", "InsertLeave" },
+    { callback = function()
+        if vim.opt.buftype._value == "" then
+            vim.cmd("call TrimWhitespace()")
+            vim.lsp.buf.format()
+            vim.api.nvim_command("update")
+        end
+    end, group = ag }
 )

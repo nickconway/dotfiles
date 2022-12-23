@@ -36,8 +36,12 @@ return {
             routes = {
                 {
                     view = "notify",
-                    filter = { event = "msg_showmode" },
+                    filter = { event = "msg_showmode", mode = "n", find = "recording" },
                 },
+                {
+                    view = nil,
+                    filter = { find = "Format request failed" },
+                }
             },
             views = {
                 cmdline_popup = {

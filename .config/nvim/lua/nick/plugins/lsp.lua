@@ -45,12 +45,6 @@ return {
             vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
             vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
             vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format() end, opts)
-
-            lsp_group = vim.api.nvim_create_augroup("LSP", { clear = true })
-            vim.api.nvim_create_autocmd(
-                { "BufWritePre" },
-                { callback = function() vim.lsp.buf.format() end, group = lsp_group }
-            )
         end)
 
         lsp.nvim_workspace()
