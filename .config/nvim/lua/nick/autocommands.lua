@@ -29,7 +29,6 @@ vim.api.nvim_create_autocmd(
     { callback = function()
         if vim.opt.buftype._value == "" then
             vim.cmd("call TrimWhitespace()")
-            vim.lsp.buf.format()
             vim.api.nvim_command("update")
         end
     end, group = ag }
