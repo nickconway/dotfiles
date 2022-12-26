@@ -28,12 +28,15 @@ vim.opt.splitbelow = true
 vim.opt.scrolloff = 8
 vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 
+
 vim.opt.foldmethod = 'indent'
 vim.opt.foldenable = false
 vim.opt.fillchars = 'eob: '
 vim.opt.laststatus = 3
 
 vim.opt.updatetime = 50
+
+vim.opt.signcolumn = 'yes'
 
 vim.cmd.colorscheme("onedark")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
