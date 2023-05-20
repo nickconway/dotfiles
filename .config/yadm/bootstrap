@@ -24,6 +24,9 @@ cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 cd ~
 
+echo "installing bitwarden cli"
+cargo install rbw
+
 echo "installing zsh"
 sudo apt install zsh -y
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
