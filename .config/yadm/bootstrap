@@ -2,6 +2,7 @@
 
 echo "Updating the yadm repo origin URL"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+yadm decrypt
 
 echo "installing starship"
 curl -sS https://starship.rs/install.sh | sh
