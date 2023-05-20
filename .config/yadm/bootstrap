@@ -27,6 +27,9 @@ cd ~
 echo "installing bitwarden cli"
 cargo install rbw
 
+echo "installing fzf"
+sudo apt install fzf -y
+
 echo "installing zsh"
 sudo apt install zsh -y
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
