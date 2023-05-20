@@ -135,7 +135,7 @@ alias c="clear"
 bindkey -s '^f' "tmuxp-sessionizer\n"
 
 pw() {
-    rbw get $1 $2 | xclip -sel copy
+    rbw get $1 $2 | clip.exe
 }
 
 function ylg() {
