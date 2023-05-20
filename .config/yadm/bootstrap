@@ -4,6 +4,8 @@ echo "Updating the yadm repo origin URL"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm decrypt
 
+sudo apt install keychain -y
+
 echo "installing starship"
 curl -sS https://starship.rs/install.sh | sh
 
@@ -25,5 +27,6 @@ echo "installing zsh"
 sudo apt install zsh -y
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+source .zshrc
