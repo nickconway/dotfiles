@@ -2,3 +2,27 @@
 
 echo "Updating the yadm repo origin URL"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+
+echo "installing starship"
+curl -sS https://starship.rs/install.sh | sh
+
+echo "installing npm"
+sudo apt install npm -y
+
+echo "installing rust toolchain"
+sudo apt install build-essential -y
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+echo "installing neovim"
+cargo install tree-sitter-cli
+sudo apt-get install ninja-build gettext cmake unzip curl -y
+git clone https://github.com/neovim/neovim
+cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
+
+echo "installing zsh"
+sudo apt install zsh -y
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
