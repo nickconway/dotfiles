@@ -30,6 +30,13 @@ cargo install rbw
 echo "installing fzf"
 sudo apt install fzf -y
 
+echo "installing doom emacs"
+sudo apt install emacs -y
+rm -rf .config/emacs
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+~/.config/emacs/bin/doom install
+yadm restore .config/emacs/elisp/kbd-mode.el
+
 echo "installing zsh"
 sudo apt install zsh -y
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
