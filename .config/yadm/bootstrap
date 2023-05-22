@@ -4,12 +4,20 @@ echo "Updating the yadm repo origin URL"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm decrypt
 
+echo "installing dependencies"
+sudo apt install zsh keychain emacs build-essential ninja-build gettext cmake unzip curl fzf -y
+
+echo "installing github cli"
+type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+&& sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+&& sudo apt update \
+&& sudo apt install gh -y
+
 echo "installing tailscale"
 curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
-
-echo "installing dependencies"
-sudo apt install zsh keychain emacs build-essential ninja-build gettext cmake unzip curl fzf -y
 
 echo "installing starship"
 curl -sS https://starship.rs/install.sh | sh
