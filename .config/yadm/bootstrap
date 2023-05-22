@@ -4,6 +4,10 @@ echo "Updating the yadm repo origin URL"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm decrypt
 
+echo "installing tailscale"
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+
 echo "installing dependencies"
 sudo apt install zsh keychain emacs build-essential ninja-build gettext cmake unzip curl fzf -y
 
