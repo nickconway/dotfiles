@@ -5,6 +5,7 @@ return {
         { 'neovim/nvim-lspconfig' },
         { 'williamboman/mason.nvim' },
         { 'williamboman/mason-lspconfig.nvim' },
+        { 'simrat39/rust-tools.nvim' },
 
         -- Autocompletion
         { 'hrsh7th/nvim-cmp' },
@@ -32,7 +33,7 @@ return {
             'rust_analyzer',
         })
 
-        lsp.on_attach(function(client, bufnr)
+        lsp.on_attach(function(_, bufnr)
             local opts = { buffer = bufnr, remap = false }
 
             vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
