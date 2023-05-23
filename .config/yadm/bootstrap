@@ -72,6 +72,10 @@ cd ~
 echo "installing bitwarden cli"
 cargo install rbw
 
+echo "installing fonts"
+sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
+sudo fc-cache -frv
+
 echo "installing doom emacs"
 git clone git://git.savannah.gnu.org/emacs.git
 cd emacs
