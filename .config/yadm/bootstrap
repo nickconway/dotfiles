@@ -1,99 +1,24 @@
-#!/bin/sh
+#!/bin/bash
 
-echo "Updating the yadm repo origin URL"
-yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm decrypt
+# Save this file as ~/.config/yadm/bootstrap and make it executable. It will
+# execute all executable files (excluding templates and editor backups) in the
+# ~/.config/yadm/bootstrap.d directory when run.
 
-echo "installing dependencies"
-sudo apt install \
-    zsh \
-    keychain \
-    build-essential \
-    autoconf \
-    libgtk-3-dev \
-    libgnutls28-dev \
-    libtiff5-dev \
-    libgif-dev \
-    libjpeg-dev \
-    libpng-dev \
-    libxpm-dev \
-    libncurses-dev \
-    texinfo \
-    adwaita-icon-theme-full \
-    ninja-build \
-    gettext \
-    cmake \
-    unzip \
-    curl \
-    fzf \
-    fd-find \
-    ripgrep \
-    libgccjit-11-dev \
-    libjansson4 \
-    libjansson-dev \
-    libtree-sitter-dev \
-    libgtk-3-dev \
-    libwebkit2gtk-4.0-dev \
-    xdotool \
-    xclip \
-    -y
+set -eu
 
-echo "installing github cli"
-type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-&& sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-&& sudo apt update \
-&& sudo apt install gh -y
-gh config set browser wslview
-gh auth login
-yadm restore ~/.config/gh/config.yml
+# Directory to look for bootstrap executables in
+BOOTSTRAP_D="${BASH_SOURCE[0]}.d"
 
-echo "installing tailscale"
-curl -fsSL https://tailscale.com/install.sh | sh
-sudo tailscale up
+if [[ ! -d "$BOOTSTRAP_D" ]]; then
+    echo "Error: bootstrap directory '$BOOTSTRAP_D' not found" >&2
+    exit 1
+fi
 
-echo "installing starship"
-curl -sS https://starship.rs/install.sh | sh
-
-echo "installing npm"
-sudo apt install npm -y
-
-echo "installing rust toolchain"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-echo "installing neovim"
-cargo install tree-sitter-cli
-git clone https://github.com/neovim/neovim
-cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
-cd ~
-
-echo "installing bitwarden cli"
-cargo install rbw
-
-echo "installing fonts"
-sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
-sudo fc-cache -frv
-
-echo "installing doom emacs"
-git clone git://git.savannah.gnu.org/emacs.git
-cd emacs
-git checkout emacs-28
-./autogen.sh
-./configure --with-native-compilation --with-x-toolkit=lucid
-make -j$(nproc)
-sudo make install
-cd ..
-rm -rf emacs
-rm -rf .config/emacs
-git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-~/.config/emacs/bin/doom install
-yadm restore .config/emacs/elisp/kbd-mode.el
-
-echo "installing zsh"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
-chsh -s /bin/zsh
+find -L "$BOOTSTRAP_D" -type f | sort | while IFS= read -r bootstrap; do
+    if [[ -x "$bootstrap" && ! "$bootstrap" =~ "##" && ! "$bootstrap" =~ "~$" ]]; then
+        if ! "$bootstrap"; then
+            echo "Error: bootstrap '$bootstrap' failed" >&2
+            exit 1
+        fi
+    fi
+done
