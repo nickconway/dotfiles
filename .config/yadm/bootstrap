@@ -5,7 +5,36 @@ yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm decrypt
 
 echo "installing dependencies"
-sudo apt install zsh keychain emacs build-essential ninja-build gettext cmake unzip curl fzf -y
+sudo apt install \
+    zsh \
+    keychain \
+    build-essential \
+    autoconf \
+    libgtk-3-dev \
+    libgnutls28-dev \
+    libtiff5-dev \
+    libgif-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libxpm-dev \
+    libncurses-dev \
+    texinfo \
+    adwaita-icon-theme-full \
+    ninja-build \
+    gettext \
+    cmake \
+    unzip \
+    curl \
+    fzf \
+    fd-find \
+    ripgrep \
+    libgccjit-11-dev \
+    libjansson4 \
+    libjansson-dev \
+    libtree-sitter-dev \
+    libgtk-3-dev \
+    libwebkit2gtk-4.0-dev \
+    -y
 
 echo "installing github cli"
 type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
@@ -42,6 +71,15 @@ echo "installing bitwarden cli"
 cargo install rbw
 
 echo "installing doom emacs"
+git clone git://git.savannah.gnu.org/emacs.git
+cd emacs
+git checkout emacs-28
+./autogen.sh
+./configure --with-native-compilation --with-x-toolkit=lucid
+make -j$(nproc)
+sudo make install
+cd ..
+rm -rf emacs
 rm -rf .config/emacs
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 ~/.config/emacs/bin/doom install
