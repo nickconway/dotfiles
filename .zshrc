@@ -140,7 +140,7 @@ pw() {
 function lg() {
     if [ "$PWD" != "$HOME" ]; then
         lazygit
-    else
+    elif [ "$PWD" = "$HOME" ]; then
         yadm enter lazygit
     fi;
 }
