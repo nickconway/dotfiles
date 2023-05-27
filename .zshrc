@@ -122,7 +122,6 @@ alias yenc="yadm encrypt"
 alias ydec="yadm decrypt"
 alias yu="yadm upgrade"
 
-alias lg="lazygit"
 alias clipqr="xclip -o | qrencode -t utf8"
 
 alias e="emacsclient -cna ''"
@@ -138,10 +137,12 @@ pw() {
     rbw get $1 $2 | clip.exe
 }
 
-function ylg() {
-    cd ~
-    yadm enter lazygit
-    cd -
+function lg() {
+    if [ "$PWD" != "$HOME" ]; then
+        lazygit
+    else
+        yadm enter lazygit
+    fi;
 }
 
 replace () {
