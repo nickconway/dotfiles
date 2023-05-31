@@ -53,6 +53,7 @@ if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
     echo "installing tailscale"
     curl -fsSL https://tailscale.com/install.sh | sh
     sudo tailscale up
+    sudo tailscale up --ssh
 fi
 
 echo "installing starship"
