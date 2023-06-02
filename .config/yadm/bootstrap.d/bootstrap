@@ -2,7 +2,6 @@
 
 echo "Updating the yadm repo origin URL"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm decrypt
 
 echo "installing dependencies"
 sudo apt install \
@@ -108,4 +107,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+
+yadm decrypt
+
 chsh -s /bin/zsh
