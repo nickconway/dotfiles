@@ -180,3 +180,7 @@ export NVM_DIR="$HOME/.nvm"
 if ! [ -x "$(command -v ng)"]; then
     source <(ng completion script)
 fi
+
+# fnm
+export PATH="/home/nick/.local/share/fnm:$PATH"
+eval "`fnm env`"
