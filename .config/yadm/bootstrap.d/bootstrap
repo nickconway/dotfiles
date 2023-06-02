@@ -36,6 +36,7 @@ sudo apt install \
     libwebkit2gtk-4.0-dev \
     xdotool \
     xclip \
+    python3-pip \
     -y
 
 if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
