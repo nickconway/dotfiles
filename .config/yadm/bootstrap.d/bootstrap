@@ -1,9 +1,11 @@
 #!/bin/sh
 
 echo "Updating the yadm repo origin URL"
+echo ""
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
 echo "installing dependencies"
+echo ""
 sudo apt install \
     zsh \
     keychain \
@@ -40,6 +42,7 @@ sudo apt install \
 
 if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
     echo "installing github cli"
+    echo ""
     type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
     && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -51,18 +54,22 @@ if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
     yadm restore ~/.config/gh/config.yml
 
     echo "installing tailscale"
+    echo ""
     curl -fsSL https://tailscale.com/install.sh | sh
     sudo tailscale up
     sudo tailscale up --ssh
 fi
 
 echo "installing starship"
+echo ""
 curl -sS https://starship.rs/install.sh | sh
 
 echo "installing npm"
+echo ""
 sudo apt install npm -y
 
 echo "installing lazygit"
+echo ""
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
 tar xf lazygit.tar.gz lazygit
@@ -70,9 +77,11 @@ sudo install lazygit /usr/local/bin
 rm lazygit lazygit.tar.gz
 
 echo "installing rust toolchain"
+echo ""
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 echo "installing neovim"
+echo ""
 cargo install tree-sitter-cli
 git clone https://github.com/neovim/neovim
 cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
@@ -81,13 +90,16 @@ cd ~
 rm -rf neovim
 
 echo "installing bitwarden cli"
+echo ""
 cargo install rbw
 
 echo "installing fonts"
+echo ""
 sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
 sudo fc-cache -frv
 
 echo "installing doom emacs"
+echo ""
 git clone git://git.savannah.gnu.org/emacs.git
 cd emacs
 git checkout emacs-28
@@ -103,6 +115,7 @@ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 yadm restore .config/emacs/elisp/kbd-mode.el
 
 echo "installing zsh"
+echo ""
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
