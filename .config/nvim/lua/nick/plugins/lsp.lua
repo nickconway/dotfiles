@@ -29,6 +29,7 @@ return {
     },
     config = function()
         local lsp = require('lsp-zero').preset({})
+        local navic = require('nvim-navic')
 
         lsp.preset('recommended')
 
@@ -39,8 +40,9 @@ return {
             'rust_analyzer',
         })
 
-        lsp.on_attach(function(_, bufnr)
+        lsp.on_attach(function(client, bufnr)
             lsp.default_keymaps({ buffer = bufnr })
+            navic.attach(client, bufnr)
         end)
 
         lsp.nvim_workspace()

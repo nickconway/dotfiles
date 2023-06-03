@@ -29,14 +29,6 @@ vim.api.nvim_create_autocmd(
 )
 
 vim.api.nvim_create_autocmd(
-    { "TextChanged", "FocusLost", "InsertLeave", "BufLeave" },
-    {
-        command = "wa",
-        group = Ag
-    }
-)
-
-vim.api.nvim_create_autocmd(
     { "BufWritePre", "BufWritePost" },
     {
         callback = function()
