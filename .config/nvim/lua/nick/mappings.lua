@@ -22,10 +22,14 @@ vim.keymap.set('n', '<Tab>', '<C-w>w', opts)
 vim.keymap.set('n', '<S-Tab>', '<C-w>W', opts)
 
 -- Telescope thing
-vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
+vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>",
+    opts)
 
 -- Alternate buffer
 vim.keymap.set('n', "<BS>", ":b#<CR>", opts)
+
+-- Format
+vim.keymap.set('n', '<leader>f', "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", opts)
 
 vim.keymap.set('n', 'J', 'mzJ`z', opts)
 
