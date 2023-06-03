@@ -6,26 +6,26 @@ vim.cmd([[
     endfun
 ]])
 
-ag = vim.api.nvim_create_augroup("main", { clear = true })
+Ag = vim.api.nvim_create_augroup("main", { clear = true })
 
 vim.api.nvim_create_autocmd(
     { "BufNewFile", "BufRead" },
-    { pattern = "*.keymap", command = "set filetype=dts", group = ag }
+    { pattern = "*.keymap", command = "set filetype=dts", group = Ag }
 )
 
 vim.api.nvim_create_autocmd(
     "BufWritePost",
-    { pattern = "plugins.lua", command = "source <afile> | PackerSync", group = ag }
+    { pattern = "plugins.lua", command = "source <afile> | PackerSync", group = Ag }
 )
 
 vim.api.nvim_create_autocmd(
     "TextYankPost",
-    { callback = function() require("vim.highlight").on_yank({ timeout = 40 }) end, group = ag }
+    { callback = function() require("vim.highlight").on_yank({ timeout = 40 }) end, group = Ag }
 )
 
 vim.api.nvim_create_autocmd(
     "VimResized",
-    { command = "wincmd =", group = ag }
+    { command = "wincmd =", group = Ag }
 )
 
 vim.api.nvim_create_autocmd(
@@ -34,6 +34,20 @@ vim.api.nvim_create_autocmd(
         callback = function()
             vim.lsp.buf.format({ async = false })
         end,
-        group = ag
+        group = Ag
+    }
+)
+
+vim.api.nvim_create_autocmd(
+    { "TextChanged", "FocusLost", "InsertLeave" },
+    {
+        callback = function()
+            if vim.opt.buftype._value == "" then
+                vim.cmd("call TrimWhitespace()")
+                vim.lsp.buf.format({ async = false })
+                vim.api.nvim_command("update")
+            end
+        end,
+        group = Ag
     }
 )
