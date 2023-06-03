@@ -42,6 +42,10 @@ sudo apt install \
 
 yadm decrypt
 
+echo "installing z"
+echo ""
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
 if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
     echo "installing github cli"
     echo ""

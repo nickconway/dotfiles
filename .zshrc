@@ -180,3 +180,5 @@ export NVM_DIR="$HOME/.nvm"
 if ! [ -x "$(command -v ng)"]; then
     source <(ng completion script)
 fi
+
+eval "$(zoxide init zsh)"
