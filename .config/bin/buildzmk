@@ -1,0 +1,3 @@
+#! /bin/sh
+cd ~/zmk/app
+west build -p -b nice_nano_v2 -d build/rollow_left -- -DSHIELD="rollow_left nice_view_adapter nice_view" -DZMK_CONFIG="/home/nick/zmk-config/config" && west build -p -b nice_nano_v2 -d build/rollow_right -- -DSHIELD="rollow_right nice_view_adapter nice_view" -DZMK_CONFIG="/home/nick/zmk-config/config"
