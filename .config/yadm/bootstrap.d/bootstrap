@@ -66,6 +66,9 @@ echo "installing starship"
 echo ""
 curl -sS https://starship.rs/install.sh | sh
 
+echo "installing tpm"
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 echo "installing npm"
 echo ""
 sudo apt install npm -y
