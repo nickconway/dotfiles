@@ -17,6 +17,16 @@ vim.keymap.set('n', '<CR>', 'ciw', opts)
 -- cursor stays on yank
 vim.keymap.set('v', 'y', 'ygv<Esc>', opts)
 
+-- cycle buffers
+vim.keymap.set('n', '<Tab>', '<C-w>w', opts)
+vim.keymap.set('n', '<S-Tab>', '<C-w>W', opts)
+
+-- Telescope thing
+vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
+
+-- Alternate buffer
+vim.keymap.set('n', "<BS>", ":b#<CR>", opts)
+
 vim.keymap.set('n', 'J', 'mzJ`z', opts)
 
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv==kgvo<Esc>=kgvo", opts)
