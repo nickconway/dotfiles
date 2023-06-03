@@ -24,3 +24,12 @@ vim.api.nvim_create_autocmd(
     "VimResized",
     { command = "wincmd =", group = ag }
 )
+vim.api.nvim_create_autocmd(
+    "BufWritePre",
+    {
+        callback = function()
+            vim.lsp.buf.format({})
+        end,
+        group = ag
+    }
+)
