@@ -37,17 +37,3 @@ vim.api.nvim_create_autocmd(
         group = Ag
     }
 )
-
-vim.api.nvim_create_autocmd(
-    { "TextChanged", "FocusLost", "InsertLeave" },
-    {
-        callback = function()
-            if vim.opt.buftype._value == "" then
-                vim.cmd("call TrimWhitespace()")
-                vim.lsp.buf.format({ async = false })
-                vim.api.nvim_command("update")
-            end
-        end,
-        group = Ag
-    }
-)
