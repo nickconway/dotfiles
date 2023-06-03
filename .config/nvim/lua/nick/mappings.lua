@@ -2,10 +2,17 @@ local opts = { noremap = true, silent = true }
 
 vim.keymap.set('n', 'x', '"_x', opts)
 
+-- centering
 vim.keymap.set('n', 'n', 'nzzzv', opts)
 vim.keymap.set('n', 'N', 'Nzzzv', opts)
 vim.keymap.set('n', '<C-d>', '<C-d>zz', opts)
 vim.keymap.set('n', '<C-u>', '<C-u>zz', opts)
+
+-- delete words
+vim.keymap.set('i', '<C-BS>', '<Esc>cvb', opts)
+
+-- change word
+vim.keymap.set('n', '<CR>', 'ciw', opts)
 
 vim.keymap.set('n', 'J', 'mzJ`z', opts)
 
