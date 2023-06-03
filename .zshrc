@@ -181,4 +181,4 @@ if ! [ -x "$(command -v ng)"]; then
     source <(ng completion script)
 fi
 
-eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh --cmd cd)"
