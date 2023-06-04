@@ -12,7 +12,7 @@ return {
                 -- require("null-ls").builtins.diagnostics.eslint,
                 -- require("null-ls").builtins.formatting.prettier,
                 -- require("null-ls").builtins.formatting.black,
-            }
+            },
         })
 
         require("mason-null-ls").setup({
@@ -20,5 +20,5 @@ return {
             automatic_installation = true,
             handlers = {},
         })
-    end
+    end,
 }

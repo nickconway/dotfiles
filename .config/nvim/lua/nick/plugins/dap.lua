@@ -1,5 +1,5 @@
 return {
-    'mfussenegger/nvim-dap',
+    "mfussenegger/nvim-dap",
     dependencies = {
         "rcarriga/nvim-dap-ui",
         "ravenxrz/DAPInstall.nvim",
@@ -14,12 +14,16 @@ return {
         vim.keymap.set("n", "<leader>do", "<cmd>DapStepOut<CR>")
         vim.keymap.set("n", "<leader>dt", "<cmd>DapTerminate<CR>")
         vim.keymap.set("n", "<leader>dv", "<cmd>DapStepOver<CR>")
-        vim.keymap.set("n", "<leader>dr", function() require 'dap'.repl.open() end)
+        vim.keymap.set("n", "<leader>dr", function()
+            require("dap").repl.open()
+        end)
 
         local dap_install = require("dap-install")
-        dap_install.setup({})
+        local dbg_list = require("dap-install.api.debuggers").get_installed_debuggers()
 
-        dap_install.config("python", {})
+        for _, debugger in ipairs(dbg_list) do
+            dap_install.config(debugger)
+        end
 
         require("dapui").setup({
             icons = { expanded = "", collapsed = "", current_frame = "" },
@@ -99,7 +103,7 @@ return {
             render = {
                 max_type_length = nil, -- Can be integer or nil.
                 max_value_lines = 100, -- Can be integer or nil.
-            }
+            },
         })
 
         local dap, dapui = require("dap"), require("dapui")
@@ -112,5 +116,5 @@ return {
         dap.listeners.before.event_exited["dapui_config"] = function()
             dapui.close()
         end
-    end
+    end,
 }
