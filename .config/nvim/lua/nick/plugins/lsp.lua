@@ -28,10 +28,7 @@ return {
         { 'onsails/lspkind-nvim' },
     },
     config = function()
-        local lsp = require('lsp-zero').preset({})
-        local navic = require('nvim-navic')
-
-        lsp.preset('recommended')
+        local lsp = require('lsp-zero').preset("recommended")
 
         lsp.ensure_installed({
             'tsserver',
@@ -41,8 +38,10 @@ return {
         })
 
         lsp.on_attach(function(client, bufnr)
+            if client.server_capabilities.documentSymbolProvider then
+                require('nvim-navic').attach(client, bufnr)
+            end
             lsp.default_keymaps({ buffer = bufnr })
-            navic.attach(client, bufnr)
         end)
 
         lsp.nvim_workspace()
