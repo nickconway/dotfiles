@@ -1,3 +1,22 @@
 #! /bin/sh
-cd ~/zmk/app
-west build -p -b nice_nano_v2 -d build/rollow_left -- -DSHIELD="rollow_left nice_view_adapter nice_view" -DZMK_CONFIG="/home/nick/zmk-config/config" && west build -p -b nice_nano_v2 -d build/rollow_right -- -DSHIELD="rollow_right nice_view_adapter nice_view" -DZMK_CONFIG="/home/nick/zmk-config/config"
+mkdir -p /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/
+cd /home/nick/zmk/app
+rm -rf build
+if [ $(find -name $1_left.conf | wc -l) -gt 0 ]; then
+    if [ "$2" = "nv" ]; then
+        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=$1"_left nice_view_adapter nice_view" && \
+        west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=$1"_right nice_view_adapter nice_view"
+    else
+        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=$1"_left" && \
+        west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=$1"_right"
+    fi
+    cp build/$1/left/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/left.uf2
+    cp build/$1/right/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/right.uf2
+else
+    if [ "$2" = "nv" ]; then
+        west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=$1" nice_view_adapter nice_view"
+    else
+        west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=$1
+    fi
+    cp build/$1/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/
+fi
