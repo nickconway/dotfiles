@@ -1,7 +1,6 @@
 #! /bin/sh
 mkdir -p /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/
 cd /home/nick/zmk/app
-rm -rf build
 if [ $(find -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
         west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/zmk-config/config" -DSHIELD=$1"_left nice_view_adapter nice_view" && \
