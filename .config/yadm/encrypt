@@ -2,3 +2,4 @@
 .config/wsl/
 .config/rbw/
 zmk-config/config/include/leader-sen.dtsi
+zmk-config/config/include/macros-sen.dtsi

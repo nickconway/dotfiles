@@ -1,4 +1,9 @@
 #! /bin/sh
+
+cd /home/nick/zmk-config/config/include/
+sed -i.bkp '/btclear/e cat leader-sen.dtsi' leader.dtsi
+sed -i '/leader_sequences/e cat macros-sen.dtsi' leader.dtsi
+
 mkdir -p /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/
 cd /home/nick/zmk/app
 if [ $(find -name $1_left.conf | wc -l) -gt 0 ]; then
@@ -19,3 +24,6 @@ else
     fi
     cp build/$1/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/
 fi
+
+cd /home/nick/zmk-config/config/include/
+mv leader.dtsi.bkp leader.dtsi

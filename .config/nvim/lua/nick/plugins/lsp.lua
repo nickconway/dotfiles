@@ -29,7 +29,9 @@ return {
 		{ "onsails/lspkind-nvim" },
 	},
 	config = function()
-		require("neodev").setup()
+		require("neodev").setup({
+			library = { plugins = { "nvim-dap-ui" }, types = true },
+		})
 
 		local lsp = require("lsp-zero").preset("recommended")
 
