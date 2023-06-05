@@ -5,18 +5,8 @@ return {
 		"jay-babu/mason-nvim-dap.nvim",
 	},
 	config = function()
-		vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>")
-		vim.keymap.set("n", "<leader>dc", "<cmd>DapContinue<CR>")
-		vim.keymap.set("n", "<leader>di", "<cmd>DapStepInto<CR>")
-		vim.keymap.set("n", "<leader>do", "<cmd>DapStepOut<CR>")
-		vim.keymap.set("n", "<leader>dt", "<cmd>DapTerminate<CR>")
-		vim.keymap.set("n", "<leader>dv", "<cmd>DapStepOver<CR>")
-		vim.keymap.set("n", "<leader>dr", function()
-			require("dap").repl.open()
-		end)
-
 		require("mason-nvim-dap").setup({
-			ensure_installed = { "python", "delve" },
+			ensure_installed = {},
 			handlers = {
 				function(config)
 					-- all sources with no handler get passed here
