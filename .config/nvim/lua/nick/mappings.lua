@@ -10,7 +10,7 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
 
 -- delete words
-vim.keymap.set("i", "<C-BS>", "<Esc>cvb", opts)
+vim.keymap.set("i", "<C-h>", "<Esc>cvb", opts)
 
 -- change word
 vim.keymap.set("n", "<CR>", "ciw", opts)
