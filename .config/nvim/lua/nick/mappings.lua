@@ -22,8 +22,6 @@ vim.keymap.set("v", "y", "ygv<Esc>", opts)
 vim.keymap.set("n", "<Tab>", "<C-w>w", opts)
 vim.keymap.set("n", "<S-Tab>", "<C-w>W", opts)
 
-vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
-
 -- Alternate buffer
 vim.keymap.set("n", "<BS>", ":b#<CR>", opts)
 
@@ -104,6 +102,7 @@ vim.keymap.set("n", "<leader>ff", builtin.find_files, opts)
 vim.keymap.set("n", "<leader>fg", builtin.git_files, opts)
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, opts)
 vim.keymap.set("n", "<leader>fl", builtin.live_grep, opts)
+vim.keymap.set("n", "<leader>fr", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
 vim.keymap.set("n", "<leader>fs", ":SearchSession<CR>", opts)
 vim.keymap.set("n", "<leader>fo", ":Telescope file_browser<CR>", opts)
 
