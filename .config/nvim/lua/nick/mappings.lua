@@ -2,6 +2,7 @@ local opts = { noremap = true, silent = true }
 
 vim.keymap.set("n", "x", '"_x', opts)
 
+vim.keymap.set("i", "<C-c>", "<Esc>", opts)
 -- centering
 vim.keymap.set("n", "n", "nzzzv", opts)
 vim.keymap.set("n", "N", "Nzzzv", opts)
@@ -21,13 +22,7 @@ vim.keymap.set("v", "y", "ygv<Esc>", opts)
 vim.keymap.set("n", "<Tab>", "<C-w>w", opts)
 vim.keymap.set("n", "<S-Tab>", "<C-w>W", opts)
 
--- Telescope thing
-vim.keymap.set(
-	"n",
-	";",
-	"<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>",
-	opts
-)
+vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
 
 -- Alternate buffer
 vim.keymap.set("n", "<BS>", ":b#<CR>", opts)
@@ -75,19 +70,19 @@ vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 local mark = require("harpoon.mark")
 local ui = require("harpoon.ui")
 
-vim.keymap.set("n", "<leader>a", mark.add_file)
-vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
+vim.keymap.set("n", "<leader>ha", mark.add_file)
+vim.keymap.set("n", "<leader>hh", ui.toggle_quick_menu)
 
-vim.keymap.set("n", "<C-n>", function()
+vim.keymap.set("n", "<C-t>", function()
 	ui.nav_file(1)
 end)
-vim.keymap.set("n", "<C-e>", function()
+vim.keymap.set("n", "<C-s>", function()
 	ui.nav_file(2)
 end)
-vim.keymap.set("n", "<C-i>", function()
+vim.keymap.set("n", "<C-r>", function()
 	ui.nav_file(3)
 end)
-vim.keymap.set("n", "<C-o>", function()
+vim.keymap.set("n", "<C-a>", function()
 	ui.nav_file(4)
 end)
 
@@ -104,12 +99,12 @@ vim.keymap.set("n", "<leader>dr", function()
 end)
 
 local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader>pb", builtin.buffers, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>pf", builtin.find_files, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>pg", builtin.git_files, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>ph", builtin.help_tags, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>pl", builtin.live_grep, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>pp", ":SearchSession<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>pv", ":Telescope file_browser<CR>", opts)
+vim.keymap.set("n", "<leader>fb", builtin.buffers, opts)
+vim.keymap.set("n", "<leader>ff", builtin.find_files, opts)
+vim.keymap.set("n", "<leader>fg", builtin.git_files, opts)
+vim.keymap.set("n", "<leader>fh", builtin.help_tags, opts)
+vim.keymap.set("n", "<leader>fl", builtin.live_grep, opts)
+vim.keymap.set("n", "<leader>fs", ":SearchSession<CR>", opts)
+vim.keymap.set("n", "<leader>fo", ":Telescope file_browser<CR>", opts)
 
-vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { silent = true })
+vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", opts)
