@@ -37,6 +37,7 @@ sudo apt install \
     xdotool \
     xclip \
     python3-pip \
+    tldr \
     -y
 
 echo "installing go"

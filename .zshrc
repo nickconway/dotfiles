@@ -194,6 +194,7 @@ fi
 
 eval "$(zoxide init zsh --cmd cd)"
 
+export FZF_DEFAULT_OPTS="--color=gutter:-1"
 export FZF_CTRL_R_OPTS="--reverse"
 export FZF_TMUX_OPTS="-p --reverse"
 
