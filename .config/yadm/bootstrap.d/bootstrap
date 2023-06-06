@@ -72,6 +72,7 @@ if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
     gh config set browser wslview
     gh auth login
     yadm restore ~/.config/gh/config.yml
+    gh extension install dlvhdr/gh-dash
 
     echo "installing tailscale"
     echo ""
