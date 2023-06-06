@@ -117,6 +117,7 @@ rm -rf neovim
 echo "installing bitwarden cli"
 echo ""
 cargo install rbw
+cargo install tealdeer
 
 echo "installing fonts"
 echo ""
