@@ -59,7 +59,7 @@ vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", opts)
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz", opts)
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz", opts)
 
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set("n", "<C-f>", "<cmd>silent !t<CR>")
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", opts)
 
