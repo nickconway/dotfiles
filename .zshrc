@@ -189,3 +189,8 @@ if ! [ -x "$(command -v ng)"]; then
 fi
 
 eval "$(zoxide init zsh --cmd cd)"
+
+export FZF_CTRL_R_OPTS="--reverse"
+export FZF_TMUX_OPTS="-p"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
