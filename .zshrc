@@ -130,7 +130,9 @@ alias v="n"
 
 alias c="clear"
 
-bindkey -s '^f' "tmux-sessionizer\n"
+t_w() t
+zle -N t_w
+bindkey '^f' t_w
 bindkey -s '^p' "tmuxp-sessionizer\n"
 
 pw() {
@@ -191,6 +193,6 @@ fi
 eval "$(zoxide init zsh --cmd cd)"
 
 export FZF_CTRL_R_OPTS="--reverse"
-export FZF_TMUX_OPTS="-p"
+export FZF_TMUX_OPTS="-p --reverse"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
