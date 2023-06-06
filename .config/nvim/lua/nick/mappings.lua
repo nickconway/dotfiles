@@ -72,16 +72,16 @@ vim.keymap.set("n", "<leader>ha", mark.add_file)
 vim.keymap.set("n", "<leader>hh", ui.toggle_quick_menu)
 
 vim.keymap.set("n", "<leader>ht", function()
-    ui.nav_file(1)
+	ui.nav_file(1)
 end)
 vim.keymap.set("n", "<leader>hs", function()
-    ui.nav_file(2)
+	ui.nav_file(2)
 end)
 vim.keymap.set("n", "<leader>hr", function()
-    ui.nav_file(3)
+	ui.nav_file(3)
 end)
 vim.keymap.set("n", "<leader>ha", function()
-    ui.nav_file(4)
+	ui.nav_file(4)
 end)
 
 vim.keymap.set("n", "-", require("oil").open, { desc = "Open parent directory" })
@@ -93,7 +93,7 @@ vim.keymap.set("n", "<leader>do", "<cmd>DapStepOut<CR>")
 vim.keymap.set("n", "<leader>dt", "<cmd>DapTerminate<CR>")
 vim.keymap.set("n", "<leader>dv", "<cmd>DapStepOver<CR>")
 vim.keymap.set("n", "<leader>dr", function()
-    require("dap").repl.open()
+	require("dap").repl.open()
 end)
 
 local builtin = require("telescope.builtin")
@@ -106,4 +106,50 @@ vim.keymap.set("n", "<leader>fr", "<cmd>lua require('telescope.builtin').resume(
 vim.keymap.set("n", "<leader>fs", ":SearchSession<CR>", opts)
 vim.keymap.set("n", "<leader>fo", ":Telescope file_browser<CR>", opts)
 
-vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", opts)
+local Terminal = require("toggleterm.terminal").Terminal
+local lazygit = Terminal:new({
+	cmd = "lazygit",
+	hidden = true,
+	direction = "float",
+	float_opts = {
+		border = "double",
+	},
+	-- function to run on opening the terminal
+	on_open = function(term)
+		vim.cmd("startinsert!")
+		vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+	end,
+	-- function to run on closing the terminal
+	on_close = function(term)
+		vim.cmd("startinsert!")
+	end,
+})
+
+local yadm = Terminal:new({
+	cmd = "yadm enter lazygit",
+	hidden = true,
+	direction = "float",
+	float_opts = {
+		border = "double",
+	},
+	-- function to run on opening the terminal
+	on_open = function(term)
+		vim.cmd("startinsert!")
+		vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+	end,
+	-- function to run on closing the terminal
+	on_close = function(term)
+		vim.cmd("startinsert!")
+	end,
+})
+
+function lazygit_toggle()
+	lazygit:toggle()
+end
+
+function yadm_toggle()
+	yadm:toggle()
+end
+
+vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua lazygit_toggle()<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>y", "<cmd>lua yadm_toggle()<CR>", opts)
