@@ -143,10 +143,16 @@ local yadm = Terminal:new({
 	end,
 })
 
+local function is_git_repo()
+	local is_repo = vim.fn.system("git rev-parse --is-inside-work-tree")
+
+	return vim.v.shell_error == 0
+end
+
 vim.keymap.set("n", "<leader>g", function()
-	if vim.fn.getcwd() == "/home/nick" then
-		yadm:toggle()
-	else
+	if is_git_repo() then
 		lazygit:toggle()
+	else
+		yadm:toggle()
 	end
 end, opts)
