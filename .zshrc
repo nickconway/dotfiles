@@ -127,7 +127,6 @@ alias clipqr="xclip -o | qrencode -t utf8"
 alias e="emacsclient -cna ''"
 alias n="nvim"
 alias v="n"
-alias t="tmux"
 
 alias c="clear"
 

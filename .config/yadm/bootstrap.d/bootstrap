@@ -45,7 +45,6 @@ yadm decrypt
 echo "installing z"
 echo ""
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-rm ~/.zcompdump*; compinit
 
 if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
     echo "installing github cli"
@@ -89,6 +88,7 @@ rm lazygit lazygit.tar.gz
 echo "installing rust toolchain"
 echo ""
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+export PATH=~/.cargo/bin/:"$PATH"
 
 echo "installing neovim"
 echo ""
