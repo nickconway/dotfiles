@@ -170,6 +170,10 @@ export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH"
+# ~/.tmux/plugins
+export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
+# ~/.config/tmux/plugins
+export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
