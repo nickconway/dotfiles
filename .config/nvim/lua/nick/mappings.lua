@@ -120,7 +120,7 @@ local lazygit = Terminal:new({
 		vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
 	end,
 	-- function to run on closing the terminal
-	on_close = function(term)
+	on_close = function(_)
 		vim.cmd("startinsert!")
 	end,
 })
@@ -138,18 +138,15 @@ local yadm = Terminal:new({
 		vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
 	end,
 	-- function to run on closing the terminal
-	on_close = function(term)
+	on_close = function(_)
 		vim.cmd("startinsert!")
 	end,
 })
 
-function lazygit_toggle()
-	lazygit:toggle()
-end
-
-function yadm_toggle()
-	yadm:toggle()
-end
-
-vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua lazygit_toggle()<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>y", "<cmd>lua yadm_toggle()<CR>", opts)
+vim.keymap.set("n", "<leader>g", function()
+	if vim.fn.getcwd() == "/home/nick" then
+		yadm:toggle()
+	else
+		lazygit:toggle()
+	end
+end, opts)
