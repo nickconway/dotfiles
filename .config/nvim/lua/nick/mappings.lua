@@ -145,7 +145,6 @@ local yadm = Terminal:new({
 
 local function is_git_repo()
 	local is_repo = vim.fn.system("git rev-parse --is-inside-work-tree")
-
 	return vim.v.shell_error == 0
 end
 

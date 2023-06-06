@@ -144,10 +144,12 @@ function ghpr() {
 }
 
 function lg() {
-    if [ "$PWD" != "$HOME" ]; then
+    if git rev-parse --is-inside-work-tree &> /dev/null; then
         lazygit
-    elif [ "$PWD" = "$HOME" ]; then
+    else
+        cd ~
         yadm enter lazygit
+        cd - &> /dev/null
     fi;
 }
 
