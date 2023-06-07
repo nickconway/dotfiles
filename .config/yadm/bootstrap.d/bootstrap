@@ -133,14 +133,14 @@ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 yadm restore .config/emacs/elisp/kbd-mode.el
 ~/.config/emacs/bin/doom sync
 
-yadm decrypt
-
 echo "installing zsh"
 echo ""
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+
+yadm decrypt
 
 echo "installing fonts"
 echo ""
