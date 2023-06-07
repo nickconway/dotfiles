@@ -29,6 +29,10 @@ return {
 						},
 					},
 				},
+				fzy_native = {
+					override_generic_sorter = false,
+					override_file_sorter = true,
+				},
 			},
 			pickers = {
 				find_files = {
@@ -41,5 +45,6 @@ return {
 		require("telescope").load_extension("session-lens")
 		require("telescope").load_extension("noice")
 		require("telescope").load_extension("file_browser")
+		require("telescope").load_extension("fzy_native")
 	end,
 }
