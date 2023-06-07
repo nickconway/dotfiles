@@ -10,11 +10,12 @@ return {
 		transparent.normal.b.fg = colors.grey
 		transparent.normal.c.bg = "none"
 		transparent.normal.c.fg = colors.grey
+		transparent.inactive.c.bg = "none"
 
 		local lualine_sections = {
 			lualine_a = { "mode" },
 			lualine_b = { "branch", "diff", "diagnostics" },
-			lualine_c = { "filename" },
+			lualine_c = {},
 			lualine_x = { "encoding", "fileformat", "filetype" },
 			lualine_y = { "progress" },
 			lualine_z = { "location" },
