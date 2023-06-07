@@ -130,7 +130,7 @@ alias v="n"
 
 alias c="clear"
 
-alias tldrf="tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right:70% | xargs tldr --color=always"
+alias tldrf="tldr --list | fzf --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
 
 t_w() t
 zle -N t_w
