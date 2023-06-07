@@ -69,7 +69,6 @@ if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
         && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
         && sudo apt update \
         && sudo apt install gh -y
-    gh config set browser wslview
     gh auth login
     yadm restore ~/.config/gh/config.yml
     gh extension install dlvhdr/gh-dash
@@ -114,15 +113,10 @@ sudo make install
 cd ~
 rm -rf neovim
 
-echo "installing bitwarden cli"
+echo "installing cargo tools"
 echo ""
 cargo install rbw
 cargo install tealdeer
-
-echo "installing fonts"
-echo ""
-sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
-sudo fc-cache -frv
 
 echo "installing doom emacs"
 echo ""
@@ -146,5 +140,10 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+
+echo "installing fonts"
+echo ""
+sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
+sudo fc-cache -frv
 
 chsh -s /bin/zsh
