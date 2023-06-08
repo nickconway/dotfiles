@@ -1,6 +1,11 @@
 return {
     "nvim-lualine/lualine.nvim",
+    dependencies = {
+        'linrongbin16/lsp-progress.nvim',
+    },
     config = function()
+        require('lsp-progress').setup()
+
         local colors = require("onedark.colors")
         local transparent = require("lualine.themes.onedark")
 
@@ -17,6 +22,7 @@ return {
             lualine_b = { "branch", "diff", "diagnostics" },
             lualine_c = {
                 'filename',
+                require('lsp-progress').progress,
                 {
                     require("noice").api.statusline.mode.get,
                     cond = require("noice").api.statusline.mode.has,

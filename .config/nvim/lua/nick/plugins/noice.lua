@@ -16,6 +16,12 @@ return {
         })
 
         require("noice").setup({
+            routes = {
+                {
+                    view = nil,
+                    filter = { find = "Format request failed" },
+                }
+            },
             lsp = {
                 -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
                 override = {
