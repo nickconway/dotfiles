@@ -16,6 +16,7 @@ return {
             lualine_a = { "mode" },
             lualine_b = { "branch", "diff", "diagnostics" },
             lualine_c = {
+                'filename',
                 {
                     require("noice").api.statusline.mode.get,
                     cond = require("noice").api.statusline.mode.has,
@@ -31,10 +32,12 @@ return {
 
         local winbar_sections = {
             lualine_c = {
-                "filename",
                 "navic",
                 color_correction = nil,
                 navic_opts = nil,
+                {
+                    draw_empty = true,
+                }
             },
         }
 
