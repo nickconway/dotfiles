@@ -15,7 +15,15 @@ return {
         local lualine_sections = {
             lualine_a = { "mode" },
             lualine_b = { "branch", "diff", "diagnostics" },
-            lualine_c = {},
+            lualine_c = {
+                {
+                    require("noice").api.statusline.mode.get,
+                    cond = require("noice").api.statusline.mode.has,
+                    fmt = function(name, context)
+                        return name:gsub('%-%- INSERT %-%-', '')
+                    end
+                }
+            },
             lualine_x = { "encoding", "fileformat", "filetype" },
             lualine_y = { "progress" },
             lualine_z = { "location" },
