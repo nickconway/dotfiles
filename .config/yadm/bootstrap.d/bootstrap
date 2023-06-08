@@ -93,7 +93,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 sudo apt install npm -y
 nvm install node
-sudo npm i -g npm
+nvm install-latest-npm
 
 echo "installing lazygit"
 echo ""
