@@ -28,7 +28,6 @@ vim.opt.splitbelow = true
 vim.opt.scrolloff = 8
 vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 
-
 vim.opt.foldmethod = 'indent'
 vim.opt.foldenable = false
 vim.opt.fillchars = 'eob: '
