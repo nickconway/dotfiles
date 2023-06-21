@@ -1,8 +1,7 @@
 return {
-	"echasnovski/mini.nvim",
-	version = "*",
-	config = function()
-		require("mini.ai").setup()
-		require("mini.jump").setup()
-	end,
+    "echasnovski/mini.nvim",
+    version = "*",
+    config = function()
+        require("mini.ai").setup()
+    end,
 }
