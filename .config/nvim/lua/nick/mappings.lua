@@ -84,7 +84,7 @@ vim.keymap.set("n", "<leader>ha", function()
     ui.nav_file(4)
 end)
 
-vim.keymap.set("n", "-", require("oil").open, { desc = "Open parent directory" })
+vim.keymap.set("n", "-", ":lua MiniFiles.open()<CR>", opts)
 
 vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>")
 vim.keymap.set("n", "<leader>dc", "<cmd>DapContinue<CR>")
