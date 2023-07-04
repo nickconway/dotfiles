@@ -17,12 +17,44 @@ return {
         transparent.normal.c.fg = colors.grey
         transparent.inactive.c.bg = "none"
 
+        local function LSPs()
+            return require('lsp-progress').progress({
+                format = function(messages)
+                    local active_clients = vim.lsp.get_active_clients()
+                    local client_count = #active_clients
+                    if #messages > 0 then
+                        return " LSP:"
+                            .. client_count
+                            .. " "
+                            .. table.concat(messages, " ")
+                    end
+                    if #active_clients <= 0 then
+                        return " LSP:" .. client_count
+                    else
+                        local client_names = {}
+                        for i, client in ipairs(active_clients) do
+                            if client and client.name ~= "" then
+                                table.insert(client_names, "[" .. client.name .. "]")
+                                print(
+                                    "client[" .. i .. "]:" .. vim.inspect(client.name)
+                                )
+                            end
+                        end
+                        return " LSP:"
+                            .. client_count
+                            .. " "
+                            .. table.concat(client_names, " ")
+                    end
+                end,
+            })
+        end
+
         local lualine_sections = {
             lualine_a = { "mode" },
             lualine_b = { "branch", "diff", "diagnostics" },
             lualine_c = {
                 'filename',
-                require('lsp-progress').progress,
+                LSPs,
                 {
                     require("noice").api.statusline.mode.get,
                     cond = require("noice").api.statusline.mode.has,
@@ -72,5 +104,13 @@ return {
             winbar = winbar_sections,
             inactive_winbar = winbar_sections,
         })
+
+        -- refresh lualine
+        vim.cmd([[
+            augroup lualine_augroup
+                autocmd!
+                autocmd User LspProgressStatusUpdated lua require("lualine").refresh()
+            augroup END
+        ]])
     end,
 }
