@@ -5,6 +5,4 @@ return {
 
     'RRethy/vim-illuminate',
 
-    'kyazdani42/nvim-web-devicons',
-
 }
