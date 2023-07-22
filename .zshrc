@@ -124,6 +124,9 @@ alias yu="yadm upgrade"
 
 alias clipqr="xclip -o | qrencode -t utf8"
 
+alias sshd="(ping -c 1 desktop-wsl.local > /dev/null 2>&1 && ssh desktop-wsl.local) || ssh desktop-wsl"
+alias sshl="(ping -c 1 laptop-wsl.local > /dev/null 2>&1 && ssh laptop-wsl.local) || ssh laptop-wsl"
+
 alias e="emacsclient -cna ''"
 alias n="nvim"
 alias v="n"
