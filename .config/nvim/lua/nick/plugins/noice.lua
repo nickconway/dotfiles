@@ -16,6 +16,10 @@ return {
                 {
                     view = nil,
                     filter = { find = "Format request failed" },
+                },
+                {
+                    view = nil,
+                    filter = { find = "client" },
                 }
             },
             lsp = {
