@@ -45,6 +45,7 @@
   "rust-tools.nvim": { "branch": "master", "commit": "0cc8adab23117783a0292a0c8a2fbed1005dc645" },
   "session-lens": { "branch": "main", "commit": "1b65d8e1bcd1836c5135cce118ba18d662a9dabd" },
   "tabby.nvim": { "branch": "main", "commit": "8bbd8b15c15b69057260170355b8e7adcca1c11a" },
+  "tailwindcss-colorizer-cmp.nvim": { "branch": "main", "commit": "65565c62963579897d28390dbd1ba8fb15ba545f" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "e03ff55962417b69c85ef41424079bb0580546ba" },
   "telescope-fzy-native.nvim": { "branch": "master", "commit": "282f069504515eec762ab6d6c89903377252bf5b" },
   "telescope-github.nvim": { "branch": "master", "commit": "ee95c509901c3357679e9f2f9eaac3561c811736" },
