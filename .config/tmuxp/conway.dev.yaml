@@ -1,16 +1,9 @@
 session_name: conway_dev
+start_directory: ~/conway.dev
 windows:
-  - window_name: Editor
-    layout: tiled
-    shell_command_before:
-      - cd ~/conway.dev
-    panes:
+  - panes:
       - shell_command:
           - nvim
-  - window_name: Server
-    layout: tiled
-    shell_command_before:
-      - cd ~/conway.dev
-    panes:
+  - panes:
       - shell_command:
-          - npm run dev -- --open
+          - npm run dev -- --open --host

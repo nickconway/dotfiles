@@ -1,17 +1,10 @@
 session_name: koui3
+start_directory: ~/koui3
 windows:
-  - window_name: Editor
-    layout: tiled
-    shell_command_before:
-      - cd ~/koui3
-    panes:
+  - panes:
       - shell_command:
           - nvim
-  - window_name: Server
-    layout: tiled
-    shell_command_before:
-      - cd ~/koui3
-    panes:
+  - panes:
       - shell_command:
           - nvm use 16.15.1
           - ng serve
