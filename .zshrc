@@ -105,8 +105,9 @@ if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -A -s main
     else
-        alias exit="tmux detach -P"
+        EXISTS=$(tmux has-session -t ssh)
         tmux new -A -s ssh
+        [[ -z $EXISTS ]] && tmux send -t ssh "alias exit='tmux detach -P'" Enter
     fi
 fi
 
