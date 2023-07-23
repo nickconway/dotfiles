@@ -1,8 +1,0 @@
-session_name: conway_dev
-start_directory: ~/conway.dev
-windows:
-  - panes:
-      - shell_command:
-          - nvim
-      - shell_command:
-          - npm run dev -- --open --host
