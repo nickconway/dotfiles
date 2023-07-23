@@ -2,9 +2,9 @@
 
 if [[ $# -eq 1 ]]; then
     dir=$1
-    command() (find "$dir" -mindepth 1 -maxdepth 1 -type d)
+    command() (find "$dir" -mindepth 1 -maxdepth 1 -type d; tmux list-sessions -F "#S")
 else
-    command() (find ~/ -mindepth 1 -maxdepth 1 -type d; zoxide query -l)
+    command() (find ~/ -mindepth 1 -maxdepth 1 -type d; zoxide query -l; tmux list-sessions -F "#S")
 fi
 selected=$(command | sort | uniq | fzf-tmux -p)
 
