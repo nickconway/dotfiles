@@ -4,6 +4,5 @@ windows:
   - panes:
       - shell_command:
           - nvim
-  - panes:
       - shell_command:
           - npm run dev -- --open --host

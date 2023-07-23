@@ -4,7 +4,6 @@ windows:
   - panes:
       - shell_command:
           - nvim
-  - panes:
       - shell_command:
           - nvm use 16.15.1
           - ng serve
