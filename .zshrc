@@ -103,9 +103,9 @@ source $ZSH/oh-my-zsh.sh
 
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
-        tmux attach -t main || tmux new -s main
+        tmux new -A -s main
     else
-        tmux attach -t ssh || tmux new -s ssh
+        tmux new -A -s ssh
     fi
 fi
 
@@ -137,12 +137,11 @@ alias v="n"
 
 alias c="clear"
 
-alias tldrf="tldr --list | fzf --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
+alias tldrf="tldr --list | fzf-tmux -p --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
 
-t_w() t
+t_w() tmux-sessionizer
 zle -N t_w
 bindkey '^f' t_w
-bindkey -s '^p' "tmuxp-sessionizer\n"
 
 pw() {
     rbw get $1 $2 | clip.exe
