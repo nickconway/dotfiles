@@ -164,6 +164,13 @@ function lg() {
     fi;
 }
 
+make-svelte() {
+    npm create svelte@latest $1
+    cd $1
+    npm install
+    npm run dev -- --open --host
+}
+
 replace () {
     if [ $# -lt 2 ]
     then
