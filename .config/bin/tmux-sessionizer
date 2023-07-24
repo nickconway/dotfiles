@@ -12,12 +12,12 @@ if [[ -z $selected ]]; then
     exit 0
 fi
 
-sveltekit=svelte-kit
-
 selected_name=$(basename "$selected")
 session_name=$(basename "$selected" | tr . _)
 
 tmux_running=$(pgrep tmux)
+
+sveltekit=svelte-kit
 
 if [[ -e ~/.config/tmuxp/"$selected_name".yaml ]]; then
     tmuxp load ~/.config/tmuxp/"$selected_name".yaml -y > /dev/null
