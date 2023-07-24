@@ -9,4 +9,4 @@ windows:
           - nvim
         focus: true
       - shell_command:
-          - npm run dev -- --open --host
+          - ng serve --open
