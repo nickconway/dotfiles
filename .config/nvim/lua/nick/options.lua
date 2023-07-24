@@ -37,6 +37,8 @@ vim.opt.updatetime = 50
 
 vim.opt.signcolumn = 'yes'
 
+vim.opt.winbar = " "
+
 vim.cmd.colorscheme("onedark")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })

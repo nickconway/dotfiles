@@ -30,9 +30,6 @@ return {
                 "navic",
                 color_correction = nil,
                 navic_opts = nil,
-                {
-                    draw_empty = true,
-                }
             },
         }
 
@@ -61,13 +58,5 @@ return {
             winbar = winbar_sections,
             inactive_winbar = winbar_sections,
         })
-
-        -- refresh lualine
-        vim.cmd([[
-            augroup lualine_augroup
-                autocmd!
-                autocmd User LspProgressStatusUpdated lua require("lualine").refresh()
-            augroup END
-        ]])
     end,
 }
