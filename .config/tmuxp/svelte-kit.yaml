@@ -1,8 +1,9 @@
 session_name: "${TMUXP_SESSION_NAME}"
 start_directory: "${TMUXP_START_DIR}"
 windows:
-  - options:
-      main-pane-height: 70
+  - layout: main-horizontal
+    options:
+      main-pane-height: "80%"
     panes:
     - shell_command:
       - nvim
