@@ -1,10 +1,6 @@
 [user]
 	name = Nick Conway
-{% if yadm.distro_family == "rhel centos fedora" %}
-    email = nconway@fornetix.com
-{% else %}
     email = nick@conway.dev
-{% endif }
 
 [init]
 	defaultBranch = main
