@@ -189,7 +189,11 @@ export NO_AT_BRIDGE=1
 export VISUAL=nvim
 export EDITOR=nvim
 
-export PROJECT_DIR=(~/git ~/git/KO)
+if [[ -e ~/git/KO ]]; then
+    export PROJECT_DIR=~/git/KO
+else
+    export PROJECT_DIR=~/git
+fi
 
 export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
 
