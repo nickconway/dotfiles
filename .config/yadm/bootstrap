@@ -59,25 +59,23 @@ echo "installing z"
 echo ""
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
-if [ "$(uname -n)" != "NCONWAY-DEV" ]; then
-    echo "installing github cli"
-    echo ""
-    type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-        && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-        && sudo apt update \
-        && sudo apt install gh -y
-    gh auth login
-    yadm restore ~/.config/gh/config.yml
-    gh extension install dlvhdr/gh-dash
+echo "installing github cli"
+echo ""
+type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \
+    && sudo apt install gh -y
+gh auth login
+yadm restore ~/.config/gh/config.yml
+gh extension install dlvhdr/gh-dash
 
-    echo "installing tailscale"
-    echo ""
-    curl -fsSL https://tailscale.com/install.sh | sh
-    sudo tailscale up
-    sudo tailscale up --ssh
-fi
+echo "installing tailscale"
+echo ""
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+sudo tailscale up --ssh
 
 echo "installing starship"
 echo ""
@@ -104,7 +102,6 @@ rm lazygit lazygit.tar.gz
 echo "installing rust toolchain"
 echo ""
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-export PATH=~/.cargo/bin/:"$PATH"
 
 echo "installing neovim"
 echo ""
@@ -120,23 +117,6 @@ echo ""
 cargo install rbw
 cargo install tealdeer
 
-echo "installing doom emacs"
-echo ""
-git clone git://git.savannah.gnu.org/emacs.git
-cd emacs
-git checkout emacs-28
-./autogen.sh
-./configure --with-native-compilation --with-x-toolkit=lucid
-make -j$(nproc)
-sudo make install
-cd ..
-rm -rf emacs
-rm -rf .config/emacs
-git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-~/.config/emacs/bin/doom install
-yadm restore .config/emacs/elisp/kbd-mode.el
-~/.config/emacs/bin/doom sync
-
 echo "installing zsh"
 echo ""
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -146,9 +126,11 @@ mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 
 yadm decrypt
 
-echo "installing fonts"
-echo ""
-sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
-sudo fc-cache -frv
+if [[ -e /mnt/c/Users ]] then;
+    echo "installing fonts"
+    echo ""
+    sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
+    sudo fc-cache -frv
+fi
 
 chsh -s /bin/zsh
