@@ -101,7 +101,7 @@ zstyle :omz:plugins:keychain options -q
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-[[ -e ~/.fornetix-rc ]] && source ~/.fornetix-rc
+[[ -e ~/.fornetixrc ]] && source ~/.fornetixrc
 
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
