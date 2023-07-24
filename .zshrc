@@ -101,6 +101,8 @@ zstyle :omz:plugins:keychain options -q
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+[[ -e ~/.fornetix-rc ]] && source ~/.fornetix-rc
+
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -A -s main
@@ -194,7 +196,7 @@ toggleproxy() {
     test -z $http_proxy && {
         echo "Enabling proxy ✅"
         for i in http_proxy https_proxy HTTP_PROXY HTTPS_PROXY; do
-                export $i=$proxy
+                export $i=$F_PROXY
         done
     } || {
         echo "Disabling proxy ❌"
@@ -207,8 +209,8 @@ export NO_AT_BRIDGE=1
 export VISUAL=nvim
 export EDITOR=nvim
 
-if [[ -e ~/git/KO ]]; then
-    export PROJECT_DIR=~/git/KO
+if [[ -z $KODIR ]]; then
+    export PROJECT_DIR=$KODIR
 else
     export PROJECT_DIR=~/git
 fi
