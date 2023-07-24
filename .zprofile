@@ -1,0 +1,1 @@
+. "$HOME/.fornetix-profile"
