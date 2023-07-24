@@ -215,7 +215,7 @@ else
     export PROJECT_DIR=~/git
 fi
 
-export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
+[[ -e /mnt/c/Users ]] && export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
