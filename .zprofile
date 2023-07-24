@@ -1,1 +1,1 @@
-. "$HOME/.fornetix-profile"
+. "$HOME/.fornetix_profile"
