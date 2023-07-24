@@ -70,7 +70,7 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git vi-mode gpg-agent keychain tmux npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
-zstyle :omz:plugins:keychain identities id_ed25519
+zstyle :omz:plugins:keychain identities $([[ -e ~/.ssh/id_ed25519 ]] && echo id_ed25519) $([[ -e ~/.ssh/id_rsa ]] && echo id_rsa)
 zstyle :omz:plugins:keychain options -q
 
 [[ -f $ZSH/oh-my-zsh.sh ]] && source $ZSH/oh-my-zsh.sh
@@ -147,7 +147,9 @@ function ghpr() {
 }
 
 function ghc() {
-    GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone
+    cd ~/git
+    GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone 
+    cd ~
 }
 
 function lg() {
