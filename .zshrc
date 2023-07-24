@@ -149,7 +149,7 @@ function ghpr() {
 function ghc() {
     cd ~/git
     GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone 
-    cd ~
+    cd -
 }
 
 function lg() {
@@ -165,14 +165,16 @@ function lg() {
 make-svelte() {
     selected_name=$(basename "$1")
     session_name=$(basename "$1" | tr . _)
+    dir=$PWD
 
+    cd $PROJECT_DIR
     npm create svelte@latest $1
     cd $1
     npm install
     git init && git add -A && git commit -m "Initial commit"
 
     TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
-    cd -
+    cd $dir
 }
 
 replace () {
@@ -184,6 +186,20 @@ replace () {
     fi
 
     vim -u NONE -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(ag $1 -l)
+}
+
+toggleproxy() {
+    local proxy=http://10.49.110.94:3128
+
+    test -z $http_proxy && {
+        echo "Enabling proxy ✅"
+        for i in http_proxy https_proxy HTTP_PROXY HTTPS_PROXY; do
+                export $i=$proxy
+        done
+    } || {
+        echo "Disabling proxy ❌"
+        unset http{,s}_proxy HTTP{,S}_PROXY
+    }
 }
 
 export NO_AT_BRIDGE=1
