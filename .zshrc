@@ -106,7 +106,6 @@ if [[ -z $TMUX ]]; then
         tmux new -A -s main
     else
         tmux new -A -s ssh
-        fi
     fi
 fi
 
