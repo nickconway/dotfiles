@@ -163,6 +163,7 @@ function lg() {
 make-svelte() {
     npm create svelte@latest $1
     cd $1
+    tmux splitw
     npm install
     npm run dev -- --open --host
 }
