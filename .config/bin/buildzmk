@@ -1,29 +1,29 @@
 #! /bin/sh
 
-cd /home/nick/git/zmk-config/config/include/ || return 
+cd $HOME/git/zmk-config/config/include/ || return 
 sed -i.bkp '/btclear/e cat leader-sen.dtsi' leader.dtsi
 sed -i '/leader_sequences/e cat macros-sen.dtsi' leader.dtsi
 
 mkdir -p /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"$1"/
-cd /home/nick/git/zmk/app || return 
+cd $HOME/git/zmk/app || return 
 if [ $(find -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
-        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/git/zmk-config/config" -DSHIELD=$1"_left nice_view_adapter nice_view" && \
-            west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/git/zmk-config/config" -DSHIELD=$1"_right nice_view_adapter nice_view"
+        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1"_left nice_view_adapter nice_view" && \
+            west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1"_right nice_view_adapter nice_view"
     else
-        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/git/zmk-config/config" -DSHIELD=$1"_left" && \
-            west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/git/zmk-config/config" -DSHIELD=$1"_right"
+        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1"_left" && \
+            west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1"_right"
     fi
     cp build/$1/left/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/left.uf2
     cp build/$1/right/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/right.uf2
 else
     if [ "$2" = "nv" ]; then
-        west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/git/zmk-config/config" -DSHIELD=$1" nice_view_adapter nice_view"
+        west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1" nice_view_adapter nice_view"
     else
-        west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="/home/nick/git/zmk-config/config" -DSHIELD=$1
+        west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1
     fi
     cp build/$1/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/
 fi
 
-cd /home/nick/git/zmk-config/config/include/ || return
+cd $HOME/git/zmk-config/config/include/ || return
 mv leader.dtsi.bkp leader.dtsi
