@@ -169,6 +169,7 @@ make-svelte() {
     npm create svelte@latest $1
     cd $1
     npm install
+    git init && git add -A && git commit -m "Initial commit"
 
     TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
     cd -
