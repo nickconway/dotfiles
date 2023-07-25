@@ -190,6 +190,12 @@ export NO_AT_BRIDGE=1
 export VISUAL=nvim
 export EDITOR=nvim
 
+{% if yadm.distro_family == "rhel centos fedora" %}
+export PROJECT_DIR=~/git/KO
+{% else %}
+export PROJECT_DIR=~/git
+{% endif %}
+
 {% if yadm.os == "WSL" %}
 export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
 {% endif %}
