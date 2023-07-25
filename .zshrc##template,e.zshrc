@@ -190,11 +190,15 @@ export NO_AT_BRIDGE=1
 export VISUAL=nvim
 export EDITOR=nvim
 
+{% if yadm.os == "WSL" %}
 export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
+{% endif %}
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
+{% if yadm.os == "WSL" %}
 export DROPBOX=/mnt/c/Users/nickc/Dropbox/
+{% endif %}
 
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH"
 export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
@@ -210,7 +214,7 @@ if command -v ng; then
     source <(ng completion script)
 fi
 
-eval "$(zoxide init zsh --cmd cd)"
+command -v zoxide > /dev/null && eval "$(zoxide init zsh --cmd cd)"
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
 export FZF_CTRL_R_OPTS="--reverse"
