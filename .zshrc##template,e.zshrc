@@ -109,7 +109,7 @@ if [[ -z $TMUX ]]; then
     fi
 fi
 
-eval "$(starship init zsh)"
+command -v starship > /dev/null && eval "$(starship init zsh)"
 
 alias ys="yadm status"
 alias ya="yadm add"
@@ -163,11 +163,15 @@ function lg() {
 }
 
 make-svelte() {
+    selected_name=$(basename "$1")
+    session_name=$(basename "$1" | tr . _)
+
     npm create svelte@latest $1
     cd $1
-    tmux splitw
     npm install
-    npm run dev -- --open --host
+
+    TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
+    cd -
 }
 
 replace () {
