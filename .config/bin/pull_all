@@ -6,8 +6,8 @@ else
     DIR=$1
 fi
 
-for d in $(find $DIR -maxdepth 1 -type d); do
+for d in $(find $DIR -name ".git"); do
     echo $d
-    cd "$d"/Debug && make clean && sudo make all
+    cd $d/.. && git pull
     echo
 done
