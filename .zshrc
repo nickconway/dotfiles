@@ -69,7 +69,7 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
-if [[ -z $TMUX ]]; then
+if [[ -z $TMUX ]] && [[ -z $SSH_CONNECTION ]]; then
     tmux new -A -s main
 fi
 
