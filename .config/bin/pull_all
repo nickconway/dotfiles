@@ -6,8 +6,8 @@ else
     DIR=$1
 fi
 
-for d in $(find $DIR -name ".git"); do
-    echo $d
-    cd $d/.. && git pull
+for d in $(find "$DIR" -name ".git"); do
+    echo "$d"
+    cd "$d/".. && git pull
     echo
 done
