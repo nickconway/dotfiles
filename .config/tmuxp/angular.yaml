@@ -6,7 +6,7 @@ windows:
       main-pane-height: "80%"
     panes:
       - shell_command:
-          - nvim
+          - cmd: nvim
         focus: true
       - shell_command:
-          - ng serve --open
+          - cmd: ng serve --open

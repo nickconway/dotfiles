@@ -6,7 +6,7 @@ windows:
       main-pane-height: "80%"
     panes:
       - shell_command:
-          - nvim
+          - cmd: nvim
         focus: true
       - shell_command:
-          - npm run dev -- --open --host
+          - cmd: npm run dev -- --open --host
