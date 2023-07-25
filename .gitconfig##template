@@ -1,6 +1,11 @@
 [user]
 	name = Nick Conway
-	email = nick@conway.dev
+{% if yadm.class == "work" %}
+    email = nconway@fornetix.com
+{% else %}
+    email = nick@conway.dev
+{% endif }
+
 [init]
 	defaultBranch = main
 
