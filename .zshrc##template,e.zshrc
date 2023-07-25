@@ -103,9 +103,9 @@ zstyle :omz:plugins:keychain options -q
 
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
-        command -v tmux && tmux new -A -s main
+        tmux new -A -s main
     else
-        command -v tmux && tmux new -A -s ssh
+        tmux new -A -s ssh
     fi
 fi
 
@@ -217,7 +217,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Load Angular CLI autocompletion.
-if command -v ng; then
+if command -v ng > /dev/null; then
     source <(ng completion script)
 fi
 
