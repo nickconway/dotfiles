@@ -188,6 +188,8 @@ export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
+export DROPBOX=/mnt/c/Users/nickc/Dropbox/
+
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH"
 export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
@@ -198,7 +200,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Load Angular CLI autocompletion.
-if ! [ -x "$(command -v ng)" ]; then
+if command -v ng; then
     source <(ng completion script)
 fi
 

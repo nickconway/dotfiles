@@ -4,7 +4,7 @@ cd $HOME/git/zmk-config/config/include/ || return
 sed -i.bkp '/btclear/e cat leader-sen.dtsi' leader.dtsi
 sed -i '/leader_sequences/e cat macros-sen.dtsi' leader.dtsi
 
-mkdir -p /mnt/c/Users/nickc/Dropbox/Documents/ZMK/"$1"/
+mkdir -p $DROPBOX/Documents/ZMK/"$1"/
 cd $HOME/git/zmk/app || return 
 if [ $(find -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
@@ -14,15 +14,15 @@ if [ $(find -name $1_left.conf | wc -l) -gt 0 ]; then
         west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1"_left" && \
             west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1"_right"
     fi
-    cp build/$1/left/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/left.uf2
-    cp build/$1/right/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/right.uf2
+    cp build/$1/left/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/left.uf2
+    cp build/$1/right/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/right.uf2
 else
     if [ "$2" = "nv" ]; then
         west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1" nice_view_adapter nice_view"
     else
         west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG="$HOME/git/zmk-config/config" -DSHIELD=$1
     fi
-    cp build/$1/zephyr/zmk.uf2 /mnt/c/Users/nickc/Dropbox/Documents/ZMK/$1/
+    test $DROPBOX && cp build/$1/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/
 fi
 
 cd $HOME/git/zmk-config/config/include/ || return
