@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
 cd $PROJECT_DIR/zmk-config/config/include/ || return 
 sed -i.bkp '/btclear/e cat leader-sen.dtsi' leader.dtsi
