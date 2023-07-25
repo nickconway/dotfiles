@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-if [[ $# -ne 1 ]]; then
-    DIR=$PROJCECT_DIR
+if [[ $# -eq 0 ]]; then
+    DIR=$PROJECT_DIR
 else
     DIR=$1
 fi
 
-for d in $(find "$DIR" -name ".git"); do
-    echo "$d"
-    cd "$d/".. && git pull
+for d in $(find "$DIR" -maxdepth 2 -name ".git"); do
+    cd "$d" && cd ..
+    echo $(basename "$PWD")
+    git pull
     echo
 done
