@@ -1,0 +1,10 @@
+session_name: koui-dev
+start_directory: "$KOTEST"
+windows:
+  - layout: main-horizontal
+    panes:
+      - shell_command:
+          - $CRYPTSOFT/kmipc_server/bin/kmip_server
+      - shell_command:
+          - sleep 5
+          - node $KODIR/ko_rest/server-ui.js
