@@ -236,7 +236,17 @@ fi
 command -v zoxide > /dev/null && eval "$(zoxide init zsh --cmd cd)"
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
-export FZF_CTRL_R_OPTS="--reverse"
+
+# CTRL-/ to toggle small preview window to see the full command
+# CTRL-Y to copy the command into clipboard using pbcopy
+export FZF_CTRL_R_OPTS="
+  --reverse
+  --preview 'echo {}' --preview-window up:3:hidden:wrap
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'Press CTRL-Y to copy command into clipboard'"
+
 export FZF_TMUX_OPTS="-p --reverse"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
