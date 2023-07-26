@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [[ $# -eq 0 ]]; then
+    DIR=$PROJECT_DIR
+else
+    DIR=$1
+fi
+
+for d in $(find "$DIR" -maxdepth 2 -name "Debug"); do
+    cd "$d" && cd ..
+    echo $(basename "$PWD")
+    cd Debug && make clean && sudo make all
+    echo
+done

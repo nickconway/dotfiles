@@ -4,7 +4,7 @@ if [[ $# -eq 1 ]]; then
     dir=$1
     command() (find "$dir" -mindepth 1 -maxdepth 1 -type d)
 else
-    command() (find ~/ $([[ -e $PROJECT_DIR ]] && echo $PROJECT_DIR) -mindepth 1 -maxdepth 1 -type d; zoxide query -l; tmux list-sessions -F "#S")
+    command() (find ~/ $([[ -e $PROJECT_DIR ]] && echo $PROJECT_DIR) -mindepth 1 -maxdepth 1 -type d; find ~/.config/tmuxp; zoxide query -l; tmux list-sessions -F "#S")
 fi
 
 selected=$(command | sort | uniq | fzf-tmux -p)
@@ -21,7 +21,11 @@ tmux_running=$(pgrep tmux)
 sveltekit=svelte-kit
 angular="angular.json"
 
-if [[ -e ~/.config/tmuxp/"$selected_name".yaml ]]; then
+if tmux has-session -t "$session_name" 2> /dev/null; then
+    tmux switch-client -t "$session_name"
+elif [[ -e ~/.config/tmuxp/"$selected_name" ]]; then
+    tmuxp load ~/.config/tmuxp/"$selected_name" -y > /dev/null
+elif [[ -e ~/.config/tmuxp/"$selected_name".yaml ]]; then
     tmuxp load ~/.config/tmuxp/"$selected_name".yaml -y > /dev/null
 elif [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     tmux new-session -s "$session_name" -c "$selected"
@@ -31,7 +35,5 @@ elif [[ -e $selected/$angular ]]; then
     TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/angular.yaml -y > /dev/null
 elif ! tmux has-session -t "$session_name" 2> /dev/null; then
     tmux new-session -ds "$session_name" -c "$selected"
-    tmux switch-client -t "$session_name"
-else
     tmux switch-client -t "$session_name"
 fi

@@ -199,12 +199,10 @@ replace () {
 }
 
 toggleproxy() {
-    local proxy=http://10.49.110.94:3128
-
     test -z $http_proxy && {
         echo "Enabling proxy ✅"
         for i in http_proxy https_proxy HTTP_PROXY HTTPS_PROXY; do
-                export $i=$F_PROXY
+                export $i=$PROXY
         done
     } || {
         echo "Disabling proxy ❌"
@@ -217,7 +215,7 @@ export NO_AT_BRIDGE=1
 export VISUAL=nvim
 export EDITOR=nvim
 
-if [[ -z $KODIR ]]; then
+if [[ -n $KODIR ]]; then
     export PROJECT_DIR=$KODIR
 else
     export PROJECT_DIR=~/git
