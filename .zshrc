@@ -68,7 +68,12 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode gpg-agent keychain tmux npm zsh-autosuggestions zsh-syntax-highlighting)
+
+if [[ -z $TMUX ]]; then
+    tmux new -A -s main
+fi
+
+plugins=(git vi-mode gpg-agent tmux keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities $([[ -e ~/.ssh/id_ed25519 ]] && echo id_ed25519) $([[ -e ~/.ssh/id_rsa ]] && echo id_rsa)
 zstyle :omz:plugins:keychain options -q
@@ -102,14 +107,6 @@ zstyle :omz:plugins:keychain options -q
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 [[ -e ~/.fornetixrc ]] && source ~/.fornetixrc
-
-if [[ -z $TMUX ]]; then
-    if [[ -z $SSH_CONNECTION ]]; then
-        tmux new -A -s main
-    else
-        tmux new -A -s ssh
-    fi
-fi
 
 command -v starship > /dev/null && eval "$(starship init zsh)"
 
