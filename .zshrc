@@ -216,6 +216,8 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 export DROPBOX=/mnt/c/Users/nickc/Dropbox/
 
+export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
+
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH"
 export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
