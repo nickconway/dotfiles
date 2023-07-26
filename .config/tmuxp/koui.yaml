@@ -2,6 +2,8 @@ session_name: koui-dev
 start_directory: "$KOTEST"
 windows:
   - layout: main-horizontal
+    option:
+      - main-pane-height: "50%"
     panes:
       - shell_command:
           - $CRYPTSOFT/kmipc_server/bin/kmip_server
