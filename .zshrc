@@ -140,16 +140,8 @@ t_w() tmux-sessionizer
 zle -N t_w
 bindkey '^f' t_w
 
-pw() {
+function pw() {
     rbw get $1 $2 | clip.exe
-}
-
-function exit() {
-    if [[ -z $SSH_CONNECTION ]]; then
-        exit
-    else
-        tmux detach -P
-    fi
 }
 
 function ghpr() {
