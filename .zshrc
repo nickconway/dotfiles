@@ -162,12 +162,15 @@ function lg() {
 }
 
 function ssh() {
-    if [[ -z $TMUX ]]; then
+    if [[ -n $TMUX ]]; then
         tmux set -p prefix C-h
-        tmux set -w status
+        tmux set status
     fi
     /usr/bin/ssh $@
-    tmux set -p prefix C-Space
+    if [[ -n $TMUX ]]; then
+        tmux set -p prefix C-Space
+        tmux set status
+    fi
 }
 
 make-svelte() {
