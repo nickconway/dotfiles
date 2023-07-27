@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd(
 vim.api.nvim_create_autocmd(
     "FocusLost",
     {
-        command = "silent! w",
+        command = "silent! update",
         group = Ag,
     }
 )
