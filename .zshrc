@@ -137,9 +137,7 @@ t_w() tmux-sessionizer
 zle -N t_w
 bindkey '^f' t_w
 
-if [[ -n $SSH_CONNECTION ]]; then
-    alias exit="tmux detach -P"
-fi
+alias x="tmux detach -P"
 
 function pw() {
     rbw get $1 $2 | clip.exe
