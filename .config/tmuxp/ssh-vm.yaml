@@ -1,0 +1,14 @@
+session_name: ssh-vm
+start_directory: "$KOTEST"
+windows:
+  - layout: main-horizontal
+    options:
+      main-pane-height: "50%"
+    panes:
+      - shell_command:
+          - $CRYPTSOFT/kmipc_server/bin/kmip_server
+      - shell_command:
+        - cmd: "/usr/bin/ssh -f -N -L localhost:4200:localhost:4200 nconway@192.168.220.130 > /dev/null"
+        - cmd: "/usr/bin/ssh -f -N -L localhost:9443:localhost:9443 nconway@192.168.220.130 > /dev/null"
+        - cmd: "/usr/bin/ssh nconway@192.168.220.130"
+        - cmd: "tmux kill-session"
