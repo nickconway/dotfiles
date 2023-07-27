@@ -1,0 +1,11 @@
+session_name: "${TMUXP_SESSION_NAME}"
+windows:
+  - layout: main-horizontal
+    panes:
+      - shell_command:
+        - cmd: "tmux set prefix C-h && tmux bind C-h send-prefix && /usr/bin/ssh $SSH_INPUTS || tmux kill-window -t && tmux set status on && tmux set prefix C-Space && tmux switch -l && tmux kill-session"
+        focus: true
+  - layout: main-horizontal
+    panes:
+      - shell_command:
+        - cmd: hide-tmux-statusbar
