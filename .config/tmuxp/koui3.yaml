@@ -1,20 +1,19 @@
 session_name: koui-dev
-start_directory: "$KOTEST"
 windows:
   - layout: main-horizontal
+    start_directory: "~/git/koui3"
     options:
       main-pane-height: "80%"
     panes:
       - shell_command:
-          - cd ~/git/koui3
           - nvim
         focus: true
       - shell_command:
-          - cd ~/git/koui3
           - nvm use 16.15.1
           - ng serve --open
       -
   - layout: main-horizontal
+    start_directory: "$KOTEST"
     options:
       main-pane-height: "50%"
     panes:

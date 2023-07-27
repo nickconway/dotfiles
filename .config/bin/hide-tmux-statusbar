@@ -1,12 +1,14 @@
 #!/bin/env bash
 
+status=off
+
 tmux set status off
 while [[ 1 -eq 1 ]]
 do
     res=$(tmux display -p '#{client_prefix}')
-    if [[ res -eq 1 ]]; then
+    if [[ status == off ]] && [[ res -eq 1 ]]; then
         tmux set status on
-    else
+    elif [[ status == on ]]
         tmux set status off
     fi
 done
