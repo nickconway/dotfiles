@@ -164,15 +164,11 @@ function lg() {
 }
 
 function ssh() {
-    if [[ -n $TMUX ]]; then
-        tmux set -p prefix C-h
-        tmux set status
+    if ! tmux has-session -t ssh > /dev/null; then
+        tmux new -ds ssh
     fi
-    /usr/bin/ssh $@
-    if [[ -n $TMUX ]]; then
-        tmux set -p prefix C-Space
-        tmux set status
-    fi
+    tmux switch-client -t ssh
+    tmux send-keys -t ssh "tmux set prefix C-h && tmux set status off && /usr/bin/ssh $@ && tmux set -p prefix C-Space && tmux set status on && tmux switch-client -l" Enter
 }
 
 make-svelte() {

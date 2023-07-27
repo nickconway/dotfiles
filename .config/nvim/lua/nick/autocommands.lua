@@ -29,6 +29,14 @@ vim.api.nvim_create_autocmd(
 )
 
 vim.api.nvim_create_autocmd(
+    "FocusLost",
+    {
+        command = "w",
+        group = Ag,
+    }
+)
+
+vim.api.nvim_create_autocmd(
     { "BufWritePre", "BufWritePost" },
     {
         callback = function()
