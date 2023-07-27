@@ -165,9 +165,9 @@ function lg() {
 
 function ssh() {
     num=
-    if tmux has-session -t ssh; then
+    if tmux has-session -t ssh 2> /dev/null; then
         num=2
-        while tmux has-session -t ssh"$num"
+        while tmux has-session -t ssh"$num" 2> /dev/null
         do
             ((num=num+1))
         done
