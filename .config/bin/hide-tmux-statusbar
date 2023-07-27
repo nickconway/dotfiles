@@ -9,7 +9,7 @@ do
     if [[ status == off ]] && [[ res -eq 1 ]]; then
         status=on
         tmux set status on
-    elif [[ status == on ]]
+    elif [[ status == on ]]; then
         status=off
         tmux set status off
     fi
