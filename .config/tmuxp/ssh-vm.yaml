@@ -5,7 +5,7 @@ windows:
       - shell_command:
         - cmd: "/usr/bin/ssh -f -N -L localhost:4200:localhost:4200 nconway@192.168.220.130 > /dev/null"
         - cmd: "/usr/bin/ssh -f -N -L localhost:9443:localhost:9443 nconway@192.168.220.130 > /dev/null"
-        - cmd: "tmux set prefix C-h && tmux bind C-h send-prefix && /usr/bin/ssh nconway@192.168.220.130 || tmux kill-window -t && tmux set status on && tmux set prefix C-Space && tmux switch -l && tmux kill-session"
+        - cmd: "tmux set prefix C-h && tmux bind C-h send-prefix && /usr/bin/ssh nconway@192.168.220.130 || tmux kill-window -t 2 && tmux set status on && tmux set prefix C-Space && tmux switch -l && tmux kill-session"
         focus: true
   - layout: main-horizontal
     panes:
