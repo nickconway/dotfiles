@@ -161,6 +161,15 @@ function lg() {
     fi;
 }
 
+function ssh() {
+    if [[ -z $TMUX ]]; then
+        tmux set -p prefix C-h
+        tmux set -w status
+    fi
+    /usr/bin/ssh $@
+    tmux set -p prefix C-Space
+}
+
 make-svelte() {
     selected_name=$(basename "$1")
     session_name=$(basename "$1" | tr . _)
