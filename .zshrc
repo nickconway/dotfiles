@@ -168,7 +168,7 @@ function ssh() {
     tmux new -ds ssh
     tmux switch -t ssh
     tmux set -t ssh status off
-    tmux send-keys -t ssh "tmux set prefix C-h && /usr/bin/ssh $@ && tmux set prefix C-Space && tmux switch -l" Enter
+    tmux send-keys -t ssh "tmux set prefix C-h && /usr/bin/ssh $@ || tmux set prefix C-Space && tmux switch -l" Enter
 }
 
 make-svelte() {
