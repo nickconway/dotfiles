@@ -106,6 +106,11 @@ zstyle :omz:plugins:keychain options -q
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH"
+export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
+export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+
 [[ -e ~/.fornetixrc ]] && source ~/.fornetixrc
 
 command -v starship > /dev/null && eval "$(starship init zsh)"
@@ -173,10 +178,7 @@ function ssh() {
         done
     else
     fi
-    tmux new -ds ssh"$num"
-    tmux switch -t ssh"$num"
-    tmux set -t ssh"$num" status off
-    tmux send-keys -t ssh"$num" "tmux set prefix C-h && /usr/bin/ssh $@ || tmux set status on && tmux set prefix C-Space && tmux switch -l && tmux kill-session" Enter
+    SSH_INPUTS=$@ TMUXP_SESSION_NAME=ssh"$num" tmuxp load ~/.config/tmuxp/ssh.yaml -y > /dev/null
 }
 
 make-svelte() {
@@ -235,11 +237,6 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 export DROPBOX=/mnt/c/Users/nickc/Dropbox/
 
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
-
-export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH"
-export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
-export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
-export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
