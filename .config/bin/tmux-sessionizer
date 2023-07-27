@@ -24,15 +24,15 @@ angular="angular.json"
 if tmux has-session -t "$session_name" 2> /dev/null; then
     tmux switch-client -t "$session_name"
 elif [[ -e ~/.config/tmuxp/"$selected_name" ]]; then
-    tmuxp load "$selected_name" -y > /dev/null
+    tmuxp load ~/.config/tmuxp/"$selected_name" -y > /dev/null
 elif [[ -e ~/.config/tmuxp/"$selected_name".yaml ]]; then
-    tmuxp load "$selected_name".yaml -y > /dev/null
+    tmuxp load ~/.config/tmuxp/"$selected_name".yaml -y > /dev/null
 elif [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     tmux new-session -s "$session_name" -c "$selected"
 elif [[ -e $selected/.$sveltekit ]]; then
-    TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load "$sveltekit" -y > /dev/null
+    TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/"$sveltekit".yaml -y > /dev/null
 elif [[ -e $selected/$angular ]]; then
-    TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load angular -y > /dev/null
+    TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/angular.yaml -y > /dev/null
 elif ! tmux has-session -t "$session_name" 2> /dev/null; then
     tmux new-session -ds "$session_name" -c "$selected"
     tmux switch-client -t "$session_name"
