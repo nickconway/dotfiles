@@ -6,9 +6,9 @@ else
     DIR=$1
 fi
 
-for d in $(find "$DIR" -maxdepth 2 -name "Debug"); do
-    cd "$d" && cd ..
+for d in $(find "$DIR" -maxdepth 2 -name ".git"); do
+    cd $(dirname $d)
     echo $(basename "$PWD")
-    cd Debug && make clean && sudo make all
+    git pull
     echo
 done

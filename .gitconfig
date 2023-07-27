@@ -1,6 +1,6 @@
 [user]
 	name = Nick Conway
-    email = nick@conway.dev
+	email = nconway@fornetix.com
 
 [init]
 	defaultBranch = main
@@ -14,3 +14,5 @@
 
 [mergetool "nvim"]
 	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+[pull]
+	rebase = false
