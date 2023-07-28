@@ -1,3 +1,24 @@
+local function is_git_repo()
+    vim.fn.system("git rev-parse --is-inside-work-tree")
+    return vim.v.shell_error == 0
+end
+
+local function get_git_root()
+    local dot_git_path = vim.fn.finddir(".git", ".;")
+    return vim.fn.fnamemodify(dot_git_path, ":h")
+end
+
+local builtin = require("telescope.builtin")
+local function get_files()
+    if vim.fn.getcwd() == vim.fn.getenv("HOME") then
+        vim.cmd("Telescope yadm_files")
+    elseif is_git_repo() then
+        require("telescope.builtin").find_files({ cwd = get_git_root() })
+    else
+        require("telescope.builtin").find_files()
+    end
+end
+
 local opts = { noremap = true, silent = true }
 
 vim.keymap.set("n", "x", '"_x', opts)
@@ -20,7 +41,7 @@ vim.keymap.set("v", "y", "ygv<Esc>", opts)
 
 -- cycle buffers
 vim.keymap.set("n", "<Tab>", "<C-w>w", opts)
-vim.keymap.set("n", "<S-Tab>", "<C-w>W", ops)
+vim.keymap.set("n", "<S-Tab>", "<C-w>W", opts)
 
 -- Alternate buffer
 vim.keymap.set("n", "<BS>", ":b#<CR>", opts)
@@ -96,10 +117,8 @@ vim.keymap.set("n", "<leader>dr", function()
     require("dap").repl.open()
 end)
 
-local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>fb", builtin.buffers, opts)
-vim.keymap.set("n", "<leader>ff", builtin.find_files, opts)
-vim.keymap.set("n", "<leader>fg", builtin.git_files, opts)
+vim.keymap.set("n", "<leader>ff", get_files, opts)
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, opts)
 vim.keymap.set("n", "<leader>fl", builtin.live_grep, opts)
 vim.keymap.set("n", "<leader>fm", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
@@ -145,11 +164,6 @@ local yadm = Terminal:new({
         vim.cmd("startinsert!")
     end,
 })
-
-local function is_git_repo()
-    vim.fn.system("git rev-parse --is-inside-work-tree")
-    return vim.v.shell_error == 0
-end
 
 vim.keymap.set("n", "<leader>g", function()
     if is_git_repo() then
