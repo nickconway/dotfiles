@@ -8,7 +8,7 @@ build_project(){
 
     sudo echo "" > /tmp/eclipse-build-log
     if [[ $project == kojob ]]; then
-        cd $KODIR/kojob
+        cd $KODIR/kojob || return
         sudo yum install -y libtool
         libtoolize
         aclocal
