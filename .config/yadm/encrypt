@@ -3,4 +3,4 @@
 .config/rbw/
 git/zmk-config/config/include/leader-sen.dtsi
 git/zmk-config/config/include/macros-sen.dtsi
-**fornetix
+.?*fornetix*
