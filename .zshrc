@@ -111,9 +111,11 @@ export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
-for f in $($FIND_COMMAND .zshrc ~ -H -d 1 -E ".zshrc" -E "*##*"); do
-    source $f
-done
+if [[ -n $FD_COMMAND ]]; then
+    for f in $($FD_COMMAND .zshrc ~ -H -d 1 -E ".zshrc" -E "*##*"); do
+        source $f
+    done
+fi
 
 command -v starship > /dev/null && eval "$(starship init zsh)"
 
