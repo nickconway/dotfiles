@@ -111,7 +111,9 @@ export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
-[[ -e ~/.fornetixrc ]] && source ~/.fornetixrc
+for f in $(find ~ -name ".zshrc*" -not -path ~/.zshrc); do
+    source $f
+done
 
 command -v starship > /dev/null && eval "$(starship init zsh)"
 
