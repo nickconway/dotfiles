@@ -3,3 +3,4 @@
 cd /etc/yum.repos.d/
 sudo wget https://download.opensuse.org/repositories/home:TheLocehiliosan:yadm/CentOS_8/home:TheLocehiliosan:yadm.repo
 sudo yum install yadm -y
+yadm clone https://github.com/nickconway/dotfiles
