@@ -111,7 +111,7 @@ export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
-for f in $(find ~ -maxdepth 1 -name ".zshrc*" -not -path ~/.zshrc); do
+for f in $(fd .zshrc ~ -H -d 1 -E ".zshrc"); do
     source $f
 done
 
