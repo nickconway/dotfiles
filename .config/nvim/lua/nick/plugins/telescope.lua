@@ -57,6 +57,5 @@ return {
         require("telescope").load_extension("noice")
         require("telescope").load_extension("file_browser")
         require("telescope").load_extension("fzy_native")
-        require("telescope").load_extension("yadm_files")
     end,
 }

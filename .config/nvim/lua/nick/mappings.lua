@@ -9,9 +9,34 @@ local function get_git_root()
 end
 
 local builtin = require("telescope.builtin")
+local pickers = require("telescope.pickers")
+local finders = require("telescope.finders")
+local conf = require("telescope.config").values
 local function get_files()
     if vim.fn.getcwd() == vim.fn.getenv("HOME") then
-        vim.cmd("Telescope yadm_files")
+        local topts = {}
+
+        local yadm_command = { "get-yadm-files" }
+
+        topts.entry_maker = function(entry)
+            return {
+                -- prepend home dir
+                value = string.format("%s/%s", vim.fn.getcwd(), entry),
+                -- skip the leading .config/ bit
+                display = string.gsub(entry, ".config/", ""),
+                ordinal = entry
+            }
+        end
+
+        pickers.new(topts, {
+            prompt_title = "Yadm Files",
+            finder = finders.new_oneshot_job(
+                vim.tbl_flatten { yadm_command, },
+                topts
+            ),
+            previewer = conf.file_previewer(topts),
+            sorter = conf.file_sorter(topts),
+        }):find()
     elseif is_git_repo() then
         require("telescope.builtin").find_files({ cwd = get_git_root() })
     else
