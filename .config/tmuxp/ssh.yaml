@@ -3,7 +3,7 @@ windows:
   - layout: main-horizontal
     panes:
       - shell_command:
-        - cmd: "tmux set prefix C-h && tmux bind C-h send-prefix && /usr/bin/ssh $SSH_INPUTS || tmux kill-window -t 2 && tmux set status on && tmux set prefix C-Space && tmux switch -l && tmux kill-session"
+        - cmd: "tmux set prefix C-h && tmux bind C-h send-prefix && ssh $SSH_INPUTS || tmux kill-window -t 2 && tmux set status on && tmux set prefix C-Space && tmux switch -l && tmux kill-session"
         focus: true
   - layout: main-horizontal
     panes:

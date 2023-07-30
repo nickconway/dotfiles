@@ -172,7 +172,7 @@ function lg() {
     fi;
 }
 
-function ssh() {
+function ts() {
     num=
     if tmux has-session -t ssh 2> /dev/null; then
         num=2
