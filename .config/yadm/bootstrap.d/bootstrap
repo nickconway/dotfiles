@@ -13,6 +13,15 @@ if ! command -v go > /dev/null; then
     go env -w GOPATH=$HOME/.local/go
 fi
 
+echo "installing keychain"
+echo ""
+git clone https://github.com/funtoo/keychain.git
+cd keychain
+make
+sudo mv ./keychain /usr/bin
+cd
+rm -rf keychain
+
 echo "installing gitmux"
 echo ""
 go install github.com/arl/gitmux@latest

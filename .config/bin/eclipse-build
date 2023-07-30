@@ -7,32 +7,17 @@ build_project(){
     project=$2
 
     sudo echo "" > /tmp/eclipse-build-log
+
     if [[ $project == kojob ]]; then
-        cd $KODIR/kojob || return
-        sudo yum install -y libtool
-        libtoolize
-        aclocal
-        autoconf
-        automake --add-missing
-        autoreconf
-        mkdir -p Debug_Linux; cd Debug_Linux
-        ../configure --prefix=/usr
-        make
-        sudo make install
-        echo
-        cd Debug
-        echo $project $config
-        make clean 2>&1 | tee -a /tmp/eclipse-build-log 
-        make 2&>1 | tee -a /tmp/eclipse-build-log 
+        config=Debug
+    elif [[ -e $HOME/git/$workspace/$project/Debug_Linux ]]; then
+        config=Debug_Linux
     else
-        if [[ -e $HOME/git/$workspace/$project/Debug_Linux ]]; then
-            config=Debug_Linux
-        else
-            config=Debug
-        fi
-        echo $project $config
-        eclipse --launcher.suppressErrors -nosplash -data $HOME/git/$workspace -application org.eclipse.cdt.managedbuilder.core.headlessbuild -cleanBuild $project/$config 2>&1 | tee -a /tmp/eclipse-build-log 
+        config=Debug
     fi
+    echo $project $config
+    eclipse --launcher.suppressErrors -nosplash -data $HOME/git/$workspace -application org.eclipse.cdt.managedbuilder.core.headlessbuild -cleanBuild $project/$config 2>&1 | tee -a /tmp/eclipse-build-log 
+
     errors=$(grep -i -e "[1-9] errors" -i -e "make.*Error" /tmp/eclipse-build-log)
     [[ -n $errors ]] && failed+=("$project")
 }
