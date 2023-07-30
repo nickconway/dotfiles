@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+
+echo "Updating the yadm repo origin URL"
+echo ""
+yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+
+echo "installing dependencies"
+echo ""
+command -v apt > /dev/null && sudo apt install \
+    zsh \
+    keychain \
+    build-essential \
+    autoconf \
+    libgtk-3-dev \
+    libgnutls28-dev \
+    libtiff5-dev \
+    libgif-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libxpm-dev \
+    libncurses-dev \
+    texinfo \
+    adwaita-icon-theme-full \
+    ninja-build \
+    gettext \
+    cmake \
+    unzip \
+    curl \
+    fd-find \
+    ripgrep \
+    libgccjit-11-dev \
+    libjansson4 \
+    libjansson-dev \
+    libtree-sitter-dev \
+    libgtk-3-dev \
+    libwebkit2gtk-4.0-dev \
+    xdotool \
+    xclip \
+    python3-pip \
+    -y
+
+echo "installing go"
+echo ""
+wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
+rm go1.20.5.linux-amd64.tar.gz
+go env -w GOPATH=$HOME/.local/go
+
+echo "installing gitmux"
+echo ""
+go install github.com/arl/gitmux@latest
+
+echo "installing fzf"
+echo ""
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
+echo "installing z"
+echo ""
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
+echo "installing github cli"
+echo ""
+type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \
+    && sudo apt install gh -y
+gh auth login
+yadm restore ~/.config/gh/config.yml
+gh extension install dlvhdr/gh-dash
+
+echo "installing tailscale"
+echo ""
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+sudo tailscale up --ssh
+
+echo "installing starship"
+echo ""
+curl -sS https://starship.rs/install.sh | sh
+
+echo "installing npm"
+echo ""
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+sudo apt install npm -y
+nvm install node
+nvm install-latest-npm
+
+echo "installing lazygit"
+echo ""
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+tar xf lazygit.tar.gz lazygit
+sudo install lazygit /usr/local/bin
+rm lazygit lazygit.tar.gz
+
+echo "installing rust toolchain"
+echo ""
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+echo "installing neovim"
+echo ""
+cargo install tree-sitter-cli
+git clone https://github.com/neovim/neovim
+cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
+cd ~
+rm -rf neovim
+
+echo "installing cargo tools"
+echo ""
+cargo install rbw
+cargo install tealdeer
+
+echo "installing zsh"
+echo ""
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+
+yadm decrypt
+
+if [[ -e /mnt/c/Users ]] then;
+    echo "installing fonts"
+    echo ""
+    sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
+    sudo fc-cache -frv
+fi
+
+chsh -s /bin/zsh
