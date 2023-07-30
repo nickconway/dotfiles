@@ -76,7 +76,7 @@ fi
 plugins=(git vi-mode gpg-agent tmux keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities $(find $HOME/.ssh/ -name "id_*" -not -path "*.pub")
-zstyle :omz:plugins:keychain options -q
+zstyle :omz:plugins:keychain options -q --nogui
 
 [[ -f $ZSH/oh-my-zsh.sh ]] && source $ZSH/oh-my-zsh.sh
 

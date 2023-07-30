@@ -19,11 +19,15 @@ local function get_files()
         local yadm_command = { "get-yadm-files" }
 
         topts.entry_maker = function(entry)
+            local str = string.gsub(entry, ".config/", "")
+            str = string.gsub(str, "yadm/alt/", "")
+            str = string.gsub(str, "##default", "")
+            -- str = string.gsub(str, "")
             return {
                 -- prepend home dir
                 value = string.format("%s/%s", vim.fn.getcwd(), entry),
                 -- skip the leading .config/ bit
-                display = string.gsub(entry, ".config/", ""),
+                display = str,
                 ordinal = entry
             }
         end

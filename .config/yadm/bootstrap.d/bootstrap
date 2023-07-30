@@ -4,6 +4,10 @@ echo "Updating the yadm repo origin URL"
 echo ""
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
+echo "decrypting files"
+echo ""
+yadm decrypt
+
 if ! command -v go > /dev/null; then
     echo "installing go"
     echo ""
@@ -102,8 +106,6 @@ echo "installing zsh"
 echo ""
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
-
-yadm decrypt
 
 if [[ -e /mnt/c/Users ]]; then
     echo "installing fonts"
