@@ -10,7 +10,7 @@ windows:
         focus: true
       - shell_command:
           - nvm use 16.15.1
-          - ng serve --open
+          - ng serve
       -
   - layout: main-horizontal
     start_directory: "$KOTEST"
