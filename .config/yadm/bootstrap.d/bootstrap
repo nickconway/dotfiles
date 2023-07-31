@@ -72,7 +72,7 @@ sudo dnf install fd -y
 
 echo "installing npm"
 echo ""
-sudo apt install node nodejs npm -y
+sudo apt install nodejs npm -y
 sudo yum install nodejs npm -y
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
