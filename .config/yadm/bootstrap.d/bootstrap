@@ -11,6 +11,7 @@ if ! command -v go > /dev/null; then
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
     rm go1.20.5.linux-amd64.tar.gz
     go env -w GOPATH=$HOME/.local/go
+    export PATH=$PATH:/usr/local/go/bin
 fi
 
 echo "installing keychain"
@@ -29,7 +30,7 @@ go install github.com/arl/gitmux@latest
 echo "installing fzf"
 echo ""
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install -y
+~/.fzf/install --all
 
 echo "installing z"
 echo ""
@@ -66,6 +67,8 @@ sudo dnf install fd -y
 
 echo "installing npm"
 echo ""
+sudo apt install node nodejs npm -y
+sudo yum install node nodejs npm -y
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
 echo "installing lazygit"
@@ -79,6 +82,7 @@ rm lazygit lazygit.tar.gz
 echo "installing rust toolchain"
 echo ""
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
 
 echo "installing cargo tools"
 echo ""
@@ -87,8 +91,13 @@ cargo install tealdeer
 
 echo "installing zsh"
 echo ""
+sudo apt install zsh -y
+sudo yum install zsh -y
+
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+[[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+[[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 if [[ -e /mnt/c/Users ]]; then
     echo "installing fonts"

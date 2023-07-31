@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-sudo yum -y install ninja-build cmake gcc make unzip gettext curl
-sudo apt-get install ninja-build gettext cmake unzip curl
+sudo yum install ninja-build cmake gcc make unzip gettext curl -y
+sudo apt-get install ninja-build gettext cmake unzip curl -y
+
+source ~/.cargo/env
 cargo install tree-sitter-cli
 
 git clone https://github.com/neovim/neovim
