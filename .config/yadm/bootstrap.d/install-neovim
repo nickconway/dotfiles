@@ -7,11 +7,11 @@ sudo yum install -y gettext
 sudo yum install -y curl
 sudo yum install -y ninja-build
 
-sudo apt-get install -y ninja-build
-sudo apt-get install -y gettext
-sudo apt-get install -y cmake
-sudo apt-get install -y unzip
-sudo apt-get install -y curl
+sudo apt install -y ninja-build
+sudo apt install -y gettext
+sudo apt install -y cmake
+sudo apt install -y unzip
+sudo apt install -y curl
 
 source ~/.cargo/env
 cargo install tree-sitter-cli
