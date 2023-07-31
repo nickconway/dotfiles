@@ -125,7 +125,17 @@ alias yau="yadm add -u"
 alias yc="yadm commit"
 alias yca="yadm commit -a"
 alias ycam="yadm commit -a -m"
-alias yp="yadm push"
+function yp() {
+    echo $#
+    if [[ $# -eq 0 ]]; then
+        echo none
+        ycam "Update config"
+        yadm push
+    else
+        echo some
+        ycam $@; yadm push
+    fi
+}
 alias yl="yadm pull"
 alias yd="yadm diff"
 alias yenc="yadm encrypt"
