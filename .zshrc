@@ -126,13 +126,10 @@ alias yc="yadm commit"
 alias yca="yadm commit -a"
 alias ycam="yadm commit -a -m"
 function yp() {
-    echo $#
     if [[ $# -eq 0 ]]; then
-        echo none
         ycam "Update config"
         yadm push
     else
-        echo some
         ycam $@; yadm push
     fi
 }
