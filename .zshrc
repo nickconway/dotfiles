@@ -70,7 +70,11 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # Add wisely, as too many plugins slow down shell startup.
 
 if [[ -z $TMUX ]]; then
-    tmux new -A -s main
+    if [[ -z $SSH_CONNECTION ]]; then
+        tmux new -A -s main
+    else
+        tmux new -A -s ssh
+    fi
 fi
 
 plugins=(git vi-mode gpg-agent tmux keychain npm zsh-autosuggestions zsh-syntax-highlighting)
