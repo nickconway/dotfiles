@@ -180,7 +180,6 @@ function s() {
         do
             ((num=num+1))
         done
-    else
     fi
     SSH_INPUTS=$@ TMUXP_SESSION_NAME=ssh"$num" tmuxp load ~/.config/tmuxp/ssh.yaml -y > /dev/null
 }
