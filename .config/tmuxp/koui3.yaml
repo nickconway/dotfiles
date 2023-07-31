@@ -18,6 +18,7 @@ windows:
       main-pane-height: "50%"
     panes:
       - shell_command:
+          - sudo rm /var/lib/ko/plugin/libLicenseMgr.so
           - kill -kill $(pgrep -f kmip_server)
           - $CRYPTSOFT/kmipc_server/bin/kmip_server
       - shell_command:
