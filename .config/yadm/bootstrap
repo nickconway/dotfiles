@@ -25,5 +25,4 @@ for bootstrap in $(find -L "$BOOTSTRAP_D" -type f | sort); do
 done
 
 echo ""
-echo "Done. Rebooting"
-sudo reboot
+echo "Done, logout/reboot now"
