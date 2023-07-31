@@ -57,9 +57,9 @@ if command -v apt > /dev/null; then
         && sudo apt update \
         && sudo apt install gh -y
 elif command -v yum > /dev/null; then
-    sudo dnf install 'dnf-command(config-manager)'
+    sudo dnf install 'dnf-command(config-manager)' -y
     sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
-    sudo dnf install gh
+    sudo dnf install gh -y
 fi
 gh auth login
 yadm restore ~/.config/gh/config.yml
