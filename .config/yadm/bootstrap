@@ -23,3 +23,6 @@ for bootstrap in $(find -L "$BOOTSTRAP_D" -type f | sort); do
         $bootstrap
     fi
 done
+
+echo ""
+echo "Done, logout/reboot now"
