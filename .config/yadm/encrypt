@@ -3,8 +3,9 @@
 .config/rbw
 git/zmk-config/config/include/leader-sen.dtsi
 git/zmk-config/config/include/macros-sen.dtsi
-.config/yadm/alt/**
-.config/yadm/alt/.[a-zA-Z0-9]*
-.config/yadm/alt/.[a-zA-Z0-9]*/*
-.config/yadm/alt/**/.[a-zA-Z0-9]*
-.config/yadm/alt/.config/yadm/bootstrap.d/*
+.config/yadm/alt/*##c.work
+.config/yadm/alt/**/*##c.work
+.config/yadm/alt/**/**/*##c.work
+.config/yadm/alt/.[a-zA-Z0-9]*##c.work
+.config/yadm/alt/.[a-zA-Z0-9]*/*##c.work
+.config/yadm/alt/.[a-zA-Z0-9]*/**/*##c.work
