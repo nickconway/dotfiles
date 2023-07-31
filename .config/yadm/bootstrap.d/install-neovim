@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo yum install ninja-build cmake gcc make unzip gettext curl -y
+sudo yum install cmake gcc make unzip gettext curl ninja-build -y
 sudo apt-get install ninja-build gettext cmake unzip curl -y
 
 source ~/.cargo/env

@@ -10,8 +10,8 @@ if ! command -v go > /dev/null; then
     wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
     rm go1.20.5.linux-amd64.tar.gz
-    go env -w GOPATH=$HOME/.local/go
     export PATH=$PATH:/usr/local/go/bin
+    go env -w GOPATH=$HOME/.local/go
 fi
 
 echo "installing keychain"
@@ -55,7 +55,6 @@ curl -sS https://starship.rs/install.sh | sh -s -- -y
 echo "installing ripgrep"
 echo ""
 sudo apt install -y ripgrep
-sudo yum install -y ripgrep
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo -y
 sudo yum install ripgrep -y
@@ -68,7 +67,7 @@ sudo dnf install fd -y
 echo "installing npm"
 echo ""
 sudo apt install node nodejs npm -y
-sudo yum install node nodejs npm -y
+sudo yum install nodejs npm -y
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
 echo "installing lazygit"
