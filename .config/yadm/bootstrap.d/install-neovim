@@ -9,3 +9,4 @@ cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 cd -
 rm -rf neovim
+nvim --headless "+Lazy! sync" +qa
