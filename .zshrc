@@ -192,13 +192,13 @@ function s() {
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h && tmux bind C-h send-prefix && ssh -t $@ 'new -s ssh $SHELL; tmux switch-client -l"
+    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -tX $@ 'tmux new -As ssh $SHELL'; tmux switch-client -l"
     tmux switch-client -t ssh-client$num
     
 }
 
 function svm() {
-    s '-X nconway@192.168.220.130 -L localhost:4200:localhost:4200 -L localhost:9443:localhost:9443'
+    s '-L localhost:4200:localhost:4200 -L localhost:9443:localhost:9443 nconway@192.168.220.130'
 }
 
 make-svelte() {
