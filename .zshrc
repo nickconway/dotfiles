@@ -265,7 +265,7 @@ export DROPBOX=/mnt/c/Users/nickc/Dropbox/
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
 export NVM_DIR="$HOME/.nvm"
-alias nvim="unalias nvm; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; nvm $@"  # This loads nvm
+alias nvm="unalias nvm; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; nvm $@"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Load Angular CLI autocompletion.
