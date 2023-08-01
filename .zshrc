@@ -72,8 +72,6 @@ export ZSH="/home/$USER/.oh-my-zsh"
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -A -s main
-    else
-        tmux new -A -s ssh
     fi
 fi
 
