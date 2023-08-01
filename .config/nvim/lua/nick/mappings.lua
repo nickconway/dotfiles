@@ -1,3 +1,7 @@
+local function map(mode, lhs, rhs, description)
+    vim.keymap.set(mode, lhs, rhs, { silent = true, noremap = true, desc = description })
+end
+
 local function is_git_repo()
     vim.fn.system("git rev-parse --is-inside-work-tree")
     return vim.v.shell_error == 0
@@ -48,118 +52,112 @@ local function get_files()
     end
 end
 
-local opts = { noremap = true, silent = true }
+map("n", "x", '"_x')
 
-vim.keymap.set("n", "x", '"_x', opts)
-
-vim.keymap.set("i", "<C-c>", "<Esc>", opts)
+map("i", "<C-c>", "<Esc>")
 -- centering
-vim.keymap.set("n", "n", "nzzzv", opts)
-vim.keymap.set("n", "N", "Nzzzv", opts)
-vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
-vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
+map("n", "n", "nzzzv")
+map("n", "N", "Nzzzv")
+map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
 
 -- delete words
-vim.keymap.set("i", "<C-h>", "<Esc>cvb", opts)
+map("i", "<C-h>", "<Esc>cvb")
 
 -- change word
-vim.keymap.set("n", "<CR>", "ciw", opts)
+map("n", "<CR>", "ciw")
 
 -- cursor stays on yank
-vim.keymap.set("v", "y", "ygv<Esc>", opts)
+map("v", "y", "ygv<Esc>")
 
 -- cycle buffers
-vim.keymap.set("n", "<Tab>", "<C-w>w", opts)
-vim.keymap.set("n", "<S-Tab>", "<C-w>W", opts)
+map("n", "<Tab>", "<C-w>w")
+map("n", "<S-Tab>", "<C-w>W")
 
 -- Alternate buffer
-vim.keymap.set("n", "<BS>", ":b#<CR>", opts)
+map("n", "<BS>", ":b#<CR>")
 
--- Format
-vim.keymap.set("n", "<leader>f", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", opts)
+map("n", "J", "mzJ`z")
 
-vim.keymap.set("n", "J", "mzJ`z", opts)
+map("v", "J", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
+map("v", "K", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv==kgvo<Esc>=kgvo", opts)
-vim.keymap.set("v", "K", ":m '<-2<CR>gv==jgvo<Esc>=jgvo", opts)
+map("x", "<leader>p", '"_dP')
 
-vim.keymap.set("x", "<leader>p", '"_dP')
+map("n", "<leader><CR>", ":so ~/.config/nvim/init.lua<CR>", "Reload config")
 
-vim.keymap.set("n", "<leader><CR>", ":so ~/.config/nvim/init.lua<CR>", opts)
+map("n", "<leader>bd", ":bp|bd #<CR>", "Delete buffer")
+map("n", "<leader>bn", ":bn<CR>", "Next buffer")
+map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 
-vim.keymap.set("n", "<leader>bd", ":bp|bd #<CR>", opts)
-vim.keymap.set("n", "<leader>bn", ":bn<CR>", opts)
-vim.keymap.set("n", "<leader>bp", ":bp<CR>", opts)
+map("n", "<leader>q", ":qa<CR>", "Quit neovim")
 
-vim.keymap.set("n", "<leader>q", ":qa<CR>", opts)
+map("n", "<leader>so", ":so %<CR>", "Source current file")
+map("n", "<leader>ss", ":w<CR>", "Save file")
+map("n", "<leader>st", ":wq<CR>", "Save and close window")
 
-vim.keymap.set("n", "<leader>so", ":so %<CR>", opts)
-vim.keymap.set("n", "<leader>ss", ":w<CR>", opts)
-vim.keymap.set("n", "<leader>st", ":wq<CR>", opts)
+map("n", "<leader>=", "<c-w>T", "Move to new tab")
+map("n", "<leader>ww", "<c-w>=", "Resize windows equally")
 
-vim.keymap.set("n", "<leader>tt", "<c-w>T", opts)
-vim.keymap.set("n", "<leader>ww", "<c-w>=", opts)
-
-vim.keymap.set("n", "<leader>ws", function()
+map("n", "<leader>ws", function()
     vim.cmd('split')
     get_files()
-end, opts)
-vim.keymap.set("n", "<leader>wv", function()
+end, "Split horizontally")
+map("n", "<leader>wv", function()
     vim.cmd('vsplit')
     get_files()
-end, opts)
-vim.keymap.set("n", "<leader>zm", ":ZenMode<CR>", opts)
+end, "Split vertically")
 
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", opts)
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", opts)
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz", opts)
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz", opts)
+map("n", "<C-k>", "<cmd>cnext<CR>zz")
+map("n", "<C-j>", "<cmd>cprev<CR>zz")
+map("n", "<leader>k", "<cmd>lnext<CR>zz", "Location list next")
+map("n", "<leader>j", "<cmd>lprev<CR>zz", "Location list previous")
 
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>")
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", opts)
+map("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>")
+map("n", "<leader>sw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Search word under cursor")
+map("n", "<leader>x", "<cmd>!chmod +x %<CR>", "Make file executable")
 
-vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+map("n", "<leader>u", vim.cmd.UndotreeToggle, "Toggle undotree")
 
 local mark = require("harpoon.mark")
 local ui = require("harpoon.ui")
 
-vim.keymap.set("n", "<leader>ha", mark.add_file)
-vim.keymap.set("n", "<leader>hh", ui.toggle_quick_menu)
+map("n", "<leader>ha", mark.add_file, "Add file")
+map("n", "<leader>hh", ui.toggle_quick_menu, "Menu")
 
-vim.keymap.set("n", "<leader>ht", function()
+map("n", "<leader>ht", function()
     ui.nav_file(1)
-end)
-vim.keymap.set("n", "<leader>hs", function()
+end, "File 1")
+map("n", "<leader>hs", function()
     ui.nav_file(2)
-end)
-vim.keymap.set("n", "<leader>hr", function()
+end, "File 2")
+map("n", "<leader>hr", function()
     ui.nav_file(3)
-end)
-vim.keymap.set("n", "<leader>ha", function()
+end, "File 3")
+map("n", "<leader>ha", function()
     ui.nav_file(4)
-end)
+end, "File 4")
 
-vim.keymap.set("n", "-", ":lua MiniFiles.open()<CR>", opts)
+map("n", "-", ":lua MiniFiles.open()<CR>")
 
-vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>")
-vim.keymap.set("n", "<leader>dc", "<cmd>DapContinue<CR>")
-vim.keymap.set("n", "<leader>di", "<cmd>DapStepInto<CR>")
-vim.keymap.set("n", "<leader>do", "<cmd>DapStepOut<CR>")
-vim.keymap.set("n", "<leader>dt", "<cmd>DapTerminate<CR>")
-vim.keymap.set("n", "<leader>dv", "<cmd>DapStepOver<CR>")
-vim.keymap.set("n", "<leader>dr", function()
+map("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>", "Toggle breakpoint")
+map("n", "<leader>dc", "<cmd>DapContinue<CR>", "Continue")
+map("n", "<leader>di", "<cmd>DapStepInto<CR>", "Step into")
+map("n", "<leader>do", "<cmd>DapStepOut<CR>", "Stop out")
+map("n", "<leader>dt", "<cmd>DapTerminate<CR>", "Terminate")
+map("n", "<leader>dv", "<cmd>DapStepOver<CR>", "Step over")
+map("n", "<leader>dr", function()
     require("dap").repl.open()
-end)
+end, "Open repl")
 
-vim.keymap.set("n", "<leader>fb", builtin.buffers, opts)
-vim.keymap.set("n", "<leader>ff", get_files, opts)
-vim.keymap.set("n", "<leader>fh", builtin.help_tags, opts)
-vim.keymap.set("n", "<leader>fl", builtin.live_grep, opts)
-vim.keymap.set("n", "<leader>fm", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
-vim.keymap.set("n", "<leader>fm", "<cmd>Telescope oldfiles<cr>", opts)
-vim.keymap.set("n", "<leader>fs", ":SearchSession<CR>", opts)
-vim.keymap.set("n", "<leader>fo", ":Telescope file_browser<CR>", opts)
+map("n", "<leader>fb", builtin.buffers, "Buffers")
+map("n", "<leader>ff", get_files, "Files")
+map("n", "<leader>fh", builtin.help_tags, "Help tags")
+map("n", "<leader>fl", builtin.live_grep, "Live grep")
+map("n", "<leader>fm", "<cmd>lua require('telescope.builtin').resume()<cr>", "Last")
+map("n", "<leader>fm", "<cmd>Telescope oldfiles<cr>", "Recent files")
+map("n", "<leader>fs", ":SearchSession<CR>", "Sessions")
+map("n", "<leader>fo", ":Telescope file_browser<CR>", "File browser")
 
 local Terminal = require("toggleterm.terminal").Terminal
 local lazygit = Terminal:new({
@@ -200,10 +198,10 @@ local yadm = Terminal:new({
     end,
 })
 
-vim.keymap.set("n", "<leader>g", function()
+map("n", "<leader>g", function()
     if is_git_repo() then
         lazygit:toggle()
     else
         yadm:toggle()
     end
-end, opts)
+end, "Git")

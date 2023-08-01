@@ -75,7 +75,7 @@ if [[ -z $TMUX ]]; then
     fi
 fi
 
-plugins=(git vi-mode gpg-agent tmux keychain npm zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities $(find $HOME/.ssh/ -name "id_*" -not -path "*.pub")
 zstyle :omz:plugins:keychain options -q --nogui
@@ -120,6 +120,14 @@ if [[ -n $FD_COMMAND ]]; then
 fi
 
 command -v starship > /dev/null && eval "$(starship init zsh)"
+
+alias ta='tmux attach -t'
+alias tad='tmux attach -d -t'
+alias ts='tmux new-session -s'
+alias tl='tmux list-sessions'
+alias tksv='tmux kill-server'
+alias tkss='tmux kill-session -t'
+alias tmuxconf'$EDITOR ~/.tmux.conf'
 
 alias ys="yadm status"
 alias ya="yadm add"
