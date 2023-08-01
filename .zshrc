@@ -192,7 +192,7 @@ function s() {
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h && tmux bind C-h send-prefix && ssh $@ || tmux switch-client -l"
+    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h && tmux bind C-h send-prefix && ssh $@; tmux switch-client -l"
     tmux switch-client -t ssh-client$num
     
 }
