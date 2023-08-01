@@ -185,16 +185,20 @@ function lg() {
 
 function s() {
     num=
-    if tmux has-session -t ssh 2> /dev/null; then
+    if tmux has-session -t ssh-client 2> /dev/null; then
         num=2
-        while tmux has-session -t ssh"$num" 2> /dev/null
+        while tmux has-session -t ssh-client"$num" 2> /dev/null
         do
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh$num "hide-tmux-statusbar & tmux set prefix C-h && tmux bind C-h send-prefix && ssh $@"
-    tmux switch-client -t ssh$num
+    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h && tmux bind C-h send-prefix && ssh $@ || tmux switch-client -l"
+    tmux switch-client -t ssh-client$num
     
+}
+
+function svm() {
+    s 'nconway@192.168.220.130 -L localhost:4200:localhost:4200 -L localhost:9443:localhost:9443'
 }
 
 make-svelte() {
