@@ -190,7 +190,7 @@ function s() {
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -tX $@ 'tmux new -As ssh $SHELL'; tmux switch-client -l"
+    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -tX $@ 'tmux new -As ssh $SHELL || $SHELL'; tmux switch-client -l"
     tmux switch-client -t ssh-client$num
     
 }
