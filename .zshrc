@@ -198,7 +198,7 @@ function s() {
 }
 
 function svm() {
-    s 'nconway@192.168.220.130 -L localhost:4200:localhost:4200 -L localhost:9443:localhost:9443'
+    s '-X nconway@192.168.220.130 -L localhost:4200:localhost:4200 -L localhost:9443:localhost:9443'
 }
 
 make-svelte() {
