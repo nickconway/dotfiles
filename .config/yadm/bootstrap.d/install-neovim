@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+sudo yum install -y cmake
+sudo yum install -y gcc
+sudo yum install -y unzip
+sudo yum install -y gettext
+sudo yum install -y curl
+sudo yum install -y ninja-build
+
+sudo apt install -y ninja-build
+sudo apt install -y gettext
+sudo apt install -y cmake
+sudo apt install -y unzip
+sudo apt install -y curl
+
+source ~/.cargo/env
+cargo install tree-sitter-cli
+
+git clone https://github.com/neovim/neovim
+cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
+cd -
+rm -rf neovim
+nvim --headless "+Lazy! sync" +qa

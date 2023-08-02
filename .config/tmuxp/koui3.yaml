@@ -1,0 +1,29 @@
+session_name: koui3
+windows:
+  - layout: main-horizontal
+    start_directory: "~/git/koui3"
+    options:
+      main-pane-height: "80%"
+    panes:
+      - shell_command:
+          - nvim
+        focus: true
+      - shell_command:
+          - nvm use 16.15.1
+          - ng serve
+      - shell_command:
+          - nvm use 16.15.1
+  - layout: main-horizontal
+    start_directory: "$KOTEST"
+    options:
+      main-pane-height: "50%"
+    panes:
+      - shell_command:
+          - sudo rm /var/lib/ko/plugin/libLicenseMgr.so
+          - kill -kill $(pgrep -f kmip_server)
+          - $CRYPTSOFT/kmipc_server/bin/kmip_server
+      - shell_command:
+          - kill -kill $(pgrep -f server-ui.js)
+          - NODE_ENV=development
+          - sleep 3
+          - node $KODIR/ko_rest/server-ui.js
