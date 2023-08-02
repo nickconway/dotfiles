@@ -26,4 +26,4 @@ windows:
           - kill -kill $(pgrep -f server-ui.js)
           - NODE_ENV=development
           - sleep 3
-          - node ~/KO/ko_rest/server-ui.js
+          - node ~/git/KO/ko_rest/server-ui.js
