@@ -205,7 +205,7 @@ function s() {
 }
 
 function svm() {
-    s "$@ -L localhost:4200:localhost:4200 -L localhost:9443:localhost:9443 nconway@192.168.220.130"
+    s "$@ -L 127.0.0.1:4200:127.0.0.1:4200 -L 127.0.0.1:9443:127.0.0.1:9443 nconway@192.168.220.130"
 }
 
 make-svelte() {
