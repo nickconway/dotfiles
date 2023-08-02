@@ -75,7 +75,7 @@ if [[ -z $TMUX ]]; then
     fi
 fi
 
-plugins=(git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(tmux git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities $(find $HOME/.ssh/ -name "id_*" -not -path "*.pub")
 zstyle :omz:plugins:keychain options -q --nogui
