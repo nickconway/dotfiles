@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+sudo apt install make -y
+
 echo "Updating the yadm repo origin URL"
 echo ""
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
@@ -108,7 +110,6 @@ if [[ -e /mnt/c/Users ]]; then
     echo "installing fonts"
     echo ""
     sudo cp ~/.config/wsl/local.conf /etc/fonts/local.conf
-    sudo fc-cache -frv
 fi
 
 chsh -s /bin/zsh
