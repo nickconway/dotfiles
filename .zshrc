@@ -74,12 +74,6 @@ export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
-if [[ -z $TMUX ]]; then
-    if [[ -z $SSH_CONNECTION ]]; then
-        tmux new -A -s main
-    fi
-fi
-
 plugins=(tmux git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities $(find $HOME/.ssh/ -name "id_*" -not -path "*.pub")
@@ -291,3 +285,9 @@ export FZF_CTRL_R_OPTS="
 export FZF_TMUX_OPTS="-p --reverse"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if [[ -z $TMUX ]]; then
+    if [[ -z $SSH_CONNECTION ]]; then
+        tmux new -A -s main
+    fi
+fi
