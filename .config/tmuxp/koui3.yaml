@@ -24,6 +24,5 @@ windows:
           - ~/cryptsoft/kmipc_server/bin/kmip_server
       - shell_command:
           - kill -kill $(pgrep -f server-ui.js)
-          - NODE_ENV=development
           - sleep 3
-          - node ~/git/KO/ko_rest/server-ui.js
+          - NODE_ENV=development node ~/git/KO/ko_rest/server-ui.js
