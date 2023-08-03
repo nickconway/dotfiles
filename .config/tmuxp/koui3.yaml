@@ -14,6 +14,15 @@ windows:
       - shell_command:
           - nvm use 16.15.1
   - layout: main-horizontal
+    start_directory: "~/git/KO/ko_rest"
+    options:
+      main-pane-height: "80%"
+    panes:
+      - shell_command:
+          - nvim
+        focus: true
+      - 
+  - layout: main-horizontal
     start_directory: "$KOTEST"
     options:
       main-pane-height: "50%"
