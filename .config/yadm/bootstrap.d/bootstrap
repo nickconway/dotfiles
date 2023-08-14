@@ -20,6 +20,13 @@ if command -v yum; then
     sudo yum install -y curl
     sudo yum install -y automake
     sudo yum install -y libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config
+    sudo yum install -y yum-utils
+    sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo -y
+    sudo yum install ripgrep -y
+    sudo dnf copr enable tkbcopr/fd -y
+    sudo dnf install fd -y
+    sudo yum install nodejs npm -y
+    sudo yum install zsh -y
 elif command -v apt; then
     sudo apt install make -y
     sudo apt install -y ninja-build
@@ -28,7 +35,10 @@ elif command -v apt; then
     sudo apt install -y unzip
     sudo apt install -y curl
     sudo apt install -y automake
+    sudo apt install -y ripgrep
     sudo apt install -y libevent ncurses libevent-dev ncurses-dev build-essential gcc make bison pkg-config
+    sudo apt install nodejs npm -y
+    sudo apt install zsh -y
 fi
 
 git clone https://github.com/funtoo/keychain.git
@@ -46,16 +56,6 @@ curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | 
 
 curl -sS https://starship.rs/install.sh | sh -s -- -y
 
-sudo apt install -y ripgrep
-sudo yum install -y yum-utils
-sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo -y
-sudo yum install ripgrep -y
-
-sudo dnf copr enable tkbcopr/fd -y
-sudo dnf install fd -y
-
-sudo apt install nodejs npm -y
-sudo yum install nodejs npm -y
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
@@ -69,9 +69,6 @@ source "$HOME/.cargo/env"
 
 cargo install rbw
 cargo install tealdeer
-
-sudo apt install zsh -y
-sudo yum install zsh -y
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
