@@ -22,12 +22,14 @@ sudo yum install -y unzip
 sudo yum install -y gettext
 sudo yum install -y curl
 sudo yum install -y ninja-build
+sudo yum install -y automake
 
 sudo apt install -y ninja-build
 sudo apt install -y gettext
 sudo apt install -y cmake
 sudo apt install -y unzip
 sudo apt install -y curl
+sudo apt install -y automake
 
 echo "installing keychain"
 echo ""
