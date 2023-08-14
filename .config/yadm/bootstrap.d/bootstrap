@@ -48,24 +48,6 @@ sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo -y
 sudo yum install ripgrep -y
 
-echo "installing github cli"
-echo ""
-if command -v apt > /dev/null; then
-    type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-        && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-        && sudo apt update \
-        && sudo apt install gh -y
-elif command -v yum > /dev/null; then
-    sudo dnf install 'dnf-command(config-manager)' -y
-    sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
-    sudo dnf install gh -y
-fi
-gh auth login
-yadm restore ~/.config/gh/config.yml
-gh extension install dlvhdr/gh-dash
-
 echo "installing fd"
 echo ""
 sudo dnf copr enable tkbcopr/fd -y
