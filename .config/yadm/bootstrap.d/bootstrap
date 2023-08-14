@@ -4,14 +4,6 @@ set -xe
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
-if ! command -v go > /dev/null; then
-    wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
-    rm go1.20.5.linux-amd64.tar.gz
-    export PATH=$PATH:/usr/local/go/bin
-    go env -w GOPATH=$HOME/.local/go
-fi
-
 if command -v yum; then
     sudo yum install -y cmake
     sudo yum install -y gcc
@@ -39,6 +31,14 @@ elif command -v apt; then
     sudo apt install -y libevent ncurses libevent-dev ncurses-dev build-essential gcc make bison pkg-config
     sudo apt install nodejs npm -y
     sudo apt install zsh -y
+fi
+
+if ! command -v go; then
+    wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
+    rm go1.20.5.linux-amd64.tar.gz
+    export PATH=$PATH:/usr/local/go/bin
+    go env -w GOPATH=$HOME/.local/go
 fi
 
 git clone https://github.com/funtoo/keychain.git
