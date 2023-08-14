@@ -2,8 +2,6 @@
 
 set -xe
 
-sudo apt install make -y
-
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
 if ! command -v go > /dev/null; then
@@ -24,6 +22,7 @@ if command -v yum; then
     sudo yum install -y automake
     sudo yum install -y libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config
 elif command -v apt; then
+    sudo apt install make -y
     sudo apt install -y ninja-build
     sudo apt install -y gettext
     sudo apt install -y cmake
