@@ -14,20 +14,24 @@ if ! command -v go > /dev/null; then
     go env -w GOPATH=$HOME/.local/go
 fi
 
-sudo yum install -y cmake
-sudo yum install -y gcc
-sudo yum install -y unzip
-sudo yum install -y gettext
-sudo yum install -y curl
-sudo yum install -y ninja-build
-sudo yum install -y automake
-
-sudo apt install -y ninja-build
-sudo apt install -y gettext
-sudo apt install -y cmake
-sudo apt install -y unzip
-sudo apt install -y curl
-sudo apt install -y automake
+if command -v yum; then
+    sudo yum install -y cmake
+    sudo yum install -y gcc
+    sudo yum install -y unzip
+    sudo yum install -y gettext
+    sudo yum install -y curl
+    sudo yum install -y ninja-build
+    sudo yum install -y automake
+    sudo yum install -y libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config
+elif command -v apt; then
+    sudo apt install -y ninja-build
+    sudo apt install -y gettext
+    sudo apt install -y cmake
+    sudo apt install -y unzip
+    sudo apt install -y curl
+    sudo apt install -y automake
+    sudo apt install -y libevent ncurses libevent-dev ncurses-dev build-essential gcc make bison pkg-config
+fi
 
 git clone https://github.com/funtoo/keychain.git
 cd keychain
