@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xe
+
 source ~/.cargo/env
 cargo install tree-sitter-cli
 

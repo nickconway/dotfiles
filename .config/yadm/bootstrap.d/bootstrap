@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xe
+
 sudo apt install make -y
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
