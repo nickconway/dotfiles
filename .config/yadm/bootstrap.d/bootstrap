@@ -18,7 +18,6 @@ if command -v yum; then
     sudo yum install -y unzip
     sudo yum install -y gettext
     sudo yum install -y curl
-    sudo yum install -y ninja-build
     sudo yum install -y automake
     sudo yum install -y libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config
 elif command -v apt; then
