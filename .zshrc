@@ -263,11 +263,6 @@ export NVM_DIR="$HOME/.nvm"
 alias nvm="unalias nvm; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; nvm $@"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Load Angular CLI autocompletion.
-if command -v ng > /dev/null; then
-    source <(ng completion script)
-fi
-
 command -v zoxide > /dev/null && eval "$(zoxide init zsh --cmd cd)"
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
