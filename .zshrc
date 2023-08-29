@@ -94,6 +94,12 @@ zstyle :omz:plugins:keychain options -q --nogui
 # else
 #   export EDITOR='mvim'
 # fi
+#
+if [[ -n $SSH_CONNECTION ]]; then
+    if [[ -z $TMUX ]]; then
+        tmux new -As ssh 
+    fi
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
