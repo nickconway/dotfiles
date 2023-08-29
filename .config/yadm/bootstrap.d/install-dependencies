@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xe
+
 if [ -f /etc/os-release ]; then
     # freedesktop.org and systemd
     . /etc/os-release

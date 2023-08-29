@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "installing tailscale"
-echo ""
+set -xe
+
 curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
 sudo tailscale up --ssh

@@ -195,11 +195,10 @@ function s() {
     fi
     tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -t $@ 'tmux new -As ssh $SHELL || $SHELL'; tmux switch-client -l"
     tmux switch-client -t ssh-client$num
-    
 }
 
 function svm() {
-    s "$@ -L 127.0.0.1:4200:127.0.0.1:4200 -L 127.0.0.1:9443:127.0.0.1:9443 nconway@192.168.220.130"
+    s "$@ -L 127.0.0.1:4200:127.0.0.1:4200 -L 127.0.0.1:9443:127.0.0.1:9443 nconway@192.168.220.131"
 }
 
 make-svelte() {
@@ -263,11 +262,6 @@ export NVM_DIR="$HOME/.nvm"
 alias nvm="unalias nvm; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; nvm $@"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Load Angular CLI autocompletion.
-if command -v ng > /dev/null; then
-    source <(ng completion script)
-fi
-
 command -v zoxide > /dev/null && eval "$(zoxide init zsh --cmd cd)"
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
@@ -288,6 +282,16 @@ export FZF_TMUX_OPTS="-p --reverse"
 
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
-        tmux new -A -s main
+        tmux new -As main
+    else
+        num=
+        if tmux has-session -t ssh 2> /dev/null; then
+            num=2
+            while tmux has-session -t ssh"$num" 2> /dev/null
+            do
+                ((num=num+1))
+            done
+        fi
+        tmux new -As ssh$num
     fi
 fi

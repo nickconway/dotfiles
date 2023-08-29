@@ -1,11 +1,11 @@
 #!/bin/bash
 
+set -xe
+
 # Save this file as ~/.config/yadm/bootstrap and make it executable. It will
 # execute all executable files (excluding templates and editor backups) in the
 # ~/.config/yadm/bootstrap.d directory when run.
 
-echo "decrypting files"
-echo ""
 yadm decrypt
 yadm alt
 
@@ -23,6 +23,3 @@ for bootstrap in $(find -L "$BOOTSTRAP_D" -type f | sort); do
         $bootstrap
     fi
 done
-
-echo ""
-echo "Done, logout/reboot now"
