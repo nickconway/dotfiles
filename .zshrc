@@ -74,7 +74,7 @@ export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
-plugins=(tmux git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities $(find $HOME/.ssh/ -name "id_*" -not -path "*.pub")
 zstyle :omz:plugins:keychain options -q --nogui
@@ -292,6 +292,6 @@ if [[ -z $TMUX ]]; then
                 ((num=num+1))
             done
         fi
-        tmux new -As ssh$num || tmux kill-session -t ssh$num ||  exit
+        tmux new -As ssh$num || tmux kill-session -t ssh$num; exit
     fi
 fi
