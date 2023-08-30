@@ -254,7 +254,7 @@ fi
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
-export DROPBOX=/mnt/c/Users/nickc/Dropbox/
+export DROPBOX=/c/Users/nickc/Dropbox/
 
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
