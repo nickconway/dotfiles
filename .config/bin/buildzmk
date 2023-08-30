@@ -6,7 +6,7 @@ sed -i '/leader_sequences/e cat macros-sen.dtsi' leader.dtsi
 
 mkdir -p $DROPBOX/Documents/ZMK/"$1"/
 cd $PROJECT_DIR/zmk/app || return 
-if [ $(find -name $1_left.conf | wc -l) -gt 0 ]; then
+if [ $(find . $PROJECT_DIR -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
         west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_left nice_view_adapter nice_view" && \
             west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_right nice_view_adapter nice_view"
