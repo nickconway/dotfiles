@@ -1,3 +1,19 @@
+if [[ -z $TMUX ]]; then
+    if [[ -z $SSH_CONNECTION ]]; then
+        tmux new -As main
+    else
+        num=
+        if tmux has-session -t ssh 2> /dev/null; then
+            num=2
+            while tmux has-session -t ssh"$num" 2> /dev/null
+            do
+                ((num=num+1))
+            done
+        fi
+        tmux new -As ssh$num || tmux kill-session -t ssh$num; exit
+    fi
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -279,19 +295,3 @@ export FZF_CTRL_R_OPTS="
 export FZF_TMUX_OPTS="-p --reverse"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-if [[ -z $TMUX ]]; then
-    if [[ -z $SSH_CONNECTION ]]; then
-        tmux new -As main
-    else
-        num=
-        if tmux has-session -t ssh 2> /dev/null; then
-            num=2
-            while tmux has-session -t ssh"$num" 2> /dev/null
-            do
-                ((num=num+1))
-            done
-        fi
-        tmux new -As ssh$num || tmux kill-session -t ssh$num; exit
-    fi
-fi
