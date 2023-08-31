@@ -209,7 +209,7 @@ function s() {
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh-client$num "[[ -f ~/.keychain/NCONWAY-DEV-sh ]] && . ~/.keychain/NCONWAY-DEV-sh; hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -t $@; tmux switch-client -l"
+    tmux new -ds ssh-client$num "[[ -f ~/.keychain/$(hostname)-sh ]] && . ~/.keychain/$(hostname)-sh; hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -t $@; tmux switch-client -l"
     tmux switch-client -t ssh-client$num
 }
 
