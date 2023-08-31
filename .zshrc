@@ -165,7 +165,7 @@ function pw() {
 }
 
 function ghpr() {
-    GH_FORCE_TTY=100% gh pr list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
 }
 
 function ghc() {
@@ -254,7 +254,7 @@ fi
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
-export DROPBOX=/mnt/c/Users/nickc/Dropbox/
+export DROPBOX=/c/Users/nickc/Dropbox/
 
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 

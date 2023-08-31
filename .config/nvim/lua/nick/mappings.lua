@@ -46,7 +46,7 @@ local function get_files()
             sorter = conf.file_sorter(topts),
         }):find()
     elseif is_git_repo() then
-        require("telescope.builtin").find_files({ cwd = get_git_root() })
+        require("telescope.builtin").git_files({ cwd = get_git_root() })
     else
         require("telescope.builtin").find_files()
     end
