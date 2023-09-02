@@ -5,7 +5,7 @@ set -xe
 source ~/.cargo/env
 cargo install tree-sitter-cli
 
-rm -rf neovim
+sudo rm -rf neovim
 git clone https://github.com/neovim/neovim
 if $(whoami) == "deck"; then
 	cd neovim && make CMAKE_BUILD_TYPE=Release
