@@ -2,11 +2,15 @@
 
 set -xe
 
+if command -v tmux; then
+    exit
+fi
+
 cd
-git clone https://github.com/tmux/tmux.git
+git clone https://github.com/tmux/tmux.git .tmux
 cd tmux
 sh autogen.sh
-./configure
+./configure --prefix=/home/deck/.tmux
 make && sudo make install
 cd -
 rm -rf tmux

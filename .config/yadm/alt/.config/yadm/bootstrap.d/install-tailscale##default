@@ -2,21 +2,21 @@
 
 set -xe
 
-if command -v apt; then
-    sudo apt install network-manager
+if [[ $(uname -n) != *.steamdeck ]]; then
+    if command -v apt; then
+        sudo apt install network-manager
+    fi
+
+    sudo systemctl start systemd-resolved
+    sudo systemctl enable systemd-resolved
+    sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+    sudo systemctl start NetworkManager
+    sudo systemctl enable NetworkManager
+
+    sudo systemctl restart systemd-resolved
+    sudo systemctl restart NetworkManager
+
+    curl -fsSL https://tailscale.com/install.sh | sh
+    sudo tailscale up --ssh --accept-routes
 fi
-
-sudo apt install network-manager
-
-sudo systemctl start systemd-resolved
-sudo systemctl enable systemd-resolved
-sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-
-sudo systemctl start NetworkManager
-sudo systemctl enable NetworkManager
-
-sudo systemctl restart systemd-resolved
-sudo systemctl restart NetworkManager
-
-curl -fsSL https://tailscale.com/install.sh | sh
-sudo tailscale up --ssh --accept-routes

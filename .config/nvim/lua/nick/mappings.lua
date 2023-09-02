@@ -24,8 +24,8 @@ local function get_files()
 
         topts.entry_maker = function(entry)
             local str = string.gsub(entry, ".config/", "")
-            str = string.gsub(str, "yadm/alt/", "")
-            str = string.gsub(str, "##default", "")
+            -- str = string.gsub(str, "yadm/alt/", "")
+            -- str = string.gsub(str, "##default", "")
             -- str = string.gsub(str, "")
             return {
                 -- prepend home dir

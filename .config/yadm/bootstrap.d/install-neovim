@@ -2,18 +2,22 @@
 
 set -xe
 
+if command -v nvim; then
+    exit
+fi
+
 source ~/.cargo/env
 cargo install tree-sitter-cli
 
 sudo rm -rf neovim
-git clone https://github.com/neovim/neovim
+git clone https://github.com/neovim/neovim ~/.neovim
 if $(whoami) == "deck"; then
-	cd neovim && make CMAKE_BUILD_TYPE=Release
-	sudo make install
-	cd -
-	rm -rf neovim
+    cd neovim && make CMAKE_BUILD_TYPE=Release
+    sudo make install
+    cd -
+    rm -rf neovim
 else
-	cd neovim && make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/neovim"
-	sudo make install
-	cd -
+    cd .neovim && make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/.neovim"
+    sudo make install
+    cd -
 fi

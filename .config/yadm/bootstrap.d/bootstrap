@@ -84,7 +84,7 @@ mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-if [[ -e /usr/share/fonts ]]; then
+if [[ -e /usr/share/fonts && ! (-e ~/Downloads/hack) ]]; then
     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip -O Downloads/hack.zip 
     unzip Downloads/hack.zip -d Downloads/hack
     sudo cp -r Downloads/hack /usr/share/fonts
