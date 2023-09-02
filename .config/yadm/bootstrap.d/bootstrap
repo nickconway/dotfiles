@@ -28,7 +28,15 @@ elif command -v apt; then
     sudo apt install -y curl
     sudo apt install -y automake
     sudo apt install -y ripgrep
-    sudo apt install -y libevent ncurses libevent-dev ncurses-dev build-essential gcc make bison pkg-config
+    # sudo apt install -y libevent 
+    # sudo apt install -y ncurses 
+    sudo apt install -y libevent-dev 
+    sudo apt install -y ncurses-dev 
+    sudo apt install -y build-essential 
+    sudo apt install -y gcc 
+    sudo apt install -y make 
+    sudo apt install -y bison 
+    sudo apt install -y pkg-config
     sudo apt install nodejs npm -y
     sudo apt install zsh -y
 fi
@@ -70,6 +78,7 @@ source "$HOME/.cargo/env"
 cargo install rbw
 cargo install tealdeer
 
+rm -rf ~/.oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions

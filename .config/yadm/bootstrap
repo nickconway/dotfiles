@@ -17,7 +17,9 @@ if [[ ! -d "$BOOTSTRAP_D" ]]; then
     exit 1
 fi
 
-for bootstrap in $(find -L "$BOOTSTRAP_D" -type f | sort); do
+scripts=$(find -L "$BOOTSTRAP_D" -type f | sort)
+echo $scripts
+for bootstrap in $scripts; do
     if [[ -x "$bootstrap" && ! "$bootstrap" =~ "##" && ! "$bootstrap" =~ "~$" ]]; then
         echo $bootstrap
         $bootstrap
