@@ -2,7 +2,7 @@ export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin
 export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:~/.neovim/bin:~/.tmux/bin
-export PATH=$PATH:$HOME/.local/podman/bin
+export PATH=$PATH:$HOME/.local/podman/bin:$HOME/.local/go/bin
 
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then

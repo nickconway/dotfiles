@@ -7,11 +7,12 @@ if command -v tmux; then
 fi
 
 cd
-git clone https://github.com/tmux/tmux.git .tmux
-cd tmux
+git clone https://github.com/tmux/tmux.git
+cd $dir
 sh autogen.sh
-./configure --prefix=/home/deck/.tmux
+./configure --prefix=~/.local/tmux
 make && sudo make install
 cd -
 rm -rf tmux
+
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
