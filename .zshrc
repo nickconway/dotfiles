@@ -250,7 +250,7 @@ else
     export PROJECT_DIR=~/git
 fi
 
-[[ -z $SSH_CONNECTION ]] && [[ -e /mnt/c/Users ]] && export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0 && export LIBGL_ALWAYS_INDIRECT=1
+## [[ -z $SSH_CONNECTION ]] && [[ -e /mnt/c/Users ]] && export DISPLAY=$(ip route | grep default | awk '{print $3; exit;}'):0.0 && export LIBGL_ALWAYS_INDIRECT=1
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
