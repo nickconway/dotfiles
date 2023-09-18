@@ -28,40 +28,54 @@ elif command -v apt; then
     sudo apt install -y curl
     sudo apt install -y automake
     sudo apt install -y ripgrep
-    sudo apt install -y libevent ncurses libevent-dev ncurses-dev build-essential gcc make bison pkg-config
+    # sudo apt install -y libevent 
+    # sudo apt install -y ncurses 
+    sudo apt install -y libevent-dev 
+    sudo apt install -y ncurses-dev 
+    sudo apt install -y build-essential 
+    sudo apt install -y gcc 
+    sudo apt install -y make 
+    sudo apt install -y bison 
+    sudo apt install -y pkg-config
     sudo apt install nodejs npm -y
     sudo apt install zsh -y
 fi
 
 if ! command -v go; then
     wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
+    sudo rm -rf ~/.local/go
+    sudo tar -C ~/.local -xzf go1.20.5.linux-amd64.tar.gz
     rm go1.20.5.linux-amd64.tar.gz
-    export PATH=$PATH:/usr/local/go/bin
-    go env -w GOPATH=$HOME/.local/go
+    export PATH=$PATH:~/.local/go
+    go env -w GOPATH=~/.local/go-packages
 fi
 
 git clone https://github.com/funtoo/keychain.git
 cd keychain
-make
-sudo mv ./keychain /usr/bin
+if [[ $(uname -n) == steamdeck ]]; then
+    distrobox enter ubuntu -- bash -c make
+else
+    make
+fi
+sudo mv ./keychain ~/.local/bin
 cd -
 rm -rf keychain
 
-go install github.com/arl/gitmux@latest
+command -v go > /dev/null && go install github.com/arl/gitmux@latest
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
-curl -sS https://starship.rs/install.sh | sh -s -- -y
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir ~/.local/bin -y
+fi
 
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
 tar xf lazygit.tar.gz lazygit
-sudo install lazygit /usr/local/bin
+sudo install lazygit ~/.local/bin
 rm lazygit lazygit.tar.gz
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -70,15 +84,18 @@ source "$HOME/.cargo/env"
 cargo install rbw
 cargo install tealdeer
 
+rm -rf ~/.oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-if [[ -e /usr/share/fonts ]]; then
+if [[ -e /usr/share/fonts && ! (-e ~/Downloads/hack) ]]; then
     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip -O Downloads/hack.zip 
     unzip Downloads/hack.zip -d Downloads/hack
     sudo cp -r Downloads/hack /usr/share/fonts
 fi
 
-chsh -s /bin/zsh
+if [[ $SHELL != *zsh ]]; then
+    chsh -s /bin/zsh
+fi

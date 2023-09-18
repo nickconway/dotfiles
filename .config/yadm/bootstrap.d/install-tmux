@@ -2,12 +2,17 @@
 
 set -xe
 
+if command -v tmux; then
+    exit
+fi
+
 cd
 git clone https://github.com/tmux/tmux.git
-cd tmux
+cd $dir
 sh autogen.sh
-./configure
+./configure --prefix=~/.local/tmux
 make && sudo make install
 cd -
 rm -rf tmux
+
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins

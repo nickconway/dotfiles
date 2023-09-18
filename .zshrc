@@ -1,3 +1,25 @@
+export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH":/usr/lib/node_modules:/usr/local/lib/node_modules
+export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
+export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:~/.neovim/bin:~/.tmux/bin
+export PATH=$PATH:$HOME/.local/podman/bin:$HOME/.local/go/bin
+
+if [[ -z $TMUX ]]; then
+    if [[ -z $SSH_CONNECTION ]]; then
+        tmux new -As main
+    else
+        num=
+        if tmux has-session -t ssh 2> /dev/null; then
+            num=2
+            while tmux has-session -t ssh"$num" 2> /dev/null
+            do
+                ((num=num+1))
+            done
+        fi
+        tmux new -As ssh$num || tmux kill-session -t ssh$num; exit
+    fi
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -68,11 +90,6 @@ export ZSH="/home/$USER/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-
-export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH":/usr/lib/node_modules:/usr/local/lib/node_modules
-export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
-export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
-export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
 plugins=(git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 zstyle :omz:plugins:keychain agents gpg,ssh
@@ -193,12 +210,12 @@ function s() {
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh-client$num "hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -t $@ 'tmux new -As ssh $SHELL || $SHELL'; tmux switch-client -l"
+    tmux new -ds ssh-client$num "[[ -f ~/.keychain/$(hostname)-sh ]] && . ~/.keychain/$(hostname)-sh; hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -t $@; tmux switch-client -l"
     tmux switch-client -t ssh-client$num
 }
 
 function svm() {
-    s "$@ -L 127.0.0.1:4200:127.0.0.1:4200 -L 127.0.0.1:9443:127.0.0.1:9443 nconway@192.168.220.131"
+    s "$@ -L 127.0.0.1:4200:127.0.0.1:4200 -L 127.0.0.1:9443:127.0.0.1:9443 nconway@192.168.220.130"
 }
 
 make-svelte() {
@@ -279,19 +296,3 @@ export FZF_CTRL_R_OPTS="
 export FZF_TMUX_OPTS="-p --reverse"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-if [[ -z $TMUX ]]; then
-    if [[ -z $SSH_CONNECTION ]]; then
-        tmux new -As main
-    else
-        num=
-        if tmux has-session -t ssh 2> /dev/null; then
-            num=2
-            while tmux has-session -t ssh"$num" 2> /dev/null
-            do
-                ((num=num+1))
-            done
-        fi
-        tmux new -As ssh$num || tmux kill-session -t ssh$num; exit
-    fi
-fi
