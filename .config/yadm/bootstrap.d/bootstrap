@@ -46,7 +46,7 @@ if ! command -v go; then
     sudo rm -rf ~/.local/go
     sudo tar -C ~/.local -xzf go1.20.5.linux-amd64.tar.gz
     rm go1.20.5.linux-amd64.tar.gz
-    export PATH=$PATH:~/.local/go
+    export PATH=$PATH:~/.local/go/bin
     go env -w GOPATH=~/.local/go-packages
 fi
 
