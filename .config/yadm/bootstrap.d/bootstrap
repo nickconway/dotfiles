@@ -41,12 +41,14 @@ elif command -v apt; then
     sudo apt install zsh -y
 fi
 
+mkdir -p ~/.local/bin
+
 if ! command -v go; then
     wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
     sudo rm -rf ~/.local/go
     sudo tar -C ~/.local -xzf go1.20.5.linux-amd64.tar.gz
     rm go1.20.5.linux-amd64.tar.gz
-    export PATH=$PATH:~/.local/go
+    export PATH=$PATH:~/.local/go/bin
     go env -w GOPATH=~/.local/go-packages
 fi
 
@@ -57,7 +59,7 @@ if [[ $(uname -n) == steamdeck ]]; then
 else
     make
 fi
-sudo mv ./keychain ~/.local/bin
+sudo mv ./keychain ~/.local/bin/
 cd -
 rm -rf keychain
 
@@ -68,7 +70,6 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir ~/.local/bin -y
-fi
 
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
@@ -90,10 +91,12 @@ mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-if [[ -e /usr/share/fonts && ! (-e ~/Downloads/hack) ]]; then
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip -O Downloads/hack.zip 
-    unzip Downloads/hack.zip -d Downloads/hack
-    sudo cp -r Downloads/hack /usr/share/fonts
+if [[ ! -e /usr/share/fonts/hack ]]; then
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip -O Hack.zip 
+    unzip Hack.zip -d hack
+    sudo cp -r hack /usr/share/fonts
+    rm -rf Hack.zip hack
+
 fi
 
 if [[ $SHELL != *zsh ]]; then
