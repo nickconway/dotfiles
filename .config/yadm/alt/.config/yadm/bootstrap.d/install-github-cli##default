@@ -6,6 +6,7 @@ if command -v gh > /dev/null; then
     exit
 fi
 
+export PATH=$PATH:~/.local/bin:~/.local/go/bin
 git clone https://github.com/cli/cli.git gh-cli
 cd gh-cli
 
