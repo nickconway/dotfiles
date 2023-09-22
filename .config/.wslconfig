@@ -1,2 +1,6 @@
-[wsl2]
-guiApplications=false
+[experimental]
+autoMemoryReclaim=gradual
+networkingMode=mirrored
+dnsTunneling=true
+firewall=true
+autoProxy=true
