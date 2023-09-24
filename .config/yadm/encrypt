@@ -2,6 +2,7 @@
 .config/wsl/*
 .config/wsl/.[a-zA-Z0-9]*
 .config/rbw/*
+.config/zmk/*
 git/zmk-config/config/include/leader-sen.dtsi
 git/zmk-config/config/include/macros-sen.dtsi
 .config/yadm/alt/*##c.work
