@@ -40,6 +40,7 @@ elif command -v apt; then
     sudo apt install nodejs npm -y
     sudo apt install zsh -y
 fi
+sudo chsh nick -s /bin/zsh
 
 mkdir -p ~/.local/bin
 
@@ -97,8 +98,4 @@ if [[ ! -e /usr/share/fonts/hack ]]; then
     sudo cp -r hack /usr/share/fonts
     rm -rf Hack.zip hack
 
-fi
-
-if [[ $SHELL != *zsh ]]; then
-    chsh -s /bin/zsh
 fi
