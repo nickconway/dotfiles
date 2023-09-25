@@ -6,6 +6,8 @@ if command -v tmux; then
     exit
 fi
 
+sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+
 cd
 git clone https://github.com/tmux/tmux.git
 cd $dir
