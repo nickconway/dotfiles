@@ -189,16 +189,16 @@ function lg() {
 }
 
 function s() {
-    num=
-    if tmux has-session -t ssh-client 2> /dev/null; then
+    num=1
+    if tmux has-session -t ssh-client-$num 2> /dev/null; then
         num=2
-        while tmux has-session -t ssh-client"$num" 2> /dev/null
+        while tmux has-session -t ssh-client-$num 2> /dev/null
         do
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh-client$num "[[ -f ~/.keychain/$(hostname)-sh ]] && . ~/.keychain/$(hostname)-sh; hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -t $@ \"export SSH_HOST=$(hostname); '$SHELL' -l\" ; tmux switch-client -l"
-    [[ -n $TMUX ]] && tmux switch-client -t ssh-client$num || tmux attach -t ssh-client$num
+    tmux new -ds ssh-client-$num "[[ -f ~/.keychain/$(hostname)-sh ]] && . ~/.keychain/$(hostname)-sh; hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; tmux unbind -n C-f; ssh -t $@ \"export SSH_HOST=$(hostname); '$SHELL' -l\" ; tmux switch-client -l"
+    [[ -n $TMUX ]] && tmux switch-client -t ssh-client-$num || tmux attach -t ssh-client-$num
 }
 
 function svm() {
@@ -286,17 +286,17 @@ if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -As main
     elif [[ -n $SSH_HOST ]]; then
-        tmux new -As ssh$SSH_HOST || tmux kill-session -t ssh$SSH_HOST; exit
+        tmux new -As ssh-$SSH_HOST || tmux kill-session -t ssh-$SSH_HOST; exit
     else
-        num=
-        if tmux has-session -t ssh 2> /dev/null; then
+        num=1
+        if tmux has-session -t ssh-$num 2> /dev/null; then
             num=2
-            while tmux has-session -t ssh"$num" 2> /dev/null
+            while tmux has-session -t ssh-$num 2> /dev/null
             do
                 ((num=num+1))
             done
         fi
-        tmux new -As ssh$num || tmux kill-session -t ssh$num; exit
+        tmux new -As ssh-$num || tmux kill-session -t ssh-$num; exit
     fi
 fi
 
