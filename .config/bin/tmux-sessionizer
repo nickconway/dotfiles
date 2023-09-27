@@ -7,7 +7,7 @@ else
     command() (find ~/ $([[ -e $PROJECT_DIR ]] && echo $PROJECT_DIR) -mindepth 1 -maxdepth 1 -type d; zoxide query -l; tmux list-sessions -F "#S")
 fi
 
-selected=$(command | sort | uniq | fzf-tmux -p)
+selected=$(command | sort | uniq | fzf-tmux -p --prompt=" > ")
 
 if [[ -z $selected ]]; then
     exit 0
