@@ -285,8 +285,6 @@ export FZF_TMUX_OPTS="-p --reverse"
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -As main
-    elif [[ -n $SSH_HOST ]]; then
-        tmux new -As ssh-$SSH_HOST || tmux kill-session -t ssh-$SSH_HOST; exit
     else
         num=1
         if tmux has-session -t ssh-$num 2> /dev/null; then
