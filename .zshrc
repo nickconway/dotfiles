@@ -162,7 +162,13 @@ t_w() tmux-sessionizer
 zle -N t_w
 bindkey '^f' t_w
 
-alias x="clear; tmux detach -P"
+function x(){
+    if [[ -z $TMUX ]]; then
+        exit
+    else
+        clear; tmux detach -P
+    fi
+}
 
 function pw() {
     rbw get $1 $2 | clip.exe
