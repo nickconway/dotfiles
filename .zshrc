@@ -148,6 +148,8 @@ alias ydec="yadm decrypt"
 alias yu="yadm upgrade"
 alias sysyadm="sudo yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 
+alias lzd="lazydocker"
+
 alias clipqr="xclip -o | qrencode -t utf8"
 
 alias e="emacsclient -cna ''"
