@@ -293,6 +293,16 @@ export FZF_TMUX_OPTS="-p --reverse"
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -As main
+    else
+        num=1
+        if tmux has-session -t ssh-client-$num 2> /dev/null; then
+            num=2
+            while tmux has-session -t ssh-client-$num 2> /dev/null
+            do
+                ((num=num+1))
+            done
+        fi
+        tmux new -As ssh-$num
     fi
 fi
 
