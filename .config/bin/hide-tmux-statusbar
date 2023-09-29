@@ -2,7 +2,6 @@
 
 status=off
 starting_pane=$(bash -c "tmux display -p #{current_pane}")
-echo Starting: $starting_pane
 
 tmux set status off
 while [[ 1 -eq 1 ]]
