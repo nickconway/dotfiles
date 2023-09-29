@@ -1,6 +1,7 @@
 #!/bin/env bash
 
 status=off
+pane=tmux\ display\ -p\ #{current-pane}
 
 tmux set status off
 while [[ 1 -eq 1 ]]
