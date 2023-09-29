@@ -213,6 +213,7 @@ function s() {
     tmux set prefix C-Space
     kill $(pgrep -f hide-tmux-statusbar)
     tmux set status on
+    clear
 }
 
 function svm() {
