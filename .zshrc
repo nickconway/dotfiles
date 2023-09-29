@@ -205,13 +205,14 @@ function s() {
             ((num=num+1))
         done
     fi
-    tmux set status-position
+    hide-tmux-statusbar &
     tmux set prefix C-h
     tmux bind C-h send-prefix
-    ssh -t $@ "tmux new -As ssh-$(hostname) '$SHELL' -l"
+    ssh -t $@ "tmux new -As ssh-$(hostname) '$SHELL' -l || '$SHELL' -l"
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
-    tmux set status-position
+    kill $(pgrep -f hide-tmux-statusbar)
+    tmux set status on
 }
 
 function svm() {
