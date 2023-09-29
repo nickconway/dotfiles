@@ -1,17 +1,21 @@
 #!/bin/env bash
 
 status=off
-pane=tmux\ display\ -p\ #{current-pane}
+starting_pane=$(bash -c "tmux display -p #{current_pane}")
+echo Starting: $starting_pane
 
 tmux set status off
 while [[ 1 -eq 1 ]]
 do
-    res=$(tmux display -p '#{client_prefix}')
-    if [[ $status == off ]] && [[ res -eq 1 ]]; then
-        status=on
-        tmux set status on
-    elif [[ $status == on ]] && [[ res -eq 0 ]]; then
-        status=off
-        tmux set status off
+    current_pane=$(bash -c "tmux display -p #{current_pane}")
+    if [[ "$starting_pane" == "$current_pane" ]]; then
+        res=$(tmux display -p '#{client_prefix}')
+        if [[ $status == off ]] && [[ res -eq 1 ]]; then
+            status=on
+            tmux set status on
+        elif [[ $status == on ]] && [[ res -eq 0 ]]; then
+            status=off
+            tmux set status off
+        fi
     fi
 done
