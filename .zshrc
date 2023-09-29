@@ -206,12 +206,13 @@ function s() {
         done
     fi
     hide-tmux-statusbar &
+    pid=$!
     tmux set prefix C-h
     tmux bind C-h send-prefix
     ssh -t $@ "tmux new -As ssh-$(hostname) '$SHELL' -l || '$SHELL' -l"
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
-    kill $(pgrep -f hide-tmux-statusbar)
+    kill $pid
     tmux set status on
     clear
 }
