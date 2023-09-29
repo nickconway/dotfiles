@@ -168,7 +168,7 @@ function x(){
     if [[ -z $TMUX ]]; then
         exit
     else
-        clear; tmux detach -P
+        tmux detach
     fi
 }
 
@@ -205,8 +205,11 @@ function s() {
             ((num=num+1))
         done
     fi
-    tmux new -ds ssh-client-$num "[[ -f ~/.keychain/$(hostname)-sh ]] && . ~/.keychain/$(hostname)-sh; hide-tmux-statusbar & tmux set prefix C-h; tmux bind C-h send-prefix; ssh -t $@ \"tmux new -As ssh-$(hostname) '$SHELL' -l\" ; tmux switch-client -l"
-    [[ -n $TMUX ]] && tmux switch-client -t ssh-client-$num || tmux attach -t ssh-client-$num
+    tmux set status-position
+    tmux set prefix C-h
+    ssh -t $@ "tmux new -As ssh-$(hostname) '$SHELL' -l"
+    tmux set prefix C-h
+    tmux set status-position
 }
 
 function svm() {
