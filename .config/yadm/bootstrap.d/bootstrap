@@ -45,8 +45,8 @@ sudo chsh nick -s /bin/zsh
 mkdir -p ~/.local/bin
 
 if ! command -v go; then
-    wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
     sudo rm -rf ~/.local/go
+    wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
     sudo tar -C ~/.local -xzf go1.20.5.linux-amd64.tar.gz
     rm go1.20.5.linux-amd64.tar.gz
     export PATH=$PATH:~/.local/go/bin
@@ -63,8 +63,6 @@ fi
 sudo mv ./keychain ~/.local/bin/
 cd -
 rm -rf keychain
-
-command -v go > /dev/null && go install github.com/arl/gitmux@latest
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
@@ -94,10 +92,7 @@ mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-if [[ ! -e /usr/share/fonts/hack ]]; then
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip -O Hack.zip 
-    unzip Hack.zip -d hack
-    sudo cp -r hack /usr/share/fonts
-    rm -rf Hack.zip hack
-
-fi
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip -O Hack.zip 
+unzip Hack.zip -d hack
+sudo cp -r hack /usr/share/fonts
+rm -rf Hack.zip hack

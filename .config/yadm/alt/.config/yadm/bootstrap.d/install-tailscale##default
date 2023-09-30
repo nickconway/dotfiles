@@ -2,13 +2,10 @@
 
 set -xe
 
-if command -v tailscale > /dev/null; then
-    exit
-fi
-
 if [[ $(uname -r) == *WSL* ]]; then
     exit
 fi
+
 if command -v apt; then
     sudo apt install network-manager
 fi

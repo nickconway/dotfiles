@@ -2,19 +2,17 @@
 
 set -xe
 
-if command -v tmux; then
-    exit
-fi
-
 sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
 
 cd
+rm -rf tmux
 git clone https://github.com/tmux/tmux.git
-cd $dir
+cd tmux
 sh autogen.sh
-./configure --prefix=~/.local/tmux
+./configure --prefix=$HOME/.local/tmux
 make && sudo make install
 cd -
 rm -rf tmux
 
+rm -rf ~/.tmux/plugins/tpm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
