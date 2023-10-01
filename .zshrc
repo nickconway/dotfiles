@@ -121,6 +121,7 @@ command -v starship > /dev/null && eval "$(starship init zsh)"
 
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
+alias td='tmux detach'
 alias ts='tmux new-session -s'
 alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
@@ -159,10 +160,6 @@ alias v="n"
 alias c="clear"
 
 alias tldrf="tldr --list | fzf-tmux -p --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
-
-t_w() tmux-sessionizer
-zle -N t_w
-bindkey '^f' t_w
 
 function x(){
     if [[ -z $TMUX ]]; then
@@ -301,6 +298,8 @@ export FZF_TMUX_OPTS="-p --reverse"
 if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -As main
+    elif [[ -n SSH_HOSTNAME ]]; then
+        tmux new -As ssh-$SSH_HOSTNAME
     else
         num=1
         if tmux has-session -t ssh-client-$num 2> /dev/null; then
