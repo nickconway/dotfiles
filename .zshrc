@@ -206,7 +206,7 @@ function s() {
     pid=$!
     tmux set prefix C-h
     tmux bind C-h send-prefix
-    ssh -t $@ "tmux new -As ssh-$(hostname) '$SHELL' -l || '$SHELL' -l"
+    ssh -t $@ "SSH_HOSTNAME=$(hostname) '$SHELL' -l"
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
     kill $pid
@@ -299,7 +299,7 @@ if [[ -z $TMUX ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -As main
     elif [[ -n SSH_HOSTNAME ]]; then
-        tmux new -As ssh-$SSH_HOSTNAME
+        tmux new -As ssh-$SSH_HOSTNAME; exit
     else
         num=1
         if tmux has-session -t ssh-client-$num 2> /dev/null; then
@@ -309,7 +309,7 @@ if [[ -z $TMUX ]]; then
                 ((num=num+1))
             done
         fi
-        tmux new -As ssh-$num
+        tmux new -As ssh-$num; exit
     fi
 fi
 
