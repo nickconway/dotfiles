@@ -166,6 +166,7 @@ function x(){
         exit
     else
         tmux detach
+        clear
     fi
 }
 
