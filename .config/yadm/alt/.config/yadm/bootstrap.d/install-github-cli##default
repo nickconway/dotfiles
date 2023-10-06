@@ -3,6 +3,7 @@
 set -xe
 
 export PATH=$PATH:~/.local/bin:~/.local/go/bin
+cd
 git clone https://github.com/cli/cli.git gh-cli
 cd gh-cli
 
