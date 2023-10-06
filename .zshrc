@@ -195,14 +195,6 @@ function lg() {
 }
 
 function s() {
-    num=1
-    if tmux has-session -t ssh-client-$num 2> /dev/null; then
-        num=2
-        while tmux has-session -t ssh-client-$num 2> /dev/null
-        do
-            ((num=num+1))
-        done
-    fi
     hide-tmux-statusbar &
     pid=$!
     tmux set prefix C-h
@@ -295,21 +287,25 @@ export FZF_TMUX_OPTS="-p --reverse"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-if [[ -z $TMUX ]]; then
+# if [[ -z $TMUX ]]; then
+if [[ -z $ZELLIJ ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
-        tmux new -As main
+        # tmux new -As main
+        zellij a -c main
     elif [[ -n SSH_HOSTNAME ]]; then
-        tmux new -As ssh-$SSH_HOSTNAME; exit
+        # tmux new -As ssh-$SSH_HOSTNAME; exit
+        zellij a -c ssh-$SSH_HOSTNAME; exit
     else
-        num=1
-        if tmux has-session -t ssh-client-$num 2> /dev/null; then
-            num=2
-            while tmux has-session -t ssh-client-$num 2> /dev/null
-            do
-                ((num=num+1))
-            done
-        fi
-        tmux new -As ssh-$num; exit
+        # num=1
+        # if tmux has-session -t ssh-client-$num 2> /dev/null; then
+        #     num=2
+        #     while tmux has-session -t ssh-client-$num 2> /dev/null
+        #     do
+        #         ((num=num+1))
+        #     done
+        # fi
+        zellij a -c ssh; exit
+        # tmux new -As ssh-$num; exit
     fi
 fi
 
