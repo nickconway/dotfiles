@@ -1,7 +1,7 @@
 # Inserts a blank line between shell prompts
 add_newline = false
 
-continuation_prompt = '[▶▶](bold purple) '
+continuation_prompt = "[▶▶](bold purple)"
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
