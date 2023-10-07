@@ -85,6 +85,7 @@ source "$HOME/.cargo/env"
 
 cargo install rbw
 cargo install tealdeer
+cargo install --locked zellij
 
 rm -rf ~/.oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
