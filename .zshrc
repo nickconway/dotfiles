@@ -291,7 +291,7 @@ if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -As main
         # zellij a -c main
-    elif [[ -n SSH_HOSTNAME ]]; then
+    elif [[ $SSH_HOSTNAME != "" ]] && [[ -n SSH_HOSTNAME ]]; then
         tmux new -As ssh-$SSH_HOSTNAME; exit
         # zellij a -c ssh-$SSH_HOSTNAME; exit
     else
