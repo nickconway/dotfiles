@@ -287,8 +287,7 @@ export FZF_TMUX_OPTS="-p --reverse"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-if [[ -z $TMUX ]]; then
-# if [[ -z $ZELLIJ ]]; then
+if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
         tmux new -As main
         # zellij a -c main
