@@ -147,7 +147,17 @@ alias yd="yadm diff"
 alias yenc="yadm encrypt"
 alias ydec="yadm decrypt"
 alias yu="yadm upgrade"
-alias sysyadm="sudo yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
+alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
+function sy() {
+    sudo chown -R $USER /etc/yadm
+    case "$1" in
+        ("") sudo -E $(alias sysyadm | cut -d\' -f2) status;;
+        (i) sysyadm clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys; sysyadm remote set-url origin git@github.com:nickconway/dotfiles.git;;
+        (p) sysyadm push;;
+        (l) sysyadm pull;;
+        (*) sudo -E $(alias sysyadm | cut -d\' -f2) "$@";;
+    esac
+}
 
 alias lzd="lazydocker"
 
