@@ -2,26 +2,106 @@
 
 set -xe
 
-# Save this file as ~/.config/yadm/bootstrap and make it executable. It will
-# execute all executable files (excluding templates and editor backups) in the
-# ~/.config/yadm/bootstrap.d directory when run.
-
+yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm decrypt
 yadm alt
 
-# Directory to look for bootstrap executables in
-BOOTSTRAP_D="${BASH_SOURCE[0]}.d"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/
 
-if [[ ! -d "$BOOTSTRAP_D" ]]; then
-    echo "Error: bootstrap directory '$BOOTSTRAP_D' not found" >&2
-    exit 1
-fi
+# if command -v yum; then
+#     sudo yum install -y cmake
+#     sudo yum install -y gcc
+#     sudo yum install -y unzip
+#     sudo yum install -y gettext
+#     sudo yum install -y curl
+#     sudo yum install -y automake
+#     sudo yum install -y libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config
+#     sudo yum install -y yum-utils
+#     sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo -y
+#     sudo yum install ripgrep -y
+#     sudo dnf copr enable tkbcopr/fd -y
+#     sudo dnf install fd -y
+#     sudo yum install nodejs npm -y
+#     sudo yum install zsh -y
+# elif command -v apt; then
+#     sudo apt install make -y
+#     sudo apt install -y ninja-build
+#     sudo apt install -y gettext
+#     sudo apt install -y cmake
+#     sudo apt install -y unzip
+#     sudo apt install -y curl
+#     sudo apt install -y automake
+#     sudo apt install -y ripgrep
+#     # sudo apt install -y libevent 
+#     # sudo apt install -y ncurses 
+#     sudo apt install -y libevent-dev 
+#     sudo apt install -y ncurses-dev 
+#     sudo apt install -y build-essential 
+#     sudo apt install -y gcc 
+#     sudo apt install -y make 
+#     sudo apt install -y bison 
+#     sudo apt install -y pkg-config
+#     sudo apt install nodejs npm -y
+#     sudo apt install zsh -y
+# fi
 
-scripts=$(find -L "$BOOTSTRAP_D" -type f | sort)
-echo $scripts
-for bootstrap in $scripts; do
-    if [[ -x "$bootstrap" && ! "$bootstrap" =~ "##" && ! "$bootstrap" =~ "~$" ]]; then
-        echo $bootstrap
-        $bootstrap
-    fi
-done
+brew install go \
+    fd \
+    ripgrep \
+    zsh \
+    keychain \
+    neovim \
+    tmux \
+    nodejs \
+    npm \
+    keychain \
+    docker \
+    gh \
+    tailscale
+
+# go env -w GOPATH=~/.local/go-packages
+
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
+
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir ~/.local/bin -y
+
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+tar xf lazygit.tar.gz lazygit
+sudo install lazygit ~/.local/bin
+rm lazygit lazygit.tar.gz
+
+curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+
+cargo install rbw
+cargo install tealdeer
+
+cargo install --locked zellij
+wget https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm -xO ~/.config/zellij/plugins/multitask.wasm
+wget https://github.com/rvcas/room/releases/latest/download/room.wasm -O ~/.config/zellij/plugins/room.wasm
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+[[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+[[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip -O Hack.zip 
+unzip Hack.zip -d hack
+sudo cp -r hack /usr/share/fonts
+rm -rf Hack.zip hack
+
+sudo groupadd docker || echo "Group docker already exists"
+sudo usermod -aG docker $USER
+
+[[ -e ~/.local/share/gh/extensions/gh-dash ]] || gh extension install dlvhdr/gh-dash
+
+sudo chsh nick -s /bin/zsh
+zsh -l
