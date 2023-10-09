@@ -23,7 +23,14 @@
     "tailscale@latest",
     "rustup@latest",
     "cargo@latest",
-    "yq@latest"
+    "yq@latest",
+    "tree@latest",
+    "bat@latest",
+    "htop@latest",
+    "curl@latest",
+    "wget@latest",
+    "tree-sitter@latest",
+    "zsh-completions@latest"
   ],
   "shell": {
     "init_hook": [
