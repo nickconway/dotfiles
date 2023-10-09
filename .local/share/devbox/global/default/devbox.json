@@ -32,7 +32,8 @@
     "zsh-completions@latest",
     "python@latest",
     "libiconv@latest",
-    "tmuxp@latest"
+    "tmuxp@latest",
+    "cmake@latest"
   ],
   "shell": {
     "init_hook": [

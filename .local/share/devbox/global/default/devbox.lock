@@ -21,6 +21,26 @@
         }
       }
     },
+    "cmake@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#cmake",
+      "source": "devbox-search",
+      "version": "3.26.4",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/2jxr49h8mx20079xvgrzicwk1cfnl0cl-cmake-3.26.4"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/y749glp3j8x5dkmr5rbi9li6vpwj3iwy-cmake-3.26.4"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/zb41b8ydiacljd0cz9p7b11az01sda6r-cmake-3.26.4"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/yi235g10sp8jx939zpfli0s74154ph3v-cmake-3.26.4"
+        }
+      }
+    },
     "curl@latest": {
       "last_modified": "2023-10-04T11:30:54Z",
       "resolved": "github:NixOS/nixpkgs/7131f3c223a2d799568e4b278380cd9dac2b8579#curl",
