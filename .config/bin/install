@@ -1,11 +1,17 @@
 #!/bin/bash
 
+set -xe
 sudo apt update -y
 sudo apt upgrade -y
 mkdir -p ~/.config/bin
 curl -fLo ~/.config/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x ~/.config/bin/yadm
 export PATH=$PATH:~/.config/bin
-~/.config/bin/yadm clone https://github.com/nickconway/dotfiles --bootstrap
+~/.config/bin/yadm clone https://github.com/nickconway/dotfiles
+
+yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+yadm reset --hard
+yadm decrypt
+yadm alt
 
 curl -fsSL https://get.jetpack.io/devbox | bash
 . <(devbox global shellenv --init-hook)
