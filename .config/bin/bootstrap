@@ -19,7 +19,11 @@ devbox-install
 devbox global install
 . <(devbox global shellenv --init-hook)
 
-~/.tmux/plugins/tpm/bin/install_plugins
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins || ~/.tmux/plugins/tpm/bin/install_plugins
+
+mkdir -p ~/.config/zellij/plugins
+curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
+curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
 sudo groupadd docker || echo "Group docker already exists"
 sudo usermod -aG docker $USER
