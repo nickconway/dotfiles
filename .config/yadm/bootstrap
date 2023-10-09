@@ -5,75 +5,8 @@ set -xe
 export PATH=$PATH:~/.config/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-
-if command -v apt; then
-    sudo apt install build-essential procps curl file git -y
-elif command -v yum; then
-    sudo yum groupinstall 'Development Tools'
-    sudo yum install procps-ng curl file git -y
-elif command -v pacman; then
-    sudo pacman -Syu base-devel procps-ng curl file git
-fi
-
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/
-
-brew install \
-    zsh \
-    zsh-autosuggestions \
-    zsh-syntax-highlighting \
-    go \
-    fd \
-    ripgrep \
-    keychain \
-    neovim \
-    tmux \
-    nodejs \
-    npm \
-    keychain \
-    docker \
-    gh \
-    tailscale
-
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
-
-curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-
-curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir ~/.local/bin -y
-
-curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-tar xf lazygit.tar.gz lazygit
-sudo install lazygit ~/.local/bin
-rm lazygit lazygit.tar.gz
-
-curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-source "$HOME/.cargo/env"
-
-cargo install rbw
-cargo install tealdeer
-
-cargo install --locked zellij
-mkdir -p ~/.config/zellij/plugins
-wget https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm -xO ~/.config/zellij/plugins/multitask.wasm
-wget https://github.com/rvcas/room/releases/latest/download/room.wasm -O ~/.config/zellij/plugins/room.wasm
-
-wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip -O Hack.zip 
-unzip Hack.zip -d hack
-sudo cp -r hack /usr/share/fonts
-rm -rf Hack.zip hack
-
-sudo groupadd docker || echo "Group docker already exists"
-sudo usermod -aG docker $USER
-
+yadm checkout .
 yadm decrypt
 yadm alt
-yadm checkout .
 
 sudo chsh nick -s $(which zsh)
-
-zsh -l
