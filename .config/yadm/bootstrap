@@ -72,6 +72,7 @@ sudo usermod -aG docker $USER
 
 yadm decrypt
 yadm alt
+yadm checkout .
 
 sudo chsh nick -s $(which zsh)
 
