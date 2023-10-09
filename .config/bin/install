@@ -4,4 +4,6 @@ sudo apt update -y
 sudo apt upgrade -y
 mkdir -p ~/.config/bin
 curl -fLo ~/.config/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x ~/.config/bin/yadm
-~/.config/bin/yadm clone https://github.com/nickconway/dotfiles
+PATH=$PATH:~/.config/bin
+~/.config/bin/yadm clone https://github.com/nickconway/dotfiles --no-bootstrap
+yadm bootstrap
