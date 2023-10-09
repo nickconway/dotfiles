@@ -22,7 +22,6 @@
     "gh@latest",
     "tailscale@latest",
     "rustup@latest",
-    "cargo@latest",
     "yq@latest",
     "tree@latest",
     "bat@latest",
@@ -30,7 +29,10 @@
     "curl@latest",
     "wget@latest",
     "tree-sitter@latest",
-    "zsh-completions@latest"
+    "zsh-completions@latest",
+    "python@latest",
+    "libiconv@latest",
+    "tmuxp@latest"
   ],
   "shell": {
     "init_hook": [

@@ -21,26 +21,6 @@
         }
       }
     },
-    "cargo@latest": {
-      "last_modified": "2023-09-27T18:02:17Z",
-      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#cargo",
-      "source": "devbox-search",
-      "version": "1.72.0",
-      "systems": {
-        "aarch64-darwin": {
-          "store_path": "/nix/store/8mdcavvgk4jf5blq6mspls97iki29l38-cargo-1.72.0"
-        },
-        "aarch64-linux": {
-          "store_path": "/nix/store/6ki98dyzaq54nbpcwrald7ji8n37vhai-cargo-1.72.0"
-        },
-        "x86_64-darwin": {
-          "store_path": "/nix/store/i59ad991wh2xi7fy3dq6ncjra7pv3rcm-cargo-1.72.0"
-        },
-        "x86_64-linux": {
-          "store_path": "/nix/store/9vxskkmmmqh2r72x63g2rr7vf93da577-cargo-1.72.0"
-        }
-      }
-    },
     "curl@latest": {
       "last_modified": "2023-10-04T11:30:54Z",
       "resolved": "github:NixOS/nixpkgs/7131f3c223a2d799568e4b278380cd9dac2b8579#curl",
@@ -241,6 +221,20 @@
         }
       }
     },
+    "libiconv@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#libiconv",
+      "source": "devbox-search",
+      "version": "50",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/02jndc2wwsfigf12wv53k8zwyfvwl9gf-libiconv-50"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/9y7gq06wk496bkk4j8iphl5gd4jxgwaa-libiconv-50"
+        }
+      }
+    },
     "neovim@latest": {
       "last_modified": "2023-10-04T02:19:08Z",
       "resolved": "github:NixOS/nixpkgs/d1c9180c6d1f8fce9469436f48c1cb8180d7087d#neovim",
@@ -278,6 +272,27 @@
         },
         "x86_64-linux": {
           "store_path": "/nix/store/qs5b5msb3jj13140k7ffqx39bphanghg-nodejs-20.8.0"
+        }
+      }
+    },
+    "python@latest": {
+      "last_modified": "2023-10-03T09:29:46Z",
+      "plugin_version": "0.0.1",
+      "resolved": "github:NixOS/nixpkgs/e2b8feae8470705c3f331901ae057da3095cea10#python312",
+      "source": "devbox-search",
+      "version": "3.12.0",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/4w9xnvsbw0b3nyzc64alz7nv7ay4a88j-python3-3.12.0"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/dgg6kzpv7yg3h83m6aa5vnplvfghcdyq-python3-3.12.0"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/grmb7mw4ixqrbrp87yqigmxiaydnqcg0-python3-3.12.0"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/7gldca15px30wpk6bfrscn19sdg755q8-python3-3.12.0"
         }
       }
     },
@@ -419,6 +434,26 @@
         },
         "x86_64-linux": {
           "store_path": "/nix/store/qr266qpqrlfzm39ak93dx7h8iwnndmk2-tmux-3.3"
+        }
+      }
+    },
+    "tmuxp@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#tmuxp",
+      "source": "devbox-search",
+      "version": "1.29.0",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/lr2aq95h5sf41v9nhwrck7db5bflfcy9-tmuxp-1.29.0"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/kyp9zwwykvanfmfagc89k9npwm775ygp-tmuxp-1.29.0"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/7sbw3i9kd8kdy5drqrf155j3506364r4-tmuxp-1.29.0"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/ckhl9j87jb55jjlp5i1pa3vla92jaibz-tmuxp-1.29.0"
         }
       }
     },
