@@ -9,8 +9,7 @@ export PATH=$PATH:~/.config/bin
 
 yadm clone https://github.com/nickconway/dotfiles -f
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm reset --hard
-sleep 5
+export GPG_TTY=$(tty)
 yadm decrypt
 yadm alt
 
