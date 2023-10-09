@@ -241,6 +241,27 @@
         }
       }
     },
+    "rustup@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "plugin_version": "0.0.1",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#rustup",
+      "source": "devbox-search",
+      "version": "1.26.0",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/wwvj17ybcisy8kd8n1jh403v63c0i3ki-rustup-1.26.0"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/c7fvdp7hi4kwahmp0211z79skf2vgwwc-rustup-1.26.0"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/5wiawj50fdl4vnvx8dz93lbhl85cj8qs-rustup-1.26.0"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/9dkpq8bpq27fhsd1d4h4hwpxhyn2zma1-rustup-1.26.0"
+        }
+      }
+    },
     "starship@latest": {
       "last_modified": "2022-04-14T10:09:46Z",
       "resolved": "github:NixOS/nixpkgs/6361b4941a69395ebf15e6e56b142765fce850f9#starship",

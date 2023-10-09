@@ -20,7 +20,9 @@
     "keychain@latest",
     "nodejs@latest",
     "gh@latest",
-    "tailscale@latest"
+    "tailscale@latest",
+    "rustup@latest",
+    "cargo@latest"
   ],
   "shell": {
     "init_hook": [
