@@ -6,4 +6,5 @@ mkdir -p ~/.config/bin
 curl -fLo ~/.config/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x ~/.config/bin/yadm
 PATH=$PATH:~/.config/bin
 ~/.config/bin/yadm clone https://github.com/nickconway/dotfiles --no-bootstrap
+yadm reset --hard
 yadm bootstrap
