@@ -13,7 +13,8 @@ export GPG_TTY=$(tty)
 yadm decrypt
 yadm alt
 
-curl -fsSL https://get.jetpack.io/devbox | bash
+curl -fsSLo ~/.config/bin/devbox https://get.jetpack.io/devbox
+devbox
 . <(devbox global shellenv --init-hook)
 
 sudo chsh nick -s $(which zsh)
