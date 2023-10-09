@@ -2,9 +2,18 @@
 
 set -xe
 
+export PATH=$PATH:~/.config/bin
+
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm decrypt
-yadm alt
+
+if command -v apt; then
+    sudo apt install build-essential procps curl file git
+elif command -v yum; then
+    sudo yum groupinstall 'Development Tools'
+    sudo yum install procps-ng curl file git
+elif command -v pacman; then
+    sudo pacman -Syu base-devel procps-ng curl file git
+fi
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/
@@ -46,19 +55,23 @@ export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/
 #     sudo apt install zsh -y
 # fi
 
-brew install go \
-    fd \
-    ripgrep \
-    zsh \
-    keychain \
-    neovim \
-    tmux \
-    nodejs \
-    npm \
-    keychain \
-    docker \
-    gh \
-    tailscale
+brew install zsh
+
+zsh -c " \
+	brew reinstall zsh; \
+	brew install go \
+	    fd \
+	    ripgrep \
+	    keychain \
+	    neovim \
+	    tmux \
+	    nodejs \
+	    npm \
+	    keychain \
+	    docker \
+	    gh \
+	    tailscale
+"
 
 # go env -w GOPATH=~/.local/go-packages
 
@@ -102,6 +115,9 @@ sudo groupadd docker || echo "Group docker already exists"
 sudo usermod -aG docker $USER
 
 [[ -e ~/.local/share/gh/extensions/gh-dash ]] || gh extension install dlvhdr/gh-dash
+
+yadm decrypt
+yadm alt
 
 sudo chsh nick -s /bin/zsh
 zsh -l
