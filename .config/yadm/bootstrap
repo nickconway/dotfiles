@@ -98,11 +98,12 @@ cargo install rbw
 cargo install tealdeer
 
 cargo install --locked zellij
+mkdir -p ~/.config/zellij/plugins
 wget https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm -xO ~/.config/zellij/plugins/multitask.wasm
 wget https://github.com/rvcas/room/releases/latest/download/room.wasm -O ~/.config/zellij/plugins/room.wasm
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+[[ -e ~/.oh-my-zsh ]] || sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+[[ -e ~/.zshrc.pre-oh-my-zsh ]] && mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 [[ -e ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
@@ -114,10 +115,8 @@ rm -rf Hack.zip hack
 sudo groupadd docker || echo "Group docker already exists"
 sudo usermod -aG docker $USER
 
-[[ -e ~/.local/share/gh/extensions/gh-dash ]] || gh extension install dlvhdr/gh-dash
-
 yadm decrypt
 yadm alt
 
-sudo chsh nick -s /bin/zsh
+sudo chsh nick -s /home/linuxbrew/.linuxbrew/bin/zsh
 zsh -l
