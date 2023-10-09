@@ -7,7 +7,7 @@ mkdir -p ~/.config/bin
 [[ -e ~/.config/bin/yadm ]] || (curl -fLo ~/.config/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.config/bin/yadm && chmod a+x ~/.config/bin/yadm)
 export PATH=$PATH:~/.config/bin
 
-yadm clone https://github.com/nickconway/dotfiles
+yadm clone https://github.com/nickconway/dotfiles || echo "Yadm already initialized"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 export GPG_TTY=$(tty)
 yadm decrypt
