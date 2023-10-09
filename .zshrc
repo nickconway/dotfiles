@@ -1,3 +1,6 @@
+eval "$(devbox global shellenv --init-hook)"
+[[ -e /home/linuxbrew/.linuxbrew ]] && eval $($(brew --prefix)/bin/brew shellenv)
+
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH":/usr/lib/node_modules:/usr/local/lib/node_modules
 export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
@@ -6,8 +9,6 @@ export PATH=$PATH:$HOME/.local/podman/bin:$HOME/.local/go/bin:/home/linuxbrew/.l
 
 plugins=(git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 
-eval "$(devbox global shellenv --init-hook)"
-[[ -e /home/linuxbrew/.linuxbrew ]] && eval $($(brew --prefix)/bin/brew shellenv)
 eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
 
 if [[ -n $FD_COMMAND ]]; then
