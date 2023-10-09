@@ -4,7 +4,7 @@ sudo apt update -y
 sudo apt upgrade -y
 mkdir -p ~/.config/bin
 curl -fLo ~/.config/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x ~/.config/bin/yadm
-PATH=$PATH:~/.config/bin
+export PATH=$PATH:~/.config/bin
 ~/.config/bin/yadm clone https://github.com/nickconway/dotfiles --bootstrap
 
 curl -fsSL https://get.jetpack.io/devbox | bash
