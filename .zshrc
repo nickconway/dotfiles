@@ -206,3 +206,6 @@ if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
         tmux new -As ssh; exit
     fi
 fi
+
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
