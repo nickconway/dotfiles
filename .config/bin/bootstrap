@@ -17,4 +17,4 @@ curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod 
 devbox-install
 . <(devbox global shellenv --init-hook)
 
-sudo chsh nick -s $(which zsh)
+sudo chsh nick -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
