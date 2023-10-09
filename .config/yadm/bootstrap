@@ -9,4 +9,7 @@ yadm checkout .
 yadm decrypt
 yadm alt
 
+curl -fsSL https://get.jetpack.io/devbox | bash
+eval "$(devbox global shellenv --init-hook)"
+
 sudo chsh nick -s $(which zsh)
