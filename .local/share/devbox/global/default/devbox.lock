@@ -362,6 +362,26 @@
         }
       }
     },
+    "yq@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#yq",
+      "source": "devbox-search",
+      "version": "3.2.3",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/cw407csxr30qzzc4fxfzxz88kv9bfvq6-python3.10-yq-3.2.3"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/y5qkxaqydjy58xiad6hilvmqyrjmp61k-python3.10-yq-3.2.3"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/j0nqggn8l3fvqschpnn7wjjbk91fw58n-python3.10-yq-3.2.3"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/4y1a29s0gbi446yry50lj057w2rr4d7l-python3.10-yq-3.2.3"
+        }
+      }
+    },
     "zellij@latest": {
       "last_modified": "2023-09-27T18:02:17Z",
       "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#zellij",

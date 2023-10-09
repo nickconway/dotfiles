@@ -22,7 +22,8 @@
     "gh@latest",
     "tailscale@latest",
     "rustup@latest",
-    "cargo@latest"
+    "cargo@latest",
+    "yq@latest"
   ],
   "shell": {
     "init_hook": [
