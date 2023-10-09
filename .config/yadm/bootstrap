@@ -8,9 +8,3 @@ yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm reset --hard
 yadm decrypt
 yadm alt
-
-curl -fsSL https://get.jetpack.io/devbox | bash
-. <(devbox global shellenv --init-hook)
-
-sudo chsh nick -s $(which zsh)
-
