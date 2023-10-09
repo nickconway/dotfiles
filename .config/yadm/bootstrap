@@ -4,12 +4,13 @@ set -xe
 
 export PATH=$PATH:~/.config/bin
 
+yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+yadm decrypt
+yadm alt
+
 curl -fsSL https://get.jetpack.io/devbox | bash
 . <(devbox global shellenv --init-hook)
 
 sudo chsh nick -s $(which zsh)
 
-yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
-yadm decrypt
-yadm alt
