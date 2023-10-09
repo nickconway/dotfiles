@@ -6,6 +6,8 @@ export PATH=$PATH:$HOME/.local/podman/bin:$HOME/.local/go/bin:/home/linuxbrew/.l
 
 plugins=(git vi-mode gpg-agent keychain npm zsh-autosuggestions zsh-syntax-highlighting)
 
+eval "$(devbox global shellenv --init-hook)"
+[[ -e /home/linuxbrew/.linuxbrew ]] && eval $($(brew --prefix)/bin/brew shellenv)
 eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
 
 if [[ -n $FD_COMMAND ]]; then
@@ -206,7 +208,3 @@ if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
         tmux new -As ssh; exit
     fi
 fi
-
-[[ -e /home/linuxbrew/.linuxbrew ]] && eval $($(brew --prefix)/bin/brew shellenv)
-source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

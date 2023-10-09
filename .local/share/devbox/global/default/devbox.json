@@ -1,0 +1,35 @@
+{
+  "packages": [
+    "neovim@latest",
+    "tmux@latest",
+    "fd@latest",
+    "zsh@latest",
+    "zsh-autosuggestions@latest",
+    "zsh-syntax-highlighting@latest",
+    "zellij@latest",
+    "rbw@latest",
+    "tealdeer@latest",
+    "docker@latest",
+    "zoxide@latest",
+    "starship@latest",
+    "lazygit@latest",
+    "lazydocker@latest",
+    "fzf@latest",
+    "go@latest",
+    "ripgrep@latest",
+    "keychain@latest",
+    "nodejs@latest",
+    "gh@latest",
+    "tailscale@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "echo 'Welcome to devbox!' > /dev/null"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}
