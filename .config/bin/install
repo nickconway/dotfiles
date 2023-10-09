@@ -5,6 +5,9 @@ sudo apt upgrade -y
 mkdir -p ~/.config/bin
 curl -fLo ~/.config/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x ~/.config/bin/yadm
 PATH=$PATH:~/.config/bin
-~/.config/bin/yadm clone https://github.com/nickconway/dotfiles --no-bootstrap
-yadm reset --hard
-yadm bootstrap
+~/.config/bin/yadm clone https://github.com/nickconway/dotfiles --bootstrap
+
+curl -fsSL https://get.jetpack.io/devbox | bash
+. <(devbox global shellenv --init-hook)
+
+sudo chsh nick -s $(which zsh)
