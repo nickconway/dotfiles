@@ -1,15 +1,16 @@
 #!/bin/bash
 
 set -xe
+
 sudo apt update -y
 sudo apt upgrade -y
+
 mkdir -p ~/.config/bin
-[[ -e ~/.config/bin/yadm ]] || (curl -fLo ~/.config/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.config/bin/yadm && chmod a+x ~/.config/bin/yadm)
+[[ -s ~/.config/bin/yadm ]] || (curl -fLo ~/.config/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.config/bin/yadm && chmod a+x ~/.config/bin/yadm)
 export PATH=$PATH:~/.config/bin
 
 yadm clone https://github.com/nickconway/dotfiles || echo "Yadm already initialized"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-export GPG_TTY=$(tty)
 yadm decrypt
 yadm alt
 
@@ -18,5 +19,9 @@ devbox-install
 devbox global install
 . <(devbox global shellenv --init-hook)
 
-sudo chsh nick -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
-zsh
+~/.tmux/plugins/tpm/bin/install_plugins
+
+sudo groupadd docker || echo "Group docker already exists"
+sudo usermod -aG docker $USER
+
+sudo chsh nick -s $(which zsh)
