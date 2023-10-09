@@ -15,6 +15,7 @@ yadm alt
 
 curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
 devbox-install
+devbox global install
 
 sudo chsh nick -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
 zsh
