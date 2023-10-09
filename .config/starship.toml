@@ -7,3 +7,10 @@ continuation_prompt = "[▶▶](bold purple)"
 [character]                            # The name of the module we are configuring is "character"
 success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 error_symbol = "[➜](bold red)"
+
+
+[container]
+disabled = true
+
+[nix_shell]
+disabled = true
