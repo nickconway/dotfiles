@@ -2,8 +2,13 @@
 
 set -xe
 
-sudo apt update -y
-sudo apt upgrade -y
+if command -v apt; then;
+    sudo apt update -y
+    sudo apt upgrade -y
+elif command -v yum; then
+    sudo yum update -y
+    sudo yum upgrade -y
+fi
 
 mkdir -p ~/.config/bin
 [[ -s ~/.config/bin/yadm ]] || (curl -fLo ~/.config/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.config/bin/yadm && chmod a+x ~/.config/bin/yadm)
