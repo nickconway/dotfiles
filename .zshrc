@@ -109,7 +109,7 @@ function s() {
     pid=$!
     tmux set prefix C-h
     tmux bind C-h send-prefix
-    ssh -t $@ "SSH_HOSTNAME=$(hostname) '$SHELL' -l"
+    ssh -t $@ SSH_HOSTNAME=$(hostname) '$SHELL' -l
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
     kill $pid
