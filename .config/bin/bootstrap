@@ -41,4 +41,4 @@ curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/
 sudo groupadd docker || echo "Group docker already exists"
 sudo usermod -aG docker $USER
 
-sudo chsh nick -s $(which zsh)
+sudo chsh $USER -s $(which zsh)
