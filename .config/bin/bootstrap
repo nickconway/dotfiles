@@ -23,8 +23,6 @@ fi
 
 yadm clone https://github.com/nickconway/dotfiles || echo "Yadm already initialized"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm decrypt
-yadm alt
 
 curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
 devbox-install
