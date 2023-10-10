@@ -1,5 +1,7 @@
 eval "$(devbox global shellenv --init-hook)"
 [[ -e /home/linuxbrew/.linuxbrew ]] && eval $($(brew --prefix)/bin/brew shellenv)
+source "$DEVBOX_PROFILE/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$DEVBOX_PROFILE/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH":/usr/lib/node_modules:/usr/local/lib/node_modules
 export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
@@ -158,6 +160,10 @@ toggleproxy() {
         unset http{,s}_proxy HTTP{,S}_PROXY
     }
 }
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export DEVBOX_PROFILE="$XDG_DATA_HOME/devbox/global/default/.devbox/virtenv/.wrappers"
 
 export NO_AT_BRIDGE=1
 
