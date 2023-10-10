@@ -19,6 +19,8 @@ devbox-install
 devbox global install
 . <(devbox global shellenv --init-hook)
 
+rustup default stable
+
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins || ~/.tmux/plugins/tpm/bin/install_plugins
 
 mkdir -p ~/.config/zellij/plugins
