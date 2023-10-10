@@ -20,6 +20,7 @@ devbox global install
 . <(devbox global shellenv --init-hook)
 
 rustup default stable
+rustup target add wasm32-wasi
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins || ~/.tmux/plugins/tpm/bin/install_plugins
 
