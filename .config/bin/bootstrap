@@ -2,7 +2,7 @@
 
 set -xe
 
-if command -v apt; then;
+if command -v apt; then
     sudo apt update -y
     sudo apt upgrade -y
 elif command -v yum; then
