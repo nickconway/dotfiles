@@ -44,6 +44,8 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 
 (sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
 
+sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers" || echo "Remove sudo password failed"
+
 yadm decrypt
 yadm alt
 
