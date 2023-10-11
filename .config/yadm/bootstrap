@@ -2,7 +2,7 @@
 
 set -xe
 
-export PATH=$PATH:~/.config/bin:~/.local/bin
+export PATH=$PATH:~/bin:~/.config/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
@@ -19,6 +19,8 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt) || echo "System yadm failed"
+
+[[ "$(yadm config local.class)" == "work" ]] && work-setup
 
 (sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
 
