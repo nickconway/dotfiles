@@ -51,4 +51,8 @@ curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/
 sudo groupadd docker || echo "Group docker already exists"
 sudo usermod -aG docker $USER
 
+yadm reset --hard
+yadm decrypt
+yadm alt
+
 sudo chsh $USER -s $(which zsh)
