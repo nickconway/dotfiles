@@ -24,6 +24,14 @@ fi
 yadm clone https://github.com/nickconway/dotfiles || echo "Yadm already initialized"
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
+if sudo -v; then
+    alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt
+fi
+
 curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
 devbox-install
 devbox global install
