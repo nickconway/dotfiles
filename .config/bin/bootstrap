@@ -3,6 +3,8 @@
 set -xe
 
 mkdir -p ~/.config/bin
+mv $BASH_SOURCE ~/.config/
+
 [[ -s ~/.config/bin/yadm ]] || (curl -fLo ~/.config/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.config/bin/yadm && chmod a+x ~/.config/bin/yadm)
 export PATH=$PATH:~/.config/bin
 
