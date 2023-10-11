@@ -48,3 +48,6 @@ yadm decrypt
 yadm alt
 
 sudo chsh $USER -s $(which zsh)
+
+sed -i '$d' .zshenv
+sed -i '$d' .zshenv
