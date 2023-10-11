@@ -12,11 +12,7 @@ fpath+=(
 eval "$(devbox global shellenv --init-hook)"
 [[ -e /home/linuxbrew/.linuxbrew ]] && eval $($(brew --prefix)/bin/brew shellenv)
 
-export PATH=~/.cargo/bin/:~/.emacs.d/bin/:~/.config/emacs/bin:~/.local/bin:~/bin:~/.config/bin:"$PATH":/usr/lib/node_modules:/usr/local/lib/node_modules
-export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
-export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
-export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:~/.local/neovim/bin:~/.local/tmux/bin
-export PATH=$PATH:$HOME/.local/podman/bin:$HOME/.local/go/bin:/home/linuxbrew/.linuxbrew/bin
+export PATH=$PATH:~/.local/bin:~/bin
 
 export GPG_TTY=$TTY
 
