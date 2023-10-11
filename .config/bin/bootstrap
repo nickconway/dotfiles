@@ -15,14 +15,6 @@ if [[ $(yadm config local.class) == "" ]]; then
     yadm config local.class $YADM_CLASS
 fi
 
-if sudo -v; then
-    alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt
-fi
-
 curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
 sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
 devbox-install
@@ -38,8 +30,16 @@ mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
-sudo groupadd docker || echo "Group docker already exists"
-sudo usermod -aG docker $USER
+if sudo -v; then
+    alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard
+    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt
+
+    sudo groupadd docker || echo "Group docker already exists"
+    sudo usermod -aG docker $USER
+fi
 
 yadm reset --hard
 yadm decrypt
