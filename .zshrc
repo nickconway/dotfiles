@@ -1,3 +1,8 @@
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+
 eval "$(devbox global shellenv --init-hook)"
 [[ -e /home/linuxbrew/.linuxbrew ]] && eval $($(brew --prefix)/bin/brew shellenv)
 
