@@ -1,4 +1,4 @@
-.ssh/id_*
+.ssh/id_ed*
 .config/rbw/*
 .config/zmk/*
 .config/yadm/alt/**/*c.work
