@@ -33,6 +33,7 @@ if sudo -v; then
 fi
 
 curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
+sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
 devbox-install
 devbox global install
 . <(devbox global shellenv --init-hook)
