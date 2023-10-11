@@ -2,8 +2,6 @@
 
 set -xe
 
-mkdir -p ~/.config/bin
-
 export PATH=$PATH:~/.config/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
@@ -13,18 +11,10 @@ if [[ $(yadm config local.class) == "" ]]; then
     yadm config local.class $YADM_CLASS
 fi
 
-curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
-
-sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
-sed -i '/confirm \"Install.*/d' ~/.config/bin/devbox-install
-sed -i 's/$(command -v sudo || true) //g' ~/.config/bin/devbox-install
-
-mkdir -p ~/.config/zellij/plugins
-curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
-curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
+yadm decrypt
+yadm alt
 
 alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
-
 (sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
@@ -34,12 +24,18 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 
 (sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers") || echo "Remove sudo password failed"
 
-yadm decrypt
-yadm alt
-
+mkdir -p ~/.config/zellij/plugins
+curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
+curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 sed -i "/^$/ N; /if \[ -e \/home\/$USER/ d" .zshenv
+
+curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
+
+sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
+sed -i '/confirm \"Install.*/d' ~/.config/bin/devbox-install
+sed -i 's/$(command -v sudo || true) //g' ~/.config/bin/devbox-install
 
 devbox-install
 devbox global install
-export PATH=$PATH:~/.config/bin:~/.local/bin
+
 sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
