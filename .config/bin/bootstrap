@@ -24,10 +24,6 @@ sed -i 's/$(command -v sudo || true) //g' ~/.config/bin/devbox-install
 devbox-install
 devbox global install
 
-if [[ "$(yadm config local.class)" != "work" ]]; then
-    . <(devbox global shellenv --init-hook)
-fi
-
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins || ~/.tmux/plugins/tpm/bin/install_plugins
 
 mkdir -p ~/.config/zellij/plugins
