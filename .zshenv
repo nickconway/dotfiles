@@ -13,3 +13,5 @@ if [[ -n $FD_COMMAND ]]; then
 fi
 
 if [ -e /home/$USER/.nix-profile/etc/profile.d/nix.sh ]; then . /home/$USER/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+if [ -e /home/nick/.nix-profile/etc/profile.d/nix.sh ]; then . /home/nick/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
