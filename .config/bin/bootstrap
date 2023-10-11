@@ -15,16 +15,6 @@ if [[ $(yadm config local.class) == "" ]]; then
     yadm config local.class $YADM_CLASS
 fi
 
-if [[ "$(yadm config local.class)" != "work" ]]; then
-    if command -v apt; then
-        sudo apt update -y
-        sudo apt upgrade -y
-    elif command -v yum; then
-        sudo yum update -y
-        sudo yum upgrade -y
-    fi
-fi
-
 if sudo -v; then
     alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
     sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys
