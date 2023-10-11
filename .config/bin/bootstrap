@@ -35,16 +35,14 @@ curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
 export PATH=$PATH:~/.config/bin:~/.local/bin
-if sudo -v; then
-    alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard
-    sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt
+alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 
-    sudo groupadd docker || echo "Group docker already exists"
-    sudo usermod -aG docker $USER
-fi
+(sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
+    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git \
+    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
+    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt) || echo "System yadm failed"
+
+(sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
 
 yadm reset --hard
 yadm decrypt
