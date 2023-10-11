@@ -34,6 +34,7 @@ mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
+export PATH=$PATH:~/.config/bin:~/.local/bin
 if sudo -v; then
     alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
     sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys
