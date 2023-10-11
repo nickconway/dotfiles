@@ -22,9 +22,9 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 
 curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .local/bin/devbox-install
 
-sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
-sed -i '/confirm \"Install.*/d' ~/.config/bin/devbox-install
-sed -i 's/$(command -v sudo || true) //g' ~/.config/bin/devbox-install
+sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
+sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
+sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 
 devbox-install
 
