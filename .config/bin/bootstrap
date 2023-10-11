@@ -19,7 +19,7 @@ curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod 
 
 sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
 sed -i "/confirm \"Install.*/d" ~/.config/bin/devbox-install
-sed -i "/command -v sudo*/d" ~/.config/bin/devbox-install
+sed -i "s/$(command -v sudo || true) //g" ~/.config/bin/devbox-install
 
 devbox-install
 devbox global install
