@@ -3,6 +3,7 @@
 set -xe
 
 export PATH=$PATH:~/bin:~/.local/bin
+(sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers") || echo "Remove sudo password failed"
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
@@ -20,19 +21,19 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt) || echo "System yadm failed"
 
+if [[ ~/.local/bin/devbox ]]; then
+    curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .local/bin/devbox-install
+
+    sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
+    sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
+    sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
+
+    devbox-install
+fi
+
 [[ "$(yadm config local.class)" == "work" ]] && work-setup
 
-curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .local/bin/devbox-install
-
-sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
-sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
-sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
-
-devbox-install
-
 (sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
-
-(sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers") || echo "Remove sudo password failed"
 
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
