@@ -48,3 +48,5 @@ yadm decrypt
 yadm alt
 
 sudo chsh $USER -s $(which zsh)
+
+sed -i "/^$/ N; /if \[ -e \/home\/$USER/ d" .zshenv
