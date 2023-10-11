@@ -33,7 +33,8 @@
     "python@latest",
     "libiconv@latest",
     "tmuxp@latest",
-    "cmake@latest"
+    "cmake@latest",
+    "cargo@latest"
   ],
   "shell": {
     "init_hook": [
