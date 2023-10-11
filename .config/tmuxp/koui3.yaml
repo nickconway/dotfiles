@@ -9,10 +9,8 @@ windows:
           - nvim
         focus: true
       - shell_command:
-          - nvm use 16.15.1
-          - ng serve
-      - shell_command:
-          - nvm use 16.15.1
+          - devbox run ng serve
+      -
   - layout: main-horizontal
     start_directory: "~/git/KO/ko_rest"
     options:
@@ -21,14 +19,13 @@ windows:
       - shell_command:
           - nvim
         focus: true
-      - 
+      -
   - layout: main-horizontal
     start_directory: "$KOTEST"
     options:
       main-pane-height: "50%"
     panes:
       - shell_command:
-          - sudo rm /var/lib/ko/plugin/libLicenseMgr.so
           - kill -kill $(pgrep -f kmip_server)
           - ~/cryptsoft/kmipc_server/bin/kmip_server
       - shell_command:
