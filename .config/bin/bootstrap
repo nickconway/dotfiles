@@ -8,13 +8,11 @@ mv $BASH_SOURCE ~/.config/bin/bootstrap || echo "Same file, whoops!"
 [[ -s ~/.config/bin/yadm ]] || (curl -fLo ~/.config/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.config/bin/yadm && chmod a+x ~/.config/bin/yadm)
 export PATH=$PATH:~/.config/bin:~/.local/bin
 
+command -v git || sudo yum install git -y
 yadm clone https://github.com/nickconway/dotfiles && yadm remote set-url origin "git@github.com:nickconway/dotfiles.git" || echo "Yadm already initialized"
 
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
-    if [[ "$YADM_CLASS" == "work" ]]; then
-        sudo yum install git -y
-    fi
     yadm config local.class $YADM_CLASS
 fi
 
