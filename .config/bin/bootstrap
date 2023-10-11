@@ -12,7 +12,7 @@ yadm clone https://github.com/nickconway/dotfiles && yadm remote set-url origin 
 
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
-    if "$YADM_CLASS" == "work"; then
+    if [[ "$YADM_CLASS" == "work" ]]; then
         sudo yum install git -y
     fi
     yadm config local.class $YADM_CLASS
