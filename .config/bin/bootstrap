@@ -22,8 +22,8 @@ sed -i '/confirm \"Install.*/d' ~/.config/bin/devbox-install
 sed -i 's/$(command -v sudo || true) //g' ~/.config/bin/devbox-install
 
 devbox-install
-devbox global install
 . <(devbox global shellenv --init-hook)
+devbox global install
 
 rustup default stable
 rustup target add wasm32-wasi
