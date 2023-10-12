@@ -1,3 +1,22 @@
+alias ga='git add'
+alias gaa='git add --all'
+alias gb='git branch'
+alias gcam='git commit --all --message'
+alias gcl='git clone --recurse-submodules'
+alias gco='git checkout'
+alias gcp='git cherry-pick'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias glgg='git log --graph'
+alias gm='git merge'
+alias gms='git merge --squash'
+alias gl='git pull'
+alias gp='git push'
+alias gr='git remote'
+alias grh='git reset --hard'
+alias gst='git status'
+alias gsw='git switch'
+
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias td='tmux detach'
@@ -137,4 +156,3 @@ function toggleproxy() {
         unset http{,s}_proxy HTTP{,S}_PROXY
     }
 }
-

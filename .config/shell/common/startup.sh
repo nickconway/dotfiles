@@ -1,11 +1,8 @@
 SHELL_NAME=$(basename $SHELL)
 
 eval "$(devbox global shellenv --init-hook)"
-
 eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
-
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
-
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 
 if [ -n "${commands[fzf-share]}" ]; then
