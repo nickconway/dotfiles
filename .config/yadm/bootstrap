@@ -20,7 +20,7 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt) || echo "System yadm failed"
 
-[[ "$(yadm config local.class)" == "work" ]] && work-setup
+([[ "$(yadm config local.class)" == "work" ]] && work-setup) || echo "Work setup failed (big surprise)"
 
 (sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
 
