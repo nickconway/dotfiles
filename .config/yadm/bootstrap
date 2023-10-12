@@ -20,6 +20,14 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt) || echo "System yadm failed"
 
+curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
+
+sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
+sed -i '/confirm \"Install.*/d' ~/.config/bin/devbox-install
+sed -i 's/$(command -v sudo || true) //g' ~/.config/bin/devbox-install
+
+devbox-install
+
 [[ "$(yadm config local.class)" == "work" ]] && work-setup
 
 (sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
@@ -31,13 +39,6 @@ curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 sed -i "/^$/ N; /if \[ -e \/home\/$USER/ d" .zshenv
 
-curl -fsSLo ~/.config/bin/devbox-install https://get.jetpack.io/devbox && chmod +x .config/bin/devbox-install
-
-sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.config/bin/devbox-install
-sed -i '/confirm \"Install.*/d' ~/.config/bin/devbox-install
-sed -i 's/$(command -v sudo || true) //g' ~/.config/bin/devbox-install
-
-devbox-install
 devbox global install
 
 sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
