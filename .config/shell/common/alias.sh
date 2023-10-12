@@ -1,3 +1,5 @@
+SHELL_NAME=$(ps -p $$ | awk 'NR==2 {print $4}')
+
 alias ga='git add'
 alias gaa='git add --all'
 alias gb='git branch'
@@ -24,7 +26,7 @@ alias ts='tmux new-session -s'
 alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
-alias tmuxconf'$EDITOR ~/.tmux.conf'
+alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias ys="yadm status"
 alias ya="yadm add"

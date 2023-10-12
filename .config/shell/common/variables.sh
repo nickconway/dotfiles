@@ -1,5 +1,3 @@
-SHELL_NAME=$(basename $SHELL)
-
 export PATH=$PATH:~/.local/bin:~/bin
 export GPG_TTY=$TTY
 
