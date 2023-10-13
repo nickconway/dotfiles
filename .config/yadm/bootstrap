@@ -6,7 +6,6 @@ export PATH=$PATH:~/bin:~/.local/bin
 (sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers") || echo "Remove sudo password failed"
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm checkout .
 
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
@@ -42,9 +41,7 @@ mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
-sed -i "/^$/ N; /if \[ -e \/home\/$USER\/.nix-profile/ d" ~/.zshrc
-sed -i "/^$/ N; /if \[ -e \/home\/$USER\/.nix-profile/ d" ~/.bashrc
-sed -i "/^$/ N; /if \[ -e \/home\/$USER\/.nix-profile/ d" ~/.bash_profile
+yadm checkout .
 
 sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
 
