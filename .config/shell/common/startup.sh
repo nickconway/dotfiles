@@ -1,5 +1,5 @@
-eval "$(devbox global shellenv --init-hook)"
-eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
+command -v devbox > /dev/null && eval "$(devbox global shellenv --init-hook)"
+command -v keychain > /dev/null && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 
