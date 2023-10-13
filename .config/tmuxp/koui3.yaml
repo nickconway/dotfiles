@@ -20,15 +20,3 @@ windows:
           - nvim
         focus: true
       -
-  - layout: main-horizontal
-    start_directory: "$KOTEST"
-    options:
-      main-pane-height: "50%"
-    panes:
-      - shell_command:
-          - kill -kill $(pgrep -f kmip_server)
-          - ~/cryptsoft/kmipc_server/bin/kmip_server
-      - shell_command:
-          - kill -kill $(pgrep -f server-ui.js)
-          - sleep 3
-          - NODE_ENV=development node ~/git/KO/ko_rest/server-ui.js
