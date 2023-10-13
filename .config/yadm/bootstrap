@@ -38,7 +38,9 @@ mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
-sed -i "/^$/ N; /if \[ -e \/home\/$USER/.nix-profile d" ~/{.zshrc,.bash_profile,.bashrc}
+sed -i "/^$/ N; /if \[ -e \/home\/$USER/.nix-profile d" ~/.zshrc
+sed -i "/^$/ N; /if \[ -e \/home\/$USER/.nix-profile d" ~/.bashrc
+sed -i "/^$/ N; /if \[ -e \/home\/$USER/.nix-profile d" ~/.bash_profile
 
 [[ "$(yadm config local.class)" == "work" ]] && work-setup
 
