@@ -43,6 +43,6 @@ curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/
 
 yadm checkout .
 
-sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
-
 [[ "$(yadm config local.class)" == "work" ]] && work-setup
+
+sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
