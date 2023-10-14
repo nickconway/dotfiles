@@ -36,6 +36,9 @@ fi
 devbox-install
 devbox global install
 
+sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /bin/node
+sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /bin/npm
+
 (sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
 
 mkdir -p ~/.config/zellij/plugins
