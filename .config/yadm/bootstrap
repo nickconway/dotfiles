@@ -19,8 +19,6 @@ yadm alt
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*.asc
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import-ownertrust "$HOME"/.gnupg/exported/*.txt
 
-[[ "$(yadm config local.class)" == "work" ]] && work-setup
-
 alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 (sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git \
@@ -52,6 +50,6 @@ curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/
 
 yadm checkout .
 
-sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
+[[ "$(yadm config local.class)" == "work" ]] && work-setup
 
-yadm checkout .
+sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
