@@ -19,7 +19,6 @@
     "keychain@latest",
     "nodejs@latest",
     "gh@latest",
-    "tailscale@latest",
     "rustup@latest",
     "yq@latest",
     "tree@latest",
