@@ -36,10 +36,10 @@ fi
 devbox-install
 devbox global install
 
-sudo rm /bin/node || true && sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /bin/node
-sudo rm /bin/npm || true && sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /bin/npm
-sudo rm /usr/bin/node || true && sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /usr/bin/node
-sudo rm /usr/bin/npm || true && sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /usr/bin/npm
+sudo rm /bin/node || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /bin/node
+sudo rm /bin/npm || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /bin/npm
+sudo rm /usr/bin/node || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /usr/bin/node
+sudo rm /usr/bin/npm || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /usr/bin/npm
 sudo npm set prefix -g ~/.npm-global
 
 sudo groupadd docker && sudo usermod -aG docker $USER
