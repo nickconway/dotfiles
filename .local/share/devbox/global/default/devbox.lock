@@ -81,26 +81,6 @@
         }
       }
     },
-    "docker@latest": {
-      "last_modified": "2023-09-27T18:02:17Z",
-      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#docker",
-      "source": "devbox-search",
-      "version": "20.10.25",
-      "systems": {
-        "aarch64-darwin": {
-          "store_path": "/nix/store/8v9z9cpaa4m1x7pacx4fxyvp523mh746-docker-20.10.25"
-        },
-        "aarch64-linux": {
-          "store_path": "/nix/store/q0y17z8b3vp7f2xxadg9wwmxm22n1bvg-docker-20.10.25"
-        },
-        "x86_64-darwin": {
-          "store_path": "/nix/store/76s2mww4yf07l7z9gk4q201d1y0w57iy-docker-20.10.25"
-        },
-        "x86_64-linux": {
-          "store_path": "/nix/store/2f7kiws40dl2m4s366gl924s0mw4kjsv-docker-20.10.25"
-        }
-      }
-    },
     "fd@latest": {
       "last_modified": "2023-09-27T18:02:17Z",
       "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#fd",
