@@ -9,7 +9,9 @@ alias gco='git checkout'
 alias gcp='git cherry-pick'
 alias gd='git diff'
 alias gds='git diff --staged'
-alias ggp="git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)"
+function ggp() {
+    "git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)"
+}
 alias glgg='git log --graph'
 alias gm='git merge'
 alias gms='git merge --squash'
