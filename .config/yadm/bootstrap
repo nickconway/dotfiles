@@ -16,8 +16,8 @@ fi
 yadm decrypt
 yadm alt
 
-gpg --import "$HOME"/.gnupg/exported/*.asc
-gpg --import-ownertrust "$HOME"/.gnupg/exported/*.txt
+[[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*.asc
+[[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import-ownertrust "$HOME"/.gnupg/exported/*.txt
 
 alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 (sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
