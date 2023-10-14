@@ -3,7 +3,7 @@
 set -xe
 
 export PATH=$PATH:~/bin:~/.local/bin
-(sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers") || echo "Remove sudo password failed"
+sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
@@ -23,7 +23,7 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 (sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
-    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt) || echo "System yadm failed"
+    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt)
 
 if [[ ! -e ~/.local/bin/devbox-install ]]; then
     curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x ~/.local/bin/devbox-install
@@ -40,8 +40,9 @@ sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappe
 sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /bin/npm
 sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /usr/bin/node
 sudo ln -s /home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /usr/bin/npm
+sudo npm set prefix -g ~/.npm-global
 
-(sudo groupadd docker && sudo usermod -aG docker $USER) || echo "Docker non-root failed"
+sudo groupadd docker && sudo usermod -aG docker $USER
 
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
