@@ -37,4 +37,4 @@ export FZF_CTRL_R_OPTS="
 
 export FZF_TMUX_OPTS="-p --reverse"
 
-export NODE_PATH="$(npm root -g)"
+export NODE_PATH=$HOME/.npm-global/lib/node_modules
