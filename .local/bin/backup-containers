@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for d in ~/docker/*; do
+    cd $d
+    docker compose stop
+
+sudo tar czvf ~/docker.tar.gz ~/docker
+
+for d in ~/docker/*; do
+    cd $d
+    docker compose up -d
