@@ -58,7 +58,6 @@ else
     curl -fsSL https://tailscale.com/install.sh | sh
 fi
 
-
 curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
 sh ~/.local/bin/get-docker
 sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
