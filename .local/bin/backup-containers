@@ -2,9 +2,11 @@
 
 set -xe
 
-np notifications "Backing up docker containers"
+ntfy publish -u "nick:$NTFY_PASSWORD" notifications "Backing up docker containers"
 cd ~
 stop-containers
 sudo tar czvf docker.tar.gz docker
 start-containers
-np notifications "Backing up complete"
+until ntfy publish -u "nick:$NTFY_PASSWORD" notifications "Backing up complete" > /dev/null; do
+    true
+done
