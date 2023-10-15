@@ -2,6 +2,7 @@
 
 set -xe
 
+cd ~
 stop-containers
-sudo tar czvf ~/docker.tar.gz ~/docker
+sudo tar czvf docker.tar.gz docker
 start-containers
