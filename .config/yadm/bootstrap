@@ -61,7 +61,7 @@ fi
 
 curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
 sh ~/.local/bin/get-docker
-sudo groupadd docker && sudo usermod -aG docker $USER
+sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
 
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
