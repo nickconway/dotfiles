@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -xe
-
 ntfy publish -u "nick:$NTFY_PASSWORD" notifications "Backing up docker containers"
 cd ~
 stop-containers
