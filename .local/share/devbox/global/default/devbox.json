@@ -33,7 +33,8 @@
     "tmuxp@latest",
     "cargo@latest",
     "cmake@latest",
-    "sshpass@latest"
+    "sshpass@latest",
+    "ntfy"
   ],
   "shell": {
     "init_hook": [
