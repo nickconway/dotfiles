@@ -34,7 +34,8 @@
     "libiconv@latest",
     "tmuxp@latest",
     "cargo@latest",
-    "cmake@latest"
+    "cmake@latest",
+    "sshpass@latest"
   ],
   "shell": {
     "init_hook": [

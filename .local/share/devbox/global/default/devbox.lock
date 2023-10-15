@@ -397,6 +397,26 @@
         }
       }
     },
+    "sshpass@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#sshpass",
+      "source": "devbox-search",
+      "version": "1.10",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/l53mfqij8a8hyzrk2qmvnsykn10fr83r-sshpass-1.10"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/35i6l3rxb3blxa83bc4nmpkwh3i6jp29-sshpass-1.10"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/ba1bcbjaxv1psayk086asbbjmcqa4m3c-sshpass-1.10"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/38hbz6rnp9llxmzlb4wlfhy6fbb234qf-sshpass-1.10"
+        }
+      }
+    },
     "starship@latest": {
       "last_modified": "2022-04-14T10:09:46Z",
       "resolved": "github:NixOS/nixpkgs/6361b4941a69395ebf15e6e56b142765fce850f9#starship",
