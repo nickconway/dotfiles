@@ -1,4 +1,5 @@
-.ssh/id_*
+.config/**/*yadm-encrypted*
 .config/rbw/*
 .config/zmk/*
 .config/yadm/alt/**/*c.work
+.ssh/id_*
