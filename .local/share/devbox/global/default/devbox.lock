@@ -295,6 +295,26 @@
         }
       }
     },
+    "ntfy-sh@latest": {
+      "last_modified": "2023-10-08T00:43:42Z",
+      "resolved": "github:NixOS/nixpkgs/5aabb5780a11c500981993d49ee93cfa6df9307b#ntfy-sh",
+      "source": "devbox-search",
+      "version": "2.7.0",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/0218aa69r6gr1zaj3pv128q9hlcd0wfb-ntfy-sh-2.7.0"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/afm8ap21ll66zcpl6jnhvkxb4b9ca1z9-ntfy-sh-2.7.0"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/61pfjayzgnq6xj926y0mchdlfax49j94-ntfy-sh-2.7.0"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/n8lxphpdn38mkqhpida0kr95b93yzwk8-ntfy-sh-2.7.0"
+        }
+      }
+    },
     "python@latest": {
       "last_modified": "2023-10-03T09:29:46Z",
       "plugin_version": "0.0.1",
