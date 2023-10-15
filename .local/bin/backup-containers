@@ -2,7 +2,9 @@
 
 set -xe
 
+np notifications "Backing up docker containers"
 cd ~
 stop-containers
 sudo tar czvf docker.tar.gz docker
 start-containers
+np notifications "Backing up complete"
