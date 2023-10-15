@@ -2,14 +2,6 @@
 
 set -xe
 
-for d in ~/docker/*; do
-    cd $d
-    docker compose stop
-done
-
+start-containers
 sudo tar czvf ~/docker.tar.gz ~/docker
-
-for d in ~/docker/*; do
-    cd $d
-    docker compose up -d
-done
+stop-containers

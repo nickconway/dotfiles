@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for d in ~/docker/*; do
+    cd $d
+    docker compose up -d
+done
