@@ -4,7 +4,7 @@ command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 
 if [ -n "${commands[fzf-share]}" ]; then
     source "$(fzf-share)/key-bindings.$SHELL_NAME"
-  source "$(fzf-share)/completion.$SHELL_NAME"
+    source "$(fzf-share)/completion.$SHELL_NAME"
 fi
 
 if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
