@@ -67,7 +67,7 @@ function make-svelte() {
 
 alias n="nvim"
 function np() {
-    ntfy publish -u "nick:$(cat .config/encrypted/ntfy)" $@
+    ntfy publish -u "nick:$NTFY_PASSWORD" $@
 }
 
 function pw() {

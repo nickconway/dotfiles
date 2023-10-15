@@ -1,4 +1,4 @@
-.config/encrypted/**/*
+.config/shell/common/encrypted.sh
 .config/rbw/**/*
 .config/yadm/alt/**/*c.work
 .config/zmk/**/*
