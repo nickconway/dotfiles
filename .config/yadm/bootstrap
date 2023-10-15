@@ -46,6 +46,8 @@ sudo rm /usr/bin/npm || true && sudo ln -s /home/$USER/.local/share/devbox/globa
 npm set prefix ~/.npm-global
 sudo npm set prefix -g ~/.npm-global
 
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
+
 sudo groupadd docker && sudo usermod -aG docker $USER
 
 mkdir -p ~/.config/zellij/plugins
