@@ -35,6 +35,7 @@ if [[ ! -e ~/.local/bin/devbox-install ]]; then
     sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 fi
 
+curl -L https://releases.nixos.org/nix/install | sh -s
 devbox-install
 devbox global install
 
