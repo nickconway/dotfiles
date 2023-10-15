@@ -1,5 +1,6 @@
 .config/shell/common/encrypted.sh
 .config/rbw/**/*
+.config/yadm/alt/**/*.env*
 .config/yadm/alt/**/*c.work
 .config/zmk/**/*
 .ssh/id_*
