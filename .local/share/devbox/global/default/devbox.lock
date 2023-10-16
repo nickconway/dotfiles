@@ -315,6 +315,26 @@
         }
       }
     },
+    "parallel@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#parallel",
+      "source": "devbox-search",
+      "version": "20230822",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/kqd1dq1w1p0cincis81kbkvj6076a9l3-parallel-20230822"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/b24z0a72xqkcdpyq3qg6znxd9yk86wi6-parallel-20230822"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/d0xa7j1kiir9ycmpald6rp4qc0dykfnl-parallel-20230822"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/zwz1j8ll48b5gibb6x543hplgbn1vbdd-parallel-20230822"
+        }
+      }
+    },
     "python@latest": {
       "last_modified": "2023-10-03T09:29:46Z",
       "plugin_version": "0.0.1",
