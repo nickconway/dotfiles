@@ -22,7 +22,7 @@ sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:AL
 
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*
 
-[[ "$(yadm config --get-all local.class)" =~ ".*work.*" ]] && [[ "$(yadm config --get-all local.class)" =~ ".*vm.*" ]] && work-setup
+[[ "$(yadm config --get-all local.class)" =~ *"work"* ]] && [[ "$(yadm config --get-all local.class)" =~ *"vm"* ]] && work-setup
 
 alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 (sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
@@ -53,7 +53,7 @@ sudo npm set prefix -g ~/.npm-global
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 
-[[ "$(yadm config --get-all local.class)" =~ ".*work.*" ]] && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")` && clone-all
+[[ "$(yadm config --get-all local.class)" =~ *"work"* ]] && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")` && clone-all
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     git clone https://github.com/tailscale-dev/deck-tailscale.git
