@@ -42,11 +42,13 @@ fi
 curl -L https://nixos.org/nix/install | sh -s
 devbox-install
 devbox global install
+. <(devbox global shellenv --init-hook)
+export PATH=$PATH:~/bin:~/.local/bin
 
-sudo rm /bin/node || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /bin/node
-sudo rm /bin/npm || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /bin/npm
-sudo rm /usr/bin/node || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/node /usr/bin/node
-sudo rm /usr/bin/npm || true && sudo ln -s /home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/npm /usr/bin/npm
+sudo rm /bin/node || true && sudo ln -s $(which node) /bin/node
+sudo rm /bin/npm || true && sudo ln -s $(which npm) /bin/npm
+sudo rm /usr/bin/node || true && sudo ln -s $(which node) /usr/bin/node
+sudo rm /usr/bin/npm || true && sudo ln -s $(which npm) /usr/bin/npm
 npm set prefix ~/.npm-global
 sudo npm set prefix -g ~/.npm-global
 
@@ -72,6 +74,6 @@ mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
-sudo chsh $USER -s $HOME/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin/zsh
+sudo chsh $USER -s $(which zsh)
 
 yadm checkout .
