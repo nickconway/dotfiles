@@ -53,7 +53,8 @@ sudo npm set prefix -g ~/.npm-global
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 
-[[ "$(yadm config --get-all local.class)" =~ ".*work.*" ]] && clone-all
+
+[[ "$(yadm config --get-all local.class)" =~ ".*work.*" ]] && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")` && clone-all
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     git clone https://github.com/tailscale-dev/deck-tailscale.git
@@ -76,6 +77,6 @@ mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
-sudo chsh $USER -s $(which zsh)
+sudo chsh $USER -s zsh
 
 yadm checkout .
