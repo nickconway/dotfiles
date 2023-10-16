@@ -53,7 +53,6 @@ sudo npm set prefix -g ~/.npm-global
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 
-
 [[ "$(yadm config --get-all local.class)" =~ ".*work.*" ]] && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")` && clone-all
 
 if [[ $(uname -n) == "steamdeck" ]]; then
