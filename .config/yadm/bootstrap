@@ -61,9 +61,11 @@ else
     curl -fsSL https://tailscale.com/install.sh | sh
 fi
 
-curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
-sh ~/.local/bin/get-docker
-sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
+if ! command -v docker; then
+    curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
+    sh ~/.local/bin/get-docker
+    sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
+fi
 
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
