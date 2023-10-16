@@ -35,7 +35,8 @@
     "cmake@latest",
     "sshpass@latest",
     "ntfy-sh@latest",
-    "parallel@latest"
+    "parallel@latest",
+    "skim@latest"
   ],
   "shell": {
     "init_hook": [

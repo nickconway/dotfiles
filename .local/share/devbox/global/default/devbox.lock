@@ -417,6 +417,26 @@
         }
       }
     },
+    "skim@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#skim",
+      "source": "devbox-search",
+      "version": "0.10.4",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/gr8c4v6hjkqmv4cp7piyq03brxdvv237-skim-0.10.4"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/b5m43z1zk4zzlmjv2bp8s4214zxkj2ga-skim-0.10.4"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/aivwizpix2md4may1ir72n9wrycwh3bj-skim-0.10.4"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/ll820p1vh44v89cnfbfjymlyjbn2p6k4-skim-0.10.4"
+        }
+      }
+    },
     "sshpass@latest": {
       "last_modified": "2023-09-27T18:02:17Z",
       "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#sshpass",
