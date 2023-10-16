@@ -55,21 +55,23 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plu
 
 [[ "$(yadm config --get-all local.class)" == *"work"* ]] && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")` && source ~/.config/shell/common/work.sh && clone-all
 
-if [[ $(uname -n) == "steamdeck" ]]; then
-    git clone https://github.com/tailscale-dev/deck-tailscale.git
-    cd deck-tailscale
-    sudo bash tailscale.sh
-    sudo tailscale up --ssh --accept-routes --operator=deck
-    rm -rf deck-tailscale
-else
-    curl -fsSL https://tailscale.com/install.sh | sh
-    sudo tailscale up --ssh --accept-routes
-fi
+if [[ $(uname -r) != *"WSL"* ]]; then 
+	if [[ $(uname -n) == "steamdeck" ]]; then
+	    git clone https://github.com/tailscale-dev/deck-tailscale.git
+	    cd deck-tailscale
+	    sudo bash tailscale.sh
+	    sudo tailscale up --ssh --accept-routes --operator=deck
+	    rm -rf deck-tailscale
+	else
+	    curl -fsSL https://tailscale.com/install.sh | sh
+	    sudo tailscale up --ssh --accept-routes
+	fi
 
-if ! command -v docker; then
-    curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
-    sh ~/.local/bin/get-docker
-    sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
+	if ! command -v docker; then
+	    curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
+	    sh ~/.local/bin/get-docker
+	    sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
+	fi
 fi
 
 mkdir -p ~/.config/zellij/plugins
