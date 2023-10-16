@@ -76,6 +76,6 @@ mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
-sudo chsh $USER -s zsh
+sudo chsh $USER -s $(which zsh)
 
 yadm checkout .
