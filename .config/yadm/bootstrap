@@ -55,7 +55,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plu
 
 [[ "$(yadm config --get-all local.class)" == *"work"* ]] && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")` && source ~/.config/shell/common/work.sh && clone-all
 
-if [[ $(uname -r) != *"WSL"* ]]; then 
+if [[ $(uname -r) != *"WSL"* ]] || [[ "$(yadm config local.class)" == *"work"* ]]; then 
     if [[ $(uname -n) == "steamdeck" ]]; then
 	    git clone https://github.com/tailscale-dev/deck-tailscale.git
 	    cd deck-tailscale
