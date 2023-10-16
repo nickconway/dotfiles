@@ -10,7 +10,10 @@ yadm checkout .
 
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
-    yadm config local.class $YADM_CLASS
+    while [[ "$YADM_CLASS" != "n" ]]; do
+        yadm config --add local.class $YADM_CLASS
+        read -p "Enter another YADM class (n to quit): " YADM_CLASS
+    done
 fi
 
 yadm decrypt
