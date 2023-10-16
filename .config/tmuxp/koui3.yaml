@@ -9,7 +9,7 @@ windows:
           - nvim
         focus: true
       - shell_command:
-          - devbox run ng serve
+          - devbox run $(which ng) serve
       -
   - layout: main-horizontal
     start_directory: "~/git/KO/ko_rest"
