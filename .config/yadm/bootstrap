@@ -2,10 +2,10 @@
 
 set -xe
 
+export PATH=$PATH:~/bin:~/.local/bin
+
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
-
-export PATH=$PATH:~/bin:~/.local/bin
 
 sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 
