@@ -7,8 +7,6 @@ export PATH=$PATH:~/bin:~/.local/bin
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
 
-sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
-
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
     while [[ "$YADM_CLASS" != "n" ]]; do
@@ -19,6 +17,8 @@ fi
 
 yadm decrypt
 yadm alt
+
+sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*.asc
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import-ownertrust "$HOME"/.gnupg/exported/*.txt
