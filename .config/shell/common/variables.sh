@@ -1,4 +1,4 @@
-export PATH=$PATH:~/.local/bin:~/bin
+export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin
 export GPG_TTY=$TTY
 
 export XDG_CONFIG_HOME="$HOME/.config"
