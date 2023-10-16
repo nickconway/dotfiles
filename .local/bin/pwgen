@@ -1,0 +1,2 @@
+#!/bin/bash
+openssl rand -base64 256 | tr -d '\n\r' | cut -c 1-$1
