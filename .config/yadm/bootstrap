@@ -53,6 +53,8 @@ sudo npm set prefix -g ~/.npm-global
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 
+[[ "$(yadm config --get-all local.class)" =~ ".*work.*" ]] && clone-all
+
 if [[ $(uname -n) == "steamdeck" ]]; then
     git clone https://github.com/tailscale-dev/deck-tailscale.git
     cd deck-tailscale
@@ -61,6 +63,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     rm -rf deck-tailscale
 else
     curl -fsSL https://tailscale.com/install.sh | sh
+    sudo tailscale up --ssh --accept-routes
 fi
 
 if ! command -v docker; then
