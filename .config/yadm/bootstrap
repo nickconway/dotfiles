@@ -20,8 +20,7 @@ yadm alt
 
 sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 
-[[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*.asc
-[[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import-ownertrust "$HOME"/.gnupg/exported/*.txt
+[[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*
 
 [[ "$(yadm config --get-all local.class)" =~ ".*work.*" ]] && [[ "$(yadm config --get-all local.class)" =~ ".*vm.*" ]] && work-setup
 
