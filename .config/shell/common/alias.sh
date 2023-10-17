@@ -66,8 +66,12 @@ function make-svelte() {
 }
 
 alias n="nvim"
+
 function np() {
     ntfy publish -u "nick:$NTFY_PASSWORD" $@
+}
+function npa() {
+    $@ && ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ is finished" || ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ failed" 
 }
 
 function pw() {
