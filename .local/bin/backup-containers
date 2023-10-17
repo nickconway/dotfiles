@@ -2,6 +2,8 @@
 
 set -xe
 
+export PATH=$PATH:/home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin
+
 cd ~
 ntfy publish -u "nick:$NTFY_PASSWORD" notifications "Backing up docker containers"
 stop-containers
