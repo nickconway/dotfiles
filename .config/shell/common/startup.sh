@@ -21,3 +21,5 @@ if [ -n "${commands[fzf-share]}" ]; then
     source "$(fzf-share)/key-bindings.$SHELL_NAME"
     source "$(fzf-share)/completion.$SHELL_NAME"
 fi
+
+export NODE_PATH=$HOME/.npm-global/lib/node_modules
