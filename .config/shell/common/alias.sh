@@ -70,8 +70,9 @@ alias n="nvim"
 function np() {
     ntfy publish -u "nick:$NTFY_PASSWORD" $@
 }
+
 function npa() {
-    $@ && ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ is finished" || ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ failed" 
+    ( ($@ && ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ is finished" || ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ failed") > /dev/null 2>&1 & )
 }
 
 function pw() {
@@ -143,10 +144,16 @@ function x(){
 
 alias ys="yadm status"
 alias ya="yadm add"
+alias yalt="yadm alt"
 alias yau="yadm add -u"
 alias yc="yadm commit"
 alias yca="yadm commit -a"
 alias ycam="yadm commit -a -m"
+alias yd="yadm diff"
+alias ydec="yadm decrypt"
+alias yenc="yadm encrypt"
+alias yl="yadm pull"
+alias yu="yadm upgrade"
 function yp() {
     if [[ $# -eq 0 ]]; then
         ycam "Update config"
@@ -155,11 +162,6 @@ function yp() {
         ycam $@; yadm push
     fi
 }
-alias yl="yadm pull"
-alias yd="yadm diff"
-alias yenc="yadm encrypt"
-alias ydec="yadm decrypt"
-alias yu="yadm upgrade"
 alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 function sy() {
     case "$1" in
