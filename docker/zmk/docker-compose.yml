@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  zmk:
+    container_name: zmk
+    image: zmkfirmware/zmk-build-arm:3.2
+    restart: unless-stopped
+      # volumes
+    
