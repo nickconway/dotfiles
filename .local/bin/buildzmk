@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xe
+
 cd $PROJECT_DIR/zmk-config/config/include/ || return 
 sed -i.bkp '/btclear/e cat ~/.config/zmk/leader.dtsi' leader.dtsi
 sed -i '/leader_sequences/e cat ~/.config/zmk/macros.dtsi' leader.dtsi
