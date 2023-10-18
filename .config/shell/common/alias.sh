@@ -1,6 +1,6 @@
 SHELL_NAME=$(ps -p $$ | awk 'NR==2 {print $4}')
 
-alias .. ='cd ..'
+alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
