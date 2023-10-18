@@ -2,19 +2,19 @@
 
 set -xe
 
-cd $PROJECT_DIR/zmk-config/config/include/ || return 
+cd $PROJECT_DIR/zmk/zmk-config/config/include/
 sed -i.bkp '/btclear/e cat ~/.config/zmk/leader.dtsi' leader.dtsi
 sed -i '/leader_sequences/e cat ~/.config/zmk/macros.dtsi' leader.dtsi
 
 mkdir -p $DROPBOX/Documents/ZMK/"$1"/
-cd $PROJECT_DIR/zmk/app || return 
-if [ $(find . $PROJECT_DIR -name $1_left.conf | wc -l) -gt 0 ]; then
+cd $PROJECT_DIR/zmk/app
+if [ $(find . $PROJECT_DIR/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
-        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_left nice_view_adapter nice_view" && \
-            west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_right nice_view_adapter nice_view"
+        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_left nice_view_adapter nice_view"
+        west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_right nice_view_adapter nice_view"
     else
-        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_left" && \
-            west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_right"
+        west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_left"
+        west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG="$PROJECT_DIR/zmk-config/config" -DSHIELD=$1"_right"
     fi
     test $DROPBOX && cp build/$1/left/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/left.uf2
     test $DROPBOX && cp build/$1/right/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/right.uf2
@@ -27,5 +27,5 @@ else
     test $DROPBOX && cp build/$1/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/
 fi
 
-cd $PROJECT_DIR/zmk-config/config/include/ || return
+cd $PROJECT_DIR/zmk-config/config/include/
 mv leader.dtsi.bkp leader.dtsi
