@@ -106,7 +106,7 @@ function pw() {
     rbw get $1 $2 | clip.exe
 }
 
-alias rd=rmdir
+alias rd="rm -rf"
 
 function replace () {
     if [ $# -lt 2 ]
