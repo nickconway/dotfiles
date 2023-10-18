@@ -191,6 +191,7 @@ function yp() {
         ycam $@; yadm push
     fi
 }
+alias yrh="yadm reset --hard"
 alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 function sy() {
     case "$1" in
