@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 cd $PROJECT_DIR/zmk-config/config/include/ || return 
-sed -i.bkp '/btclear/e cat ~/.config/zmk/leader-encrypted.dtsi' leader.dtsi
-sed -i '/leader_sequences/e cat ~/.config/zmk/macros-encrypted.dtsi' leader.dtsi
+sed -i.bkp '/btclear/e cat ~/.config/zmk/leader.dtsi' leader.dtsi
+sed -i '/leader_sequences/e cat ~/.config/zmk/macros.dtsi' leader.dtsi
 
 mkdir -p $DROPBOX/Documents/ZMK/"$1"/
 cd $PROJECT_DIR/zmk/app || return 
