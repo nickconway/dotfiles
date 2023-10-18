@@ -122,6 +122,7 @@ function replace () {
 }
 
 function s() {
+    touch /tmp/tmux-$(tmux display -p "#S-#P")
     hide-tmux-statusbar &
     pid=$!
     tmux set prefix C-h
@@ -131,6 +132,7 @@ function s() {
     tmux set prefix C-Space
     kill $pid
     tmux set status on
+    rm /tmp/tmux-$(tmux display -p "#S-#P")
     clear
 }
 
