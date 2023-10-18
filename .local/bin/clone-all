@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mkdir -p $PROJECT_DIR
+cd $PROJECT_DIR
+for r in $(gh repo list | awk '{print $1}' | sed "/.*dotfiles.*/d"); do
+    git clone "ssh://git@github.com/$r"
+done

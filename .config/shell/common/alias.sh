@@ -46,7 +46,8 @@ alias gst='git status'
 alias gsw='git switch'
 
 function ghc() {
-    cd ~/git
+    mkdir -p $PROJECT_DIR
+    cd $PROJECT_DIR
     GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone 
     cd -
 }

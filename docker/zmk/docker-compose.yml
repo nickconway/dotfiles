@@ -1,9 +1,18 @@
-version: "3"
+version: "3.9"
 
 services:
   zmk:
     container_name: zmk
-    image: zmkfirmware/zmk-build-arm:3.2
+    command: tail -f /dev/null
     restart: unless-stopped
+    ports:
+      - 3000
+    build:
+      context: .devcontainer/
+      dockerfile: Dockerfile
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/git/zmk:/workspace
+      - ./root:/root
+      - ./workspace/zephyr:/workspace/zephyr
+      - ./workspace/modules:/workspace/modules
+      - ./workspace/tools:/workspace/tools
