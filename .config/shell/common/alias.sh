@@ -1,5 +1,22 @@
 SHELL_NAME=$(ps -p $$ | awk 'NR==2 {print $4}')
 
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+
+alias -- -='cd -'
+alias 1='cd -1'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+
 alias c="clear"
 
 alias clipqr="xclip -o | qrencode -t utf8"
@@ -29,7 +46,8 @@ alias gst='git status'
 alias gsw='git switch'
 
 function ghc() {
-    cd ~/git
+    mkdir -p $PROJECT_DIR
+    cd $PROJECT_DIR
     GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone 
     cd -
 }
@@ -37,6 +55,12 @@ function ghc() {
 function ghpr() {
     GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
 }
+
+# List directory contents
+alias lsa='ls -lah --color'
+alias l='ls -h --color'
+alias ll='ls -lh --color'
+alias la='ls -lAh --color'
 
 alias lzd="lazydocker"
 
@@ -65,6 +89,11 @@ function make-svelte() {
     cd $dir
 }
 
+alias md='mkdir -p'
+function mkcd() {
+    mkdir -p -- "$1" && cd -P -- "$1"
+}
+
 alias n="nvim"
 
 function np() {
@@ -79,6 +108,7 @@ function pw() {
     rbw get $1 $2 | clip.exe
 }
 
+alias rd="rm -rf"
 
 function replace () {
     if [ $# -lt 2 ]
@@ -162,6 +192,7 @@ function yp() {
         ycam $@; yadm push
     fi
 }
+alias yrh="yadm reset --hard"
 alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 function sy() {
     case "$1" in

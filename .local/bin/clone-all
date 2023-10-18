@@ -1,0 +1,9 @@
+#!/bin/bash
+
+mkdir -p $PROJECT_DIR
+cd $PROJECT_DIR
+for r in $(gh repo list | awk '{print $1}' | sed "/.*dotfiles.*/d" | sed "/.*zmk-config.*/d"); do
+    gh repo clone $r
+done
+cd zmk
+gh repo clone zmk-config
