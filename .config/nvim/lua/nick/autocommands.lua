@@ -27,7 +27,10 @@ vim.api.nvim_create_autocmd(
     { "BufWritePre", "BufWritePost" },
     {
         callback = function()
-            vim.lsp.buf.format({ async = false })
+            local project = vim.loop.cwd():match("^.*/(.+)$")
+            if not (project == "koui3" or project == "ko_rest") then
+                vim.lsp.buf.format({ async = false })
+            end
         end,
         group = Ag
     }
