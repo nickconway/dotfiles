@@ -31,19 +31,17 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt)
 
-if [[ ! -e ~/.local/bin/devbox-install ]]; then
-    curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x ~/.local/bin/devbox-install
-
-    sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
-    sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
-    sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
-fi
+curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x ~/.local/bin/devbox-install
+sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
+sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
+sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 
 curl -L https://nixos.org/nix/install | sh -s
 devbox-install
 devbox global install
 . <(devbox global shellenv --init-hook)
 export PATH=$PATH:~/bin:~/.local/bin
+. ~/.config/shell/common/encrypted.sh
 
 sudo rm /bin/node || true && sudo ln -s $(which node) /bin/node
 sudo rm /bin/npm || true && sudo ln -s $(which npm) /bin/npm
@@ -54,18 +52,23 @@ sudo npm set prefix -g ~/.npm-global
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 
-[[ "$(yadm config --get-all local.class)" == *"work"* ]] && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")` && source ~/.config/shell/common/work.sh && clone-all
+eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
+if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
+    source ~/.config/shell/common/work.sh && clone-all-work
+else
+    clone-all
+fi
 
 if [[ $(uname -r) != *"WSL"* ]] || [[ "$(yadm config local.class)" == *"work"* ]]; then 
     if [[ $(uname -n) == "steamdeck" ]]; then
 	    git clone https://github.com/tailscale-dev/deck-tailscale.git
 	    cd deck-tailscale
 	    sudo bash tailscale.sh
-	    sudo tailscale up --ssh --accept-routes --operator=deck
+	    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
 	    rm -rf deck-tailscale
 	else
 	    curl -fsSL https://tailscale.com/install.sh | sh
-	    sudo tailscale up --ssh --accept-routes
+	    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
 	fi
 fi
 
