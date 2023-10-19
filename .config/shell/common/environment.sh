@@ -2,6 +2,7 @@ command -v devbox > /dev/null && eval "$(devbox global shellenv --init-hook)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 command -v keychain > /dev/null && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
+if [[ -e /home/$USER/.nix-profile/etc/profile.d/nix.sh ]]; then . /home/$USER/.nix-profile/etc/profile.d/nix.sh; fi
 
 if [ -f /etc/os-release ]; then
     # freedesktop.org and systemd
