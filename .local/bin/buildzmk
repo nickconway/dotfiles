@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd $PROJECT_DIR/zmk/zmk-config/config/include/
+cd $PROJECT_DIR/zmk-config/config/include/
 sed -i.bkp '/btclear/e cat ~/.config/zmk/leader.dtsi' leader.dtsi
 sed -i '/leader_sequences/e cat ~/.config/zmk/macros.dtsi' leader.dtsi
 
@@ -25,5 +25,5 @@ else
     test -f $DROPBOX && cp build/$1/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/
 fi
 
-cd ../zmk-config/config/include/
+cd $PROJECT_DIR/zmk-config/config/include/
 mv leader.dtsi.bkp leader.dtsi
