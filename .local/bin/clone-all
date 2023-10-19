@@ -3,5 +3,5 @@
 mkdir -p $PROJECT_DIR
 cd $PROJECT_DIR
 for r in $(gh repo list | awk '{print $1}' | sed "/.*dotfiles.*/d"); do
-    gh repo clone $r
+    gh repo clone $r || echo "$r already exists"
 done
