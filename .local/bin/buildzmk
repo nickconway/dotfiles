@@ -14,15 +14,15 @@ if [ $(find . $PROJECT_DIR/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
         docker exec -it zmk bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left\""
         docker exec -it zmk bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right\""
     fi
-    test $DROPBOX && test build/$1 && cp build/$1/left/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/left.uf2
-    test $DROPBOX && test build/$1 && cp build/$1/right/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/right.uf2
+    test -f $DROPBOX && test build/$1 && cp build/$1/left/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/left.uf2
+    test -f $DROPBOX && test build/$1 && cp build/$1/right/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/right.uf2
 else
     if [ "$2" = "nv" ]; then
         docker exec -it zmk bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1 nice_view_adapter nice_view\""
     else
         docker exec -it zmk bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1\""
     fi
-    test $DROPBOX && cp build/$1/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/
+    test -f $DROPBOX && cp build/$1/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/
 fi
 
 cd ../zmk-config/config/include/
