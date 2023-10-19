@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cd $PROJECT_DIR/zmk
-docker compose up -d && docker exec -it zmk bash -c "cd workspace && west init -l app/ && west update"
