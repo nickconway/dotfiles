@@ -4,7 +4,7 @@ cd $PROJECT_DIR/zmk/zmk-config/config/include/
 sed -i.bkp '/btclear/e cat ~/.config/zmk/leader.dtsi' leader.dtsi
 sed -i '/leader_sequences/e cat ~/.config/zmk/macros.dtsi' leader.dtsi
 
-mkdir -p $DROPBOX/Documents/ZMK/"$1"/
+test -f $DROPBOX && mkdir -p $DROPBOX/Documents/ZMK/"$1"/
 cd $PROJECT_DIR/zmk/app
 if [ $(find . $PROJECT_DIR/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
