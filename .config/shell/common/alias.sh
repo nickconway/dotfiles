@@ -200,6 +200,7 @@ alias sysyadm="yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data"
 function sy() {
     case "$1" in
         ("") sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) status;;
+        (c) sysyadm commit -am "$@";;
         (i) sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys; sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git;;
         (p) sysyadm push;;
         (l) sysyadm pull;;
