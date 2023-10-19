@@ -102,7 +102,7 @@ function np() {
 }
 
 function npa() {
-    $@ && ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ is finished" || ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ failed"
+    $@ && ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ is finished" > /dev/null 2>&1 || ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ failed" > /dev/null 2>&1
 }
 
 function pw() {
