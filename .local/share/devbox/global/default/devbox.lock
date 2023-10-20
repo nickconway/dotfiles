@@ -396,6 +396,26 @@
         }
       }
     },
+    "rsync@latest": {
+      "last_modified": "2023-09-27T18:02:17Z",
+      "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#rsync",
+      "source": "devbox-search",
+      "version": "3.2.7",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/s76fp807gpk99zj1yi6ny6km7vhymydw-rsync-3.2.7"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/bkycdpc2nfc9h2037gg844sah5sf0390-rsync-3.2.7"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/8c02a5d563yaa6f8bgvg71263f5rwjh8-rsync-3.2.7"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/0s2bzpml283zkfnhw7qi5qy1zlisffxj-rsync-3.2.7"
+        }
+      }
+    },
     "rustup@latest": {
       "last_modified": "2023-09-27T18:02:17Z",
       "plugin_version": "0.0.1",
