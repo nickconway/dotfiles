@@ -166,14 +166,7 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias v="nvim"
 
-function x(){
-    if [[ -z $TMUX ]]; then
-        exit
-    else
-        tmux detach
-        clear
-    fi
-}
+alias x='tmux detach && clear || exit'
 
 alias ys="yadm status"
 alias ya="yadm add"
