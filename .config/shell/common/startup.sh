@@ -11,6 +11,8 @@ if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
     fi
 fi
 
+command -v keychain > /dev/null && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
+
 if [ -n "${commands[fzf-share]}" ]; then
     source "$(fzf-share)/key-bindings.$SHELL_NAME"
     source "$(fzf-share)/completion.$SHELL_NAME"
