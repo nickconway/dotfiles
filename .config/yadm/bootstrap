@@ -20,7 +20,7 @@ yadm decrypt
 yadm alt
 
 sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
-sudo grep "session optional pam_exec.so su nick bash -lc '/usr/bin/ntfy-ssh'" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so su nick bash -lc '/usr/bin/ntfy-ssh' >> /etc/pam.d/sshd"
+sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
 
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*
 
