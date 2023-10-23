@@ -98,11 +98,11 @@ function mkcd() {
 alias n="nvim"
 
 function np() {
-    ntfy publish -u "nick:$NTFY_PASSWORD" $@
+    ntfy publish -u $@
 }
 
 function npa() {
-    $@ && ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ is finished" > /dev/null 2>&1 || ntfy publish -u "nick:$NTFY_PASSWORD" notifications "$@ failed" > /dev/null 2>&1
+    $@ && ntfy publish notifications "$@ is finished" > /dev/null 2>&1 || ntfy publish notifications "$@ failed" > /dev/null 2>&1
 }
 
 function pw() {
