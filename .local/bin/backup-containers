@@ -5,10 +5,10 @@ set -xe
 export PATH=$PATH:/home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin
 
 cd ~
-ntfy publish -u "nick:$NTFY_PASSWORD" notifications "Backing up docker containers"
+ntfy publish notifications "Backing up docker containers"
 stop-containers
 sudo tar czvf docker.tar.gz docker
 start-containers
-until ntfy publish -u "nick:$NTFY_PASSWORD" notifications "Backing up complete" > /dev/null; do
+until ntfy publish notifications "Backing up complete" > /dev/null; do
     true
 done
