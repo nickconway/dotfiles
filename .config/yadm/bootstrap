@@ -45,6 +45,7 @@ if [[ $(uname -r) != *"WSL"* ]] || [[ "$(yadm config local.class)" == *"work"* ]
 	    cd deck-tailscale
 	    sudo bash tailscale.sh
 	    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
+        cd
 	    rm -rf deck-tailscale
 
         sudo touch /etc/subuid /etc/subgid
