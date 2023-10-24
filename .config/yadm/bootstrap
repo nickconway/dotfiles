@@ -23,6 +23,8 @@ fi
 yadm decrypt
 yadm alt
 
+[[ -e ~/.ssh/id_ed25519.pub ]] && cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
+
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
 
