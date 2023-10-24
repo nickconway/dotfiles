@@ -4,6 +4,9 @@ set -xe
 
 cd
 export PATH=$PATH:~/bin:~/.local/bin
+if [[ $(uname -n) == "steamdeck" ]]; then
+    export SD=distrobox\ enter\ ubuntu\ --
+fi
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
@@ -37,11 +40,7 @@ sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/
 sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
 sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 
-if [[ $(uname -n) == "steamdeck" ]]; then
-    distrobox enter ubuntu -- "curl -L https://nixos.org/nix/install | sh -s"
-else
-    curl -L https://nixos.org/nix/install | sh -s
-fi
+$SD install-nix
 devbox-install
 devbox global install
 . <(devbox global shellenv --init-hook)
