@@ -81,11 +81,11 @@ if ! command -v docker; then
     sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
 fi
 
+mkdir -p ~/.config/zellij/plugins
+curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
+curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
+
 if [[ $(uname -n) == "steamdeck" ]]; then
-    if [[ ! -e ~/.local/share/sd_pssword_set ]]; then
-        passwd
-        touch .local/share/sd_password_set
-    fi
     sudo touch /etc/subuid /etc/subgid
     sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
     curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
@@ -93,10 +93,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     chmod +x .local/bin/podman
     distrobox create -i ubuntu
 fi
-
-mkdir -p ~/.config/zellij/plugins
-curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
-curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
 sudo chsh $USER -s $(which zsh)
 
