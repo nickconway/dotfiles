@@ -32,7 +32,7 @@ else
 fi
 KERNEL=$(uname -r)
 
-export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin
+export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin
 export GPG_TTY=$TTY
 
 export XDG_CONFIG_HOME="$HOME/.config"
