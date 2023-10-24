@@ -29,7 +29,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
     curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
     chmod +x .local/bin/podman
-    distrobox create ubuntu
+    distrobox create -i ubuntu
     export SD=distrobox\ enter\ ubuntu\ --
 fi
 
