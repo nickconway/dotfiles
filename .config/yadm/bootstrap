@@ -37,9 +37,9 @@ sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/
 sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
 sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 
-mkdir -m 0755 ~/.nix || echo ".nix already exists"
-nix-user-chroot ~/.nix bash -c 'curl -L https://nixos.org/nix/install | sh'
-
+curl -L https://nixos.org/nix/install | sh -s
+nix --extra-experimental-features nix-command run --store ~/.nix nixpkgs.nix nixpkgs.bashInteractive
+mkdir -p ~/.config/nix && echo "store = $HOME/.nix" >> ~/.config/nix/nix.conf
 devbox-install
 devbox global install
 . <(devbox global shellenv --init-hook)
