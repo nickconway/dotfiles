@@ -19,20 +19,6 @@ fi
 yadm decrypt
 yadm alt
 
-# if [[ $(uname -n) == "steamdeck" ]]; then
-#     if [[ ! -e ~/.local/share/sd_pssword_set ]]; then
-#         passwd
-#         touch .local/share/sd_password_set
-#     fi
-#     sudo touch /etc/subuid /etc/subgid
-#     sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
-#     curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-#     curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
-#     chmod +x .local/bin/podman
-#     distrobox create -i ubuntu
-#     export SD=distrobox\ enter\ ubuntu\ --
-# fi
-
 sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
 
@@ -93,6 +79,19 @@ if ! command -v docker; then
     curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
     sh ~/.local/bin/get-docker
     sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
+fi
+
+if [[ $(uname -n) == "steamdeck" ]]; then
+    if [[ ! -e ~/.local/share/sd_pssword_set ]]; then
+        passwd
+        touch .local/share/sd_password_set
+    fi
+    sudo touch /etc/subuid /etc/subgid
+    sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
+    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+    curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
+    chmod +x .local/bin/podman
+    distrobox create -i ubuntu
 fi
 
 mkdir -p ~/.config/zellij/plugins
