@@ -3,13 +3,7 @@
 set -xe
 
 cd
-export PATH=$PATH:~/bin:~/.local/bin
-if [[ $(uname -n) == "steamdeck" ]]; then
-    read -p "Do you want to change the password? (Y/n): " CHANGE_PASS
-    if [[ "$CHANGE_PASS" == "" || "$CHANGE_PASS" == "y" ]]; then
-        passwd
-    export SD=distrobox\ enter\ ubuntu\ --
-fi
+export PATH=$PATH:~/bin:~/.local/bin:~/.local/podman/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
@@ -24,6 +18,17 @@ fi
 
 yadm decrypt
 yadm alt
+
+if [[ $(uname -n) == "steamdeck" ]]; then
+    read -p "Do you want to change the password? (Y/n): " CHANGE_PASS
+    if [[ "$CHANGE_PASS" == "" || "$CHANGE_PASS" == "y" ]]; then
+        passwd
+    fi
+    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix ~/.local
+    distrobox create ubuntu
+    export SD=distrobox\ enter\ ubuntu\ --
+fi
 
 sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
