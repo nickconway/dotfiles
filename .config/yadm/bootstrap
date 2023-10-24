@@ -36,6 +36,28 @@ sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt
 
+if [[ $(uname -r) != *"WSL"* ]] || [[ "$(yadm config local.class)" == *"work"* ]]; then 
+    if [[ $(uname -n) == "steamdeck" ]]; then
+	    git clone https://github.com/tailscale-dev/deck-tailscale.git
+	    cd deck-tailscale
+	    sudo bash tailscale.sh
+	    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
+	    rm -rf deck-tailscale
+
+        sudo touch /etc/subuid /etc/subgid
+        sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
+        curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+        curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
+        chmod +x .local/bin/podman
+        distrobox create -i ubuntu
+
+        exit
+	else
+	    curl -fsSL https://tailscale.com/install.sh | sh
+	    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
+	fi
+fi
+
 curl -L https://nixos.org/nix/install | sh -s
 . $HOME/.nix-profile/etc/profile.d/nix.sh
 
@@ -50,6 +72,8 @@ devbox global install
 
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
+
+sudo chsh $USER -s $(which zsh)
 
 sudo rm /bin/node || true && sudo ln -s $(which node) /bin/node
 sudo rm /bin/npm || true && sudo ln -s $(which npm) /bin/npm
@@ -67,19 +91,6 @@ else
     clone-all
 fi
 
-if [[ $(uname -r) != *"WSL"* ]] || [[ "$(yadm config local.class)" == *"work"* ]]; then 
-    if [[ $(uname -n) == "steamdeck" ]]; then
-	    git clone https://github.com/tailscale-dev/deck-tailscale.git
-	    cd deck-tailscale
-	    sudo bash tailscale.sh
-	    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
-	    rm -rf deck-tailscale
-	else
-	    curl -fsSL https://tailscale.com/install.sh | sh
-	    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
-	fi
-fi
-
 if ! command -v docker; then
     curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
     sh ~/.local/bin/get-docker
@@ -89,16 +100,5 @@ fi
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
-
-if [[ $(uname -n) == "steamdeck" ]]; then
-    sudo touch /etc/subuid /etc/subgid
-    sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
-    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-    curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
-    chmod +x .local/bin/podman
-    distrobox create -i ubuntu
-fi
-
-sudo chsh $USER -s $(which zsh)
 
 yadm checkout .
