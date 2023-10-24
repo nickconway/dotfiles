@@ -20,9 +20,9 @@ yadm decrypt
 yadm alt
 
 if [[ $(uname -n) == "steamdeck" ]]; then
-    read -p "Do you want to change the password? (Y/n): " CHANGE_PASS
-    if [[ "$CHANGE_PASS" == "" || "$CHANGE_PASS" == "y" ]]; then
+    if [[ ! -e ~/.local/share/sd_pssword_set ]]; then
         passwd
+        touch .local/share/sd_password_set
     fi
     sudo touch /etc/subuid /etc/subgid
     sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
