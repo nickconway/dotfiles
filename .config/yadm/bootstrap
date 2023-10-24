@@ -19,19 +19,19 @@ fi
 yadm decrypt
 yadm alt
 
-if [[ $(uname -n) == "steamdeck" ]]; then
-    if [[ ! -e ~/.local/share/sd_pssword_set ]]; then
-        passwd
-        touch .local/share/sd_password_set
-    fi
-    sudo touch /etc/subuid /etc/subgid
-    sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
-    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-    curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
-    chmod +x .local/bin/podman
-    distrobox create -i ubuntu
-    export SD=distrobox\ enter\ ubuntu\ --
-fi
+# if [[ $(uname -n) == "steamdeck" ]]; then
+#     if [[ ! -e ~/.local/share/sd_pssword_set ]]; then
+#         passwd
+#         touch .local/share/sd_password_set
+#     fi
+#     sudo touch /etc/subuid /etc/subgid
+#     sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
+#     curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+#     curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
+#     chmod +x .local/bin/podman
+#     distrobox create -i ubuntu
+#     export SD=distrobox\ enter\ ubuntu\ --
+# fi
 
 sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
@@ -51,9 +51,11 @@ sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/
 sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
 sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 
-$SD install-nix
+curl -L https://nixos.org/nix/install | sh -s
 devbox-install
-DEVBOX_DEBUG=1 devbox global install
+nix run --store ~/.nix nixpkgs.nix nixpkgs.bashInteractive
+mkdir -p ~/.config/nix && echo "store = $HOME/.nix" >> ~/.config/nix/nix.conf
+devbox global install
 . <(devbox global shellenv --init-hook)
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
