@@ -5,6 +5,9 @@ set -xe
 cd
 export PATH=$PATH:~/bin:~/.local/bin
 if [[ $(uname -n) == "steamdeck" ]]; then
+    read -p "Do you want to change the password? (Y/n): " CHANGE_PASS
+    if [[ "$CHANGE_PASS" == "" || "$CHANGE_PASS" == "y" ]]; then
+        passwd
     export SD=distrobox\ enter\ ubuntu\ --
 fi
 
