@@ -7,7 +7,7 @@ if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
     #     # zellij a -c ssh-$SSH_HOSTNAME; exit
     else
         # zellij a -c ssh; exit
-        command -v tmux > /dev/null && tmux new -As ssh; exit
+        command -v tmux > /dev/null && tmux new -As ssh && exit
     fi
 fi
 
