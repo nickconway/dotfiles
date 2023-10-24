@@ -5,6 +5,10 @@ set -xe
 cd
 export PATH=$PATH:~/bin:~/.local/bin:~/.local/podman/bin
 
+if [[ $(uname -n) == "steamdeck" ]]; then
+    sudo steamos-readonly disable
+fi
+
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
 
