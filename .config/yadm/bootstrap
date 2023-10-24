@@ -36,18 +36,18 @@ sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
     && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt
 
+curl -L https://nixos.org/nix/install | sh -s
+. $HOME/.nix-profile/etc/profile.d/nix.sh
+
 curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x ~/.local/bin/devbox-install
 sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
 sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
 sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
-
-curl -L https://nixos.org/nix/install | sh -s
-. $HOME/.nix-profile/etc/profile.d/nix.sh
-nix --extra-experimental-features nix-command run --store ~/.nix nixpkgs.nix nixpkgs.bashInteractive
-mkdir -p ~/.config/nix && echo "store = $HOME/.nix" >> ~/.config/nix/nix.conf
 devbox-install
+
 devbox global install
 . <(devbox global shellenv --init-hook)
+
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
 
