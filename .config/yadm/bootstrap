@@ -50,7 +50,7 @@ if [[ $(uname -r) != *"WSL"* ]] || [[ "$(yadm config local.class)" == *"work"* ]
         sudo touch /etc/subuid /etc/subgid
         sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
         curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-        curl -o ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
+        curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
         chmod +x .local/bin/podman
         distrobox create -i ubuntu
 
