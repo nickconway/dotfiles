@@ -37,7 +37,7 @@ sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/
 sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
 sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 
-mkdir -m 0755 ~/.nix
+mkdir -m 0755 ~/.nix || echo ".nix already exists"
 nix-user-chroot ~/.nix bash -c 'curl -L https://nixos.org/nix/install | sh'
 
 devbox-install
