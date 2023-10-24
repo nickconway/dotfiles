@@ -189,7 +189,7 @@ function yp() {
     fi
 }
 alias yrh="yadm reset --hard"
-alias sysyadm='sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
+alias sysyadm='sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
 alias sycam='sysyadm commit -am'
 alias syi='sysyadm clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys; sysyadm remote set-url origin git@github.com:nickconway/dotfiles.git'
 alias syl='sysyadm pull'
