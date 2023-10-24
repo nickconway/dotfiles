@@ -42,7 +42,7 @@ sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
 
 $SD install-nix
 devbox-install
-devbox global install
+DEVBOX_DEBUG=1 devbox global install
 . <(devbox global shellenv --init-hook)
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
