@@ -105,7 +105,7 @@ curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/
 
 eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
 
-if [[ ! -e ~/.local/bin/docker ]] then
+if [[ ! -e ~/.local/bin/docker ]]; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
     DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless || (DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | bash) && DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless
 fi
