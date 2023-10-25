@@ -128,7 +128,7 @@ if [[ ! -e ~/.local/bin/docker ]]; then
     sh ~/.local/bin/get-docker-rootless || (sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
 
     sudo loginctl enable-linger $(whoami)
-    export DOCKER_HOST=unix:///run/user/1000//docker.sock
+    export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
     systemctl --user start docker
     systemctl --user enable docker
     sudo setcap cap_net_bind_service=ep $(which rootlesskit)

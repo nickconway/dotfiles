@@ -75,4 +75,4 @@ export FZF_TMUX_OPTS="-p --reverse"
 
 export NODE_PATH=$HOME/.npm-global/lib/node_modules
 
-export DOCKER_HOST=unix:///run/user/1000/docker.sock
+export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
