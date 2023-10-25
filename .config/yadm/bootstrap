@@ -8,7 +8,7 @@ export PATH=$PATH:~/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
-if [[ command -v termux-reload-settings ]]; then
+if command -v termux-reload-settings; then
     yadm decrypt
     yadm alt
     pkg install openssh
