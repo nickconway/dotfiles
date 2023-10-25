@@ -8,6 +8,12 @@ export PATH=$PATH:~/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
+if [[ command -v termux-reload-settings ]]; then
+    yadm decrypt
+    yadm alt
+    exit
+fi
+
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
     while [[ "$YADM_CLASS" != "n" ]]; do
