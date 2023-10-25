@@ -114,7 +114,7 @@ eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pu
 
 if [[ ! -e ~/.local/bin/docker ]]; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
-    DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless || (DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | bash) && DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless
+    DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless || (DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless
     systemctl --user start docker
     systemctl --user enable docker
     sudo loginctl enable-linger $(whoami)
