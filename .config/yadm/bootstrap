@@ -25,7 +25,13 @@ yadm checkout .zshrc
 
 . ~/.config/shell/common/encrypted.sh
 
-[[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
+if [[ -e ~/.ssh/authorized_keys ]]; then
+    for f in $(ls ~/.ssh/*.pub); do 
+        grep -qF "$(cat $f)" ~/.ssh/authorized_keys || echo "$(cat $f)" >> ~/.ssh/authorized_keys
+    done
+else
+    [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
+fi
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo steamos-readonly disable
