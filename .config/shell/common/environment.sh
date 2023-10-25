@@ -75,4 +75,4 @@ export FZF_TMUX_OPTS="-p --reverse"
 
 export NODE_PATH=$HOME/.npm-global/lib/node_modules
 
-[[ "$(uname -r)" == *"WSL"* ]] && export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+[[ "$(uname -r)" == *"WSL"* ]] || export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
