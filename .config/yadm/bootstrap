@@ -7,7 +7,6 @@ cd
 export PATH=$PATH:~/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm checkout .
 
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
@@ -114,5 +113,3 @@ if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
 else
     clone-all
 fi
-
-yadm checkout .
