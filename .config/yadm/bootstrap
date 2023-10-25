@@ -115,6 +115,15 @@ eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pu
 if [[ ! -e ~/.local/bin/docker ]]; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
     DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless || (DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | bash) && DOCKER_BIN=~/.local/bin SKIP_IPTABLES=1 sh ~/.local/bin/get-docker-rootless
+    systemctl --user start docker
+    systemctl --user enable docker
+    sudo loginctl enable-linger $(whoami)
+    sudo setcap cap_net_bind_service=ep $(which rootlesskit)
+    systemctl --user restart docker
+
+    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+    mkdir -p $DOCKER_CONFIG/cli-plugins
+    curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
 fi
 
 if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
