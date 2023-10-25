@@ -55,6 +55,12 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
     chmod +x .local/bin/podman
     distrobox create -i ubuntu
+
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    brew install neovim tmux keychain node zellij
 else
     curl -fsSL https://tailscale.com/install.sh | sh
     sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
@@ -70,8 +76,9 @@ else
 
     devbox global install
     . <(devbox global shellenv --init-hook)
-    . ~/.bash_profile
 fi
+
+. ~/.bash_profile
 
 sudo chsh $USER -s $(which zsh)
 

@@ -2,6 +2,8 @@ command -v devbox > /dev/null && eval "$(devbox global shellenv --init-hook)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 if [[ -e /home/$USER/.nix-profile/etc/profile.d/nix.sh ]]; then . /home/$USER/.nix-profile/etc/profile.d/nix.sh; fi
+test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 if [ -f /etc/os-release ]; then
     # freedesktop.org and systemd
