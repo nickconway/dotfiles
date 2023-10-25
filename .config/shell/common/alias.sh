@@ -190,7 +190,7 @@ alias yrh="yadm reset --hard"
 alias ys="yadm status"
 alias yu="yadm upgrade"
 
-alias sysyadm='sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
+alias sysyadm='sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
 alias sya='sysyadm add'
 alias syalt='sysyadm alt'
 alias sycam='sysyadm commit -am'
