@@ -104,7 +104,7 @@ eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pu
 
 if ! command -v docker; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
-    sh ~/.local/bin/get-docker-rootless
+    sh ~/.local/bin/get-docker-rootless || (sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | bash) && sh ~/.local/bin/get-docker-rootless
 fi
 
 if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
