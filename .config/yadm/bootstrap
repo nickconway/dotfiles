@@ -8,9 +8,6 @@ export PATH=$PATH:~/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
-export PATH=$PATH:~/bin:~/.local/bin
-. ~/.config/shell/common/encrypted.sh
-
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
     while [[ "$YADM_CLASS" != "n" ]]; do
@@ -21,6 +18,8 @@ fi
 
 yadm decrypt
 yadm alt
+
+. ~/.config/shell/common/encrypted.sh
 
 [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 
