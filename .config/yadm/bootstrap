@@ -115,3 +115,5 @@ if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
 else
     clone-all
 fi
+
+echo "All done!"
