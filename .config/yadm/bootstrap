@@ -104,6 +104,8 @@ sudo rm /usr/bin/npm || true && sudo ln -s $(which npm) /usr/bin/npm
 npm set prefix ~/.npm-global
 sudo npm set prefix -g ~/.npm-global
 
+nvim --headless '+Lazy! sync' +qa
+
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 
 mkdir -p ~/.config/zellij/plugins
