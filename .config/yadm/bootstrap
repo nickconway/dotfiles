@@ -21,6 +21,7 @@ yadm alt
 
 yadm checkout .bash_profile
 yadm checkout .bashrc
+yadm checkout .zshrc
 
 . ~/.config/shell/common/encrypted.sh
 
@@ -115,5 +116,9 @@ if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
 else
     clone-all
 fi
+
+yadm checkout .bash_profile
+yadm checkout .bashrc
+yadm checkout .zshrc
 
 echo "All done!"
