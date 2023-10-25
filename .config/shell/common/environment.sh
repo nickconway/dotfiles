@@ -74,3 +74,5 @@ export FZF_CTRL_R_OPTS="
 export FZF_TMUX_OPTS="-p --reverse"
 
 export NODE_PATH=$HOME/.npm-global/lib/node_modules
+
+export DOCKER_HOST=unix:///run/user/1000/docker.sock
