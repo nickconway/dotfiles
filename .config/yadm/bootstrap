@@ -19,6 +19,9 @@ fi
 yadm decrypt
 yadm alt
 
+yadm checkout .bash_profile
+yadm checkout .bashrc
+
 . ~/.config/shell/common/encrypted.sh
 
 [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
