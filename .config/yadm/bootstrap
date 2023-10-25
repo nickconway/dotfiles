@@ -3,14 +3,12 @@
 set -xe
 
 cd
-export PATH=$PATH:~/bin:~/.local/bin
 
-if [[ $(uname -n) == "steamdeck" ]]; then
-    sudo steamos-readonly disable
-fi
+export PATH=$PATH:~/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
+. ~/.bash_profile
 
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
@@ -25,8 +23,9 @@ yadm alt
 
 [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 
-export PATH=$PATH:~/bin:~/.local/bin
-. ~/.config/shell/common/encrypted.sh
+if [[ $(uname -n) == "steamdeck" ]]; then
+    sudo steamos-readonly disable
+fi
 
 sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
 sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
@@ -35,49 +34,44 @@ sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || su
 
 [[ "$(yadm config --get-all local.class)" == *"work"* ]] && [[ "$(yadm config --get-all local.class)" == *"vm"* ]] && work-setup
 
-alias sysyadm='yadm --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
-sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
-    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git \
-    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) reset --hard \
-    && sudo env "PATH=$PATH" $(alias sysyadm | cut -d\' -f2) alt
+alias sysyadm='sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
+sysyadm clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
+    && sysyadm remote set-url origin git@github.com:nickconway/dotfiles.git \
+    && sysyadm reset --hard \
+    && sysyadm decrypt
+    && sysyadm alt
 
-if [[ $(uname -r) != *"WSL"* ]] || [[ "$(yadm config local.class)" == *"work"* ]]; then 
-    if [[ $(uname -n) == "steamdeck" ]]; then
-	    git clone https://github.com/tailscale-dev/deck-tailscale.git
-	    cd deck-tailscale
-	    sudo bash tailscale.sh
-	    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
-        cd
-	    rm -rf deck-tailscale
+if [[ $(uname -n) == "steamdeck" ]]; then
+    git clone https://github.com/tailscale-dev/deck-tailscale.git
+    cd deck-tailscale
+    sudo bash tailscale.sh
+    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
+    cd
+    rm -rf deck-tailscale
 
-        sudo touch /etc/subuid /etc/subgid
-        sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
-        curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-        curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
-        chmod +x .local/bin/podman
-        distrobox create -i ubuntu
+    sudo touch /etc/subuid /etc/subgid
+    sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
+    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+    curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
+    chmod +x .local/bin/podman
+    distrobox create -i ubuntu
+else
+    curl -fsSL https://tailscale.com/install.sh | sh
+    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
 
-        exit
-	else
-	    curl -fsSL https://tailscale.com/install.sh | sh
-	    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
-	fi
+    curl -L https://nixos.org/nix/install | sh -s
+    . $HOME/.nix-profile/etc/profile.d/nix.sh
+
+    curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x ~/.local/bin/devbox-install
+    sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
+    sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
+    sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
+    devbox-install
+
+    devbox global install
+    . <(devbox global shellenv --init-hook)
+    . ~/.bash_profile
 fi
-
-curl -L https://nixos.org/nix/install | sh -s
-. $HOME/.nix-profile/etc/profile.d/nix.sh
-
-curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x ~/.local/bin/devbox-install
-sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
-sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
-sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
-devbox-install
-
-devbox global install
-. <(devbox global shellenv --init-hook)
-
-export PATH=$PATH:~/bin:~/.local/bin
-. ~/.config/shell/common/encrypted.sh
 
 sudo chsh $USER -s $(which zsh)
 
@@ -90,21 +84,21 @@ sudo npm set prefix -g ~/.npm-global
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 
+mkdir -p ~/.config/zellij/plugins
+curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
+curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
+
 eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
+
+if ! command -v docker; then
+    curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
+    sh ~/.local/bin/get-docker-rootless
+fi
+
 if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
     source ~/.config/shell/common/work.sh && clone-all-work
 else
     clone-all
 fi
-
-if ! command -v docker; then
-    curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
-    sh ~/.local/bin/get-docker
-    sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker
-fi
-
-mkdir -p ~/.config/zellij/plugins
-curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
-curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 
 yadm checkout .
