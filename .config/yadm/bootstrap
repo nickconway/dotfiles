@@ -8,7 +8,9 @@ export PATH=$PATH:~/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .
-. ~/.bash_profile
+
+export PATH=$PATH:~/bin:~/.local/bin
+. ~/.config/shell/common/encrypted.sh
 
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
@@ -82,7 +84,8 @@ else
     . <(devbox global shellenv --init-hook)
 fi
 
-. ~/.bash_profile
+export PATH=$PATH:~/bin:~/.local/bin
+. ~/.config/shell/common/encrypted.sh
 
 sudo chsh $USER -s $(which zsh)
 
