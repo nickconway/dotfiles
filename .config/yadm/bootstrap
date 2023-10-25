@@ -34,12 +34,11 @@ sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || su
 
 [[ "$(yadm config --get-all local.class)" == *"work"* ]] && [[ "$(yadm config --get-all local.class)" == *"vm"* ]] && work-setup
 
-alias sysyadm='sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
-$(alias sysyadm | cut -d\' -f2) clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
-    && $(alias sysyadm | cut -d\' -f2) remote set-url origin git@github.com:nickconway/dotfiles.git \
-    && $(alias sysyadm | cut -d\' -f2) reset --hard \
-    && $(alias sysyadm | cut -d\' -f2) decrypt \
-    && $(alias sysyadm | cut -d\' -f2) alt
+sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
+    && sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
+    && sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
+    && sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt \
+    && sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     git clone https://github.com/tailscale-dev/deck-tailscale.git
