@@ -12,6 +12,7 @@ yadm checkout .bashrc
 yadm checkout .zshrc
 
 if command -v termux-reload-settings; then
+    apt update -y && apt upgrade -y
     pkg install openssh -y
     exit
 fi
