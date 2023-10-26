@@ -1,3 +1,5 @@
+[[ -z $SSH_AUTH_SOCK ]] && eval (ssh-agent -s)
+
 if command -v termux-reload-settings > /dev/null; then
     . source-ssh-agent
     SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}') | sort | uniq | fzf-tmux -p --prompt=" > ")
@@ -23,8 +25,6 @@ if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
         command -v tmux > /dev/null && tmux new -As ssh && exit
     fi
 fi
-
-command -v keychain > /dev/null && eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
 
 if [ -n "${commands[fzf-share]}" ]; then
     source "$(fzf-share)/key-bindings.$SHELL_NAME"
