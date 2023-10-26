@@ -18,4 +18,6 @@ if [ -n "${commands[fzf-share]}" ]; then
     source "$(fzf-share)/completion.$SHELL_NAME"
 fi
 
+command -v termux-reload-settings > /dev/null && ssh-picker
+
 export NODE_PATH=$HOME/.npm-global/lib/node_modules
