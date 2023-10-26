@@ -134,7 +134,8 @@ function s() {
     if [[ $# -gt 0 ]]; then
         ssh -t $@ SSH_HOSTNAME=$(hostname) '$SHELL' -l
     else
-        ssh -t $(ssh-picker) SSH_HOSTNAME=$(hostname) '$SHELL' -l
+        selected=$((grep "Host " ~/.ssh/config | awk '{print $2}') | sort | uniq | fzf-tmux -p --prompt=" > ")
+        [[ -z $selected ]] || ssh -t $selected SSH_HOSTNAME=$(hostname) '$SHELL' -l
     fi
 
     if [[ -n $TMUX ]]; then
