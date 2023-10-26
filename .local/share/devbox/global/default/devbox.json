@@ -37,7 +37,8 @@
     "ntfy-sh@latest",
     "parallel@latest",
     "skim@latest",
-    "rsync@latest"
+    "rsync@latest",
+    "ssh-ident@latest"
   ],
   "shell": {
     "init_hook": [

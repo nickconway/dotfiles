@@ -457,6 +457,26 @@
         }
       }
     },
+    "ssh-ident@latest": {
+      "last_modified": "2023-10-08T00:43:42Z",
+      "resolved": "github:NixOS/nixpkgs/5aabb5780a11c500981993d49ee93cfa6df9307b#ssh-ident",
+      "source": "devbox-search",
+      "version": "2016-04-21",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/m0nbnlamdxidqynar45mkl55w89bav6m-ssh-ident-2016-04-21"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/drnxiiw30slzcih2hkvk6807kifn8rpv-ssh-ident-2016-04-21"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/5ka897aagbr59d2baz9c0f0jq110407n-ssh-ident-2016-04-21"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/az1hvahcd6yw1vhcsm0jpq9wgkljlj5a-ssh-ident-2016-04-21"
+        }
+      }
+    },
     "sshpass@latest": {
       "last_modified": "2023-09-27T18:02:17Z",
       "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#sshpass",
