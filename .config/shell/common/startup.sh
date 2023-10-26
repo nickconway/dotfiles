@@ -1,4 +1,8 @@
-[[ -z $SSH_AUTH_SOCK ]] && eval $(ssh-agent -s)
+if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+else
+    eval $(ssh-agent -s -a $XDG_RUNTIME_DIR/agent.sock)
+fi
 
 if command -v termux-reload-settings > /dev/null; then
     SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}') | sort | uniq | fzf-tmux -p --prompt=" > ")
