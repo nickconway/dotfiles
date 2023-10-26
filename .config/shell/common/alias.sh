@@ -130,7 +130,13 @@ function s() {
         tmux set prefix C-h
         tmux bind C-h send-prefix
     fi
-    ssh -t $(ssh-picker) SSH_HOSTNAME=$(hostname) '$SHELL' -l
+
+    if [[ $# -gt 0 ]]; then
+        ssh -t $@ SSH_HOSTNAME=$(hostname) '$SHELL' -l
+    else
+        ssh -t $(ssh-picker) SSH_HOSTNAME=$(hostname) '$SHELL' -l
+    fi
+
     if [[ -n $TMUX ]]; then
         tmux bind C-Space send-prefix
         tmux set prefix C-Space
