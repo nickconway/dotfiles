@@ -8,4 +8,4 @@ if [[ -z $selected ]]; then
     exit 0
 fi
 
-ssh $selected
+echo $selected
