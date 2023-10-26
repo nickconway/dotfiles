@@ -1,6 +1,6 @@
 if command -v termux-reload-settings > /dev/null; then
-    ssh-picker;
-    exit;
+    ssh-picker
+    exit
 fi
 
 if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
