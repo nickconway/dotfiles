@@ -37,6 +37,7 @@ KERNEL=$(uname -r)
 export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin
 export GPG_TTY=$TTY
 
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export DEVBOX_PROFILE="$XDG_DATA_HOME/devbox/global/default/.devbox/virtenv/.wrappers"
