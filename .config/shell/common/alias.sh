@@ -123,18 +123,22 @@ function replace () {
 }
 
 function s() {
-    touch /tmp/tmux-$(tmux display -p "#S-#P")
-    hide-tmux-statusbar &
-    pid=$!
-    tmux set prefix C-h
-    tmux bind C-h send-prefix
+    if [[ -n $TMUX ]]; then
+        touch /tmp/tmux-$(tmux display -p "#S-#P")
+        hide-tmux-statusbar &
+        pid=$!
+        tmux set prefix C-h
+        tmux bind C-h send-prefix
+    fi
     ssh -t $@ SSH_HOSTNAME=$(hostname) '$SHELL' -l
-    tmux bind C-Space send-prefix
-    tmux set prefix C-Space
-    kill $pid
-    tmux set status on
-    rm /tmp/tmux-$(tmux display -p "#S-#P")
-    clear
+    if [[ -n $TMUX ]]; then
+        tmux bind C-Space send-prefix
+        tmux set prefix C-Space
+        kill $pid
+        tmux set status on
+        rm /tmp/tmux-$(tmux display -p "#S-#P")
+        clear
+    fi
 }
 
 function svm() {
