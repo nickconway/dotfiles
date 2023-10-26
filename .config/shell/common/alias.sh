@@ -178,7 +178,7 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias v="nvim"
 
-alias x='tmux detach && clear || exit'
+alias x='tmux detach && clear || exit 0'
 
 alias ya="yadm add"
 alias yalt="yadm alt"
