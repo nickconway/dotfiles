@@ -7,10 +7,11 @@ cd
 export PATH=$PATH:~/bin:~/.local/bin
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+yadm checkout .bash_profile
+yadm checkout .bashrc
+yadm checkout .zshrc
 
 if command -v termux-reload-settings; then
-    yadm decrypt
-    yadm alt
     pkg install openssh
     exit
 fi
@@ -25,10 +26,6 @@ fi
 
 yadm decrypt
 yadm alt
-
-yadm checkout .bash_profile
-yadm checkout .bashrc
-yadm checkout .zshrc
 
 . ~/.config/shell/common/encrypted.sh
 
