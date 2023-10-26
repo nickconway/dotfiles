@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+command() (grep "Host " ~/.ssh/config | awk '{print $2}')
+
+selected=$(command | sort | uniq | fzf-tmux -p --prompt=" > ")
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+ssh $selected
