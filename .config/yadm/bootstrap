@@ -69,7 +69,12 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
     cd
     rm -rf deck-tailscale
+elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
+    curl -fsSL https://tailscale.com/install.sh | sh
+    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
+fi
 
+if [[ $(uname -n) == "steamdeck" ]]; then
     sudo touch /etc/subuid /etc/subgid
     sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
     curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
@@ -82,10 +87,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     brew install neovim tmux keychain node zellij
-elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
-    curl -fsSL https://tailscale.com/install.sh | sh
-    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
-
+else
     curl -L https://nixos.org/nix/install | sh -s
     . $HOME/.nix-profile/etc/profile.d/nix.sh
 
