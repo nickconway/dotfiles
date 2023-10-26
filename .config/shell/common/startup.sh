@@ -1,4 +1,4 @@
-[[ -z $SSH_AUTH_SOCK ]] && eval (ssh-agent -s)
+[[ -z $SSH_AUTH_SOCK ]] && eval $(ssh-agent -s)
 
 if command -v termux-reload-settings > /dev/null; then
     . source-ssh-agent
