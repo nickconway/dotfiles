@@ -1,4 +1,4 @@
-SHELL_NAME=$(ps -p $$ | awk 'NR==2 {print $4}')
+SHELL_NAME=$(basename $(ps -p $$ | awk 'NR==2 {print $4}'))
 
 alias ..='cd ..'
 alias ...='cd ../..'
