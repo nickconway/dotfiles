@@ -37,7 +37,11 @@ KERNEL=$(uname -r)
 export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin
 export GPG_TTY=$TTY
 
-export XDG_RUNTIME_DIR=/run/user/$(id -u)
+if command -v termux-reload-settings > /dev/null; then
+    export XDG_RUNTIME_DIR=/data/data/com.termux/files/usr/tmp
+else
+    export XDG_RUNTIME_DIR=/run/user/$(id -u)
+fi
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export DEVBOX_PROFILE="$XDG_DATA_HOME/devbox/global/default/.devbox/virtenv/.wrappers"
