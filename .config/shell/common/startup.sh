@@ -1,4 +1,5 @@
 if command -v termux-reload-settings > /dev/null; then
+    . source-ssh-agent
     SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}') | sort | uniq | fzf-tmux -p --prompt=" > ")
     if [[ -z $SELECTED ]]; then
         unset SELECTED
