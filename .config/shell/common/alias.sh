@@ -145,7 +145,6 @@ function s() {
         kill $pid
         tmux set status on
         rm /tmp/tmux-$(tmux display -p "#S-#P")
-        clear
     fi
 }
 
