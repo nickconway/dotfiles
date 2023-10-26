@@ -5,6 +5,7 @@ set -xe
 cd
 
 export PATH=$PATH:~/bin:~/.local/bin
+[[ -z $SSH_AUTH_SOCK ]] && eval (ssh-agent -s)
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .bash_profile
@@ -120,8 +121,6 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plu
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
-
-eval `keychain -q --nogui --eval $(find $HOME/.ssh/ -name "id*" -not -path "*.pub")`
 
 if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
