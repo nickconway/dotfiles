@@ -1,4 +1,7 @@
-command -v termux-reload-settings > /dev/null && ssh-picker && exit || exit
+if command -v termux-reload-settings > /dev/null; then
+    ssh-picker;
+    exit;
+fi
 
 if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
