@@ -38,7 +38,7 @@ export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin
 export GPG_TTY=$TTY
 
 if command -v termux-reload-settings > /dev/null; then
-    export XDG_RUNTIME_DIR=/data/data/com.termux/files/usr/tmp
+    export XDG_RUNTIME_DIR=$HOME/.termux
 else
     export XDG_RUNTIME_DIR=/run/user/$(id -u)
 fi
