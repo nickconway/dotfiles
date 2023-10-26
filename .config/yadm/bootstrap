@@ -82,7 +82,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     brew install neovim tmux keychain node zellij
-else
+elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
     curl -fsSL https://tailscale.com/install.sh | sh
     sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
 
