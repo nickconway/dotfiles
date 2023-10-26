@@ -1,6 +1,5 @@
 if command -v termux-reload-settings > /dev/null; then
-    yadm pull
-    ssh-picker
+    s && exit
     exit
 fi
 
