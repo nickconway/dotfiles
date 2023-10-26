@@ -13,7 +13,7 @@ yadm checkout .zshrc
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
-    pkg install openssh -y
+    pkg install openssh gnupg -y
     yadm decrypt
     yadm alt
     exit
