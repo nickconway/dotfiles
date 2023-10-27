@@ -5,7 +5,11 @@ set -xe
 cd
 
 export PATH=$PATH:~/bin:~/.local/bin
-[[ -z $SSH_AUTH_SOCK ]] && eval (ssh-agent -s)
+if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+else
+    eval $(ssh-agent -s -a $XDG_RUNTIME_DIR/agent.sock)
+fi
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 yadm checkout .bash_profile
