@@ -1,5 +1,7 @@
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+elif ! ssh-add -l; then
+    eval $(ssh-agent -t 1h -s -a $XDG_RUNTIME_DIR/agent.sock)
 else
     eval $(ssh-agent -t 1h -s -a $XDG_RUNTIME_DIR/agent.sock)
 fi
