@@ -28,7 +28,6 @@
     "wget@latest",
     "tree-sitter@latest",
     "zsh-completions@latest",
-    "python@latest",
     "libiconv@latest",
     "tmuxp@latest",
     "cargo@latest",

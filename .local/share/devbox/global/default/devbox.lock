@@ -335,27 +335,6 @@
         }
       }
     },
-    "python@latest": {
-      "last_modified": "2023-10-03T09:29:46Z",
-      "plugin_version": "0.0.1",
-      "resolved": "github:NixOS/nixpkgs/e2b8feae8470705c3f331901ae057da3095cea10#python312",
-      "source": "devbox-search",
-      "version": "3.12.0",
-      "systems": {
-        "aarch64-darwin": {
-          "store_path": "/nix/store/4w9xnvsbw0b3nyzc64alz7nv7ay4a88j-python3-3.12.0"
-        },
-        "aarch64-linux": {
-          "store_path": "/nix/store/dgg6kzpv7yg3h83m6aa5vnplvfghcdyq-python3-3.12.0"
-        },
-        "x86_64-darwin": {
-          "store_path": "/nix/store/grmb7mw4ixqrbrp87yqigmxiaydnqcg0-python3-3.12.0"
-        },
-        "x86_64-linux": {
-          "store_path": "/nix/store/7gldca15px30wpk6bfrscn19sdg755q8-python3-3.12.0"
-        }
-      }
-    },
     "rbw@latest": {
       "last_modified": "2023-09-27T18:02:17Z",
       "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#rbw",
