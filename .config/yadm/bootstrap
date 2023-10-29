@@ -128,6 +128,7 @@ curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/
 
 if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
+    chmod +x ~/.local/bin/get-docker-rootless
     export DOCKER_BIN=~/.local/bin
     export SKIP_IPTABLES=1 
     sh ~/.local/bin/get-docker-rootless || (sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
@@ -137,6 +138,8 @@ if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     systemctl --user start docker
     systemctl --user enable docker
     sudo setcap cap_net_bind_service=ep $(which rootlesskit)
+    sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
+    sudo sysctl --system
     systemctl --user restart docker
 
     DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}

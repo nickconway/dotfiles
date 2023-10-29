@@ -2,6 +2,8 @@
 
 cd ~/docker/pihole
 docker compose up -d
+cd ~/docker/traefik
+docker compose up -d
 for d in ~/docker/*; do
     cd $d
     docker compose up -d
