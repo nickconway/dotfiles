@@ -9,6 +9,8 @@ ntfy publish notifications "Backing up docker containers"
 stop-containers
 sudo tar czvf docker.tar.gz docker
 start-containers
+rsync -ah --progress ~/docker.tar.gz ~/Dropbox/Documents/Backups/docker.tar.gz
 until ntfy publish notifications "Backing up complete" > /dev/null; do
     true
 done
+rm ~/docker.tar.gz
