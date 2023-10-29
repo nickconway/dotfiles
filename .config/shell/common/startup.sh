@@ -1,7 +1,4 @@
-if ! ssh-add -l > /dev/null 2>&1; then
-    rm $XDG_RUNTIME_DIR/agent.sock
-    eval $(ssh-agent -t 1h -s -a $XDG_RUNTIME_DIR/agent.sock)
-elif [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
+if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
 else
     eval $(ssh-agent -t 1h -s -a $XDG_RUNTIME_DIR/agent.sock)
