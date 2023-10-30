@@ -145,7 +145,7 @@ function s() {
     if [[ -n $TMUX ]]; then
         touch /tmp/tmux-$(tmux display -p "#S-#P")
         hide-tmux-statusbar &
-        pid=$!
+        STATUSBAR_PID=$!
         tmux set prefix C-h
         tmux bind C-h send-prefix
     fi
@@ -161,7 +161,7 @@ function s() {
     if [[ -n $TMUX ]]; then
         tmux bind C-Space send-prefix
         tmux set prefix C-Space
-        kill $pid
+        kill $STATUSBAR_PID
         tmux set status on
         rm /tmp/tmux-$(tmux display -p "#S-#P")
     fi
