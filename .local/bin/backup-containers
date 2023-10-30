@@ -5,12 +5,10 @@ set -xe
 export PATH=$PATH:/home/nick/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin
 
 cd ~
-ntfy publish notifications "Backing up docker containers"
+# ntfy publish notifications "Backing up docker containers"
 stop-containers
-sudo tar czvf docker.tar.gz docker
+sudo rsync -ahuvz --progress ~/docker ~/Dropbox/Documents/Backups/
 start-containers
-rsync -auzh --progress ~/docker.tar.gz ~/Dropbox/Documents/Backups/docker.tar.gz
 until ntfy publish notifications "Backing up complete" > /dev/null; do
     true
 done
-rm ~/docker.tar.gz
