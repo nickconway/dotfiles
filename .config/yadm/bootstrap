@@ -8,7 +8,7 @@ export PATH=$PATH:~/bin:~/.local/bin
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
 else
-    eval $(ssh-agent -s -a $XDG_RUNTIME_DIR/agent.sock)
+    eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
 fi
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
