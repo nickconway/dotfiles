@@ -4,6 +4,8 @@ set -xe
 
 cd
 
+FAILED_COMMANDS=()
+
 export PATH=$PATH:~/bin:~/.local/bin
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
@@ -54,8 +56,8 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     yay -S base-devel
 fi
 
-sudo grep $USER /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
-sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
+sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers" || FAILED_COMMANDS+="Disabling sudo password failed"
+sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd" || FAILED_COMMANDS+="NTFY ssh setup failed"
 
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*
 
@@ -66,6 +68,7 @@ sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
     && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
+    || FAILED_COMMANDS+="System YADM failed"
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     git clone https://github.com/tailscale-dev/deck-tailscale.git
@@ -76,7 +79,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     rm -rf deck-tailscale
 elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
     curl -fsSL https://tailscale.com/install.sh | sh
-    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
+    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY || FAILED_COMMANDS+="Tailscale setup failed"
 fi
 
 if [[ $(uname -n) == "steamdeck" ]]; then
@@ -109,14 +112,14 @@ fi
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
 
-sudo chsh $USER -s $(which zsh)
+sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+="Changing default shell failed"
 
-sudo rm /bin/node || true && sudo ln -s $(which node) /bin/node
-sudo rm /bin/npm || true && sudo ln -s $(which npm) /bin/npm
-sudo rm /usr/bin/node || true && sudo ln -s $(which node) /usr/bin/node
-sudo rm /usr/bin/npm || true && sudo ln -s $(which npm) /usr/bin/npm
+(sudo rm /bin/node || true) && sudo ln -s $(which node) /bin/node || FAILED_COMMANDS+="Linking /bin/node failed"
+(sudo rm /bin/npm || true) && sudo ln -s $(which npm) /bin/npm || FAILED_COMMANDS+="Linking /bin/npm failed"
+(sudo rm /usr/bin/node || true) && sudo ln -s $(which node) /usr/bin/node || FAILED_COMMANDS+="Linking /usr/bin/node failed"
+(sudo rm /usr/bin/npm || true) && sudo ln -s $(which npm) /usr/bin/npm || FAILED_COMMANDS+="Linking /usr/bin/npm failed"
 npm set prefix ~/.npm-global
-sudo npm set prefix -g ~/.npm-global
+sudo npm set prefix -g ~/.npm-global || FAILED_COMMANDS+="Setting global npm prefix failed"
 
 nvim --headless '+Lazy! sync' +qa
 
@@ -133,14 +136,16 @@ if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     export SKIP_IPTABLES=1 
     sh ~/.local/bin/get-docker-rootless || (sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
 
-    sudo loginctl enable-linger $(whoami)
+    sudo loginctl enable-linger $(whoami) || FAILED_COMMANDS+="Enabling user systemctl failed"
     export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
     systemctl --user start docker
     systemctl --user enable docker
-    sudo setcap cap_net_bind_service=ep $(which rootlesskit)
-    sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
-    sudo sysctl --system
-    systemctl --user restart docker
+    if [[ "$(yadm config --get-all local.class)" == *"server"* ]]; then
+        sudo setcap cap_net_bind_service=ep $(which rootlesskit)
+        sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
+        sudo sysctl --system
+        systemctl --user restart docker
+    fi
 
     DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
     mkdir -p $DOCKER_CONFIG/cli-plugins
@@ -161,3 +166,7 @@ yadm checkout .zshrc
 curl -d "Bootstrapping complete on $(hostname)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
 
 echo "All done!"
+
+for f in $FAILED_COMMANDS; do
+    echo $f
+done
