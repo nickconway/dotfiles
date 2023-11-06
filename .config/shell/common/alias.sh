@@ -117,7 +117,7 @@ function mkcd() {
 alias n="nvim"
 
 function np() {
-    ntfy publish -u $@
+    ntfy publish $@
 }
 
 function npa() {
