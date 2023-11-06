@@ -18,14 +18,14 @@ fi
 
 if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
-        command -v tmux > /dev/null && tmux new -As main
+        command -v tmux > /dev/null && tmux new -As main $SHELL_NAME
         # zellij a -c main
     # elif [[ $SSH_HOSTNAME != "" ]] && [[ -n SSH_HOSTNAME ]]; then
     #     tmux new -As ssh-$SSH_HOSTNAME; exit
     #     # zellij a -c ssh-$SSH_HOSTNAME; exit
     else
         # zellij a -c ssh; exit
-        command -v tmux > /dev/null && tmux new -As ssh && exit
+        command -v tmux > /dev/null && tmux new -As ssh $SHELL_NAME && exit
     fi
 fi
 
