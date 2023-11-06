@@ -68,7 +68,7 @@ sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
     && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
-    || FAILED_COMMANDS+="System YADM failed"
+    # || FAILED_COMMANDS+="System YADM failed"
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     git clone https://github.com/tailscale-dev/deck-tailscale.git
