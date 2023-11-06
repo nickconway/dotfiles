@@ -165,7 +165,7 @@ yadm checkout .zshrc
 
 echo "All done!"
 
-if [[ $FAILED_COMMANDS != () ]]; then
+if ! [[ ${#FAILED_COMMANDS[@]} -eq 0 ]]; then
     echo "The following commands failed"
 fi
 
