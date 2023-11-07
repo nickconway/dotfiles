@@ -112,8 +112,6 @@ fi
 export PATH=$PATH:~/bin:~/.local/bin
 . ~/.config/shell/common/encrypted.sh
 
-sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+="Changing default shell failed"
-
 (sudo rm /bin/node || true) && sudo ln -s $(which node) /bin/node || FAILED_COMMANDS+="Linking /bin/node failed"
 (sudo rm /bin/npm || true) && sudo ln -s $(which npm) /bin/npm || FAILED_COMMANDS+="Linking /bin/npm failed"
 (sudo rm /usr/bin/node || true) && sudo ln -s $(which node) /usr/bin/node || FAILED_COMMANDS+="Linking /usr/bin/node failed"
@@ -168,6 +166,8 @@ rm -rf Hack.zip
 yadm checkout .bash_profile
 yadm checkout .bashrc
 yadm checkout .zshrc
+
+sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+="Changing default shell failed"
 
 echo "All done!"
 
