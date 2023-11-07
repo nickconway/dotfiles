@@ -201,6 +201,7 @@ alias x='tmux detach -P && clear || exit 0'
 alias ya="yadm add"
 alias yalt="yadm alt"
 alias yau="yadm add -u"
+alias yb='yadm bootstrap'
 alias yc="yadm commit"
 alias yca="yadm commit -a"
 alias ycam="yadm commit -a -m"

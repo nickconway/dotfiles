@@ -157,9 +157,9 @@ else
     clone-all
 fi
 
-mkdir -p .local/share/fonts/hack-nerd-font
+mkdir -p ~/.local/share/fonts/hack-nerd-font
 wget -O Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
-unzip Hack.zip -d .local/share/fonts/hack-nerd-font
+unzip Hack.zip -d ~/.local/share/fonts/hack-nerd-font
 fc-cache -fv
 rm -rf Hack.zip
 
