@@ -21,6 +21,8 @@ alias c='clear'
 
 alias clipqr='xclip -o | qrencode -t utf8'
 
+alias dbr='eval "$(devbox global shellenv --recompute)"'
+
 alias dco="docker compose"
 alias dcb="docker compose build"
 alias dce="docker compose exec"
