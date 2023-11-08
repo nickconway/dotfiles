@@ -596,6 +596,26 @@
         }
       }
     },
+    "unzip@latest": {
+      "last_modified": "2023-10-25T20:49:13Z",
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#unzip",
+      "source": "devbox-search",
+      "version": "6.0",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/lc06gja1nwkmqi20x0ckghphbkx7dp99-unzip-6.0"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/5vbmpd7k56whlvbg884hhvn5hy2dl2j0-unzip-6.0"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/c6y6v83alrb8hg2p14z5zgmhdk0pvymw-unzip-6.0"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/8ksjsax1pyzpk416g3n112nij5g5zzm8-unzip-6.0"
+        }
+      }
+    },
     "wget@latest": {
       "last_modified": "2023-09-27T18:02:17Z",
       "resolved": "github:NixOS/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9#wget",

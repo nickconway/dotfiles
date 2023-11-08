@@ -37,7 +37,8 @@
     "parallel@latest",
     "skim@latest",
     "rsync@latest",
-    "ssh-ident@latest"
+    "ssh-ident@latest",
+    "unzip@latest"
   ],
   "shell": {
     "init_hook": [
