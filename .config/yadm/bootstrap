@@ -28,7 +28,7 @@ fi
 
 if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class: " YADM_CLASS
-    while [[ "$YADM_CLASS" != "n" ]]; do
+    while [[ "$YADM_CLASS" != "n" ]] && [[ "$YADM_CLASS" != "" ]]; do
         yadm config --add local.class $YADM_CLASS
         read -p "Enter another YADM class (n to quit): " YADM_CLASS
     done
@@ -63,18 +63,18 @@ sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || su
 
 [[ "$(yadm config --get-all local.class)" == *"work"* ]] && [[ "$(yadm config --get-all local.class)" == *"vm"* ]] && work-setup
 
-sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
+(sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
     && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
-    && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
-    # || FAILED_COMMANDS+="System YADM failed"
+    && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt)
+    || FAILED_COMMANDS+="System YADM failed"
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     git clone https://github.com/tailscale-dev/deck-tailscale.git
     cd deck-tailscale
     sudo bash tailscale.sh
-    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
+    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY || FAILED_COMMAND+="Tailscale setup failed"
     cd
     rm -rf deck-tailscale
 elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
@@ -94,7 +94,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
 
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    brew install neovim tmux keychain node zellij
+    brew install neovim tmux node zellij
 else
     curl -L https://nixos.org/nix/install | sh -s
     . $HOME/.nix-profile/etc/profile.d/nix.sh
@@ -126,6 +126,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plu
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
 curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
+curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
 
 if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
@@ -151,12 +152,6 @@ if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 fi
 
-if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
-    source ~/.config/shell/common/work.sh && clone-all-work
-else
-    clone-all
-fi
-
 mkdir -p ~/.local/share/fonts/hack-nerd-font
 wget -O Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
 unzip Hack.zip -d ~/.local/share/fonts/hack-nerd-font
@@ -166,6 +161,12 @@ rm -rf Hack.zip
 yadm checkout .bash_profile
 yadm checkout .bashrc
 yadm checkout .zshrc
+
+if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
+    source ~/.config/shell/common/work.sh && clone-all-work
+else
+    clone-all
+fi
 
 sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+="Changing default shell failed"
 
