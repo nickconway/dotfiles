@@ -96,6 +96,14 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     distrobox create -i ubuntu
 fi
 
+if command -v apt-get > /dev/null; then
+    sudo apt-get install build-essential procps curl file git
+elif command -v yum > /dev/null; then
+    sudo yum groupinstall 'Development Tools'
+    sudo yum install procps-ng curl file git
+elif command -v pacman > /dev/null; then
+    sudo pacman -Syu base-devel procps-ng curl file git
+fi
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || (mkdir -p ~/.local/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.local/homebrew)
 eval "$(brew shellenv)"
 brew update --force --quiet
