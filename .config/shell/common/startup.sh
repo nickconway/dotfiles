@@ -1,8 +1,6 @@
+[[ -d ~/.local/homebrew ]] && eval "$(~/.local/homebrew/bin/brew shellenv)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
-[[ -e /home/$USER/.nix-profile/etc/profile.d/nix.sh ]] && . /home/$USER/.nix-profile/etc/profile.d/nix.sh
-[[ -d ~/.linuxbrew ]] && eval "$(~/.linuxbrew/bin/brew shellenv)"
-[[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock

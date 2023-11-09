@@ -37,7 +37,6 @@ else
 fi
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
-export DEVBOX_PROFILE="$XDG_DATA_HOME/devbox/global/default/.devbox/virtenv/.wrappers"
 
 export VISUAL=nvim
 export EDITOR=nvim

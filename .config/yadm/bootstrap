@@ -71,16 +71,20 @@ sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt \
     || FAILED_COMMANDS+="System YADM failed"
 
-if [[ $(uname -n) == "steamdeck" ]]; then
-    git clone https://github.com/tailscale-dev/deck-tailscale.git
-    cd deck-tailscale
-    sudo bash tailscale.sh
-    sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY || FAILED_COMMAND+="Tailscale setup failed"
-    cd
-    rm -rf deck-tailscale
-elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
-    curl -fsSL https://tailscale.com/install.sh | sh
-    sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY || FAILED_COMMANDS+="Tailscale setup failed"
+if ! command -v tailscale > /dev/null; then
+    if [[ $(uname -n) == "steamdeck" ]]; then
+        git clone https://github.com/tailscale-dev/deck-tailscale.git
+        cd deck-tailscale
+        sudo bash tailscale.sh
+        sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY || FAILED_COMMAND+="Tailscale setup failed"
+        cd
+        rm -rf deck-tailscale
+    elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
+        curl -fsSL https://tailscale.com/install.sh | sh
+        sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY || FAILED_COMMANDS+="Tailscale setup failed"
+    fi
+else
+    sudo tailscale update
 fi
 
 if [[ $(uname -n) == "steamdeck" ]]; then
@@ -93,14 +97,10 @@ if [[ $(uname -n) == "steamdeck" ]]; then
 fi
 
 mkdir -p ~/.local/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.local/homebrew
-eval "$(~/.local/homebrew/bin/brew shellenv)"
+eval "$(brew shellenv)"
 brew update --force --quiet
 chmod -R go-w "$(brew --prefix)/share/zsh"
 
-(sudo rm /bin/node || true) && sudo ln -s $(which node) /bin/node || FAILED_COMMANDS+="Linking /bin/node failed"
-(sudo rm /bin/npm || true) && sudo ln -s $(which npm) /bin/npm || FAILED_COMMANDS+="Linking /bin/npm failed"
-(sudo rm /usr/bin/node || true) && sudo ln -s $(which node) /usr/bin/node || FAILED_COMMANDS+="Linking /usr/bin/node failed"
-(sudo rm /usr/bin/npm || true) && sudo ln -s $(which npm) /usr/bin/npm || FAILED_COMMANDS+="Linking /usr/bin/npm failed"
 npm set prefix ~/.npm-global
 sudo npm set prefix -g ~/.npm-global || FAILED_COMMANDS+="Setting global npm prefix failed"
 
