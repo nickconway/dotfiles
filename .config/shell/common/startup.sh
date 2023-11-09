@@ -34,8 +34,7 @@ export NODE_PATH=$HOME/.npm-global/lib/node_modules
 [[ "$(basename $SHELL)" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
 if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
     if [[ -z $SSH_CONNECTION ]]; then
-        # command -v tmux > /dev/null && tmux new -As main $TMUX_SHELL && exit 0
-        command -v tmux > /dev/null && tmux new -As main $TMUX_SHELL
+        command -v tmux > /dev/null && tmux new -As main $TMUX_SHELL && exit 0
         # zellij a -c main
     # elif [[ $SSH_HOSTNAME != "" ]] && [[ -n SSH_HOSTNAME ]]; then
     #     tmux new -As ssh-$SSH_HOSTNAME; exit
