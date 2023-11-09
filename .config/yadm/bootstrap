@@ -140,7 +140,7 @@ fi
 if command -v fc-cache > /dev/null; then
     mkdir -p ~/.local/share/fonts/hack-nerd-font
     wget -O Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
-    unzip Hack.zip -o -d ~/.local/share/fonts/hack-nerd-font
+    unzip -o Hack.zip -d ~/.local/share/fonts/hack-nerd-font
     fc-cache -fv
     rm -rf Hack.zip
 fi
