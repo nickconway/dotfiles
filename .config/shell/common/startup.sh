@@ -1,4 +1,4 @@
-command -v && eval "$($(brew --prefix)/bin/brew shellenv)"
+command -v brew > /dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 
@@ -20,10 +20,7 @@ if command -v termux-reload-settings > /dev/null; then
     fi
 fi
 
-if command -v fzf-share > /dev/null; then
-    source "$(fzf-share)/key-bindings.$SHELL_NAME"
-    source "$(fzf-share)/completion.$SHELL_NAME"
-fi
+[[ -f ~/.fzf.$SHELL_NAME ]] && source ~/.fzf.$SHELL_NAME
 
 [[ "$(basename $SHELL)" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
 if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
