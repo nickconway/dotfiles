@@ -1,4 +1,3 @@
-command -v devbox > /dev/null && eval "$(devbox global shellenv --init-hook)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 [[ -e /home/$USER/.nix-profile/etc/profile.d/nix.sh ]] && . /home/$USER/.nix-profile/etc/profile.d/nix.sh
@@ -27,9 +26,6 @@ if command -v fzf-share > /dev/null; then
     source "$(fzf-share)/key-bindings.$SHELL_NAME"
     source "$(fzf-share)/completion.$SHELL_NAME"
 fi
-
-export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin
-export NODE_PATH=$HOME/.npm-global/lib/node_modules
 
 [[ "$(basename $SHELL)" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
 if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then

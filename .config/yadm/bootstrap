@@ -6,7 +6,7 @@ cd
 
 FAILED_COMMANDS=()
 
-export PATH=$PATH:~/bin:~/.local/bin
+export PATH=$PATH:~/bin:~/.local/bin:~/.local/homebrew/bin
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
 else
@@ -90,28 +90,12 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
     chmod +x .local/bin/podman
     distrobox create -i ubuntu
-
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    brew install neovim tmux node zellij
-else
-    curl -L https://nixos.org/nix/install | sh -s
-    . $HOME/.nix-profile/etc/profile.d/nix.sh
-
-    curl -fsSLo ~/.local/bin/devbox-install https://get.jetpack.io/devbox && chmod +x ~/.local/bin/devbox-install
-    sed -i 's/readonly INSTALL_DIR="\/usr\/local\/bin"/readonly INSTALL_DIR="$HOME\/.local\/bin"/g' ~/.local/bin/devbox-install
-    sed -i '/confirm \"Install.*/d' ~/.local/bin/devbox-install
-    sed -i 's/$(command -v sudo || true) //g' ~/.local/bin/devbox-install
-    devbox-install
-
-    devbox global install
-    . <(devbox global shellenv --init-hook)
 fi
 
-export PATH=$PATH:~/bin:~/.local/bin
-. ~/.config/shell/common/encrypted.sh
+mkdir -p ~/.local/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.local/homebrew
+eval "$(~/.local/homebrew/bin/brew shellenv)"
+brew update --force --quiet
+chmod -R go-w "$(brew --prefix)/share/zsh"
 
 (sudo rm /bin/node || true) && sudo ln -s $(which node) /bin/node || FAILED_COMMANDS+="Linking /bin/node failed"
 (sudo rm /bin/npm || true) && sudo ln -s $(which npm) /bin/npm || FAILED_COMMANDS+="Linking /bin/npm failed"
