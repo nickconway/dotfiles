@@ -153,10 +153,10 @@ function s() {
     fi
 
     if [[ $# -gt 0 ]]; then
-        ssh -t $@ SSH_HOSTNAME=$(hostname) '$SHELL' -l
+        ssh -t $@ SSH_HOSTNAME=$(hostname)
     else
         SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}') | sort | uniq | fzf-tmux -p --prompt=" > ")
-        [[ -z $SELECTED ]] || ssh -t $SELECTED SSH_HOSTNAME=$(hostname) '$SHELL' -l
+        [[ -z $SELECTED ]] || ssh -t $SELECTED SSH_HOSTNAME=$(hostname)
         unset SELECTED
     fi
 
