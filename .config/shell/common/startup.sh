@@ -1,5 +1,4 @@
-[[ -d /home/linuxbrew/.linuxbrew/bin ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-[[ -d ~/.local/homebrew ]] && eval "$(~/.local/homebrew/bin/brew shellenv)"
+command -v && eval "$($(brew --prefix)/bin/brew shellenv)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 
