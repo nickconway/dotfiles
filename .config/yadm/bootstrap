@@ -172,7 +172,7 @@ if ! [[ ${#FAILED_COMMANDS[@]} -eq 0 ]]; then
     echo "The following commands failed"
 fi
 
-for f in $FAILED_COMMANDS; do
+for f in ${FAILED_COMMANDS[@]}; do
     echo "$f"
 done
 
