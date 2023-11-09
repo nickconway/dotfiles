@@ -27,10 +27,9 @@ brew install \
     wget \
     tree-sitter \
     zsh-completions \
-    libiconv \
     tmuxp \
     cmake \
-    ntfy-sh \
+    ntfy \
     parallel \
-    skim \
     rsync \
+    gcc \

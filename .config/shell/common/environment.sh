@@ -27,7 +27,7 @@ else
 fi
 KERNEL=$(uname -r)
 
-export PATH=$PATH:~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin:~/.local/homebrew/bin
+export PATH=~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$PATH
 export GPG_TTY=$TTY
 
 if command -v termux-reload-settings > /dev/null; then
