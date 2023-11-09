@@ -97,10 +97,10 @@ if [[ $(uname -n) == "steamdeck" ]]; then
 fi
 
 if command -v apt-get > /dev/null; then
-    sudo apt-get install build-essential procps curl file git
+    sudo apt-get install build-essential procps curl file git -y
 elif command -v yum > /dev/null; then
-    sudo yum groupinstall 'Development Tools'
-    sudo yum install procps-ng curl file git
+    sudo yum groupinstall 'Development Tools' -y
+    sudo yum install procps-ng curl file git -y
 elif command -v pacman > /dev/null; then
     sudo pacman -Syu base-devel procps-ng curl file git
 fi
@@ -172,7 +172,7 @@ if ! [[ ${#FAILED_COMMANDS[@]} -eq 0 ]]; then
     echo "The following commands failed"
 fi
 
-for f in ${FAILED_COMMANDS[@]}; do
+for f in "${FAILED_COMMANDS[@]}"; do
     echo "$f"
 done
 
