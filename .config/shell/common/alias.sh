@@ -199,7 +199,7 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias v="nvim"
 
-alias x='[[ $(tmux list-panes | wc -l) -gt 1 ]] && exit 0 || (tmux detach && clear)'
+alias x='[[ $(tmux list-panes | wc -l) -gt 1 ]] && exit 0 || (tmux detach; clear)'
 
 alias ya="yadm add"
 alias yalt="yadm alt"
