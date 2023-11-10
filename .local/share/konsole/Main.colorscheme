@@ -1,14 +1,14 @@
 [Background]
-Color=21,27,33
+Color=30,33,39
 
 [BackgroundFaint]
-Color=22,32,45
+Color=49,54,59
 
 [BackgroundIntense]
-Color=19,46,69
+Color=0,0,0
 
 [Color0]
-Color=21,27,33
+Color=40,44,52
 
 [Color0Faint]
 Color=49,54,59
@@ -17,7 +17,7 @@ Color=49,54,59
 Color=127,140,141
 
 [Color1]
-Color=237,21,21
+Color=224,108,117
 
 [Color1Faint]
 Color=120,50,40
@@ -26,16 +26,16 @@ Color=120,50,40
 Color=192,57,43
 
 [Color2]
-Color=71,146,176
+Color=152,195,121
 
 [Color2Faint]
-Color=52,108,146
+Color=23,162,98
 
 [Color2Intense]
-Color=171,207,228
+Color=28,220,154
 
 [Color3]
-Color=246,116,0
+Color=229,192,123
 
 [Color3Faint]
 Color=182,86,25
@@ -44,7 +44,7 @@ Color=182,86,25
 Color=253,188,75
 
 [Color4]
-Color=29,153,243
+Color=97,175,239
 
 [Color4Faint]
 Color=27,102,143
@@ -53,7 +53,7 @@ Color=27,102,143
 Color=61,174,233
 
 [Color5]
-Color=155,89,182
+Color=190,80,70
 
 [Color5Faint]
 Color=97,74,115
@@ -62,38 +62,39 @@ Color=97,74,115
 Color=142,68,173
 
 [Color6]
-Color=227,255,194
+Color=86,182,194
 
 [Color6Faint]
-Color=91,118,56
+Color=24,108,96
 
 [Color6Intense]
-Color=141,189,85
+Color=22,160,133
 
 [Color7]
-Color=239,240,241
+Color=151,158,171
 
 [Color7Faint]
 Color=99,104,109
 
 [Color7Intense]
-Color=252,252,252
+Color=255,255,255
 
 [Foreground]
-Color=239,240,241
+Color=171,178,191
 
 [ForegroundFaint]
-Color=220,230,231
+Color=239,240,241
 
 [ForegroundIntense]
-Color=252,252,252
+Color=255,255,255
 
 [General]
 Anchor=0.5,0.5
-Blur=false
+Blur=true
 ColorRandomization=false
-Description=SteamOS
+Description=Main
 FillStyle=Tile
-Opacity=0.9
+Opacity=0.25
 Wallpaper=
+WallpaperFlipType=NoFlip
 WallpaperOpacity=1
