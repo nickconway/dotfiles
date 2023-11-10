@@ -201,7 +201,7 @@ yadm checkout .zshrc
 if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
     source ~/.config/shell/common/work.sh && clone-all-work
 else
-    clone-all
+    [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git) ]] || clone-all
 fi
 
 sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells" || FAILED_COMMANDS+="Adding to /etc/shells"
