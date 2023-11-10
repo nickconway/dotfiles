@@ -56,7 +56,7 @@ export DROPBOX=/c/Users/nickc/Dropbox
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" --no-use # This loads nvm
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
 

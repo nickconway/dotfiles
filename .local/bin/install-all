@@ -4,6 +4,7 @@ brew install \
     zellij \
     tmux \
     node \
+    nvm \
     bat \
     fd \
     zsh \

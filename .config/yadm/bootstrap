@@ -108,6 +108,8 @@ NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Ho
 eval "$(brew shellenv)"
 brew update --force --quiet
 chmod -R go-w "$(brew --prefix)/share/zsh"
+
+mkdir ~/.nvm
 install-all
 
 $HOMEBREW_PREFIX/opt/fzf/install --all
