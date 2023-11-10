@@ -166,8 +166,8 @@ fi
     && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
     && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 
-if [[ "$(yadm config --get-all local.class)" == *"surface"* ]] && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
-    if command -v apt > /dev/null; then
+if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
+    if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
         wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
         echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
         sudo apt update -y
@@ -175,6 +175,21 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]] && [[ ! -e /etc/a
         sudo apt install linux-surface-secureboot-mok -y
         sudo update-grub
     fi
+
+    sudo mkdir -p /etc/libinput
+    sudo bash -c "sudo cat > /etc/libinput/local-overrides.quirks <<EOF
+[Microsoft Surface Laptop Studio Touchpad]
+MatchVendor=0x045E
+MatchProduct=0x09AF
+MatchUdevType=touchpad
+AttrPressureRange=2:1
+AttrPalmPressureThreshold=500
+
+[Microsoft Surface Laptop Studio Built-In Peripherals]
+MatchName=*Microsoft Surface*
+MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*
+ModelTabletModeNoSuspend=1
+EOF"
 fi
 
 yadm checkout .bash_profile
