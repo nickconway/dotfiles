@@ -156,7 +156,16 @@ if command -v fc-cache > /dev/null; then
     rm -rf Hack.zip
 fi
 
-if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
+[[ ! $(yadm config --get-all local.class) == *"server"* ]] \
+    && [[ ! $(yadm config --get-all local.class) == *"WSL"* ]] \
+    && (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin) \
+    && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
+    && cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
+    && cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
+    && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
+    && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+
+if [[ "$(yadm config --get-all local.class)" == *"surface"* ]] && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
     if command -v apt > /dev/null; then
         wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
         echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
