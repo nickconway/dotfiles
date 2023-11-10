@@ -145,7 +145,8 @@ function replace () {
 
 function s() {
     if [[ -n $TMUX ]]; then
-        touch /tmp/tmux-$(tmux display -p "#S-#P")
+        TMUX_ID="$(tmux display -p "#S-#P")"
+        touch /tmp/tmux-"$TMUX_ID"
         hide-tmux-statusbar &
         STATUSBAR_PID=$!
         tmux set prefix C-h
@@ -153,10 +154,10 @@ function s() {
     fi
 
     if [[ $# -gt 0 ]]; then
-        ssh -t $@ SSH_HOSTNAME=$(hostname)
+        ssh $@
     else
         SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}') | sort | uniq | fzf-tmux -p --prompt=" > ")
-        [[ -z $SELECTED ]] || ssh -t $SELECTED SSH_HOSTNAME=$(hostname)
+        [[ -z $SELECTED ]] || ssh $SELECTED
         unset SELECTED
     fi
 
@@ -165,7 +166,7 @@ function s() {
         tmux set prefix C-Space
         kill $STATUSBAR_PID
         tmux set status on
-        rm /tmp/tmux-$(tmux display -p "#S-#P")
+        rm /tmp/tmux-"$TMUX_ID"
     fi
 }
 
