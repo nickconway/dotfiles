@@ -154,6 +154,17 @@ if command -v fc-cache > /dev/null; then
     rm -rf Hack.zip
 fi
 
+if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
+    if command -v apt > /dev/null; then
+        wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
+        echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
+        sudo apt update -y
+        sudo apt install linux-image-surface linux-headers-surface libwacom-surface iptsd -y
+        sudo apt install linux-surface-secureboot-mok -y
+        sudo update-grub
+    fi
+fi
+
 yadm checkout .bash_profile
 yadm checkout .bashrc
 yadm checkout .zshrc
