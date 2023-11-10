@@ -145,8 +145,8 @@ function replace () {
 
 function s() {
     if [[ -n $TMUX ]]; then
-        TMUX_ID="$(tmux display -p "#S-#P")"
-        touch /tmp/tmux-"$TMUX_ID"
+        TMUX_PID="$(tmux display -p "#{pane_pid}")"
+        touch /tmp/tmux-"$TMUX_PID"
         hide-tmux-statusbar &
         STATUSBAR_PID=$!
         tmux set prefix C-h
@@ -166,7 +166,7 @@ function s() {
         tmux set prefix C-Space
         kill $STATUSBAR_PID
         tmux set status on
-        rm /tmp/tmux-"$TMUX_ID"
+        rm /tmp/tmux-"$TMUX_PID"
     fi
 }
 
@@ -199,7 +199,7 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias v="nvim"
 
-alias x='tmux detach && clear || exit 0'
+alias x='[[ $(tmux list-panes | wc -l) -gt 1 ]] && exit 0 || (tmux detach && clear)'
 
 alias ya="yadm add"
 alias yalt="yadm alt"
