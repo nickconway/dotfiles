@@ -2,7 +2,7 @@
 
 set -xe
 
-export PATH=$PATH:/home/$USER/.local/share/devbox/global/default/.devbox/virtenv/.wrappers/bin:$HOME/.local/bin
+export PATH=$HOME/.local/bin:$PATH
 . $HOME/.config/shell/common/encrypted.sh
 
 cd ~
