@@ -10,7 +10,9 @@ ntfy publish notifications "Backing up docker containers" | echo "Failed to noti
 stop-containers
 sudo rsync -ahuvz --progress ~/docker ~/Dropbox/Documents/Backups/
 sudo rsync -ahuvz --progress ~/.local/share/docker/volumes ~/Dropbox/Documents/Backups/docker/
-start-containers
+until [[ $(docker ps | awk 'NR!=1' | wc -l) == $(grep image ~/docker/*/docker-compose*) ]]; do
+    start-containers
+done
 until ntfy publish notifications "Backing up complete" > /dev/null; do
     true
 done
