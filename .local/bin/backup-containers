@@ -11,10 +11,10 @@ echo "Stopping containers"
 stop-containers
 sudo rsync -ahuvz --progress ~/docker ~/Dropbox/Documents/Backups/
 sudo rsync -ahuvz --progress ~/.local/share/docker/volumes ~/Dropbox/Documents/Backups/docker/
-until [[ $(docker ps | awk 'NR!=1' | wc -l) == $(grep image ~/docker/*/docker-compose*) ]]; do
+until [[ "$(docker ps | awk 'NR!=1' | wc -l)" == "$(grep image ~/docker/*/docker-compose*)" ]]; do
     echo "Starting containers"
     start-containers
 done
-until ntfy publish notifications "Backing up complete" > /dev/null; do
+until ntfy publish notifications "Backing up complete"; do
     true
 done
