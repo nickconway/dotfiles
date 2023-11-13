@@ -6,7 +6,7 @@ export PATH=$HOME/.local/bin:$PATH
 . $HOME/.config/shell/common/encrypted.sh
 
 cd ~
-ntfy publish notifications "Backing up docker containers" | echo "Failed to notify of backup start"
+curl -d "Backing up docker containers" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" echo "Failed to notify of backup start"
 echo "Stopping containers"
 stop-containers
 sudo rsync -ahuvz --progress ~/docker ~/Dropbox/Documents/Backups/
@@ -16,6 +16,6 @@ until [[ "$(docker ps | awk 'NR!=1' | wc -l)" == "$(grep image ~/docker/*/docker
     start-containers
     echo "Started containers; $(docker ps | awk 'NR!=1' | wc -l) running; $(grep image ~/docker/*/docker-compose* | wc -l) total"
 done
-until ntfy publish notifications "Backing up complete"; do
+until curl -d "Backing up complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"; do
     true
 done
