@@ -198,9 +198,7 @@ yadm checkout .bash_profile
 yadm checkout .bashrc
 yadm checkout .zshrc
 
-if [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
-    source ~/.config/shell/common/work.sh && clone-all-work
-else
+if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
     [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
 fi
 
