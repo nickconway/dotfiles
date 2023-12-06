@@ -79,7 +79,7 @@ if ! command -v tailscale > /dev/null; then
         sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY || FAILED_COMMAND+="Tailscale setup failed"
         cd
         rm -rf deck-tailscale
-    elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* ]]; then
+    elif [[ "$(uname -r)" != *"WSL"* ]] || [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" != *"vm"* ]]; then
         curl -fsSL https://tailscale.com/install.sh | sh
         sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY || FAILED_COMMANDS+="Tailscale setup failed"
     fi
