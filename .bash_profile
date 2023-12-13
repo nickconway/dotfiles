@@ -1,1 +1,1 @@
-[[ -n $BASH_BERSION ]] && [[ -f $HOME/.bashrc ]] && . $HOME/.bashrc
+[[ -n $BASH_VERSION ]] && [[ -f $HOME/.bashrc ]] && . $HOME/.bashrc
