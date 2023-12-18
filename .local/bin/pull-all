@@ -1,14 +1,6 @@
-#!/usr/bin/env bash
-
-if [[ $# -eq 0 ]]; then
-    DIR=$PROJECT_DIR
-else
-    DIR=$1
-fi
-
-for d in $(find "$DIR" -maxdepth 2 -name ".git"); do
-    cd $(dirname $d)
-    echo $(basename "$PWD")
+#! /bin/bash
+for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
+    cd $d
+    cd ..
     git pull
-    echo
 done
