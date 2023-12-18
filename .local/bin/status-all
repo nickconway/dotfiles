@@ -1,0 +1,7 @@
+#! /bin/bash
+for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
+    echo $d
+    cd $d
+    cd ..
+    git status --porcelain
+done
