@@ -2,9 +2,5 @@
 for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
     cd $d
     cd ..
-    if [[ $(git status --porcelain) != "" ]]; then
-        pwd
-        git status
-        echo
-    fi
+    git reset --hard
 done
