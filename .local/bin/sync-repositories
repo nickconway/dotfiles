@@ -1,0 +1,9 @@
+#! /bin/bash
+for d in $(find . -name .git -type d -prune -not -path '*flake*'); do
+    cd $(dirname $d)
+    for f in $(git status --porcelain | awk '{ print $2 }'); do
+        file=$(echo $(dirname $d)/$f | cut -c3-)
+        scp $(pwd)/$f $1/$file
+    done
+    cd - > /dev/null
+done

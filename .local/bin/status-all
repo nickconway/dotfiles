@@ -2,5 +2,9 @@
 for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
     cd $d
     cd ..
-    git pull
+    if [[ $(git status --porcelain) != "" ]]; then
+        pwd
+        git status
+        echo
+    fi
 done

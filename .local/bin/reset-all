@@ -2,5 +2,5 @@
 for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
     cd $d
     cd ..
-    git pull
+    git reset --hard
 done
