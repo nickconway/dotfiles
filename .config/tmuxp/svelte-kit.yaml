@@ -1,0 +1,12 @@
+session_name: ${TMUXP_SESSION_NAME}
+start_directory: ${TMUXP_START_DIR}
+windows:
+- layout: main-horizontal
+  options:
+    main-pane-height: 80%
+  panes:
+  - focus: true
+    shell_command:
+    - cmd: nvim
+  - shell_command:
+    - cmd: npm run dev -- --open --host
