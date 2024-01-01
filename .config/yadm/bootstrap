@@ -27,10 +27,10 @@ if command -v termux-reload-settings; then
 fi
 
 if [[ $(yadm config local.class) == "" ]]; then
-    read -p "Enter YADM class: " YADM_CLASS
-    while [[ "$YADM_CLASS" != "n" ]] && [[ "$YADM_CLASS" != "" ]]; do
+    read -p "Enter YADM class (q to quit): " YADM_CLASS
+    while [[ "$YADM_CLASS" != "q" ]] && [[ "$YADM_CLASS" != "" ]]; do
         yadm config --add local.class $YADM_CLASS
-        read -p "Enter another YADM class (n to quit): " YADM_CLASS
+        read -p "Enter another YADM class (q to quit): " YADM_CLASS
     done
 fi
 
@@ -78,7 +78,7 @@ else
     sudo tailscale update
 fi
 
-[[ "$(yadm config --get-all local.class)" == *"work"* ]] && [[ "$(yadm config --get-all local.class)" == *"vm"* ]] && work-setup; exit
+[[ "$(yadm config --get-all local.class)" == *"work"* ]] && work-setup; exit
 
 sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
