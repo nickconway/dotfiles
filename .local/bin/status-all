@@ -5,6 +5,7 @@ for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
     if [[ $(git status --porcelain) != "" ]]; then
         pwd
         git status
+        echo 
         echo -----------------------------
         echo 
     fi
