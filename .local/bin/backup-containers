@@ -16,6 +16,6 @@ until [[ "$(docker ps | awk 'NR!=1' | wc -l)" == "$(grep image ~/docker/*/docker
     start-containers
     echo "Started containers; $(docker ps | awk 'NR!=1' | wc -l) running; $(grep image ~/docker/*/docker-compose* | wc -l) total"
 done
-until [[ $(curl -d "Backing up complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") != "404 page not found" ]]; do
+until [[ $(curl -f -s -o /dev/null -d "Backing up complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") ]]; do
     sleep 3
 done
