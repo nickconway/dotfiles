@@ -109,11 +109,11 @@ eval "$(brew shellenv)"
 brew update --force --quiet
 chmod -R go-w "$(brew --prefix)/share/zsh"
 
-mkdir -p ~/.nvm
 install-all
 
 $HOMEBREW_PREFIX/opt/fzf/install --all
 
+npm set prefix ~/.npm-global
 sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global || FAILED_COMMANDS+="Setting global npm prefix failed"
 
 nvim --headless '+Lazy! sync' +qa
