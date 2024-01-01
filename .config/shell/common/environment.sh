@@ -57,7 +57,7 @@ export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [[ ! -e $NVM_DIR ]] && mkdir -p $NVM_DIR
-command -v brew > /dev/null && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use || [ -s "$NVM_DIR/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" --no-use # This loads nvm
+command -v brew > /dev/null && ([ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" --no-use) || ([ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use) # This loads nvm
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
 
