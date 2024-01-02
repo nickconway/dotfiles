@@ -7,6 +7,7 @@ cd
 FAILED_COMMANDS=()
 
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
+
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
 else
