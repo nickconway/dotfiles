@@ -56,6 +56,7 @@ alias gds='git diff --staged'
 function ggp() {
     git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)
 }
+alias gif='git update-index --assume-unchanged'
 alias glgg='git log --graph'
 alias gm='git merge'
 alias gms='git merge --squash'
