@@ -15,9 +15,6 @@ else
 fi
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm checkout .bash_profile
-yadm checkout .bashrc
-yadm checkout .zshrc
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
@@ -158,9 +155,7 @@ if command -v fc-cache > /dev/null; then
     rm -rf Hack.zip
 fi
 
-[[ ! $(yadm config --get-all local.class) == *"server"* ]] \
-    && [[ ! $(yadm config --get-all local.class) == *"WSL"* ]] \
-    && (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
+(curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
     && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
     && mkdir -p ~/.local/share/applications \
     && cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
@@ -178,20 +173,18 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
         sudo update-grub
     fi
 
-    sudo mkdir -p /etc/libinput
-    sudo bash -c "sudo cat > /etc/libinput/local-overrides.quirks <<EOF
-[Microsoft Surface Laptop Studio Touchpad]
-MatchVendor=0x045E
-MatchProduct=0x09AF
-MatchUdevType=touchpad
-AttrPressureRange=2:1
-AttrPalmPressureThreshold=500
-
-[Microsoft Surface Laptop Studio Built-In Peripherals]
-MatchName=*Microsoft Surface*
-MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*
-ModelTabletModeNoSuspend=1
-EOF"
+    sudo mkdir -p /etc/libinput && \
+        sudo bash -c "sudo echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo '' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
 fi
 
 yadm checkout .bash_profile
@@ -209,10 +202,9 @@ echo "All done!"
 
 if ! [[ ${#FAILED_COMMANDS[@]} -eq 0 ]]; then
     echo "The following commands failed"
+    for f in "${FAILED_COMMANDS[@]}"; do
+        echo "$f"
+    done
 fi
-
-for f in "${FAILED_COMMANDS[@]}"; do
-    echo "$f"
-done
 
 curl -d "Bootstrapping complete on $(hostname)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
