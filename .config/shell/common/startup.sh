@@ -9,10 +9,6 @@ else
 fi
 
 if command -v termux-reload-settings > /dev/null; then
-    if ! $(ssh-add -l); then
-        rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
-    fi
-
     SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}') | sort | uniq | fzf-tmux -p --prompt=" > ")
     if [[ -z $SELECTED ]]; then
         unset SELECTED
