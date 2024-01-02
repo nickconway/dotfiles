@@ -56,6 +56,7 @@ alias gds='git diff --staged'
 function ggp() {
     git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)
 }
+alias gif='git update-index --assume-unchanged'
 alias glgg='git log --graph'
 alias gm='git merge'
 alias gms='git merge --squash'
@@ -205,7 +206,7 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias v="nvim"
 
-alias x='[[ -z $TMUX ]] && exit 0 || [[ $(tmux list-panes | wc -l) -gt 1 ]] && exit 0 || (tmux detach; clear)'
+alias x='[[ -z $TMUX ]] && exit 0 || [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]] && exit 0 || (tmux detach; clear)'
 
 alias ya="yadm add"
 alias yalt="yadm alt"
