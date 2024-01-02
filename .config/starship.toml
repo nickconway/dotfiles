@@ -8,9 +8,29 @@ continuation_prompt = "[▶▶](bold purple)"
 success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 error_symbol = "[➜](bold red)"
 
-
 [container]
 disabled = true
 
 [nix_shell]
 disabled = true
+
+[custom.yadm]
+when="[[ $(pwd) == $HOME ]]"
+command="""
+YADM_STATUS=$(cd ~/.local/share/yadm/repo.git; git status)
+YADM_STASH=$(cd ~/.local/share/yadm/repo.git; git stash list | wc -l)
+YADM_PROMPT=''
+
+[[ $YADM_STATUS == *'ahead'* ]] && YADM_PROMPT+='⇡';
+[[ $YADM_STATUS == *'behind'* ]] && YADM_PROMPT+='⇣';
+[[ $YADM_STASH -ne 0 ]] && YADM_PROMPT+='$';
+[[ $YADM_STATUS == *'modified'* ]] && YADM_PROMPT+='!';
+[[ $YADM_STATUS == *'new file'* ]] && YADM_PROMPT+='+';
+[[ $YADM_STATUS == *'deleted'* ]] && YADM_PROMPT+='✘';
+
+[[ $YADM_PROMPT != '' ]] && printf [;
+[[ $YADM_PROMPT != '' ]] && printf $YADM_PROMPT;
+[[ $YADM_PROMPT != '' ]] && printf ];
+"""
+style='bold red'
+format='[$symbol($output)]($style)'
