@@ -163,7 +163,7 @@ function s() {
     if [[ $# -gt 0 ]]; then
         ssh $@
     else
-        SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}'; command -v tailscale > /dev/null && tailscale status | awk '{print $2}') | sort | uniq | awk 'NF' | fzf-tmux -p --prompt=" > ")
+        SELECTED=$((grep "Host " ~/.ssh/config | awk '{print $2}'; command -v tailscale > /dev/null && tailscale status | grep -v '^#' | awk '{print $2}') | sort | uniq | awk 'NF' | fzf-tmux -p --prompt=" > ")
         [[ -z $SELECTED ]] || ssh $SELECTED
         unset SELECTED
     fi
