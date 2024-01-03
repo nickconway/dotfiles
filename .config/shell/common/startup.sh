@@ -3,7 +3,11 @@ command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
-    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+    if [[ "$(ssh-add -l)" == *"Error"* ]]; then
+        rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
+    else
+        export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+    fi
 else
     eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
 fi
