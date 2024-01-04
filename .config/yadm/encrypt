@@ -1,5 +1,6 @@
 .config/shell/common/encrypted.sh
-.config/rbw/**/*
+.config/rbw/config.json
 .config/yadm/alt/**/*c.work
-.config/zmk/**/*
+.config/zmk/macros.dtsi
+.config/zmk/leader.dtsi
 .ssh/id_*
