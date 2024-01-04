@@ -4,7 +4,7 @@ set -xe
 
 cd
 
-FAILED_COMMANDS=()
+export FAILED_COMMANDS=()
 
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
@@ -13,7 +13,6 @@ if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
 else
     eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
 fi
-ssh-add
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
@@ -47,8 +46,8 @@ else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
 
-sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers" || FAILED_COMMANDS+="Disabling sudo password"
-sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd" || FAILED_COMMANDS+="NTFY ssh setup"
+sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers" || FAILED_COMMANDS+=("Disabling sudo password")
+sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd" || FAILED_COMMANDS+=("NTFY ssh setup")
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo steamos-readonly disable
@@ -68,7 +67,7 @@ sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
     && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt \
-    || FAILED_COMMANDS+="System YADM"
+    || FAILED_COMMANDS+=("System YADM")
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo touch /etc/subuid /etc/subgid
@@ -79,13 +78,13 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     distrobox create -i ubuntu
 fi
 
-install-all || FAILED_COMMANDS+="Installing programs"
+install-all || FAILED_COMMANDS+=("Installing programs")
 
-sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global || FAILED_COMMANDS+="Setting global npm prefix"
+sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global || FAILED_COMMANDS+=("Setting global npm prefix")
 
-nvim --headless '+Lazy! sync' +qa || FAILED_COMMANDS+="Neovim plugin setup"
+nvim --headless '+Lazy! sync' +qa || FAILED_COMMANDS+=("Neovim plugin setup")
 
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
+([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins) || FAILED_COMMANDS+=("TPM setup")
 
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
@@ -108,13 +107,13 @@ yadm checkout .bash_profile
 yadm checkout .bashrc
 yadm checkout .zshrc
 
-sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells" || FAILED_COMMANDS+="Adding to /etc/shells"
-sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+="Changing default shell"
+sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells" || FAILED_COMMANDS+=("Adding to /etc/shells")
+sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+=("Changing default shell")
 
 echo "All done!"
 
 if ! [[ ${#FAILED_COMMANDS[@]} -eq 0 ]]; then
-    echo "The following commands failed"
+    echo "The following failed"
     for f in "${FAILED_COMMANDS[@]}"; do
         echo "$f"
     done
