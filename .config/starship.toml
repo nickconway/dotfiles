@@ -15,7 +15,7 @@ disabled = true
 disabled = true
 
 [custom.yadm]
-when="[[ $(pwd) == $HOME ]]"
+when="[[ -e ~/.local/share/yadm && $(pwd) == $HOME && ($(cd ~/.local/share/yadm/repo.git; git status --porcelain) != '' || $(cd ~/.local/share/yadm/repo.git; git stash list | wc -l) -ne 0) ]]"
 command="""
 YADM_STATUS=$(cd ~/.local/share/yadm/repo.git; git status)
 YADM_STASH=$(cd ~/.local/share/yadm/repo.git; git stash list | wc -l)
