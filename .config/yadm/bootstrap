@@ -60,8 +60,6 @@ fi
 
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*
 
-[[ "$(yadm config --get-all local.class)" == *"work"* ]] && . ~/.config/shell/common/work.sh && work-setup
-
 sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
@@ -102,6 +100,8 @@ fi
 if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
     [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
 fi
+
+[[ "$(yadm config --get-all local.class)" == *"work"* ]] && . ~/.config/shell/common/work.sh && work-setup
 
 yadm checkout .bash_profile
 yadm checkout .bashrc
