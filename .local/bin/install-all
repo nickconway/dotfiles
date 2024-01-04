@@ -6,19 +6,15 @@ if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
     if command -v apt-get > /dev/null; then
         sudo apt-get install build-essential procps curl file git -y
     elif command -v yum > /dev/null; then
-        sudo yum groupinstall 'Development Tools' -y
-        sudo yum install procps-ng curl file git -y
+        sudo yum groupinstall 'Development Tools' -y && sudo yum install procps-ng curl file git -y
     elif command -v pacman > /dev/null; then
         sudo pacman -Syu base-devel procps-ng curl file git
     fi
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || (mkdir -p ~/.local/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.local/homebrew) && eval "$(brew shellenv)" && brew update --force --quiet && chmod -R go-w "$(brew --prefix)/share/zsh"
 fi
 
-brew install \
-    neovim \
-    zellij \
+command -v brew > /dev/null && brew install \
     node \
-    nvm \
     bat \
     fd \
     zsh \
@@ -45,14 +41,16 @@ brew install \
     parallel \
     rsync \
     gcc \
+    || echo "Homebrew not installed"
 
-command -v brew > /dev/null && brew install starship || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin
-
-command -v brew > /dev/null && (brew install fzf; $HOMEBREW_PREFIX/opt/fzf/install --all) || (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all)
-
-command -v brew > /dev/null && brew install zoxide || (curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash)
-
-command -v brew > /dev/null && brew install tmux || (sudo yum install libevent ncurses libevent-devel gcc make bison pkg-config -y; git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure --prefix $HOME/.local && make && make install && cd && rm -rf ~/tmux)
+(brew install fzf && $HOMEBREW_PREFIX/opt/fzf/install --all) || (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all)
+brew install neovim || curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim
+brew install nvm || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+brew install starship || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin
+brew install tmux || (sudo yum install libevent ncurses libevent-devel gcc make bison pkg-config -y; git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure --prefix $HOME/.local && make && make install && cd && rm -rf ~/tmux)
+brew install yq || wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq
+brew install zellij || (curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz)
+brew install zoxide || (curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash)
 
 if ! command -v tailscale > /dev/null; then
     if [[ $(uname -n) == "steamdeck" ]]; then
@@ -70,7 +68,7 @@ else
     sudo tailscale update
 fi
 
-if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
+if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ "$(yadm config --get-all local.class)" != *"work"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
     chmod +x ~/.local/bin/get-docker-rootless
     export DOCKER_BIN=~/.local/bin
