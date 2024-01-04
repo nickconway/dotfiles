@@ -13,6 +13,7 @@ if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
 else
     eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
 fi
+ssh-add
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
