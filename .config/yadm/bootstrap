@@ -46,6 +46,9 @@ else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
 
+sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers" || FAILED_COMMANDS+="Disabling sudo password failed"
+sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd" || FAILED_COMMANDS+="NTFY ssh setup failed"
+
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo steamos-readonly disable
     echo "keyserver hkps://keyserver.ubuntu.com" >> /etc/pacman.d/gnupg/gpg.conf
@@ -54,9 +57,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     sudo pacman-key --refresh-keys
     yay -S base-devel
 fi
-
-sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers" || FAILED_COMMANDS+="Disabling sudo password failed"
-sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd" || FAILED_COMMANDS+="NTFY ssh setup failed"
 
 [[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*
 
@@ -107,7 +107,7 @@ eval "$(brew shellenv)"
 brew update --force --quiet
 chmod -R go-w "$(brew --prefix)/share/zsh"
 
-install-all
+brew-install-all
 
 $HOMEBREW_PREFIX/opt/fzf/install --all
 
@@ -134,12 +134,10 @@ if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
     export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
     systemctl --user start docker
     systemctl --user enable docker
-    if [[ "$(yadm config --get-all local.class)" == *"server"* ]]; then
-        sudo setcap cap_net_bind_service=ep $(which rootlesskit)
-        sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
-        sudo sysctl --system
-        systemctl --user restart docker
-    fi
+    sudo setcap cap_net_bind_service=ep $(which rootlesskit)
+    sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
+    sudo sysctl --system
+    systemctl --user restart docker
 
     DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
     mkdir -p $DOCKER_CONFIG/cli-plugins
