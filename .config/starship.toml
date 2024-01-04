@@ -33,4 +33,4 @@ YADM_PROMPT=''
 [[ $YADM_PROMPT != '' ]] && printf ];
 """
 style='bold red'
-format='[$symbol($output)]($style) '
+format='[$symbol($output)]($style)'
