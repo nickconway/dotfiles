@@ -25,13 +25,13 @@ fi
 
 [[ -f ~/.fzf.$SHELL_NAME ]] && source ~/.fzf.$SHELL_NAME
 
-# [[ "$(basename $SHELL)" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
-# if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
-#     if [[ -z $SSH_CONNECTION ]]; then
-#         command -v tmux > /dev/null && tmux new -As main $TMUX_SHELL && exit 0
-#         # zellij a -c main
-#     else
-#         # zellij a -c ssh; exit
-#         command -v tmux > /dev/null && tmux new -As ssh $TMUX_SHELL && exit 0
-#     fi
-# fi
+[[ "$(basename $SHELL)" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
+if [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
+    if [[ -z $SSH_CONNECTION ]]; then
+        command -v tmux > /dev/null && tmux new -As main $TMUX_SHELL && exit 0
+        # zellij a -c main
+    else
+        # zellij a -c ssh; exit
+        command -v tmux > /dev/null && tmux new -As ssh $TMUX_SHELL && exit 0
+    fi
+fi
