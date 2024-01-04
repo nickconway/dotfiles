@@ -45,7 +45,7 @@ command -v brew > /dev/null && brew install \
 (brew install fzf && $HOMEBREW_PREFIX/opt/fzf/install --all) || (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || ~/.fzf/install --all)
 brew install neovim || curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim
 brew install nvm || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-brew install starship || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin
+brew install starship || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y
 brew install tmux || (sudo yum install libevent ncurses libevent-devel gcc make bison pkg-config -y; git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure --prefix $HOME/.local && make && make install && cd && rm -rf ~/tmux)
 brew install yq || (wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq)
 brew install zellij || (curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz)
