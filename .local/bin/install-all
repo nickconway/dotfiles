@@ -2,10 +2,21 @@
 
 set -xe
 
+if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
+    if command -v apt-get > /dev/null; then
+        sudo apt-get install build-essential procps curl file git -y
+    elif command -v yum > /dev/null; then
+        sudo yum groupinstall 'Development Tools' -y
+        sudo yum install procps-ng curl file git -y
+    elif command -v pacman > /dev/null; then
+        sudo pacman -Syu base-devel procps-ng curl file git
+    fi
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || (mkdir -p ~/.local/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.local/homebrew) && eval "$(brew shellenv)" && brew update --force --quiet && chmod -R go-w "$(brew --prefix)/share/zsh"
+fi
+
 brew install \
     neovim \
     zellij \
-    tmux \
     node \
     nvm \
     bat \
@@ -15,11 +26,8 @@ brew install \
     zsh-syntax-highlighting \
     rbw \
     tealdeer \
-    zoxide \
-    starship \
     lazygit \
     lazydocker \
-    fzf \
     go \
     ripgrep \
     gh \
@@ -38,11 +46,81 @@ brew install \
     rsync \
     gcc \
 
-command -v starship > /dev/null || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin
+command -v brew > /dev/null && brew install starship || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin
 
-command -v fzf > /dev/null || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
-$HOMEBREW_PREFIX/opt/fzf/install --all
+command -v brew > /dev/null && (brew install fzf; $HOMEBREW_PREFIX/opt/fzf/install --all) || (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all)
 
-command -v zoxide > /dev/null || curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+command -v brew > /dev/null && brew install zoxide || (curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash)
 
-command -v tmux > /dev/null || (sudo yum install libevent ncurses libevent-devel gcc make bison pkg-config -y; git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure --prefix $HOME/.local && make && make install && cd && rm -rf ~/tmux)
+command -v brew > /dev/null && brew install tmux || (sudo yum install libevent ncurses libevent-devel gcc make bison pkg-config -y; git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure --prefix $HOME/.local && make && make install && cd && rm -rf ~/tmux)
+
+if ! command -v tailscale > /dev/null; then
+    if [[ $(uname -n) == "steamdeck" ]]; then
+        git clone https://github.com/tailscale-dev/deck-tailscale.git
+        cd deck-tailscale
+        sudo bash tailscale.sh
+        sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
+        cd
+        rm -rf deck-tailscale
+    elif [[ "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
+        curl -fsSL https://tailscale.com/install.sh | sh
+        sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
+    fi
+else
+    sudo tailscale update
+fi
+
+if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
+    curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
+    chmod +x ~/.local/bin/get-docker-rootless
+    export DOCKER_BIN=~/.local/bin
+    export SKIP_IPTABLES=1 
+    sh ~/.local/bin/get-docker-rootless || (sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
+
+    sudo loginctl enable-linger $(whoami) || FAILED_COMMANDS+="Enabling user systemctl failed"
+    export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
+    systemctl --user start docker
+    systemctl --user enable docker
+    sudo setcap cap_net_bind_service=ep $(which rootlesskit)
+    sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
+    sudo sysctl --system
+    systemctl --user restart docker
+
+    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+    mkdir -p $DOCKER_CONFIG/cli-plugins
+    curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+fi
+
+(curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
+    && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
+    && mkdir -p ~/.local/share/applications \
+    && cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
+    && cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
+    && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
+    && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+
+if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
+    if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
+        wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
+        echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
+        sudo apt update -y
+        sudo apt install linux-image-surface linux-headers-surface libwacom-surface iptsd -y
+        sudo apt install linux-surface-secureboot-mok -y
+        sudo update-grub
+    fi
+
+    sudo mkdir -p /etc/libinput && \
+        sudo bash -c "sudo echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo '' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "sudo echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
+fi
+
