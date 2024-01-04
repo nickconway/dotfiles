@@ -13,6 +13,7 @@ if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
 else
     eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
 fi
+ssh-add
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
@@ -94,22 +95,19 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     distrobox create -i ubuntu
 fi
 
-if command -v apt-get > /dev/null; then
-    sudo apt-get install build-essential procps curl file git -y
-elif command -v yum > /dev/null; then
-    sudo yum groupinstall 'Development Tools' -y
-    sudo yum install procps-ng curl file git -y
-elif command -v pacman > /dev/null; then
-    sudo pacman -Syu base-devel procps-ng curl file git
+if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
+    if command -v apt-get > /dev/null; then
+        sudo apt-get install build-essential procps curl file git -y
+    elif command -v yum > /dev/null; then
+        sudo yum groupinstall 'Development Tools' -y
+        sudo yum install procps-ng curl file git -y
+    elif command -v pacman > /dev/null; then
+        sudo pacman -Syu base-devel procps-ng curl file git
+    fi
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || (mkdir -p ~/.local/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.local/homebrew) && eval "$(brew shellenv)" && brew update --force --quiet && chmod -R go-w "$(brew --prefix)/share/zsh"
 fi
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || (mkdir -p ~/.local/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.local/homebrew)
-eval "$(brew shellenv)"
-brew update --force --quiet
-chmod -R go-w "$(brew --prefix)/share/zsh"
 
-brew-install-all
-
-$HOMEBREW_PREFIX/opt/fzf/install --all
+install-all
 
 npm set prefix ~/.npm-global
 sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global || FAILED_COMMANDS+="Setting global npm prefix failed"
@@ -185,13 +183,13 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
         sudo bash -c "sudo echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
 fi
 
-yadm checkout .bash_profile
-yadm checkout .bashrc
-yadm checkout .zshrc
-
 if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
     [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
 fi
+
+yadm checkout .bash_profile
+yadm checkout .bashrc
+yadm checkout .zshrc
 
 sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells" || FAILED_COMMANDS+="Adding to /etc/shells"
 sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+="Changing default shell failed"
