@@ -81,8 +81,6 @@ install-all || FAILED_COMMANDS+=("Installing programs")
 
 sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global || FAILED_COMMANDS+=("Setting global npm prefix")
 
-nvim --headless '+Lazy! sync' +qa || FAILED_COMMANDS+=("Neovim plugin setup")
-
 ([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins) || FAILED_COMMANDS+=("TPM setup")
 
 mkdir -p ~/.config/zellij/plugins

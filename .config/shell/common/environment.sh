@@ -28,6 +28,7 @@ fi
 KERNEL=$(uname -r)
 
 export PATH=~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$HOME/.cargo/bin:~/.go/bin:$PATH
+export GOPATH=~/.go
 export GPG_TTY=$TTY
 
 if command -v termux-reload-settings > /dev/null; then
