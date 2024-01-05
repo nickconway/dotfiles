@@ -16,6 +16,7 @@ fi
 command -v brew > /dev/null && brew install \
     node \
     fd \
+    sshfs \
     zsh \
     zsh-autosuggestions \
     zsh-syntax-highlighting \
