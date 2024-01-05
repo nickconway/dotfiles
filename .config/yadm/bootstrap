@@ -59,7 +59,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     yay -S base-devel
 fi
 
-[[ $(ls "$HOME"/.gnupg/exported) ]] && gpg --import "$HOME"/.gnupg/exported/*
+[[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
 
 sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
     && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \

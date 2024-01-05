@@ -1,3 +1,4 @@
+.config/gpg/backup.pgp
 .config/shell/common/encrypted.sh
 .config/rbw/config.json
 .config/yadm/alt/**/*c.work
