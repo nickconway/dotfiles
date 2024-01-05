@@ -16,30 +16,12 @@ fi
 if command -v brew > /dev/null; then
     brew install \
         neovim \
-        node \
-        fd \
         sshfs \
         zsh \
-        zsh-autosuggestions \
-        zsh-syntax-highlighting \
-        rbw \
-        tealdeer \
-        lazygit \
-        lazydocker \
-        go \
-        gh \
-        yq \
         tree \
-        bat \
         htop \
-        curl \
-        wget \
-        tree-sitter \
-        zsh-completions \
         tmuxp \
         cmake \
-        ntfy \
-        parallel \
         rsync \
         gcc 
     $HOMEBREW_PREFIX/opt/fzf/install --all
@@ -55,8 +37,29 @@ wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O 
 curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
+(wget -O - pi.dk/3 || curl pi.dk/3/ || fetch -o - http://pi.dk/3) | bash
+
 command -v rustup > /dev/null && rustup update || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+cargo install --locked bat
+cargo install fd-find
+cargo install rbw
 cargo install ripgrep
+cargo install tealdeer
+cargo install tree-sitter-cli
+
+rm -rf ~/.go && tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz && mv ~/go ~/.go
+go install github.com/jesseduffield/lazygit@latest
+curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+git clone https://github.com/cli/cli.git ~/gh-cli
+cd gh-cli
+make install prefix=$HOME/.local/bin/gh
+rm -rf ~/gh-cli
+
+mkdir -p ~/.zsh
+[[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+[[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git ~/.zsh/zsh-completions
+[[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
 
 if ! command -v tailscale > /dev/null; then
     if [[ $(uname -n) == "steamdeck" ]]; then

@@ -1,17 +1,12 @@
 setopt hist_ignore_all_dups
 setopt INC_APPEND_HISTORY
 
-if type brew &>/dev/null; then
-     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
-     autoload -Uz compinit
-     compinit
+if [[ ~/.zsh/zsh-completions ]]; then
+    fpath=(~/.zsh/zsh-completions/src $fpath)
 fi
 
-fpath=(
-    /home/linuxbrew/.linuxbrew/share/zsh/site-functions
-    "${fpath[@]}"
-)
+autoload -Uz compinit
+compinit
 
 setopt auto_cd
 setopt auto_pushd
