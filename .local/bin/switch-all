@@ -1,0 +1,9 @@
+#! /bin/bash
+if [[ $# -ne 1 ]]; then
+    exit
+fi
+for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
+    cd $d
+    cd ..
+    git switch $1
+done
