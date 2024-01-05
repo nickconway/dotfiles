@@ -27,8 +27,7 @@ vim.api.nvim_create_autocmd(
     { "BufWritePre", "BufWritePost" },
     {
         callback = function()
-            local project = vim.loop.cwd():match("^.*/(.+)$")
-            if not (project == "koui3" or project == "ko_rest") then
+            if not (vim.fn.hostname() == "alma") then
                 vim.lsp.buf.format({ async = false })
             end
         end,
