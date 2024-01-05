@@ -43,11 +43,8 @@ command -v brew > /dev/null && export HOMEBREW_PREFIX="$(brew --prefix)" && expo
 export VISUAL=nvim
 export EDITOR=nvim
 
-if [[ -n $KODIR ]]; then
-    export PROJECT_DIR=$KODIR
-else
-    export PROJECT_DIR=~/git
-fi
+export PROJECT_DIR=~/git
+export WORK_GIT=~/work-git
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
