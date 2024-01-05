@@ -27,7 +27,6 @@ if command -v brew > /dev/null; then
         lazygit \
         lazydocker \
         go \
-        ripgrep \
         gh \
         yq \
         tree \
@@ -56,7 +55,8 @@ wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O 
 curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
-command -v rustup > /dev/null && rustup update || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh --s -- -y
+command -v rustup > /dev/null && rustup update || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+cargo install ripgrep
 
 if ! command -v tailscale > /dev/null; then
     if [[ $(uname -n) == "steamdeck" ]]; then
