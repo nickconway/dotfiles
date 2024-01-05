@@ -44,7 +44,6 @@ export VISUAL=nvim
 export EDITOR=nvim
 
 export PROJECT_DIR=~/git
-export WORK_GIT=~/work-git
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
