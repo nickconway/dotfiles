@@ -87,7 +87,7 @@ if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
     [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
 fi
 
-if [[ $CAN_SUDO == "true"]]; then
+if [[ $CAN_SUDO == "true" ]]; then
     sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
     sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
 
