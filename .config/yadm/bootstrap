@@ -4,8 +4,7 @@ set -xe
 
 cd
 
-export FAILED_COMMANDS=()
-
+CAN_SUDO=$(sudo true && echo "true" || echo "false")
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
@@ -47,9 +46,6 @@ else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
 
-sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers" || FAILED_COMMANDS+=("Disabling sudo password")
-sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd" || FAILED_COMMANDS+=("NTFY ssh setup")
-
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo steamos-readonly disable
     echo "keyserver hkps://keyserver.ubuntu.com" >> /etc/pacman.d/gnupg/gpg.conf
@@ -61,13 +57,6 @@ fi
 
 [[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
 
-sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
-    && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
-    && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
-    && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
-    && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt \
-    || FAILED_COMMANDS+=("System YADM")
-
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo touch /etc/subuid /etc/subgid
     sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
@@ -77,11 +66,9 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     distrobox create -i ubuntu
 fi
 
-install-all || FAILED_COMMANDS+=("Installing programs")
+install-all
 
-sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global || FAILED_COMMANDS+=("Setting global npm prefix")
-
-([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins) || FAILED_COMMANDS+=("TPM setup")
+([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins)
 
 mkdir -p ~/.config/zellij/plugins
 curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
@@ -100,22 +87,28 @@ if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
     [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
 fi
 
+if [[ $CAN_SUDO == "true"]]; then
+    sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
+    sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
+
+    sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
+        && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
+        && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
+        && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
+        && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
+
+    sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global
+
+    sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells"
+    sudo chsh $USER -s $(which zsh)
+fi
+
 [[ "$(yadm config --get-all local.class)" == *"work"* ]] && . ~/.config/shell/common/work.sh && work-setup
 
 yadm checkout .bash_profile
 yadm checkout .bashrc
 yadm checkout .zshrc
 
-sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells" || FAILED_COMMANDS+=("Adding to /etc/shells")
-sudo chsh $USER -s $(which zsh) || FAILED_COMMANDS+=("Changing default shell")
-
 echo "All done!"
-
-if ! [[ ${#FAILED_COMMANDS[@]} -eq 0 ]]; then
-    echo "The following failed"
-    for f in "${FAILED_COMMANDS[@]}"; do
-        echo "$f"
-    done
-fi
 
 curl -d "Bootstrapping complete on $(hostname)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"

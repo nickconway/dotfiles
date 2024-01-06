@@ -50,7 +50,7 @@ rm -rf ~/.go && tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz && mv ~/go ~/.go
 export GOPATH=~/.go
 go install github.com/jesseduffield/lazygit@latest
 curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-~/go1.21.5.linux-amd64.tar.gz
+rm ~/go1.21.5.linux-amd64.tar.gz
 
 git clone https://github.com/cli/cli.git ~/gh-cli
 cd gh-cli
@@ -121,16 +121,16 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
     fi
 
     sudo mkdir -p /etc/libinput && \
-        sudo bash -c "sudo echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo '' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "sudo echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
+        sudo bash -c "echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo '' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
 fi
 
