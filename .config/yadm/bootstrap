@@ -105,9 +105,9 @@ fi
 
 [[ "$(yadm config --get-all local.class)" == *"work"* ]] && . ~/.config/shell/common/work.sh && work-setup
 
-yadm checkout .bash_profile
-yadm checkout .bashrc
-yadm checkout .zshrc
+yadm checkout ~/.bash_profile
+yadm checkout ~/.bashrc
+yadm checkout ~/.zshrc
 
 echo "All done!"
 
