@@ -33,6 +33,8 @@ fi
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || ~/.fzf/install --all
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install node
 
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y
