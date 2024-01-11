@@ -31,7 +31,10 @@ else
 fi
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || ~/.fzf/install --all
+
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+nvm install node
+
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq
 curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
