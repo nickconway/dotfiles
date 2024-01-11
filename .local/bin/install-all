@@ -2,7 +2,7 @@
 
 set -xe
 
-if [[ "$(yadm config --get-all local.class)" != *"work"* || "$(yadm config --get-all local.class)" != *"vm"* ]]; then
+if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" != *"vm"*) ]]; then
     if command -v apt-get > /dev/null; then
         sudo apt-get install build-essential procps curl file git -y
     elif command -v yum > /dev/null; then
