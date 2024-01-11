@@ -51,7 +51,9 @@ cargo install tealdeer
 cargo install tree-sitter-cli
 
 wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
-rm -rf ~/.go && tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz && mv ~/go ~/.go
+rm -rf ~/.go
+tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz
+mv ~/go ~/.go
 chmod -R +rwx ~/.go
 export GOPATH=~/.go
 go install github.com/jesseduffield/lazygit@latest
