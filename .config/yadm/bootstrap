@@ -12,7 +12,10 @@ if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
 else
     eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
 fi
-ssh-add
+
+if [[ "$(ls ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then 
+    ssh-add
+fi
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
