@@ -61,11 +61,11 @@ wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
 rm -rf ~/.go
 tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz
 mv ~/go ~/.go
-chmod -R +rwx ~/.go
 export GOPATH=~/.go
 go install github.com/jesseduffield/lazygit@latest
 curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-rm ~/go1.21.5.linux-amd64.tar.gz
+rm ~/go*.linux-amd64.tar.gz
+chmod -R +rwx ~/.go
 
 git clone https://github.com/cli/cli.git ~/gh-cli
 cd gh-cli
