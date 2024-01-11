@@ -103,7 +103,7 @@ if [[ $CAN_SUDO == "true" ]]; then
     sudo chsh $USER -s $(which zsh)
 fi
 
-[[ "$(yadm config --get-all local.class)" == *"work"* ]] && . ~/.config/shell/common/work.sh && work-setup
+[[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]] && . ~/.config/shell/common/work.sh && work-setup
 
 yadm checkout ~/.bash_profile
 yadm checkout ~/.bashrc
