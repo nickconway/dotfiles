@@ -25,7 +25,6 @@ if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --
         cmake \
         rsync \
         gcc 
-    $HOMEBREW_PREFIX/opt/fzf/install --all
 else
     curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
 fi
