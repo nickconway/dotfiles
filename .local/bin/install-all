@@ -36,6 +36,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install node
+if [[ $CAN_SUDO == "true" ]]; then
+    sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global
+fi
 
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq
