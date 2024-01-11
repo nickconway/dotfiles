@@ -10,7 +10,10 @@ if [[ "$(yadm config --get-all local.class)" != *"work"* && "$(yadm config --get
     elif command -v pacman > /dev/null; then
         sudo pacman -Syu base-devel procps-ng curl file git
     fi
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && (eval "$(brew shellenv)" && brew update --force --quiet && chmod -R go-w "$(brew --prefix)/share/zsh") || echo "Could not install homebrew"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(brew shellenv)"
+    brew update --force --quiet
+    chmod -R go-w "$(brew --prefix)/share/zsh"
 fi
 
 if command -v brew > /dev/null; then
