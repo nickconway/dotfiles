@@ -94,26 +94,32 @@ else
     sudo tailscale update
 fi
 
-if [[ ! "$(uname -r)" == *"WSL"* ]] && [[ "$(yadm config --get-all local.class)" != *"work"* ]] && [[ ! -e ~/.local/bin/docker ]]; then
-    curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
-    chmod +x ~/.local/bin/get-docker-rootless
-    export DOCKER_BIN=~/.local/bin
-    export SKIP_IPTABLES=1 
-    sh ~/.local/bin/get-docker-rootless || (sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
+if [[ ! "$(uname -r)" == *"WSL"* ]]; then
+    if [[ $CAN_SUDO == "true" ]]; then
+        curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
+        chmod +x ~/.local/bin/get-docker
+        sh ~/.local/bin/get-docker
+    else
+        curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
+        chmod +x ~/.local/bin/get-docker-rootless
+        export DOCKER_BIN=~/.local/bin
+        export SKIP_IPTABLES=1 
+        sh ~/.local/bin/get-docker-rootless || (sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
 
-    sudo loginctl enable-linger $(whoami)
-    export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
-    systemctl --user start docker
-    systemctl --user enable docker
-    sudo setcap cap_net_bind_service=ep $(which rootlesskit)
-    sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
-    sudo sysctl --system
-    systemctl --user restart docker
+        sudo loginctl enable-linger $(whoami)
+        export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
+        systemctl --user start docker
+        systemctl --user enable docker
+        sudo setcap cap_net_bind_service=ep $(which rootlesskit)
+        sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
+        sudo sysctl --system
+        systemctl --user restart docker
 
-    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    mkdir -p $DOCKER_CONFIG/cli-plugins
-    curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+        DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+        mkdir -p $DOCKER_CONFIG/cli-plugins
+        curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+        chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+    fi
 fi
 
 (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
