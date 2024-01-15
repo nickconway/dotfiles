@@ -9,8 +9,8 @@ cd ~
 curl -d "Backing up docker containers" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" || echo "Failed to notify of backup start"
 echo "Stopping containers"
 stop-containers
-sudo rsync -ahuvz --progress ~/docker ~/Dropbox/Documents/Backups/
-sudo rsync -ahuvz --progress ~/.local/share/docker/volumes ~/Dropbox/Documents/Backups/docker/
+sudo tar czf docker-$(date +"%d-%b-%Y-%H-%M-%S").tar.gz ~/docker ~/.local/share/docker/volumes
+mv docker*.tar.gz ~/Dropbox/Documents/Backups/
 until [[ "$(docker ps | awk 'NR!=1' | wc -l)" == "$(grep image ~/docker/*/docker-compose* | wc -l)" ]]; do
     echo "Starting containers; $(docker ps | awk 'NR!=1' | wc -l) running; $(grep image ~/docker/*/docker-compose* | wc -l) total"
     start-containers

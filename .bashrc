@@ -5,4 +5,3 @@ done
 for f in ~/.config/shell/bash/*; do
     source $f
 done
-. "$HOME/.cargo/env"
