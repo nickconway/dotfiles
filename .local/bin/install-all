@@ -68,7 +68,7 @@ rm ~/go*.linux-amd64.tar.gz
 
 git clone https://github.com/cli/cli.git ~/gh-cli
 cd gh-cli
-make install prefix=$HOME/.local/bin/gh
+make install prefix=$HOME/.local
 rm -rf ~/gh-cli
 
 mkdir -p ~/.zsh
