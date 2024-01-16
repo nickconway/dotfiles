@@ -49,7 +49,7 @@ curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm
 
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
-command -v rustup > /dev/null && rustup update || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+command -v rustup > /dev/null && rustup update || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; rustup default stable)
 cargo install --locked bat
 cargo install fd-find
 cargo install rbw
