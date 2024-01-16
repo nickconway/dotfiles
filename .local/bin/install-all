@@ -94,8 +94,8 @@ else
     [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update
 fi
 
-if [[ ! "$(uname -r)" == *"WSL"* && ! -e "~/.local/bin/docker" ]]; then
-    curl -o .local/bin/slirp4netns --fail -L https://github.com/rootless-containers/slirp4netns/releases/download/v1.2.2/slirp4netns-$(uname -m)
+if [[ "$(uname -r)" != *"WSL"* ]] && [[ ! -e ~/.local/bin/dockerd ]]; then
+    curl -o .local/bin/slirp4netns --fail -L https://github.com/rootless-containers/slirp4netns/releases/latest/download/slirp4netns-$(uname -m)
     chmod +x .local/bin/slirp4netns
 
     curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
