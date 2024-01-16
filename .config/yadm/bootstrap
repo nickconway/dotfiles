@@ -21,7 +21,7 @@ yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
-    pkg install openssh termux-api gnupg fzf -y
+    pkg install openssh termux-api gnupg fzf dnsutils -y
     yadm decrypt
     yadm alt
     exit

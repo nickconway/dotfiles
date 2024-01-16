@@ -33,114 +33,133 @@ else
     curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
 fi
 
-([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins)
+([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins) &
 
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || ~/.fzf/install --all
+(git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y
-wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq
+(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash) &
 
-curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
-mkdir -p ~/.config/zellij/plugins
-curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
-curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
-curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
+(curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y) &
 
-curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+(wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq) &
 
-command -v rustup > /dev/null && rustup update || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; rustup default stable)
-cargo install --locked bat
-cargo install fd-find
-cargo install rbw
-cargo install ripgrep
-cargo install tealdeer
-cargo install tree-sitter-cli
+{
+    curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
+    mkdir -p ~/.config/zellij/plugins
+    curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
+    curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
+    curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
+} &
 
-[[ -e ~/.go ]] && chmod -R +rwx ~/.go && rm -rf ~/.go
-wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
-tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz
-mv ~/go ~/.go
-export GOPATH=~/.go
-go install github.com/jesseduffield/lazygit@latest
-curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-rm ~/go*.linux-amd64.tar.gz
+(curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash) &
 
-git clone https://github.com/cli/cli.git ~/gh-cli
-cd gh-cli
-make install prefix=$HOME/.local
-rm -rf ~/gh-cli
+{
+    command -v rustup > /dev/null && rustup update || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; rustup default stable)
+    cargo install --locked bat &
+    cargo install fd-find &
+    cargo install rbw &
+    cargo install ripgrep &
+    cargo install tealdeer &
+    cargo install tree-sitter-cli &
+} &
 
-mkdir -p ~/.zsh
-cd ~/.zsh
-[[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
-[[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
-[[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-cd ~
+{
+    [[ -e ~/.go ]] && chmod -R +rwx ~/.go && rm -rf ~/.go
+    wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
+    tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz
+    mv ~/go ~/.go
+    export GOPATH=~/.go
+    go install github.com/jesseduffield/lazygit@latest
+    curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+    rm ~/go*.linux-amd64.tar.gz
 
-if ! command -v tailscale > /dev/null; then
-    if [[ $(uname -n) == "steamdeck" ]]; then
-        git clone https://github.com/tailscale-dev/deck-tailscale.git
-        cd deck-tailscale
-        sudo bash tailscale.sh
-        sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
-        cd
-        rm -rf deck-tailscale
-    elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
-        curl -fsSL https://tailscale.com/install.sh | sh
-        sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
+    git clone https://github.com/cli/cli.git ~/gh-cli
+    cd gh-cli
+    make install prefix=$HOME/.local
+    rm -rf ~/gh-cli
+} &
+
+{
+    mkdir -p ~/.zsh
+    cd ~/.zsh
+    [[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
+    [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
+    [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+    cd ~
+} &
+
+{
+    if ! command -v tailscale > /dev/null; then
+        if [[ $(uname -n) == "steamdeck" ]]; then
+            git clone https://github.com/tailscale-dev/deck-tailscale.git
+            cd deck-tailscale
+            sudo bash tailscale.sh
+            sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
+            cd
+            rm -rf deck-tailscale
+        elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
+            curl -fsSL https://tailscale.com/install.sh | sh
+            sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
+        fi
+    else
+        [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update
     fi
-else
-    [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update
-fi
+} & 
 
-if [[ "$(uname -r)" != *"WSL"* ]] && [[ ! -e ~/.local/bin/dockerd ]]; then
-    curl -o .local/bin/slirp4netns --fail -L https://github.com/rootless-containers/slirp4netns/releases/latest/download/slirp4netns-$(uname -m)
-    chmod +x .local/bin/slirp4netns
+{
+    if [[ "$(uname -r)" != *"WSL"* ]] && [[ ! -e ~/.local/bin/dockerd ]]; then
+        curl -o .local/bin/slirp4netns --fail -L https://github.com/rootless-containers/slirp4netns/releases/latest/download/slirp4netns-$(uname -m)
+        chmod +x .local/bin/slirp4netns
 
-    curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
-    chmod +x ~/.local/bin/get-docker-rootless
-    export DOCKER_BIN=~/.local/bin
-    export SKIP_IPTABLES=1 
-    sh ~/.local/bin/get-docker-rootless || ([[ $CAN_SUDO == "true" ]] && sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
+        curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
+        chmod +x ~/.local/bin/get-docker-rootless
+        export DOCKER_BIN=~/.local/bin
+        export SKIP_IPTABLES=1 
+        sh ~/.local/bin/get-docker-rootless || ([[ $CAN_SUDO == "true" ]] && sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
 
-    [[ $CAN_SUDO == "true" ]] && sudo setcap cap_net_bind_service=ep $(which rootlesskit)
-    [[ $CAN_SUDO == "true" ]] && sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
-    [[ $CAN_SUDO == "true" ]] && sudo sysctl --system
-    mkdir -p ~/.config/systemd/user/docker.service.d
-    echo "[Service]" > ~/.config/systemd/user/docker.service.d/override.conf
-    echo 'Environment="DOCKERD_ROOTLESS_ROOTLESSKIT_PORT_DRIVER=slirp4netns"' >> ~/.config/systemd/user/docker.service.d/override.conf
-    [[ $CAN_SUDO == "true" ]] && sudo loginctl enable-linger $(whoami)
-    export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
-    systemctl --user daemon-reload
-    systemctl --user restart docker
-    systemctl --user start docker
-    systemctl --user enable docker
+        [[ $CAN_SUDO == "true" ]] && sudo setcap cap_net_bind_service=ep $(which rootlesskit)
+        [[ $CAN_SUDO == "true" ]] && sudo bash -c "echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf"
+        [[ $CAN_SUDO == "true" ]] && sudo sysctl --system
+        mkdir -p ~/.config/systemd/user/docker.service.d
+        echo "[Service]" > ~/.config/systemd/user/docker.service.d/override.conf
+        echo 'Environment="DOCKERD_ROOTLESS_ROOTLESSKIT_PORT_DRIVER=slirp4netns"' >> ~/.config/systemd/user/docker.service.d/override.conf
+        [[ $CAN_SUDO == "true" ]] && sudo loginctl enable-linger $(whoami)
+        export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
+        systemctl --user daemon-reload
+        systemctl --user restart docker
+        systemctl --user start docker
+        systemctl --user enable docker
 
-    export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    mkdir -p $DOCKER_CONFIG/cli-plugins
-    curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
-    docker network inspect proxy || docker network create proxy
-fi
+        export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+        mkdir -p $DOCKER_CONFIG/cli-plugins
+        curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+        chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+        docker network inspect proxy || docker network create proxy
+    fi
+} &
 
-(curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
-    && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
-    && mkdir -p ~/.local/share/applications \
-    && cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
-    && cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
-    && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
-    && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+{
+    (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
+        && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
+        && mkdir -p ~/.local/share/applications \
+        && cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
+        && cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
+        && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
+        && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+} &
 
-if [[ $(uname -n) == "steamdeck" ]]; then
-    sudo touch /etc/subuid /etc/subgid
-    sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
-    curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-    curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
-    chmod +x .local/bin/podman
-    distrobox create -i ubuntu
-fi
+{
+    if [[ $(uname -n) == "steamdeck" ]]; then
+        sudo touch /etc/subuid /etc/subgid
+        sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
+        curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
+        curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
+        chmod +x .local/bin/podman
+        distrobox create -i ubuntu
+    fi
+} &
 
+{
 if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
     if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
         wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
@@ -164,4 +183,6 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
         sudo bash -c "echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
         sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
 fi
+} &
 
+wait
