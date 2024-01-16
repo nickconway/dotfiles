@@ -185,4 +185,4 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
 fi
 } &
 
-wait
+wait -n
