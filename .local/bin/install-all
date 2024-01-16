@@ -2,46 +2,58 @@
 
 set -xe
 
-if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"*) ]]; then
-    if ! command -v brew > /dev/null; then
-        if command -v apt-get > /dev/null; then
-            sudo apt-get install build-essential procps curl file git -y
-        elif command -v yum > /dev/null; then
-            sudo yum groupinstall 'Development Tools' -y && sudo yum install procps-ng curl file git -y
-        elif command -v pacman > /dev/null; then
-            sudo pacman -Syu base-devel procps-ng curl file git
+CAN_SUDO=$(sudo true && echo "true" || echo "false")
+
+PROCS=()
+
+{
+    if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"*) ]]; then
+        if ! command -v brew > /dev/null; then
+            if command -v apt-get > /dev/null; then
+                sudo apt-get install build-essential procps curl file git -y
+            elif command -v yum > /dev/null; then
+                sudo yum groupinstall 'Development Tools' -y && sudo yum install procps-ng curl file git -y
+            elif command -v pacman > /dev/null; then
+                sudo pacman -Syu base-devel procps-ng curl file git
+            fi
+            NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            eval "$(brew shellenv)"
+            brew update --force --quiet
+            chmod -R go-w "$(brew --prefix)/share/zsh"
+            brew install \
+                neovim \
+                sshfs \
+                zsh \
+                tree \
+                htop \
+                tmux \
+                tmuxp \
+                cmake \
+                rsync \
+                gcc 
+        else
+            brew update
         fi
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        eval "$(brew shellenv)"
-        brew update --force --quiet
-        chmod -R go-w "$(brew --prefix)/share/zsh"
-        brew install \
-            neovim \
-            sshfs \
-            zsh \
-            tree \
-            htop \
-            tmux \
-            tmuxp \
-            cmake \
-            rsync \
-            gcc 
     else
-        brew update
+        curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
     fi
-else
-    curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
-fi
+} &
+PROCS+=($!)
 
 ([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins) &
+PROCS+=($!)
 
 (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &
+PROCS+=($!)
 
 (curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash) &
+PROCS+=($!)
 
 (curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y) &
+PROCS+=($!)
 
 (wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq) &
+PROCS+=($!)
 
 {
     curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
@@ -50,8 +62,10 @@ fi
     curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
     curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
 } &
+PROCS+=($!)
 
 (curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash) &
+PROCS+=($!)
 
 {
     command -v rustup > /dev/null && rustup update || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; rustup default stable)
@@ -62,6 +76,7 @@ fi
     cargo install tealdeer &
     cargo install tree-sitter-cli &
 } &
+PROCS+=($!)
 
 {
     [[ -e ~/.go ]] && chmod -R +rwx ~/.go && rm -rf ~/.go
@@ -78,6 +93,7 @@ fi
     make install prefix=$HOME/.local
     rm -rf ~/gh-cli
 } &
+PROCS+=($!)
 
 {
     mkdir -p ~/.zsh
@@ -87,6 +103,7 @@ fi
     [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
     cd ~
 } &
+PROCS+=($!)
 
 {
     if ! command -v tailscale > /dev/null; then
@@ -105,6 +122,7 @@ fi
         [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update
     fi
 } & 
+PROCS+=($!)
 
 {
     if [[ "$(uname -r)" != *"WSL"* ]] && [[ ! -e ~/.local/bin/dockerd ]]; then
@@ -137,6 +155,7 @@ fi
         docker network inspect proxy || docker network create proxy
     fi
 } &
+PROCS+=($!)
 
 {
     (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
@@ -147,6 +166,7 @@ fi
         && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
         && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 } &
+PROCS+=($!)
 
 {
     if [[ $(uname -n) == "steamdeck" ]]; then
@@ -158,6 +178,7 @@ fi
         distrobox create -i ubuntu
     fi
 } &
+PROCS+=($!)
 
 {
 if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
@@ -184,5 +205,8 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
         sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
 fi
 } &
+PROCS+=($!)
 
-wait -n
+for pid in ${PROCS[@]}; do
+    wait $pid
+done
