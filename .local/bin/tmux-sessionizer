@@ -19,7 +19,6 @@ session_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
 sveltekit=".svelte-kit"
-angular="angular.json"
 
 if tmux has-session -t "$session_name" 2> /dev/null; then
     tmux switch-client -t "$session_name"
@@ -43,8 +42,6 @@ elif [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     tmux new-session -s "$session_name" -c "$selected"
 elif [[ -e $selected/$sveltekit ]]; then
     TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
-elif [[ -e $selected/$angular ]]; then
-    TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/angular.yaml -y > /dev/null
 elif ! tmux has-session -t "$session_name" 2> /dev/null; then
     tmux new-session -ds "$session_name" -c "$selected"
     tmux switch-client -t "$session_name"
