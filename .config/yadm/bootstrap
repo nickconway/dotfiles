@@ -49,7 +49,7 @@ else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
 
-if [[ $(uname -n) == "steamdeck" ]]; then
+if [[ $(uname -n) == "steamdeck" ]] && [[ ! grep 'keyserver hkps://keyserver.ubuntu.com' /etc/pacman.d/gnupg/gpg.conf ]]; then
     sudo steamos-readonly disable
     sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
     sudo pacman-key --init
