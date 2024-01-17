@@ -1,3 +1,3 @@
 return {
-	"theprimeagen/harpoon",
+    "theprimeagen/harpoon",
 }
