@@ -49,14 +49,14 @@ else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
 
-if [[ $(uname -n) == "steamdeck" ]] && [[ ! grep 'keyserver hkps://keyserver.ubuntu.com' /etc/pacman.d/gnupg/gpg.conf ]]; then
-    sudo steamos-readonly disable
-    sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
-    sudo pacman-key --init
-    sudo pacman-key --populate
-    sudo pacman-key --refresh-keys
-    sudo pacman -S base-devel
-fi
+# if [[ $(uname -n) == "steamdeck" ]] && [[ ! grep 'keyserver hkps://keyserver.ubuntu.com' /etc/pacman.d/gnupg/gpg.conf ]]; then
+#     sudo steamos-readonly disable
+#     sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
+#     sudo pacman-key --init
+#     sudo pacman-key --populate
+#     sudo pacman-key --refresh-keys
+#     sudo pacman -S base-devel
+# fi
 
 [[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
 
