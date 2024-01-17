@@ -57,7 +57,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
     sudo pacman-key --init
     sudo pacman-key --populate archlinux
-    sudo pacman-key --refresh-keys
     sudo pacman -Syu
     sudo pacman -Sy base-devel
 fi
