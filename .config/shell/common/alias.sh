@@ -92,14 +92,14 @@ alias ll='ls -lh --color'
 alias ls='ls --color'
 alias lsa='ls -lah --color'
 
-alias lzd='lazydocker'
+alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E lazydocker || lazydocker'
 
 function lg() {
     if git rev-parse --is-inside-work-tree &> /dev/null; then
-        lazygit
+        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E lazygit || lazygit
     else
         cd ~
-        yadm enter lazygit
+        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E yadm enter lazygit || yadm enter lazygit
         cd - &> /dev/null
     fi;
 }
