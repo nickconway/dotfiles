@@ -52,12 +52,12 @@ fi
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo systemctl enable --now sshd
     sudo steamos-readonly disable
-    if ! grep 'keyserver hkps://keyserver.ubuntu.com' /etc/pacman.d/gnupg/gpg.conf; then
-        sudo pacman-key --init
-	sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
-        sudo pacman-key --populate
-        sudo pacman-key --refresh-keys
-    fi
+    sudo rm -rf /etc/pacman.d/gnupg
+    sudo pacman-key --init
+    sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
+    sudo pacman-key --init
+    sudo pacman-key --populate archlinux
+    sudo pacman-key --refresh-keys
     sudo pacman -Syu
     sudo pacman -Sy base-devel
 fi
