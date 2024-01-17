@@ -55,7 +55,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     sudo pacman-key --init
     sudo pacman-key --populate
     sudo pacman-key --refresh-keys
-    sudo yay -S base-devel
+    sudo pacman -S base-devel
 fi
 
 [[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
