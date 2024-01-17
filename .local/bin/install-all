@@ -37,6 +37,7 @@ PROCS=()
                 sshfs \
                 zsh \
                 tree \
+                the_silver_searcher
                 htop \
                 tmux \
                 tmuxp \
@@ -49,7 +50,7 @@ PROCS=()
     else
         curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
     fi
-} &
+} &> /tmp/yadm-brew &
 PROCS+=($!)
 
 ([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins) &> /tmp/yadm-tpm &
