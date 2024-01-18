@@ -37,7 +37,7 @@ PROCS=()
                 sshfs \
                 zsh \
                 tree \
-                the_silver_searcher
+                the_silver_searcher \
                 htop \
                 tmux \
                 tmuxp \

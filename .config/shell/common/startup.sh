@@ -5,6 +5,7 @@ command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
     if [[ "$(ssh-add -l)" == *"Error"* ]]; then
+        echo removing
         rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
     fi
 else
