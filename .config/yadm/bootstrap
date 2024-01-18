@@ -5,6 +5,7 @@ set -xe
 cd
 
 export CAN_SUDO=$(sudo true && echo "true" || echo "false")
+export HAS_INTERNET=$(ping -c 1 google.com &> /dev/null && echo "true" || echo "false")
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
@@ -19,7 +20,7 @@ fi
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 
-if command -v termux-reload-settings; then
+if [[ "$HAS_INTERNET" == "true" ]] && command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
     pkg install openssh termux-api gnupg fzf dnsutils -y
     yadm decrypt
@@ -51,30 +52,34 @@ fi
 
 [[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
 
-install-all
+if [[ $HAS_INTERNET == "true" ]]; then
+    install-all
 
-if command -v fc-cache > /dev/null; then
-    mkdir -p ~/.local/share/fonts/hack-nerd-font
-    wget -O Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
-    unzip -o Hack.zip -d ~/.local/share/fonts/hack-nerd-font
-    fc-cache -fv
-    rm -rf Hack.zip
-fi
+    if command -v fc-cache > /dev/null; then
+        mkdir -p ~/.local/share/fonts/hack-nerd-font
+        wget -O Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
+        unzip -o Hack.zip -d ~/.local/share/fonts/hack-nerd-font
+        fc-cache -fv
+        rm -rf Hack.zip
+    fi
 
-if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
-    [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
+    if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
+        [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
+    fi
 fi
 
 if [[ $CAN_SUDO == "true" ]]; then
     sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
     sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
 
-    [[ -e /etc/yadm/data/repo.git ]] \
-        || sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
-        && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
-        && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
-        && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
-        && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
+    if [[ $HAS_INTERNET == "true" ]]; then
+        [[ -e /etc/yadm/data/repo.git ]] \
+            || sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
+            && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
+            && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
+            && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
+            && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
+    fi
 
     command -v npm > /dev/null && (sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global)
 
@@ -82,7 +87,9 @@ if [[ $CAN_SUDO == "true" ]]; then
     command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
 fi
 
-[[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]] && . ~/.config/shell/common/work.sh && work-setup
+if [[ $HAS_INTERNET == "true" ]]; then
+    [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]] && . ~/.config/shell/common/work.sh && work-setup
+fi
 
 yadm checkout ~/.bash_profile
 yadm checkout ~/.bashrc
