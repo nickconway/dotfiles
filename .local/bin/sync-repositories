@@ -1,5 +1,5 @@
 #! /bin/bash
-for d in $(find . -name .git -type d -prune -not -path '*flake*'); do
+for d in $(find . -name .git -type d -prune); do
     cd $(dirname $d)
     for f in $(git status --porcelain | awk '{ print $2 }'); do
         file=$(echo $(dirname $d)/$f | cut -c3-)
