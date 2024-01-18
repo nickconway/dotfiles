@@ -23,25 +23,35 @@ alias clipqr='xclip -o | qrencode -t utf8'
 
 alias dbr='eval "$(devbox global shellenv --recompute)"'
 
-alias dco="docker compose"
+function dr() {
+
+    if [[ $# -gt 0 ]]; then
+        docker restart $@
+    else
+        SELECTED=$(docker ps -a --format {{.Names}} | fzf-tmux -p --prompt=" > ")
+        [[ -z $SELECTED ]] || docker restart $SELECTED
+        unset SELECTED
+    fi
+}
+
+alias dc="docker compose"
 alias dcb="docker compose build"
+alias dcd="docker compose down"
 alias dce="docker compose exec"
-alias dcps="docker compose ps"
-alias dcrestart="docker compose restart"
-alias dcrm="docker compose rm"
-alias dcr="docker compose run"
-alias dcstop="docker compose stop"
-alias dcup="docker compose up"
-alias dcupb="docker compose up --build"
-alias dcupd="docker compose up -d"
-alias dcupdate="docker compose down && docker compose pull && docker compose up -d"
-alias dcupdb="docker compose up -d --build"
-alias dcdn="docker compose down"
+alias dck="docker compose kill"
 alias dcl="docker compose logs"
 alias dclf="docker compose logs -f"
+alias dcps="docker compose ps"
 alias dcpull="docker compose pull"
+alias dcr="docker compose run"
+alias dcrs="docker compose restart"
+alias dcrm="docker compose rm"
 alias dcstart="docker compose start"
-alias dck="docker compose kill"
+alias dcstop="docker compose stop"
+alias dcu="docker compose up -d"
+alias dcub="docker compose up --build"
+alias dcudb="docker compose up -d --build"
+alias dcupdate="docker compose down && docker compose pull && docker compose up -d"
 
 alias e="emacsclient -cna ''"
 
