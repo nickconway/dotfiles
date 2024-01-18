@@ -4,14 +4,15 @@ set -xe
 
 export PATH=$HOME/.local/bin:$PATH
 . $HOME/.config/shell/common/encrypted.sh
+DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
 cd ~
 curl -d "Backing up docker containers" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" || echo "Failed to notify of backup start"
 echo "Stopping containers"
 stop-containers
-sudo tar czfv docker-$(date +"%d-%b-%Y-%H-%M-%S").tar.gz docker .local/share/docker/volumes
-sudo chown $USER:$USER docker*.tar.gz
-mv docker*.tar.gz ~/Dropbox/Documents/Backups/
+sudo tar czfv docker-$DATE.tar.gz docker .local/share/docker/volumes
+sudo chown $USER:$USER docker-$DATE.tar.gz
+mv docker-$DATE.tar.gz ~/Dropbox/Documents/Backups/
 start-containers
 until [[ $(curl -f -s -d "Backing up complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") ]]; do
     sleep 3
