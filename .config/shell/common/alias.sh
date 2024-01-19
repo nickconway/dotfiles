@@ -143,7 +143,10 @@ function np() {
 }
 
 function npa() {
-    $@ && ntfy publish notifications "$@ is finished" || ntfy publish notifications "$@ failed"
+    ARGS="$@"
+    $@ \
+        && curl -d "$ARGS finished successfully" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" \
+        || curl -d "$ARGS failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
 }
 
 function pw() {
