@@ -219,6 +219,11 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias v="nvim"
 
+function work() {
+    ssh -N alma &
+    s work
+}
+
 alias x='[[ -z $TMUX ]] && exit 0 || [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]] && exit 0 || tmux detach'
 
 alias ya="yadm add"
