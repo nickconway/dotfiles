@@ -143,7 +143,7 @@ function np() {
 }
 
 function npa() {
-    $@ && ntfy publish notifications "$@ is finished" > /dev/null 2>&1 || ntfy publish notifications "$@ failed" > /dev/null 2>&1
+    $@ && ntfy publish notifications "$@ is finished" || ntfy publish notifications "$@ failed"
 }
 
 function pw() {
