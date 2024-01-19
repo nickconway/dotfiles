@@ -2,5 +2,6 @@
 
 for d in ~/docker/*; do
     cd $d
+    echo $d
     docker compose stop
 done
