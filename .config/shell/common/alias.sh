@@ -190,6 +190,8 @@ function s() {
     fi
 }
 
+alias server='s server'
+
 function svm() {
     s -L 127.0.0.1:4200:127.0.0.1:4200 -L 127.0.0.1:9443:127.0.0.1:9443 $@
 }
@@ -221,6 +223,8 @@ alias v="nvim"
 
 function work() {
     ssh -N alma &
+    PID=$!
+    { until [[ $(pgrep --full 'ssh work') != "" ]]; do true; done; while [[ $(pgrep --full 'ssh work') != "" ]]; do true; done; kill $PID; } &
     s work
 }
 
