@@ -18,7 +18,6 @@ CAN_SUDO=$(sudo true && echo "true" || echo "false")
 
 PROCS=()
 
-echo "homebrew"
 {
     if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"*) ]]; then
         if ! command -v brew > /dev/null; then
@@ -53,37 +52,32 @@ echo "homebrew"
     fi
 } &> /tmp/yadm-brew &
 PID=$!
-echo $PID
+echo "homebrew $PID"
 PROCS+=($!)
 
-echo "tpm"
 ([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; command -v tmux && ~/.tmux/plugins/tpm/bin/install_plugins) &> /tmp/yadm-tpm &
 PID=$!
-echo $PID
+echo "tpm $PID"
 PROCS+=($!)
 
-echo "fzf"
 (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &> /tmp/yadm-fzf &
 PID=$!
-echo $PID
+echo "fzf $PID"
 PROCS+=($!)
 
-echo "nvm"
 (curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash) &> /tmp/yadm-nvm &
 PID=$!
-echo $PID
+echo "nvm $PID"
 PROCS+=($!)
 
-echo "starship"
 (curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y) &> /tmp/yadm-starship &
 PID=$!
-echo $PID
+echo "starship $PID"
 PROCS+=($!)
 
-echo "yq"
 (wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq) &> /tmp/yadm-yq &
 PID=$!
-echo $PID
+echo "yq $PID"
 PROCS+=($!)
 
 {
@@ -94,16 +88,14 @@ PROCS+=($!)
     curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
 } &> /tmp/yadm-zellij &
 PID=$!
-echo $PID
+echo "zellij $PID"
 PROCS+=($!)
 
-echo "zoxide"
 (curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash) &> /tmp/yadm-zoxide &
 PID=$!
-echo $PID
+echo "zoxide $PID"
 PROCS+=($!)
 
-echo "rust"
 {
     command -v rustup > /dev/null && ([[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup update) \
         || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; [[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup default stable)
@@ -118,10 +110,9 @@ echo "rust"
     fi
 } &> /tmp/yadm-cargo &
 PID=$!
-echo $PID
+echo "rust $PID"
 PROCS+=($!)
 
-echo "go"
 {
     [[ -e ~/.go ]] && chmod -R +rwx ~/.go && rm -rf ~/.go
     wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
@@ -140,10 +131,9 @@ echo "go"
     rm -rf ~/gh-cli
 } &> /tmp/yadm-gh-cli &
 PID=$!
-echo $PID
+echo "go $PID"
 PROCS+=($!)
 
-echo "zsh-extras"
 {
     mkdir -p ~/.zsh
     cd ~/.zsh
@@ -153,10 +143,9 @@ echo "zsh-extras"
     cd ~
 } &> /tmp/yadm-zsh-extras &
 PID=$!
-echo $PID
+echo "zsh-extras $PID"
 PROCS+=($!)
 
-echo "tailscale"
 {
     if ! command -v tailscale > /dev/null; then
         if [[ "$(uname -r)" != *"WSL"* ]]; then
@@ -177,10 +166,9 @@ echo "tailscale"
     fi
 } &> /tmp/yadm-tailscale &
 PID=$!
-echo $PID
+echo "tailscale $PID"
 PROCS+=($!)
 
-echo "docker"
 {
     if [[ "$(uname -r)" != *"WSL"* ]] && [[ ! -e ~/.local/bin/dockerd ]]; then
         curl -o .local/bin/slirp4netns --fail -L https://github.com/rootless-containers/slirp4netns/releases/latest/download/slirp4netns-$(uname -m)
@@ -213,10 +201,9 @@ echo "docker"
     fi
 } &> /tmp/yadm-docker &
 PID=$!
-echo $PID
+echo "docker $PID"
 PROCS+=($!)
 
-echo "kitty"
 {
     (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
         && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
@@ -227,10 +214,9 @@ echo "kitty"
         && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 } &> /tmp/yadm-kitty &
 PID=$!
-echo $PID
+echo "kitty $PID"
 PROCS+=($!)
 
-echo "distrobox"
 {
     if [[ $(uname -n) == "steamdeck" ]]; then
         sudo touch /etc/subuid /etc/subgid
@@ -242,10 +228,9 @@ echo "distrobox"
     fi
 } &> /tmp/yadm-steamdeck-distrobox &
 PID=$!
-echo $PID
+echo "distrobox $PID"
 PROCS+=($!)
 
-echo "surface"
 {
 if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
     if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
@@ -272,7 +257,7 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
 fi
 } &> /tmp/yadm-surface &
 PID=$!
-echo $PID
+echo "surface $PID"
 PROCS+=($!)
 
 FAILED=0
