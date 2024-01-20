@@ -128,12 +128,12 @@ PROCS+=($!)
                 git clone https://github.com/tailscale-dev/deck-tailscale.git
                 cd deck-tailscale
                 sudo bash tailscale.sh
-                sudo tailscale up --ssh --accept-routes --operator=deck --authkey $TAILSCALE_KEY
+                sudo tailscale up --ssh --accept-routes --operator=deck --authkey "$TAILSCALE_KEY"
                 cd
                 rm -rf deck-tailscale
             elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
                 curl -fsSL https://tailscale.com/install.sh | sh
-                sudo tailscale up --ssh --accept-routes --authkey $TAILSCALE_KEY
+                sudo tailscale up --ssh --accept-routes --authkey "$TAILSCALE_KEY"
             fi
         fi
     else
