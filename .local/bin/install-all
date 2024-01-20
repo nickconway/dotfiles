@@ -18,6 +18,7 @@ CAN_SUDO=$(sudo true && echo "true" || echo "false")
 
 PROCS=()
 
+echo "homebrew"
 {
     if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"*) ]]; then
         if ! command -v brew > /dev/null; then
@@ -53,18 +54,23 @@ PROCS=()
 } &> /tmp/yadm-brew &
 PROCS+=($!)
 
+echo "tpm"
 ([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; command -v tmux && ~/.tmux/plugins/tpm/bin/install_plugins) &> /tmp/yadm-tpm &
 PROCS+=($!)
 
+echo "fzf"
 (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &> /tmp/yadm-fzf &
 PROCS+=($!)
 
+echo "nvm"
 (curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash) &> /tmp/yadm-nvm &
 PROCS+=($!)
 
+echo "starship"
 (curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y) &> /tmp/yadm-starship &
 PROCS+=($!)
 
+echo "yq"
 (wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq) &> /tmp/yadm-yq &
 PROCS+=($!)
 
@@ -77,9 +83,11 @@ PROCS+=($!)
 } &> /tmp/yadm-zellij &
 PROCS+=($!)
 
+echo "zoxide"
 (curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash) &> /tmp/yadm-zoxide &
 PROCS+=($!)
 
+echo "rust"
 {
     command -v rustup > /dev/null && ([[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup update) \
         || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; [[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup default stable)
@@ -95,6 +103,7 @@ PROCS+=($!)
 } &> /tmp/yadm-cargo &
 PROCS+=($!)
 
+echo "go"
 {
     [[ -e ~/.go ]] && chmod -R +rwx ~/.go && rm -rf ~/.go
     wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
@@ -114,6 +123,7 @@ PROCS+=($!)
 } &> /tmp/yadm-gh-cli &
 PROCS+=($!)
 
+echo "zsh-extras"
 {
     mkdir -p ~/.zsh
     cd ~/.zsh
@@ -124,6 +134,7 @@ PROCS+=($!)
 } &> /tmp/yadm-zsh-extras &
 PROCS+=($!)
 
+echo "tailscale"
 {
     if ! command -v tailscale > /dev/null; then
         if [[ "$(uname -r)" != *"WSL"* ]]; then
@@ -145,6 +156,7 @@ PROCS+=($!)
 } &> /tmp/yadm-tailscale &
 PROCS+=($!)
 
+echo "docker"
 {
     if [[ "$(uname -r)" != *"WSL"* ]] && [[ ! -e ~/.local/bin/dockerd ]]; then
         curl -o .local/bin/slirp4netns --fail -L https://github.com/rootless-containers/slirp4netns/releases/latest/download/slirp4netns-$(uname -m)
@@ -178,6 +190,7 @@ PROCS+=($!)
 } &> /tmp/yadm-docker &
 PROCS+=($!)
 
+echo "kitty"
 {
     (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
         && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
@@ -189,6 +202,7 @@ PROCS+=($!)
 } &> /tmp/yadm-kitty &
 PROCS+=($!)
 
+echo "distrobox"
 {
     if [[ $(uname -n) == "steamdeck" ]]; then
         sudo touch /etc/subuid /etc/subgid
@@ -201,6 +215,7 @@ PROCS+=($!)
 } &> /tmp/yadm-steamdeck-distrobox &
 PROCS+=($!)
 
+echo "surface"
 {
 if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
     if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
