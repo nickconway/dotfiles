@@ -53,6 +53,10 @@ fi
 
 if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]]; then
     . ~/.config/shell/common/work.sh && work-setup
+    yadm checkout ~/.bash_profile
+    yadm checkout ~/.bashrc
+    yadm checkout ~/.zshrc
+    curl -d "Work setup complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
     exit
 fi
 
