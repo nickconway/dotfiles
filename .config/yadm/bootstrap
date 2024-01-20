@@ -51,7 +51,10 @@ fi
 
 [[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
 
-[[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]] && . ~/.config/shell/common/work.sh && work-setup && exit || exit
+if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]]; then
+    . ~/.config/shell/common/work.sh && work-setup
+    exit
+fi
 
 if [[ $HAS_INTERNET == "true" ]]; then
     install-all
