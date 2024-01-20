@@ -81,7 +81,7 @@ PROCS+=($!)
 PROCS+=($!)
 
 {
-    command -v rustup > /dev/null && rustup update || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; ~/.cargo/bin/rustup default stable)
+    command -v rustup > /dev/null && rustup update || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; source ~/.cargo/env; rustup default stable)
     cargo install --locked bat &
     cargo install fd-find &
     cargo install rbw &
