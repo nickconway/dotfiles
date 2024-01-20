@@ -53,7 +53,7 @@ PROCS=()
 } &> /tmp/yadm-brew &
 PROCS+=($!)
 
-([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; ~/.tmux/plugins/tpm/bin/install_plugins) &> /tmp/yadm-tpm &
+([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; command -v tmux && ~/.tmux/plugins/tpm/bin/install_plugins) &> /tmp/yadm-tpm &
 PROCS+=($!)
 
 (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &> /tmp/yadm-fzf &
