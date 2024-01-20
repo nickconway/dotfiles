@@ -135,7 +135,7 @@ PROCS+=($!)
             fi
         fi
     else
-        [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update -y
+        [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update --yes
     fi
 } &> /tmp/yadm-tailscale &
 PROCS+=($!)
