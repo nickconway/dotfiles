@@ -53,11 +53,7 @@ fi
 
 if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]]; then
     . ~/.config/shell/common/work.sh && work-setup
-    yadm checkout ~/.bash_profile
-    yadm checkout ~/.bashrc
-    yadm checkout ~/.zshrc
     curl -d "Work setup complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
-    exit
 fi
 
 if [[ $HAS_INTERNET == "true" ]]; then
@@ -91,7 +87,7 @@ if [[ $CAN_SUDO == "true" ]]; then
 
     command -v npm > /dev/null && (sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global)
 
-    sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells"
+    command -v zsh > /dev/null && (sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells")
     command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
 fi
 
