@@ -51,6 +51,8 @@ fi
 
 [[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
 
+[[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]] && . ~/.config/shell/common/work.sh && work-setup && exit || exit
+
 if [[ $HAS_INTERNET == "true" ]]; then
     install-all
 
@@ -84,10 +86,6 @@ if [[ $CAN_SUDO == "true" ]]; then
 
     sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells"
     command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
-fi
-
-if [[ $HAS_INTERNET == "true" ]]; then
-    [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]] && . ~/.config/shell/common/work.sh && work-setup
 fi
 
 yadm checkout ~/.bash_profile
