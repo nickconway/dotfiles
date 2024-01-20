@@ -105,7 +105,7 @@ PROCS+=($!)
     [[ -e ~/gh-cli ]] && echo "Already exists" || git clone https://github.com/cli/cli.git ~/gh-cli
     cd gh-cli
     git pull
-    make install prefix=$HOME/.local
+    command -v make && make install prefix=$HOME/.local
     rm -rf ~/gh-cli
 } &> /tmp/yadm-gh-cli &
 PROCS+=($!)
@@ -136,7 +136,7 @@ PROCS+=($!)
             fi
         fi
     else
-        [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update --yes
+        [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update --yes || echo "Could not update"
     fi
 } &> /tmp/yadm-tailscale &
 PROCS+=($!)
