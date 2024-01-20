@@ -248,4 +248,4 @@ for pid in ${PROCS[@]}; do
     wait $pid || (echo $pid && FAILED="1")
 done
 
-[[ "$FAILED" == "1" ]] && exit 1
+[[ "$FAILED" == "1" ]] && exit 1 || exit 0
