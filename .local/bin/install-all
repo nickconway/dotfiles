@@ -102,8 +102,9 @@ PROCS+=($!)
     curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
     rm ~/go*.linux-amd64.tar.gz
 
-    git clone https://github.com/cli/cli.git ~/gh-cli
+    [[ -e ~/gh-cli ]] && echo "Already exists" || git clone https://github.com/cli/cli.git ~/gh-cli
     cd gh-cli
+    git pull
     make install prefix=$HOME/.local
     rm -rf ~/gh-cli
 } &> /tmp/yadm-gh-cli &
