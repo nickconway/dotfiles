@@ -52,26 +52,38 @@ echo "homebrew"
         curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
     fi
 } &> /tmp/yadm-brew &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "tpm"
 ([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; command -v tmux && ~/.tmux/plugins/tpm/bin/install_plugins) &> /tmp/yadm-tpm &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "fzf"
 (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &> /tmp/yadm-fzf &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "nvm"
 (curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash) &> /tmp/yadm-nvm &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "starship"
 (curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y) &> /tmp/yadm-starship &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "yq"
 (wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq) &> /tmp/yadm-yq &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 {
@@ -81,10 +93,14 @@ PROCS+=($!)
     curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
     curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
 } &> /tmp/yadm-zellij &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "zoxide"
 (curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash) &> /tmp/yadm-zoxide &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "rust"
@@ -101,6 +117,8 @@ echo "rust"
         cargo install tree-sitter-cli &
     fi
 } &> /tmp/yadm-cargo &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "go"
@@ -121,6 +139,8 @@ echo "go"
     command -v make && make install prefix=$HOME/.local
     rm -rf ~/gh-cli
 } &> /tmp/yadm-gh-cli &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "zsh-extras"
@@ -132,6 +152,8 @@ echo "zsh-extras"
     [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
     cd ~
 } &> /tmp/yadm-zsh-extras &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "tailscale"
@@ -154,6 +176,8 @@ echo "tailscale"
         [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update --yes || echo "Could not update"
     fi
 } &> /tmp/yadm-tailscale &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "docker"
@@ -188,6 +212,8 @@ echo "docker"
         docker network inspect proxy || docker network create proxy
     fi
 } &> /tmp/yadm-docker &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "kitty"
@@ -200,6 +226,8 @@ echo "kitty"
         && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
         && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 } &> /tmp/yadm-kitty &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "distrobox"
@@ -213,6 +241,8 @@ echo "distrobox"
         distrobox create -i ubuntu
     fi
 } &> /tmp/yadm-steamdeck-distrobox &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 echo "surface"
@@ -241,6 +271,8 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
         sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
 fi
 } &> /tmp/yadm-surface &
+PID=$!
+echo $PID
 PROCS+=($!)
 
 FAILED="0"
