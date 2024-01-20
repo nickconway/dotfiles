@@ -275,9 +275,11 @@ PID=$!
 echo $PID
 PROCS+=($!)
 
-FAILED="0"
+FAILED=0
 for pid in ${PROCS[@]}; do
-    wait $pid || echo $pid && FAILED="1"
+    if ! wait $pid; then
+        echo $pid
+        FAILED=$((FAILED+1))
+    fi
 done
-
-[[ "$FAILED" == "1" ]] && exit 1 || exit 0
+[[ $FAILED -ne 0 ]] && exit 1 || exit 0
