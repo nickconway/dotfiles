@@ -4,6 +4,21 @@ set -xe
 
 cd
 
+yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+if [[ $(yadm config local.class) == "" ]]; then
+    read -p "Enter YADM class (q to quit): " YADM_CLASS
+    while [[ "$YADM_CLASS" != "q" ]] && [[ "$YADM_CLASS" != "" ]]; do
+        yadm config --add local.class $YADM_CLASS
+        read -p "Enter another YADM class (q to quit): " YADM_CLASS
+    done
+fi
+
+export GPG_TTY=$(tty)
+yadm decrypt
+yadm alt
+
+. ~/.config/shell/common/encrypted.sh
+
 export CAN_SUDO=$(sudo true && echo "true" || echo "false")
 export HAS_INTERNET=$(ping -c 1 google.com &> /dev/null && echo "true" || echo "false")
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
@@ -18,8 +33,6 @@ if [[ "$(ls ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
     ssh-add
 fi
 
-yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-
 if [[ "$HAS_INTERNET" == "true" ]] && command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
     pkg install openssh termux-api gnupg fzf dnsutils zsh -y
@@ -27,20 +40,6 @@ if [[ "$HAS_INTERNET" == "true" ]] && command -v termux-reload-settings; then
     yadm alt
     exit
 fi
-
-if [[ $(yadm config local.class) == "" ]]; then
-    read -p "Enter YADM class (q to quit): " YADM_CLASS
-    while [[ "$YADM_CLASS" != "q" ]] && [[ "$YADM_CLASS" != "" ]]; do
-        yadm config --add local.class $YADM_CLASS
-        read -p "Enter another YADM class (q to quit): " YADM_CLASS
-    done
-fi
-
-export GPG_TTY=$(tty)
-yadm decrypt
-yadm alt
-
-. ~/.config/shell/common/encrypted.sh
 
 if [[ -e ~/.ssh/authorized_keys ]]; then
     for f in $(ls ~/.ssh/*.pub); do 
