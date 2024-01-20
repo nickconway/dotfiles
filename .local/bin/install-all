@@ -97,10 +97,11 @@ PROCS+=($!)
     wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
     tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz
     mv ~/go ~/.go
+    rm ~/go*.linux-amd64.tar.gz
+
     export GOPATH=~/.go
     ~/.go/bin/go install github.com/jesseduffield/lazygit@latest
     curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-    rm ~/go*.linux-amd64.tar.gz
 
     [[ -e ~/gh-cli ]] && echo "Already exists" || git clone https://github.com/cli/cli.git ~/gh-cli
     cd gh-cli
