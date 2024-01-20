@@ -223,6 +223,9 @@ fi
 } &> /tmp/yadm-surface &
 PROCS+=($!)
 
+FAILED="0"
 for pid in ${PROCS[@]}; do
-    wait $pid
+    wait $pid || FAILED="1"
 done
+
+[[ "$FAILED" == "1" ]] && exit 1
