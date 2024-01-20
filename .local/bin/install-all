@@ -245,7 +245,7 @@ PROCS+=($!)
 
 FAILED="0"
 for pid in ${PROCS[@]}; do
-    wait $pid || (echo $pid && FAILED="1")
+    wait $pid || echo $pid && FAILED="1"
 done
 
 [[ "$FAILED" == "1" ]] && exit 1 || exit 0
