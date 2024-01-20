@@ -84,12 +84,14 @@ PROCS+=($!)
     command -v rustup > /dev/null && ([[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup update) \
         || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; [[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup default stable)
     [[ -e ~/.cargo/env ]] && source ~/.cargo/env;
-    cargo install --locked bat &
-    cargo install fd-find &
-    cargo install rbw &
-    cargo install ripgrep &
-    cargo install tealdeer &
-    cargo install tree-sitter-cli &
+    if command -v cc; then
+        cargo install --locked bat &
+        cargo install fd-find &
+        cargo install rbw &
+        cargo install ripgrep &
+        cargo install tealdeer &
+        cargo install tree-sitter-cli &
+    fi
 } &> /tmp/yadm-cargo &
 PROCS+=($!)
 
