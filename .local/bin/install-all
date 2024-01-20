@@ -55,7 +55,7 @@ PID=$!
 echo "homebrew $PID"
 PROCS+=($!)
 
-([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; command -v tmux && ~/.tmux/plugins/tpm/bin/install_plugins) &> /tmp/yadm-tpm &
+([[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; command -v tmux && ~/.tmux/plugins/tpm/bin/install_plugins || echo "tmux not installed") &> /tmp/yadm-tpm &
 PID=$!
 echo "tpm $PID"
 PROCS+=($!)
