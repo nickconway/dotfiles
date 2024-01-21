@@ -2,7 +2,7 @@
 for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
     cd $d
     cd ..
-    if [[ $(git status --porcelain) != "" ]]; then
+    if [[ $(git status --porcelain) != "" ]] && [[ $(git status --porcelain) != " M Makefile.Debug"* ]]; then
         pwd
         git status
         echo 
