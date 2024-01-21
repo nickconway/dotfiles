@@ -8,5 +8,6 @@ for d in $(find . -name .git -type d -prune); do
             scp $(pwd)/$f $1/$file
         fi
     done
+    echo
     cd - > /dev/null
 done
