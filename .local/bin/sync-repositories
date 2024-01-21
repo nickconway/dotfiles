@@ -1,7 +1,7 @@
 #! /bin/bash
 for d in $(find . -name .git -type d -prune); do
     cd $(dirname $d)
-    if git status --porcelain > /dev/null; then
+    if [[ $(git status --porcelain) != "" ]]; then
         for f in $(git status --porcelain | awk '{ print $2 }'); do
             file=$(echo $(dirname $d)/$f | cut -c3-)
             echo "$(pwd)/$f to $1/$file"
