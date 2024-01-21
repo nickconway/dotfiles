@@ -4,7 +4,7 @@ for d in $(find . -name .git -type d -prune); do
     for f in $(git status --porcelain | awk '{ print $2 }'); do
         file=$(echo $(dirname $d)/$f | cut -c3-)
         echo "$(pwd)/$f to $1/$file"
-        if [[ "$1" != "dry" ]]; then
+        if [[ "$2" != "dry" ]]; then
             scp $(pwd)/$f $1/$file
         fi
     done
