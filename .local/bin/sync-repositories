@@ -1,13 +1,15 @@
 #! /bin/bash
 for d in $(find . -name .git -type d -prune); do
     cd $(dirname $d)
-    for f in $(git status --porcelain | awk '{ print $2 }'); do
-        file=$(echo $(dirname $d)/$f | cut -c3-)
-        echo "$(pwd)/$f to $1/$file"
-        if [[ "$2" != "dry" ]]; then
-            scp $(pwd)/$f $1/$file
-        fi
-    done
-    echo
+    if git status --porcelain > /dev/null; then
+        for f in $(git status --porcelain | awk '{ print $2 }'); do
+            file=$(echo $(dirname $d)/$f | cut -c3-)
+            echo "$(pwd)/$f to $1/$file"
+            if [[ "$2" != "dry" ]]; then
+                scp $(pwd)/$f $1/$file
+            fi
+        done
+        echo
+    fi
     cd - > /dev/null
 done
