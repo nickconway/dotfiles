@@ -39,7 +39,6 @@ PROCS=()
                 tree \
                 the_silver_searcher \
                 htop \
-                tmux \
                 tmuxp \
                 cmake \
                 rsync \
@@ -67,7 +66,7 @@ PROCS+=($!)
         git clone https://github.com/tmux/tmux.git
         cd tmux
         sh autogen.sh
-        ./configure
+        ./configure --prefix=$HOME/.local
         make && sudo make install
         cd
         rm -rf tmux
