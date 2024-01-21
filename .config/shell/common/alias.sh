@@ -21,6 +21,8 @@ alias c='clear'
 
 alias clipqr='xclip -o | qrencode -t utf8'
 
+alias desktop='s desktop'
+
 alias dbr='eval "$(devbox global shellenv --recompute)"'
 
 function dr() {
@@ -195,9 +197,7 @@ function s() {
 
 alias server='s server'
 
-function svm() {
-    s -L 127.0.0.1:4200:127.0.0.1:4200 -L 127.0.0.1:9443:127.0.0.1:9443 $@
-}
+alias steamdeck='s steamdeck'
 
 alias tldrf="tldr --list | fzf-tmux -p --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
 
@@ -223,13 +223,9 @@ alias tkss='tmux kill-session -t'
 alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 alias v="nvim"
+alias vm='s alma'
 
-function work() {
-    ssh -N alma &
-    PID=$!
-    { until [[ $(pgrep --full 'ssh work') != "" ]]; do true; done; while [[ $(pgrep --full 'ssh work') != "" ]]; do true; done; kill $PID; } &
-    s work
-}
+alias work='s alma'
 
 alias x='[[ -z $TMUX ]] && exit 0 || [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]] && exit 0 || tmux detach'
 
