@@ -205,5 +205,5 @@ map("n", "<leader>gg", function()
         yadm:toggle()
     end
 end, "Lazygit")
-map("n", "<leader>gn", "<cmd>Gitsigns next_hunk<CR>")
-map("n", "<leader>gp", "<cmd>Gitsigns prev_hunk<CR>")
+map("n", "<leader>gn", "<cmd>Gitsigns next_hunk<CR>", "Next hunk")
+map("n", "<leader>gp", "<cmd>Gitsigns prev_hunk<CR>", "Previous hunk")
