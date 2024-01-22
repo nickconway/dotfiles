@@ -198,10 +198,12 @@ local yadm = Terminal:new({
     end,
 })
 
-map("n", "<leader>g", function()
+map("n", "<leader>gg", function()
     if is_git_repo() then
         lazygit:toggle()
     else
         yadm:toggle()
     end
-end, "Git")
+end, "Lazygit")
+map("n", "<leader>gn", "<cmd>Gitsigns next_hunk")
+map("n", "<leader>gp", "<cmd>Gitsigns prev_hunk")
