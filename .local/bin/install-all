@@ -210,7 +210,9 @@ PROCS[$!]="tailscale"
                 docker network inspect proxy || docker network create proxy
                 systemctl --user stop docker
             else
-                rm -f ~/bin/dockerd
+                rm -f ~/.local/bin/dockerd
+                export DOCKER_BIN=~/.local/bin
+                export SKIP_IPTABLES=1 
                 curl -fsSL https://get.docker.com/rootless | sh
             fi
         fi
