@@ -57,7 +57,7 @@ if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get
 fi
 
 if [[ $HAS_INTERNET == "true" ]]; then
-    install-all
+    install-all || echo "Installing some programs failed"
 
     if command -v fc-cache > /dev/null; then
         mkdir -p ~/.local/share/fonts/hack-nerd-font
