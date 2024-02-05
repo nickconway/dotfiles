@@ -35,7 +35,6 @@ declare -A PROCS
             brew update --force --quiet
             chmod -R go-w "$(brew --prefix)/share/zsh"
             brew install \
-                neovim \
                 sshfs \
                 zsh \
                 tree \
@@ -48,11 +47,11 @@ declare -A PROCS
         else
             brew update
         fi
-    else
-        curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
     fi
 } &> /tmp/yadm-brew &
 PROCS[$!]="homebrew"
+
+curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim && chmod +x ~/.local/bin/nvim
 
 {
     if [[ "$CAN_SUDO" == "true" ]]; then
