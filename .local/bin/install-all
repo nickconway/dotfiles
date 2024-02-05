@@ -198,7 +198,7 @@ PROCS+=($!)
         if [[ "$(yadm config --get-all local.class)" == *"server"* ]]; then
             curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
             chmod +x ~/.local/bin/get-docker
-            sh ~/.local/bin/get-docker-rootless
+            sh ~/.local/bin/get-docker
             sudo groupadd docker
             sudo usermod -aG docker $USER
             newgrp docker
