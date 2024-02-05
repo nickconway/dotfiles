@@ -211,9 +211,12 @@ PROCS[$!]="tailscale"
                 systemctl --user stop docker
             else
                 rm -f ~/.local/bin/dockerd
+                curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
+                chmod +x ~/.local/bin/get-docker-rootless
+
                 export DOCKER_BIN=~/.local/bin
                 export SKIP_IPTABLES=1 
-                curl -fsSL https://get.docker.com/rootless | sh
+                sh ~/.local/bin/get-docker-rootless
             fi
         fi
     fi
