@@ -155,6 +155,7 @@ PROCS[$!]="zsh-extras"
                 git clone https://github.com/tailscale-dev/deck-tailscale.git
                 cd deck-tailscale
                 sudo bash tailscale.sh
+                source /etc/profile.d/tailscale.sh
                 sudo tailscale up --ssh --accept-routes --operator=deck --authkey "$TAILSCALE_KEY"
                 cd
                 rm -rf deck-tailscale
