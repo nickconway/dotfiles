@@ -268,7 +268,7 @@ PROCS[$!]="surface"
 FAILED=0
 for pid in ${!PROCS[@]}; do
     if ! wait $pid; then
-        echo $PROCS[$pid] failed
+        echo ${PROCS[$pid]} failed
         FAILED=$((FAILED+1))
     fi
 done
