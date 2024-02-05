@@ -11,8 +11,8 @@ if [[ $(uname -n) == "steamdeck" ]]; then
         sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
         sudo pacman-key --init
         sudo pacman-key --populate archlinux
-        sudo pacman -Syu
-        sudo pacman -Sy base-devel
+        sudo pacman -Syu --noconfirm
+        sudo pacman -Sy base-devel --noconfirm
     } || echo "Steamdeck read-only disabling failed"
 fi
 
@@ -28,7 +28,7 @@ declare -A PROCS
             elif command -v yum > /dev/null; then
                 sudo yum groupinstall 'Development Tools' -y && sudo yum install procps-ng curl file git -y
             elif command -v pacman > /dev/null; then
-                sudo pacman -Syu base-devel procps-ng curl file git
+                sudo pacman -Syu base-devel procps-ng curl file git --noconfirm
             fi
             NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             eval "$(brew shellenv)"
@@ -61,7 +61,7 @@ PROCS[$!]="homebrew"
             elif command -v yum > /dev/null; then
                 sudo yum install libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config -y
             elif command -v pacman > /dev/null; then
-                sudo pacman -Syu base-devel procps-ng curl file git
+                sudo pacman -Syu base-devel procps-ng curl file git --noconfirm
             fi
         git clone https://github.com/tmux/tmux.git
         cd tmux
