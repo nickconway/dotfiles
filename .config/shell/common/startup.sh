@@ -17,7 +17,7 @@ if command -v termux-reload-settings > /dev/null; then
         unset SELECTED
         return
     else
-        ssh -t $SELECTED SSH_HOSTNAME=$(hostname) '$SHELL' -l
+        ssh -t $SELECTED SSH_HOSTNAME=$(uname -n) '$SHELL' -l
         unset SELECTED
         exit
     fi
