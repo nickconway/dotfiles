@@ -97,7 +97,7 @@ function ghprm() {
     gm -
 }
 
-alias internet-connection='ping -c 1 google.com &> /dev/null'
+alias internet-connection='ping -c 1 8.8.8.8 &> /dev/null'
 
 # List directory contents
 alias l='ls -h --color'
