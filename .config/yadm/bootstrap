@@ -2,6 +2,10 @@
 
 set -xe
 
+export CAN_SUDO=$(sudo true && echo "true" || echo "false")
+export HAS_INTERNET=$(ping -c 1 8.8.8.8 &> /dev/null && echo "true" || echo "false")
+export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
+
 cd
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
@@ -18,10 +22,6 @@ yadm decrypt
 yadm alt
 
 . ~/.config/shell/common/encrypted.sh
-
-export CAN_SUDO=$(sudo true && echo "true" || echo "false")
-export HAS_INTERNET=$(ping -c 1 google.com &> /dev/null && echo "true" || echo "false")
-export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
