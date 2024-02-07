@@ -1,8 +1,3 @@
 #!/bin/bash
 
-for d in ~/docker/*; do
-    cd $d
-    if [[ -e docker-compose.yaml ]] || [[ -e docker-compose.yml ]] || [[ -e compose.yaml ]] || [[ -e compose.yml ]]; then
-        docker compose up -d
-    fi
-done
+docker start $(docker ps -qa)
