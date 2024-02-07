@@ -96,6 +96,8 @@ map("n", "<leader>so", ":so %<CR>", "Source current file")
 map("n", "<leader>ss", ":w<CR>", "Save file")
 map("n", "<leader>st", ":wq<CR>", "Save and close window")
 
+map("n", "<leader>t", ":TroubleToggle<CR>", "Trouble")
+
 map("n", "<leader>=", "<c-w>T", "Move to new tab")
 map("n", "<leader>ww", "<c-w>=", "Resize windows equally")
 
