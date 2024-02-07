@@ -97,4 +97,4 @@ yadm checkout ~/.zshrc
 
 echo "All done!"
 
-curl -d "Bootstrapping complete on $(hostname)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
+curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
