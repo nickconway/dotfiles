@@ -11,12 +11,12 @@ curl -d "Backing up docker containers" https://ntfy.conway.dev/notifications -H 
 echo "Stopping containers"
 stop-containers
 sudo tar czfv docker-$(hostname)-"$DATE".tar.gz docker $(sudo test -e /var/lib/docker/volumes && echo /var/lib/docker/volumes) $([[ -e ~/.local/share/docker/volumes ]] && echo .local/share/docker/volumes)
-sudo chown $USER:$USER docker-$(hostname)-"$DATE".tar.gz
+sudo chown $(whoami):$(whoami) docker-$(hostname)-"$DATE".tar.gz
 mv docker-$(hostname)-"$DATE".tar.gz ~/Dropbox/Documents/Backups/
 start-containers
 
 cd ~/Dropbox
-dropbox exclude add Documents/Backups/*
+dropbox exclude add Documents/Backups/docker-$(hostname)-"$DATE".tar.gz
 
 until [[ $(curl -f -s -d "Backing up complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") ]]; do
     sleep 3
