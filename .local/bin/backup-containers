@@ -12,9 +12,9 @@ echo "Stopping containers"
 stop-containers
 sudo tar czfv docker-$(hostname)-"$DATE".tar.gz docker $(sudo test -e /var/lib/docker/volumes && echo /var/lib/docker/volumes) $([[ -e ~/.local/share/docker/volumes ]] && echo .local/share/docker/volumes)
 sudo chown $(whoami):$(whoami) docker-$(hostname)-"$DATE".tar.gz
-mv docker-$(hostname)-"$DATE".tar.gz ~/Dropbox/Documents/Backups/
 start-containers
 
+mv docker-$(hostname)-"$DATE".tar.gz ~/Dropbox/Documents/Backups/
 cd ~/Dropbox
 dropbox exclude add Documents/Backups/docker-$(hostname)-"$DATE".tar.gz
 
