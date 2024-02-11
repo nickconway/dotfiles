@@ -36,6 +36,12 @@ fi
 if [[ "$HAS_INTERNET" == "true" ]] && command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
     pkg install openssh termux-api gnupg fzf dnsutils zsh -y
+    mkdir -p ~/.zsh
+    cd ~/.zsh
+    [[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
+    [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
+    [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+    cd ~
     yadm decrypt
     yadm alt
     exit
