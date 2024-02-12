@@ -225,14 +225,16 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 function tu() {
     if [[ $(uname -n) == "steamdeck" ]]; then
         tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client,tag:server" --login-server https://vpn.conway.dev $@
-    elif [[ $(yadm config --get-all local.class) != *"server"* && $(yadm config --get-all local.class) != *"work"* ]]; then
-        tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
-    else
+    elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
+        tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:work" --login-server https://vpn.conway.dev $@
+    elif [[ $(yadm config --get-all local.class) != *"server"* ]]; then
         if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-            tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --advertise-tags="tag:server" --login-server https://vpn.conway.dev $@
+            tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --login-server https://vpn.conway.dev $@
         else
-            tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --advertise-tags="tag:server" --accept-dns=false --login-server https://vpn.conway.dev $@
+            tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --accept-dns=false --login-server https://vpn.conway.dev $@
         fi
+    else
+        tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
     fi
 }
 
