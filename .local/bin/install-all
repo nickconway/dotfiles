@@ -149,21 +149,21 @@ PROCS[$!]="zsh-extras"
 
 {
     if ! command -v tailscale > /dev/null; then
-        if [[ "$(uname -r)" != *"WSL"* ]]; then
+        if [[ "$(uname -r)" != *"WSL"*  || "$(uname -r)" == *"tailscale"* ]]; then
             if [[ $(uname -n) == "steamdeck" ]]; then
                 git clone https://github.com/tailscale-dev/deck-tailscale.git
                 cd deck-tailscale
                 sudo bash tailscale.sh
                 source /etc/profile.d/tailscale.sh
-                sudo tailscale up --ssh --accept-routes --operator=deck --authkey "$TAILSCALE_KEY"
+                sudo tailscale up --ssh --accept-routes --operator=deck --authkey "$VPN_KEY" --login-server https://vpn.conway.dev
                 cd
                 rm -rf deck-tailscale
             elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
                     curl -fsSL https://tailscale.com/install.sh | sh
                 if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-                    sudo tailscale up --ssh --accept-routes --authkey "$TAILSCALE_KEY"
+                    sudo tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --login-server https://vpn.conway.dev
                 else
-                    sudo tailscale up --ssh --accept-routes --authkey "$TAILSCALE_KEY" --accept-dns=false
+                    sudo tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --accept-dns=false --login-server https://vpn.conway.dev
                 fi
             fi
         fi
