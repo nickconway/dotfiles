@@ -155,16 +155,27 @@ PROCS[$!]="zsh-extras"
                 cd deck-tailscale
                 sudo bash tailscale.sh
                 source /etc/profile.d/tailscale.sh
-                sudo tailscale up --ssh --accept-routes --operator=deck --authkey "$VPN_KEY" --advertise-tags="client server" --login-server https://vpn.conway.dev
+            elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
+                curl -fsSL https://tailscale.com/install.sh | sh
+            fi
+
+            if [[ $(uname -n) == "steamdeck" ]]; then
+                sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client,tag:server" --login-server https://vpn.conway.dev
+            elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
+                if [[ $(yadm config --get-all local.class) != *"server"* && $(yadm config --get-all local.class) != *"work"* ]]; then
+                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client" --login-server https://vpn.conway.dev
+                else
+                    if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
+                        sudo tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --advertise-tags="tag:server" --login-server https://vpn.conway.dev
+                    else
+                        sudo tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --advertise-tags="tag:server" --accept-dns=false --login-server https://vpn.conway.dev
+                    fi
+                fi
+            fi
+
+            if [[ $(uname -n) == "steamdeck" ]]; then
                 cd
                 rm -rf deck-tailscale
-            elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
-                    curl -fsSL https://tailscale.com/install.sh | sh
-                if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-                    sudo tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --login-server https://vpn.conway.dev
-                else
-                    sudo tailscale up --ssh --accept-routes --authkey "$VPN_KEY" --accept-dns=false --login-server https://vpn.conway.dev
-                fi
             fi
         fi
     else
