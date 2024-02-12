@@ -168,7 +168,7 @@ PROCS[$!]="zsh-extras"
                     else
                         sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --accept-dns=false --login-server https://vpn.conway.dev
                     fi
-                elif [[ $(yadm config --get-all local.class) != *"work"* ]]; then
+                elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
                     sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:work" --login-server https://vpn.conway.dev
                 else
                     sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client" --login-server https://vpn.conway.dev

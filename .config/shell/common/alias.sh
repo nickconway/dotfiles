@@ -227,7 +227,7 @@ function tu() {
         tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client,tag:server" --login-server https://vpn.conway.dev $@
     elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
         tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:work" --login-server https://vpn.conway.dev $@
-    elif [[ $(yadm config --get-all local.class) != *"server"* ]]; then
+    elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
         if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
             tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --login-server https://vpn.conway.dev $@
         else
