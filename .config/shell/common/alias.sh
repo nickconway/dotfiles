@@ -233,6 +233,12 @@ function tu() {
         else
             tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --accept-dns=false --login-server https://vpn.conway.dev $@
         fi
+    elif [[ "$(uname -r)" == *"WSL"* ]]; then
+        if [[ -e /c ]]; then
+            /c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
+        elif [[ -e /mnt/c ]]; then
+            /mnt/c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
+        fi
     else
         tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
     fi
