@@ -224,11 +224,7 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 function tu() {
     if [[ "$(uname -r)" == *"WSL"* ]]; then
-        if [[ -e /c/Program\ Files/Tailscale ]]; then
-            TS_COMMAND="/c/Program\ Files/Tailscale/tailscale.exe"
-        elif [[ -e /mnt/c/Program\ Files/Tailscale ]]; then
-            TS_COMMAND="/mnt/c/Program\ Files/Tailscale/tailscale.exe"
-        fi
+        TS_COMMAND="tailscale.exe"
         TS_FLAGS="up --accept-routes --authkey $VPN_KEY"
     else
         TS_COMMAND="tailscale"
