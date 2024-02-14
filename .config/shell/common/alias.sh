@@ -253,10 +253,6 @@ function tu() {
         TS_FLAGS+=" --accept-dns=false"
     fi
 
-    if [[ $(yadm config --get-all local.class) == *"subnet-router"* ]]; then
-        TS_FLAGS+=" --advertise-routes=10.0.107.0/24"
-    fi
-
     echo "$TS_COMMAND $TS_FLAGS $@"
     eval "$TS_COMMAND $TS_FLAGS $@"
 
