@@ -10,7 +10,7 @@ cd
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
 if [[ $(yadm config local.class) == "" ]]; then
-    read -p "Enter YADM class (q to quit): " YADM_CLASS
+    read -p "Enter YADM class [dns, server, surface, vm, vpn, work] (q to quit): " YADM_CLASS
     while [[ "$YADM_CLASS" != "q" ]] && [[ "$YADM_CLASS" != "" ]]; do
         yadm config --add local.class $YADM_CLASS
         read -p "Enter another YADM class (q to quit): " YADM_CLASS
