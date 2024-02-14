@@ -224,23 +224,23 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 function tu() {
     if [[ $(uname -n) == "steamdeck" ]]; then
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client,tag:server" $@
+        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client,tag:server" --authkey "$VPN_KEY" $@
     elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:work" $@
+        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:work" --authkey "$VPN_KEY" $@
     elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
         if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" $@
+            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --authkey "$VPN_KEY" $@
         else
-            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --accept-dns=false $@
+            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --accept-dns=false --authkey "$VPN_KEY" $@
         fi
     elif [[ "$(uname -r)" == *"WSL"* ]]; then
-        if [[ -e /c ]]; then
-            /c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" $@
-        elif [[ -e /mnt/c ]]; then
-            /mnt/c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" $@
+        if [[ -e /c/Program\ Files/Tailscale ]]; then
+            /c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --authkey "$VPN_KEY" $@
+        elif [[ -e /mnt/c/Program\ Files/Tailscale ]]; then
+            /mnt/c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --authkey "$VPN_KEY" $@
         fi
     else
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client" $@
+        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client" --authkey "$VPN_KEY" $@
     fi
 }
 

@@ -161,17 +161,17 @@ PROCS[$!]="zsh-extras"
 
             if [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
                 if [[ $(uname -n) == "steamdeck" ]]; then
-                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client,tag:server" --login-server https://vpn.conway.dev
+                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client,tag:server" 
                 elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
                     if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-                        sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --login-server https://vpn.conway.dev
+                        sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" 
                     else
-                        sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --accept-dns=false --login-server https://vpn.conway.dev
+                        sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --accept-dns=false 
                     fi
                 elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
-                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:work" --login-server https://vpn.conway.dev
+                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:work" 
                 else
-                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client" --login-server https://vpn.conway.dev
+                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client" 
                 fi
             fi
 
