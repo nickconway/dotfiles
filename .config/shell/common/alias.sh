@@ -224,23 +224,23 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 function tu() {
     if [[ $(uname -n) == "steamdeck" ]]; then
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client,tag:server" --login-server https://vpn.conway.dev $@
+        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client,tag:server" $@
     elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:work" --login-server https://vpn.conway.dev $@
+        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:work" $@
     elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
         if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --login-server https://vpn.conway.dev $@
+            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" $@
         else
-            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --accept-dns=false --login-server https://vpn.conway.dev $@
+            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --accept-dns=false $@
         fi
     elif [[ "$(uname -r)" == *"WSL"* ]]; then
         if [[ -e /c ]]; then
-            /c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
+            /c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" $@
         elif [[ -e /mnt/c ]]; then
-            /mnt/c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
+            /mnt/c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" $@
         fi
     else
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client" --login-server https://vpn.conway.dev $@
+        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client" $@
     fi
 }
 
