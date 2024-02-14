@@ -223,25 +223,41 @@ alias tkss='tmux kill-session -t'
 alias tmuxconf='$EDITOR ~/.tmux.conf'
 
 function tu() {
-    if [[ $(uname -n) == "steamdeck" ]]; then
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client,tag:server" --authkey "$VPN_KEY" $@
-    elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:work" --authkey "$VPN_KEY" $@
-    elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
-        if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --authkey "$VPN_KEY" $@
-        else
-            tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:server" --accept-dns=false --authkey "$VPN_KEY" $@
-        fi
-    elif [[ "$(uname -r)" == *"WSL"* ]]; then
+    if [[ "$(uname -r)" == *"WSL"* ]]; then
         if [[ -e /c/Program\ Files/Tailscale ]]; then
-            /c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --authkey "$VPN_KEY" $@
+            TS_COMMAND="/c/Program\ Files/Tailscale/tailscale.exe"
         elif [[ -e /mnt/c/Program\ Files/Tailscale ]]; then
-            /mnt/c/Program\ Files/Tailscale/tailscale.exe up --unattended --accept-routes --advertise-tags="tag:client" --authkey "$VPN_KEY" $@
+            TS_COMMAND="/mnt/c/Program\ Files/Tailscale/tailscale.exe"
         fi
+        TS_FLAGS="up --accept-routes --authkey $VPN_KEY"
     else
-        tailscale up --ssh --accept-routes --operator=$(whoami) --advertise-tags="tag:client" --authkey "$VPN_KEY" $@
+        TS_COMMAND="tailscale"
+        TS_FLAGS="up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY"
     fi
+
+    if [[ $(uname -n) == "steamdeck" ]]; then
+        TS_FLAGS+=" --advertise-tags=tag:client,tag:server"
+    elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
+        TS_FLAGS+=" --advertise-tags=tag:work"
+    elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
+        TS_FLAGS+=" --advertise-tags=tag:server"
+    else
+        TS_FLAGS+=" --advertise-tags=tag:client"
+    fi
+
+    if [[ "$(uname -r)" == *"WSL"* ]]; then
+        TS_FLAGS+=" --unattended"
+    fi
+
+    if [[ $(yadm config --get-all local.class) == *"dns"* ]]; then
+        TS_FLAGS+=" --accept-dns=false"
+    fi
+
+    echo "$TS_COMMAND $TS_FLAGS $@"
+    eval "$TS_COMMAND $TS_FLAGS $@"
+
+    echo "$TS_COMMAND set --auto-update"
+    eval "$TS_COMMAND set --auto-update"
 }
 
 alias v="nvim"

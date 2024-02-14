@@ -149,31 +149,37 @@ PROCS[$!]="zsh-extras"
 
 {
     if ! command -v tailscale > /dev/null; then
-        if [[ "$(uname -r)" != *"WSL"*  || "$(uname -r)" == *"vpn"* ]]; then
+        if [[ "CAN_SUDO" == "true" && "$(uname -r)" == *"vpn"* ]]; then
             if [[ $(uname -n) == "steamdeck" ]]; then
                 git clone https://github.com/tailscale-dev/deck-tailscale.git
                 cd deck-tailscale
                 sudo bash tailscale.sh
                 source /etc/profile.d/tailscale.sh
-            elif [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
+            else
                 curl -fsSL https://tailscale.com/install.sh | sh
             fi
 
-            if [[ "$CAN_SUDO" == "true" && "$(yadm config --get-all local.class)" != *"no-tailscale"* ]]; then
-                if [[ $(uname -n) == "steamdeck" ]]; then
-                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client,tag:server" 
-                elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
-                    if [[ $(yadm config --get-all local.class) != *"dns"* ]]; then
-                        sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" 
-                    else
-                        sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:server" --accept-dns=false 
-                    fi
-                elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
-                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:work" 
-                else
-                    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey "$VPN_KEY" --advertise-tags="tag:client" 
-                fi
+            TS_COMMAND="sudo tailscale up"
+            TS_FLAGS="up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY"
+            if [[ $(uname -n) == "steamdeck" ]]; then
+                TS_FLAGS+=" --advertise-tags=tag:client,tag:server" 
+            elif [[ $(yadm config --get-all local.class) == *"server"* ]]; then
+                TS_FLAGS+=" --advertise-tags=tag:server" 
+            elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
+                TS_FLAGS+=" --advertise-tags=tag:work" 
+            else
+                TS_FLAGS+=" --advertise-tags=tag:client" 
             fi
+
+            if [[ $(yadm config --get-all local.class) == *"dns"* ]]; then
+                TS_FLAGS+=" --accept-dns=false "
+            fi
+
+            echo "$TS_COMMAND $TS_FLAGS"
+            eval "$TS_COMMAND $TS_FLAGS"
+
+            echo "$TS_COMMAND set --auto-update"
+            eval "$TS_COMMAND set --auto-update"
 
             if [[ $(uname -n) == "steamdeck" ]]; then
                 cd
