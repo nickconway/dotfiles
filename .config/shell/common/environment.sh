@@ -44,7 +44,7 @@ command -v brew > /dev/null && export HOMEBREW_PREFIX="$(brew --prefix)" && expo
 export VISUAL=nvim
 export EDITOR=nvim
 
-export PROJECT_DIR=~/git
+export PROJECT_DIR=~/Git
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
