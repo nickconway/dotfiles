@@ -74,7 +74,7 @@ if [[ $HAS_INTERNET == "true" ]]; then
     fi
 
     if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
-        [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls ~/git | wc -l) ]] || clone-all
+        [[ $(gh repo list | awk 'NR!=1' | wc -l) == $(ls $PROJECT_DIR | wc -l) ]] || clone-all
     fi
 fi
 
