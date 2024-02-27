@@ -40,7 +40,7 @@ declare -A PROCS
                 tree \
                 the_silver_searcher \
                 htop \
-                tmuxp \
+                btop \
                 cmake \
                 rsync \
                 gcc 
