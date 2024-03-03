@@ -258,18 +258,6 @@ PROCS[$!]="docker"
 PROCS[$!]="kitty"
 
 {
-    if [[ $(uname -n) == "steamdeck" ]]; then
-        sudo touch /etc/subuid /etc/subgid
-        sudo usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
-        curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix ~/.local
-        curl -Lo ~/.local/bin/podman https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
-        chmod +x .local/bin/podman
-        distrobox create -i ubuntu
-    fi
-} &> /tmp/yadm-steamdeck-distrobox &
-PROCS[$!]="distrobox"
-
-{
 if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
     if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
         wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
