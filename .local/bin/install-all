@@ -21,7 +21,7 @@ CAN_SUDO=$(sudo true && echo "true" || echo "false")
 declare -A PROCS
 
 {
-    if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"*) ]]; then
+    if [[ "$(yadm config --get-all local.class)" == *"homebrew"* ]]; then
         if ! command -v brew > /dev/null; then
             if command -v apt-get > /dev/null; then
                 sudo apt-get install -o DPkg::Lock::Timeout=300 build-essential procps curl file git -y
@@ -55,13 +55,13 @@ curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 
 {
     if [[ "$CAN_SUDO" == "true" ]]; then
-            if command -v apt-get > /dev/null; then
-                sudo apt-get install -o DPkg::Lock::Timeout=300 libevent ncurses libevent-dev ncurses-dev build-essential bison pkg-config -y
-            elif command -v yum > /dev/null; then
-                sudo yum install libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config -y
-            elif command -v pacman > /dev/null; then
-                sudo pacman -Syu base-devel procps-ng curl file git --noconfirm
-            fi
+        if command -v apt-get > /dev/null; then
+            sudo apt-get install -o DPkg::Lock::Timeout=300 libevent-dev ncurses-dev build-essential bison pkg-config -y
+        elif command -v yum > /dev/null; then
+            sudo yum install libevent-devel ncurses-devel gcc make bison pkg-config -y
+        elif command -v pacman > /dev/null; then
+            sudo pacman -Syu base-devel procps-ng curl file git --noconfirm
+        fi
         git clone https://github.com/tmux/tmux.git
         cd tmux
         sh autogen.sh
@@ -76,7 +76,14 @@ curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 } &> /tmp/yadm-tmux &
 PROCS[$!]="tmux"
 
-(pip3 install --user tmuxp) &> /tmp/yadm-tmuxp &
+{
+    if [[ "$CAN_SUDO" == "true" ]]; then
+        if command -v apt-get > /dev/null; then
+            sudo apt-get install -o DPkg::Lock::Timeout=300 python3-pip -y
+        fi
+    fi
+    pip install --user tmuxp
+} &> /tmp/yadm-tmuxp &
 PROCS[$!]="tmuxp"
 
 (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &> /tmp/yadm-fzf &
@@ -286,6 +293,7 @@ PROCS[$!]="surface"
 
 FAILED=0
 for pid in ${!PROCS[@]}; do
+    echo "Waiting for ${PROCS[$pid]}"
     if ! wait $pid; then
         echo ${PROCS[$pid]} failed
         FAILED=$((FAILED+1))
