@@ -88,7 +88,7 @@ if [[ $CAN_SUDO == "true" ]]; then
                 || sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
                 && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
                 && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
-                && ([[ -e /etc/yadm/encrypt ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
+                && ([[ -e /etc/yadm/data/archive ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
                 && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
         fi
 
