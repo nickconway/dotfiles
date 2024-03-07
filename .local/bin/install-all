@@ -24,7 +24,7 @@ declare -A PROCS
     if [[ ! ("$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"*) ]]; then
         if ! command -v brew > /dev/null; then
             if command -v apt-get > /dev/null; then
-                sudo apt-get install build-essential procps curl file git -y
+                sudo apt-get install -o DPkg::Lock::Timeout=300 build-essential procps curl file git -y
             elif command -v yum > /dev/null; then
                 sudo yum groupinstall 'Development Tools' -y && sudo yum install procps-ng curl file git -y
             elif command -v pacman > /dev/null; then
@@ -56,7 +56,7 @@ curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 {
     if [[ "$CAN_SUDO" == "true" ]]; then
             if command -v apt-get > /dev/null; then
-                sudo apt-get install libevent ncurses libevent-dev ncurses-dev build-essential bison pkg-config -y
+                sudo apt-get install -o DPkg::Lock::Timeout=300 libevent ncurses libevent-dev ncurses-dev build-essential bison pkg-config -y
             elif command -v yum > /dev/null; then
                 sudo yum install libevent ncurses libevent-devel ncurses-devel gcc make bison pkg-config -y
             elif command -v pacman > /dev/null; then
@@ -262,9 +262,9 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
     if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
         wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
         echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
-        sudo apt update -y
-        sudo apt install linux-image-surface linux-headers-surface libwacom-surface iptsd -y
-        sudo apt install linux-surface-secureboot-mok -y
+        sudo apt update -o DPkg::Lock::Timeout=300 -y
+        sudo apt install -o DPkg::Lock::Timeout=300 linux-image-surface linux-headers-surface libwacom-surface iptsd -y
+        sudo apt install -o DPkg::Lock::Timeout=300 linux-surface-secureboot-mok -y
         sudo update-grub
     fi
 
