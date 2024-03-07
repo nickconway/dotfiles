@@ -13,7 +13,7 @@ if [[ $(yadm config local.class) == "" ]]; then
     read -p "Enter YADM class [dns, homebrew, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
     while [[ "$YADM_CLASS" != "q" ]] && [[ "$YADM_CLASS" != "" ]]; do
         yadm config --add local.class $YADM_CLASS
-        read -p "Enter another YADM class (q to quit): " YADM_CLASS
+        read -p "Enter another YADM class [dns, homebrew, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
     done
 fi
 
