@@ -7,8 +7,7 @@ export PATH=$HOME/.local/bin:$PATH
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
 cd ~
-curl -d "Backing up docker containers" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" || echo "Failed to notify of backup start"
-echo "Stopping containers"
+
 stop-containers
 sudo tar czfv docker-$(hostname)-"$DATE".tar.gz --exclude=docker/data docker $(sudo test -e /var/lib/docker/volumes && echo /var/lib/docker/volumes) $([[ -e ~/.local/share/docker/volumes ]] && echo .local/share/docker/volumes)
 sudo chown $(whoami):$(whoami) docker-$(hostname)-"$DATE".tar.gz
@@ -18,6 +17,6 @@ mv docker-$(hostname)-"$DATE".tar.gz ~/Dropbox/Documents/Backups/
 cd ~/Dropbox
 dropbox exclude add Documents/Backups/docker-$(hostname)-"$DATE".tar.gz
 
-until [[ $(curl -f -s -d "Backing up complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") ]]; do
+until [[ $(curl -f -s -d "Docker backup on $(hostname) complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") ]]; do
     sleep 3
 done
