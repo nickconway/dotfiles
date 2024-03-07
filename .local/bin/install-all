@@ -20,11 +20,13 @@ CAN_SUDO=$(sudo true && echo "true" || echo "false")
 
 declare -A PROCS
 
+mkdir -p ~/.local/source
+
 {
     if [[ "$(yadm config --get-all local.class)" == *"homebrew"* ]]; then
         if ! command -v brew > /dev/null; then
-            if command -v apt-get > /dev/null; then
-                sudo apt-get install -o DPkg::Lock::Timeout=300 build-essential procps curl file git -y
+            if command -v apt > /dev/null; then
+                sudo apt install -o DPkg::Lock::Timeout=300 build-essential procps curl file git -y
             elif command -v yum > /dev/null; then
                 sudo yum groupinstall 'Development Tools' -y && sudo yum install procps-ng curl file git -y
             elif command -v pacman > /dev/null; then
@@ -55,20 +57,21 @@ curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 
 {
     if [[ "$CAN_SUDO" == "true" ]]; then
-        if command -v apt-get > /dev/null; then
-            sudo apt-get install -o DPkg::Lock::Timeout=300 libevent-dev ncurses-dev build-essential bison pkg-config -y
+        if command -v apt > /dev/null; then
+            sudo apt install -o DPkg::Lock::Timeout=300 libevent-dev ncurses-dev build-essential bison pkg-config -y
         elif command -v yum > /dev/null; then
             sudo yum install libevent-devel ncurses-devel gcc make bison pkg-config -y
         elif command -v pacman > /dev/null; then
             sudo pacman -Syu base-devel procps-ng curl file git --noconfirm
         fi
-        git clone https://github.com/tmux/tmux.git
-        cd tmux
+
+        [[ -e ~/.local/source/tmux ]] || git clone https://github.com/tmux/tmux.git ~/.local/source/tmux
+        cd ~/.local/source/tmux
+        git pull
         sh autogen.sh
         ./configure --prefix=$HOME/.local
         make && sudo make install
         cd
-        rm -rf tmux
     fi
 
     [[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -77,9 +80,26 @@ curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 PROCS[$!]="tmux"
 
 {
+    sudo apt install -o DPkg::Lock::Timeout=300 -y python3 python3-dev python3-pip python3-virtualenv \
+        libacl1-dev libacl1 automake \
+        libssl-dev \
+        liblz4-dev libzstd-dev libxxhash-dev \
+        build-essential \
+        pkg-config python3-pkgconfig
+
+    [[ -e ~/.local/source/borg ]] || git clone https://github.com/borgbackup/borg.git ~/.local/source/borg
+    virtualenv --python=$(which python3) ~/.local/borg-env
+    source ~/.local/borg-env/bin/activate
+    cd ~/.local/source/borg
+    pip install -r requirements.d/development.txt
+    pip install -e .
+} &> /tmp/yadm-borg &
+PROCS[$!]="borg"
+
+{
     if [[ "$CAN_SUDO" == "true" ]]; then
-        if command -v apt-get > /dev/null; then
-            sudo apt-get install -o DPkg::Lock::Timeout=300 python3-pip -y
+        if command -v apt > /dev/null; then
+            sudo apt install -o DPkg::Lock::Timeout=300 python3-pip -y
         fi
     fi
     pip install --user tmuxp
@@ -136,11 +156,10 @@ PROCS[$!]="rust"
     ~/.go/bin/go install github.com/jesseduffield/lazygit@latest
     curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
 
-    [[ -e ~/gh-cli ]] && echo "Already exists" || git clone https://github.com/cli/cli.git ~/gh-cli
-    cd gh-cli
+    [[ -e ~/.local/source/gh-cli ]] || git clone https://github.com/cli/cli.git ~/.local/source/gh-cli
+    cd ~/.local/source/gh-cli
     git pull
     command -v make && make install prefix=$HOME/.local
-    rm -rf ~/gh-cli
 } &> /tmp/yadm-gh-cli &
 PROCS[$!]="go"
 
@@ -158,8 +177,8 @@ PROCS[$!]="zsh-extras"
     if ! command -v tailscale > /dev/null; then
         if [[ "CAN_SUDO" == "true" && "$(uname -r)" == *"vpn"* ]]; then
             if [[ $(uname -n) == "steamdeck" ]]; then
-                git clone https://github.com/tailscale-dev/deck-tailscale.git
-                cd deck-tailscale
+                [[ -e ~/.local/source/deck-tailscale ]] || git clone https://github.com/tailscale-dev/deck-tailscale.git ~/.local/source/deck-tailscale
+                cd ~/.local/source/deck-tailscale
                 sudo bash tailscale.sh
                 source /etc/profile.d/tailscale.sh
             else
@@ -187,11 +206,6 @@ PROCS[$!]="zsh-extras"
 
             echo "$TS_COMMAND set --auto-update"
             eval "$TS_COMMAND set --auto-update"
-
-            if [[ $(uname -n) == "steamdeck" ]]; then
-                cd
-                rm -rf deck-tailscale
-            fi
         fi
     else
         [[ "$CAN_SUDO" == "true" ]] && sudo tailscale update --yes || echo "Could not update"
