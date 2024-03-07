@@ -80,7 +80,7 @@ curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 PROCS[$!]="tmux"
 
 {
-    wget https://github.com/borgbackup/borg/releases/download/1.2.7/borg-linux64 -O ~/.local/bin/borg
+    wget https://github.com/borgbackup/borg/releases/latest/download/borg-linux64 -O ~/.local/bin/borg
     chmod +x ~/.local/bin/borg
 } &> /tmp/yadm-borg &
 PROCS[$!]="borg"
