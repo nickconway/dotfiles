@@ -18,6 +18,7 @@ alias 8='cd -8'
 alias 9='cd -9'
 
 alias a='ansible'
+alias ah='ansible-doc --list | awk "{print \$1}" | fzf-tmux -p --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
 alias ap='ansible-playbook'
 
 alias c='clear'
