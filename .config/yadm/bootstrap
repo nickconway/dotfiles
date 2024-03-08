@@ -72,11 +72,9 @@ if [[ $HAS_INTERNET == "true" ]]; then
         fc-cache -fv
         rm -rf Hack.zip
     fi
-
-    if [[ "$(yadm config --get-all local.class)" != *"work"* ]]; then
-        clone-all
-    fi
 fi
+
+clone-all
 
 if [[ $CAN_SUDO == "true" ]]; then
     if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
@@ -93,10 +91,9 @@ if [[ $CAN_SUDO == "true" ]]; then
         fi
 
         command -v npm > /dev/null && (sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global)
-
-        command -v zsh > /dev/null && (sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells")
-        command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
     fi
+    command -v zsh > /dev/null && (sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells")
+    command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
 fi
 
 yadm checkout ~/.bash_profile
