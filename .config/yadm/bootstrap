@@ -9,11 +9,12 @@ export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/
 cd
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-if [[ $(yadm config local.class) == "" ]]; then
-    read -p "Enter YADM class [dns, homebrew, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
-    while [[ "$YADM_CLASS" != "q" ]] && [[ "$YADM_CLASS" != "" ]]; do
-        yadm config --add local.class $YADM_CLASS
-        read -p "Enter another YADM class [dns, homebrew, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
+if [[ $(yadm config --get-all local.class) == "" ]]; then
+    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
+        if [[ "$YADM_CLASS" != "" ]]; then
+            yadm config --add local.class $YADM_CLASS
+        fi
+        read -p "Enter YADM class [dns, homebrew, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
     done
 fi
 
