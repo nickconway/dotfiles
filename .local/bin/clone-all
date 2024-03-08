@@ -3,5 +3,5 @@
 mkdir -p ~/Git
 cd ~/Git
 for r in $(gh repo list | awk '{print $1}' | sed "/.*dotfiles.*/d"); do
-    gh repo clone $r || echo "$r already exists"
+    gh repo clone $r || (cd $(echo $r | cut -d/ -f2); git pull)
 done
