@@ -144,7 +144,7 @@ function mkcd() {
 alias n="nvim"
 
 function np() {
-    ntfy publish $@
+    curl -d "$@" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 }
 
 function npa() {
