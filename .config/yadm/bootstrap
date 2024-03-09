@@ -81,7 +81,7 @@ fi
 if [[ -e ~/Git/ansible ]]; then
     cd ~/Git/ansible
     for f in ~/Git/ansible/bootstrap/*.yml; do
-        ansible-playbook $f --extra-vars "variable_host=local"
+        ansible-playbook $f --limit localhost
     done
 
     for c in $(yadm config --get-all local.class); do
