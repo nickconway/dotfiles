@@ -78,6 +78,25 @@ if [[ $HAS_INTERNET == "true" ]]; then
     fi
 fi
 
+if [[ -e ~/Git/ansible ]]; then
+    cd ~/Git/ansible
+    for f in ~/Git/ansible/bootstrap/*.yml; do
+        ansible-playbook $f --extra-vars "variable_host=local"
+    done
+
+    for c in $(yadm config --get-all local.class); do
+        if [[ -e ~/Git/ansible/$c ]]; then
+            for f in $c/*.yml; do
+                if grep "become: yes" $f; then
+                    FLAGS="-K"
+                fi
+                ansible-playbook $f $FLAGS
+            done
+        fi
+    done
+    cd
+fi
+
 yadm checkout ~/.bash_profile
 yadm checkout ~/.bashrc
 yadm checkout ~/.zshrc

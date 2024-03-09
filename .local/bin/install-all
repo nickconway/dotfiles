@@ -2,6 +2,12 @@
 
 set -xe
 
+CAN_SUDO=$(sudo true && echo "true" || echo "false")
+
+declare -A PROCS
+
+mkdir -p ~/.local/source
+
 if [[ $(uname -n) == "steamdeck" ]]; then
     {
         sudo systemctl enable --now sshd
@@ -15,12 +21,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
         sudo pacman -Sy base-devel --noconfirm
     } || echo "Steamdeck read-only disabling failed"
 fi
-
-CAN_SUDO=$(sudo true && echo "true" || echo "false")
-
-declare -A PROCS
-
-mkdir -p ~/.local/source
 
 {
     if [[ "$(yadm config --get-all local.class)" == *"homebrew"* ]]; then
