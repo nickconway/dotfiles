@@ -18,7 +18,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
     done
 fi
 
-if [[ "$HAS_INTERNET" == "true" ]] && command -v termux-reload-settings; then
+if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
     pkg install openssh starship termux-api gnupg fzf dnsutils zsh -y
     mkdir -p ~/.zsh
