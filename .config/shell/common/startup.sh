@@ -12,8 +12,7 @@ else
 fi
 
 if command -v termux-reload-settings > /dev/null; then
-    s
-    exit
+    s && exit
 fi
 
 [[ -f ~/.fzf.$SHELL_NAME ]] && source ~/.fzf.$SHELL_NAME
