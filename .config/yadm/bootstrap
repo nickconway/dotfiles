@@ -18,6 +18,21 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
     done
 fi
 
+if [[ "$HAS_INTERNET" == "true" ]] && command -v termux-reload-settings; then
+    apt update -y && apt upgrade -y
+    pkg install openssh starship termux-api gnupg fzf dnsutils zsh -y
+    mkdir -p ~/.zsh
+    cd ~/.zsh
+    [[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
+    [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
+    [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+    cd ~
+    export GPG_TTY=$(tty)
+    yadm decrypt
+    yadm alt
+    exit
+fi
+
 export GPG_TTY=$(tty)
 yadm decrypt
 yadm alt
@@ -32,20 +47,6 @@ fi
 
 if [[ "$(ls ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then 
     ssh-add
-fi
-
-if [[ "$HAS_INTERNET" == "true" ]] && command -v termux-reload-settings; then
-    apt update -y && apt upgrade -y
-    pkg install openssh starship termux-api gnupg fzf dnsutils zsh -y
-    mkdir -p ~/.zsh
-    cd ~/.zsh
-    [[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
-    [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
-    [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-    cd ~
-    yadm decrypt
-    yadm alt
-    exit
 fi
 
 if [[ -e ~/.ssh/authorized_keys ]]; then
