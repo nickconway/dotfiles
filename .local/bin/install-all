@@ -54,8 +54,15 @@ mkdir -p ~/.local/source
 PROCS[$!]="homebrew"
 
 {
-    curl -SL https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ~/.local/bin/nvim
-    chmod +x ~/.local/bin/nvim
+    if [[ "$CAN_SUDO" == "true" ]]; then
+        sudo apt-get install -o DPkg::Lock::Timeout=300 ninja-build gettext cmake unzip curl -y
+    fi
+
+    [[ -e ~/.local/source/neovim ]] || git clone https://github.com/neovim/neovim ~/.local/source/neovim
+    cd ~/.local/source/neovim
+    git pull
+    make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=$HOME/.local
+    make install
 } &> /tmp/yadm-nvim &
 PROCS[$!]="nvim"
 

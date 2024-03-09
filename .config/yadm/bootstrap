@@ -14,7 +14,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
         if [[ "$YADM_CLASS" != "" ]]; then
             yadm config --add local.class $YADM_CLASS
         fi
-        read -p "Enter YADM class [dns, homebrew, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
+        read -p "Enter YADM class [dns, homebrew, passwordless, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
     done
 fi
 
@@ -77,9 +77,16 @@ fi
 
 clone-all
 
+yadm checkout ~/.bash_profile
+yadm checkout ~/.bashrc
+yadm checkout ~/.zshrc
+
 if [[ $CAN_SUDO == "true" ]]; then
     if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
-        sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
+        if [[ "$(yadm config --get-all local.class)" == *"passwordless"* ]]; then
+            sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
+        fi
+
         sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
 
         if [[ $HAS_INTERNET == "true" ]]; then
@@ -96,10 +103,6 @@ if [[ $CAN_SUDO == "true" ]]; then
     command -v zsh > /dev/null && (sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells")
     command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
 fi
-
-yadm checkout ~/.bash_profile
-yadm checkout ~/.bashrc
-yadm checkout ~/.zshrc
 
 echo "All done!"
 
