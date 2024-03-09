@@ -62,7 +62,7 @@ PROCS[$!]="nvim"
 {
     if [[ "$CAN_SUDO" == "true" ]]; then
         if command -v apt > /dev/null; then
-            sudo apt install -o DPkg::Lock::Timeout=300 libevent-dev ncurses-dev build-essential bison pkg-config -y
+            sudo apt install -o DPkg::Lock::Timeout=300 libevent-dev ncurses-dev build-essential bison pkg-config automake autotools-dev -y
         elif command -v yum > /dev/null; then
             sudo yum install libevent-devel ncurses-devel gcc make bison pkg-config -y
         elif command -v pacman > /dev/null; then
