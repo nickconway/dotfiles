@@ -63,6 +63,8 @@ if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get
     curl -d "Work setup complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
 fi
 
+clone-all
+
 if [[ $HAS_INTERNET == "true" ]]; then
     install-all || echo "Installing some programs failed"
 
@@ -74,8 +76,6 @@ if [[ $HAS_INTERNET == "true" ]]; then
         rm -rf Hack.zip
     fi
 fi
-
-clone-all
 
 yadm checkout ~/.bash_profile
 yadm checkout ~/.bashrc
