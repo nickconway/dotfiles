@@ -9,14 +9,6 @@ export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/
 cd
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-if [[ $(yadm config --get-all local.class) == "" ]]; then
-    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
-        if [[ "$YADM_CLASS" != "" ]]; then
-            yadm config --add local.class $YADM_CLASS
-        fi
-        read -p "Enter YADM class [dns, homebrew, passwordless, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
-    done
-fi
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
@@ -32,6 +24,15 @@ if command -v termux-reload-settings; then
     yadm alt
     chsh -s zsh
     exit
+fi
+
+if [[ $(yadm config --get-all local.class) == "" ]]; then
+    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
+        if [[ "$YADM_CLASS" != "" ]]; then
+            yadm config --add local.class $YADM_CLASS
+        fi
+        read -p "Enter YADM class [dns, homebrew, passwordless, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
+    done
 fi
 
 export GPG_TTY=$(tty)
