@@ -30,6 +30,7 @@ if command -v termux-reload-settings; then
     export GPG_TTY=$(tty)
     yadm decrypt
     yadm alt
+    chsh -s zsh
     exit
 fi
 
