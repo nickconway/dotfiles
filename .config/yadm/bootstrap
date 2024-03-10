@@ -102,17 +102,6 @@ command -v pip > /dev/null && pip install --user ansible
 if command -v ansible /dev/null && [[ -e ~/Git/ansible/bootstrap ]]; then
     cd ~/Git/ansible
     ansible-playbook bootstrap/main.yml --limit localhost
-
-    for c in $(yadm config --get-all local.class); do
-        if [[ -e ~/Git/ansible/$c/main.yml ]]; then
-            if grep -r "become: true" ~/Git/ansible/bootstrap/$c; then
-                ansible-playbook $c/main.yml --limit localhost -K
-            else
-                ansible-playbook $c/main.yml --limit localhost
-            fi
-        fi
-    done
-
     cd
 fi
 
