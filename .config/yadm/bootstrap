@@ -111,12 +111,6 @@ done
 
 if [[ $CAN_SUDO == "true" ]]; then
     if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
-        if [[ "$(yadm config --get-all local.class)" == *"passwordless"* ]]; then
-            sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
-        fi
-
-        sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
-
         command -v npm > /dev/null && (sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global)
     fi
     command -v zsh > /dev/null && (sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells")
