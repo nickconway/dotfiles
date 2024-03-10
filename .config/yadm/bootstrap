@@ -109,8 +109,6 @@ if [[ $CAN_SUDO == "true" ]]; then
     if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
         command -v npm > /dev/null && (sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global)
     fi
-    command -v zsh > /dev/null && (sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells")
-    command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
 fi
 
 yadm checkout ~/.bash_profile
