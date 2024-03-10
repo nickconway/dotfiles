@@ -37,6 +37,23 @@ export GPG_TTY=$(tty)
 yadm decrypt
 yadm alt
 
+if [[ $CAN_SUDO == "true" ]]; then
+    if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
+        if [[ "$(yadm config --get-all local.class)" == *"passwordless"* ]]; then
+            sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
+        fi
+
+        sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
+
+        [[ -e /etc/yadm/data/repo.git ]] \
+            || sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
+            && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
+            && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
+            && ([[ -e /etc/yadm/data/archive ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
+            && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
+    fi
+fi
+
 . ~/.config/shell/common/encrypted.sh
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
@@ -78,28 +95,18 @@ if [[ $HAS_INTERNET == "true" ]]; then
     fi
 fi
 
-if [[ -e ~/Git/ansible ]]; then
+if [[ -e ~/Git/ansible/bootstrap/main.yml ]]; then
     cd ~/Git/ansible
-    for f in ~/Git/ansible/bootstrap/*.yml; do
-        ansible-playbook $f --limit localhost
-    done
-
-    for c in $(yadm config --get-all local.class); do
-        if [[ -e ~/Git/ansible/$c ]]; then
-            for f in $c/*.yml; do
-                if grep "become: yes" $f; then
-                    FLAGS="-K"
-                fi
-                ansible-playbook $f $FLAGS
-            done
-        fi
-    done
-    cd
+    ansible-playbook bootstrap/main.yml --limit localhost
 fi
 
-yadm checkout ~/.bash_profile
-yadm checkout ~/.bashrc
-yadm checkout ~/.zshrc
+for c in $(yadm config --get-all local.class); do
+    if [[ -e ~/Git/ansible/$c/main.yml ]]; then
+        cd ~/Git/ansible
+        ansible-playbook $c/main.yml --limit localhost
+    fi
+cd
+done
 
 if [[ $CAN_SUDO == "true" ]]; then
     if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
@@ -109,20 +116,15 @@ if [[ $CAN_SUDO == "true" ]]; then
 
         sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
 
-        if [[ $HAS_INTERNET == "true" ]]; then
-            [[ -e /etc/yadm/data/repo.git ]] \
-                || sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
-                && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
-                && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data reset --hard \
-                && ([[ -e /etc/yadm/data/archive ]] && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data decrypt || echo "Does not exist") \
-                && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
-        fi
-
         command -v npm > /dev/null && (sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global)
     fi
     command -v zsh > /dev/null && (sudo grep "$(which zsh)" /etc/shells || sudo bash -c "echo $(which zsh) >> /etc/shells")
     command -v zsh > /dev/null && sudo chsh $USER -s $(which zsh)
 fi
+
+yadm checkout ~/.bash_profile
+yadm checkout ~/.bashrc
+yadm checkout ~/.zshrc
 
 echo "All done!"
 
