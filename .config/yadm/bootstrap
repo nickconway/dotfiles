@@ -41,12 +41,6 @@ yadm alt
 
 if [[ $CAN_SUDO == "true" ]]; then
     if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
-        if [[ "$(yadm config --get-all local.class)" == *"passwordless"* ]]; then
-            sudo grep "$USER ALL=" /etc/sudoers || sudo bash -c "echo $USER ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers"
-        fi
-
-        sudo grep "session optional pam_exec.so /usr/bin/ntfy-ssh" /etc/pam.d/sshd || sudo bash -c "echo session optional pam_exec.so /usr/bin/ntfy-ssh >> /etc/pam.d/sshd"
-
         [[ -e /etc/yadm/data/repo.git ]] \
             || sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
             && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data remote set-url origin git@github.com:nickconway/dotfiles.git \
@@ -100,14 +94,19 @@ fi
 if [[ -e ~/Git/ansible/bootstrap/main.yml ]]; then
     cd ~/Git/ansible
     ansible-playbook bootstrap/main.yml --limit localhost
+    cd
 fi
 
 for c in $(yadm config --get-all local.class); do
     if [[ -e ~/Git/ansible/$c/main.yml ]]; then
         cd ~/Git/ansible
-        ansible-playbook $c/main.yml --limit localhost
+        if grep -r "become: true" ~/Git/ansible/$c; then
+            ansible-playbook $c/main.yml --limit localhost -K
+        else
+            ansible-playbook $c/main.yml --limit localhost
+        fi
+        cd
     fi
-cd
 done
 
 if [[ $CAN_SUDO == "true" ]]; then
