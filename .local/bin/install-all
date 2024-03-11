@@ -38,12 +38,6 @@ declare -A PROCS
 PROCS[$!]="homebrew"
 
 {
-    wget https://github.com/borgbackup/borg/releases/latest/download/borg-linux64 -O ~/.local/bin/borg
-    chmod +x ~/.local/bin/borg
-} &> /tmp/yadm-borg &
-PROCS[$!]="borg"
-
-{
     curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
     mkdir -p ~/.config/zellij/plugins
     curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
