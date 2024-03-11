@@ -6,22 +6,6 @@ CAN_SUDO=$(sudo true && echo "true" || echo "false")
 
 declare -A PROCS
 
-mkdir -p ~/.local/source
-
-if [[ $(uname -n) == "steamdeck" ]]; then
-    {
-        sudo systemctl enable --now sshd
-        sudo steamos-readonly disable
-        sudo rm -rf /etc/pacman.d/gnupg
-        sudo pacman-key --init
-        sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
-        sudo pacman-key --init
-        sudo pacman-key --populate archlinux
-        sudo pacman -Syu --noconfirm
-        sudo pacman -Sy base-devel --noconfirm
-    } || echo "Steamdeck read-only disabling failed"
-fi
-
 {
     if [[ "$(yadm config --get-all local.class)" == *"homebrew"* ]]; then
         if ! command -v brew > /dev/null; then
@@ -54,57 +38,10 @@ fi
 PROCS[$!]="homebrew"
 
 {
-    if [[ "$CAN_SUDO" == "true" ]]; then
-        sudo apt-get install -o DPkg::Lock::Timeout=300 ninja-build gettext cmake unzip curl -y
-    fi
-
-    [[ -e ~/.local/source/neovim ]] || git clone https://github.com/neovim/neovim ~/.local/source/neovim
-    cd ~/.local/source/neovim
-    git pull
-    make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=$HOME/.local
-    make install
-} &> /tmp/yadm-nvim &
-PROCS[$!]="nvim"
-
-{
-    if [[ "$CAN_SUDO" == "true" ]]; then
-        if command -v apt > /dev/null; then
-            sudo apt install -o DPkg::Lock::Timeout=300 libevent-dev ncurses-dev build-essential bison pkg-config automake autotools-dev -y
-        elif command -v yum > /dev/null; then
-            sudo yum install libevent-devel ncurses-devel gcc make bison pkg-config -y
-        elif command -v pacman > /dev/null; then
-            sudo pacman -Syu base-devel procps-ng curl file git --noconfirm
-        fi
-
-        [[ -e ~/.local/source/tmux ]] || git clone https://github.com/tmux/tmux.git ~/.local/source/tmux
-        cd ~/.local/source/tmux
-        git pull
-        sh autogen.sh
-        ./configure --prefix=$HOME/.local
-        make && sudo make install
-        cd
-    fi
-
-    [[ -e ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    command -v tmux && ~/.tmux/plugins/tpm/bin/install_plugins || echo "tmux not installed"
-} &> /tmp/yadm-tmux &
-PROCS[$!]="tmux"
-
-{
     wget https://github.com/borgbackup/borg/releases/latest/download/borg-linux64 -O ~/.local/bin/borg
     chmod +x ~/.local/bin/borg
 } &> /tmp/yadm-borg &
 PROCS[$!]="borg"
-
-{
-    if [[ "$CAN_SUDO" == "true" ]]; then
-        if command -v apt > /dev/null; then
-            sudo apt install -o DPkg::Lock::Timeout=300 python3-pip -y
-        fi
-    fi
-    pip install --user tmuxp
-} &> /tmp/yadm-tmuxp &
-PROCS[$!]="tmuxp"
 
 (git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &> /tmp/yadm-fzf &
 PROCS[$!]="fzf"

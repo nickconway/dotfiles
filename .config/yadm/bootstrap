@@ -26,6 +26,20 @@ if command -v termux-reload-settings; then
     exit
 fi
 
+if [[ $(uname -n) == "steamdeck" ]]; then
+    {
+        sudo systemctl enable --now sshd
+        sudo steamos-readonly disable
+        sudo rm -rf /etc/pacman.d/gnupg
+        sudo pacman-key --init
+        sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
+        sudo pacman-key --init
+        sudo pacman-key --populate archlinux
+        sudo pacman -Syu --noconfirm
+        sudo pacman -Sy base-devel --noconfirm
+    } || echo "Steamdeck read-only disabling failed"
+fi
+
 if [[ $(yadm config --get-all local.class) == "" ]]; then
     while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
         if [[ "$YADM_CLASS" != "" ]]; then
