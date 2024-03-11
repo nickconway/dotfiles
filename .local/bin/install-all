@@ -38,21 +38,6 @@ declare -A PROCS
 PROCS[$!]="homebrew"
 
 {
-    command -v rustup > /dev/null && ([[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup update) \
-        || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; [[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup default stable)
-    [[ -e ~/.cargo/env ]] && source ~/.cargo/env;
-    if command -v cc; then
-        cargo install --locked bat &
-        cargo install fd-find &
-        cargo install rbw &
-        cargo install ripgrep &
-        cargo install tealdeer &
-        cargo install tree-sitter-cli &
-    fi
-} &> /tmp/yadm-cargo &
-PROCS[$!]="rust"
-
-{
     [[ -e ~/.go ]] && chmod -R +rwx ~/.go && rm -rf ~/.go
     wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
     tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz
@@ -163,17 +148,6 @@ PROCS[$!]="tailscale"
     fi
 } &> /tmp/yadm-docker &
 PROCS[$!]="docker"
-
-{
-    (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
-        && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
-        && mkdir -p ~/.local/share/applications \
-        && cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
-        && cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
-        && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
-        && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
-} &> /tmp/yadm-kitty &
-PROCS[$!]="kitty"
 
 FAILED=0
 for pid in ${!PROCS[@]}; do
