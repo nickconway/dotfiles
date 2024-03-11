@@ -43,18 +43,6 @@ PROCS[$!]="homebrew"
 } &> /tmp/yadm-borg &
 PROCS[$!]="borg"
 
-(git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all || (cd ~/.fzf && git pull && ~/.fzf/install --all)) &> /tmp/yadm-fzf &
-PROCS[$!]="fzf"
-
-(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash) &> /tmp/yadm-nvm &
-PROCS[$!]="nvm"
-
-(curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.local/bin -y) &> /tmp/yadm-starship &
-PROCS[$!]="starship"
-
-(wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O ~/.local/bin/yq && chmod +x ~/.local/bin/yq) &> /tmp/yadm-yq &
-PROCS[$!]="yq"
-
 {
     curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
     mkdir -p ~/.config/zellij/plugins
@@ -63,9 +51,6 @@ PROCS[$!]="yq"
     curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
 } &> /tmp/yadm-zellij &
 PROCS[$!]="zellij"
-
-(curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash) &> /tmp/yadm-zoxide &
-PROCS[$!]="zoxide"
 
 {
     command -v rustup > /dev/null && ([[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup update) \
