@@ -149,7 +149,7 @@ command -v pip > /dev/null && pip install --user ansible
 
 if command -v ansible /dev/null && [[ -e ~/Git/ansible/main.yml ]]; then
     cd ~/Git/ansible
-    ansible-playbook main.yml --limit localhost
+    ansible-playbook main.yml --limit localhost -J
     cd
 fi
 
