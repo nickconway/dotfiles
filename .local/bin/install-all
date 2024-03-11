@@ -38,15 +38,6 @@ declare -A PROCS
 PROCS[$!]="homebrew"
 
 {
-    curl -SL https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz -O && tar -xvf zellij*.tar.gz && chmod +x ./zellij && mv ./zellij ~/.local/bin/zellij && rm zellij*.tar.gz
-    mkdir -p ~/.config/zellij/plugins
-    curl -L "https://github.com/imsnif/multitask/releases/latest/download/multitask.wasm" -o ~/.config/zellij/plugins/multitask.wasm
-    curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
-    curl -L "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" -o ~/.config/zellij/plugins/zjstatus.wasm
-} &> /tmp/yadm-zellij &
-PROCS[$!]="zellij"
-
-{
     command -v rustup > /dev/null && ([[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup update) \
         || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; [[ -e ~/.cargo/env ]] && source ~/.cargo/env && rustup default stable)
     [[ -e ~/.cargo/env ]] && source ~/.cargo/env;
@@ -78,16 +69,6 @@ PROCS[$!]="rust"
     command -v make && make install prefix=$HOME/.local
 } &> /tmp/yadm-gh-cli &
 PROCS[$!]="go"
-
-{
-    mkdir -p ~/.zsh
-    cd ~/.zsh
-    [[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
-    [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
-    [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-    cd ~
-} &> /tmp/yadm-zsh-extras &
-PROCS[$!]="zsh-extras"
 
 {
     if ! command -v tailscale > /dev/null; then
@@ -176,8 +157,8 @@ PROCS[$!]="tailscale"
     fi
 
     if [[ $(yadm config --get-all local.class) == *"dns"* ]]; then
-        sudo sed -r -i.orig 's/#?DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf
         sudo sh -c 'rm /etc/resolv.conf && ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf'
+        sudo sed -r -i.orig 's/#?DNSStubListener=yes/DNSStubListener=no/g' /etc/resolv.conf
         sudo systemctl restart systemd-resolved
     fi
 } &> /tmp/yadm-docker &
@@ -193,33 +174,6 @@ PROCS[$!]="docker"
         && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 } &> /tmp/yadm-kitty &
 PROCS[$!]="kitty"
-
-{
-if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
-    if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
-        wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
-        echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
-        sudo apt update -o DPkg::Lock::Timeout=300 -y
-        sudo apt install -o DPkg::Lock::Timeout=300 linux-image-surface linux-headers-surface libwacom-surface iptsd -y
-        sudo apt install -o DPkg::Lock::Timeout=300 linux-surface-secureboot-mok -y
-        sudo update-grub
-    fi
-
-    sudo mkdir -p /etc/libinput && \
-        sudo bash -c "echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo '' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
-fi
-} &> /tmp/yadm-surface &
-PROCS[$!]="surface"
 
 FAILED=0
 for pid in ${!PROCS[@]}; do

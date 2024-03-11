@@ -53,6 +53,30 @@ export GPG_TTY=$(tty)
 yadm decrypt
 yadm alt
 
+if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
+    if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
+        wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
+        echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
+        sudo apt update -o DPkg::Lock::Timeout=300 -y
+        sudo apt install -o DPkg::Lock::Timeout=300 linux-image-surface linux-headers-surface libwacom-surface iptsd -y
+        sudo apt install -o DPkg::Lock::Timeout=300 linux-surface-secureboot-mok -y
+        sudo update-grub
+    fi
+
+    sudo mkdir -p /etc/libinput && \
+        sudo bash -c "echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo '' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
+        sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
+fi
+
 if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
     [[ -e /etc/yadm/data/repo.git ]] \
         || sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data clone -w / https://github.com/nickconway/dotfiles -f --single-branch --branch sys \
