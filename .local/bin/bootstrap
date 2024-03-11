@@ -2,8 +2,9 @@
 
 set -e
 
-export CAN_SUDO=$(sudo true && echo "true" || echo "false")
-export HAS_INTERNET=$(ping -c 1 8.8.8.8 &> /dev/null && echo "true" || echo "false")
+export CAN_SUDO
+CAN_SUDO=$(sudo true && echo "true" || echo "false")
+
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 cd
@@ -19,7 +20,8 @@ if command -v termux-reload-settings; then
     [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
     [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
     cd ~
-    export GPG_TTY=$(tty)
+    export GPG_TTY
+    GPG_TTY=$(tty)
     yadm decrypt
     yadm alt
     chsh -s zsh
@@ -43,13 +45,15 @@ fi
 if [[ $(yadm config --get-all local.class) == "" ]]; then
     while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
         if [[ "$YADM_CLASS" != "" ]]; then
-            yadm config --add local.class $YADM_CLASS
+            yadm config --add local.class "$YADM_CLASS"
         fi
-        read -p "Enter YADM class [dns, homebrew, passwordless, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
+        read -rp "Enter YADM class [dns, homebrew, passwordless, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
     done
 fi
 
-export GPG_TTY=$(tty)
+export GPG_TTY
+GPG_TTY=$(tty)
+
 yadm decrypt
 yadm alt
 
@@ -88,18 +92,18 @@ fi
 
 . ~/.config/shell/common/encrypted.sh
 
-if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
-    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
 else
-    eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock)
+    eval $(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)
 fi
 
-if [[ "$(ls ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then 
+if [[ "$(find ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then 
     ssh-add
 fi
 
 if [[ -e ~/.ssh/authorized_keys ]]; then
-    for f in $(ls ~/.ssh/*.pub); do 
+    for f in ~/.ssh/*.pub; do 
         grep -qF "$(cat $f)" ~/.ssh/authorized_keys || echo "$(cat $f)" >> ~/.ssh/authorized_keys
     done
 else
