@@ -108,27 +108,19 @@ fi
 if [[ "$CAN_SUDO" == "true" ]]; then
     if command -v apt > /dev/null; then
         sudo apt install python3-pip -y
+    else
+        python3 -m ensurepip --upgrade
     fi
 fi
 
 command -v pip > /dev/null && pip install --user ansible
 
-if command -v ansible /dev/null && [[ -e ~/Git/ansible/bootstrap ]]; then
+if command -v ansible /dev/null && [[ -e ~/Git/ansible/main.yml ]]; then
     cd ~/Git/ansible
-    ansible-playbook bootstrap/main.yml --limit localhost
+    ansible-playbook main.yml --limit localhost
     cd
 fi
 
-if [[ $CAN_SUDO == "true" ]]; then
-    if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
-        command -v npm > /dev/null && (sudo npm set prefix -g ~/.npm-global || npm set prefix -g ~/.npm-global)
-    fi
-fi
-
-yadm checkout ~/.bash_profile
-yadm checkout ~/.bashrc
-yadm checkout ~/.zshrc
-
 echo "All done!"
 
-curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
+curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
