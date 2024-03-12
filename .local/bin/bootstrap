@@ -47,7 +47,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
         if [[ "$YADM_CLASS" != "" ]]; then
             yadm config --add local.class "$YADM_CLASS"
         fi
-        read -rp "Enter YADM class [homebrew, passwordless, surface, system, work] (q to quit): " YADM_CLASS
+        read -rp "Enter YADM class [homebrew, passwordless, surface, system, vm, work] (q to quit): " YADM_CLASS
     done
 fi
 
