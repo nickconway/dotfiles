@@ -47,7 +47,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
         if [[ "$YADM_CLASS" != "" ]]; then
             yadm config --add local.class "$YADM_CLASS"
         fi
-        read -rp "Enter YADM class [dns, homebrew, passwordless, server, surface, system, vm, vpn, work] (q to quit): " YADM_CLASS
+        read -rp "Enter YADM class [homebrew, passwordless, surface, system, work] (q to quit): " YADM_CLASS
     done
 fi
 
@@ -90,7 +90,7 @@ if [[ "$(yadm config --get-all local.class)" == *"system"* ]]; then
         && sudo GPG_TTY="$GPG_TTY" SSH_AUTH_SOCK="$SSH_AUTH_SOCK" PATH="$PATH" $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data alt
 fi
 
-. ~/.config/shell/common/encrypted.sh
+[[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
 
 if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
     export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
