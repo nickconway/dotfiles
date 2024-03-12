@@ -163,6 +163,10 @@ function pw() {
 alias rd="rm -rf"
 
 function replace () {
+    if ! command -v ag > /dev/null; then
+        echo "ag not found"
+        return
+    fi
     if [ $# -lt 2 ]
     then
         echo "Recursive, interactive text replacement"
