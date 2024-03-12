@@ -20,6 +20,7 @@ alias 9='cd -9'
 alias a='ansible'
 alias ah='ansible-doc --list | awk "{print \$1}" | fzf-tmux -p --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
 alias ap='ansible-playbook'
+alias apa='(cd ~/Git/ansible && ap main.yml --ask-vault-pass)'
 alias apl='ansible-playbook --limit localhost'
 
 alias c='clear'
