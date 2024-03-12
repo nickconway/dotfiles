@@ -1,6 +1,12 @@
 #! /bin/bash
-for d in $(find $(pwd) -name .git -type d -prune -not -path '*flake*'); do
-    cd $d
-    cd ..
-    git pull
+if [[ -n $1 ]]; then
+    DIR=$@
+else
+    DIR=$(pwd)
+fi
+
+for d in $DIR; do
+    for repo in $d/*; do
+        (echo $repo; cd $repo; git pull)
+    done
 done
