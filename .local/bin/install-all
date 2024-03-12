@@ -38,24 +38,6 @@ declare -A PROCS
 PROCS[$!]="homebrew"
 
 {
-    [[ -e ~/.go ]] && chmod -R +rwx ~/.go && rm -rf ~/.go
-    wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
-    tar -C ~ -xzf go1.21.5.linux-amd64.tar.gz
-    mv ~/go ~/.go
-    rm ~/go*.linux-amd64.tar.gz
-
-    export GOPATH=~/.go
-    ~/.go/bin/go install github.com/jesseduffield/lazygit@latest
-    curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-
-    [[ -e ~/.local/source/gh-cli ]] || git clone https://github.com/cli/cli.git ~/.local/source/gh-cli
-    cd ~/.local/source/gh-cli
-    git pull
-    command -v make && make install prefix=$HOME/.local
-} &> /tmp/yadm-gh-cli &
-PROCS[$!]="go"
-
-{
     if ! command -v tailscale > /dev/null; then
         if [[ "CAN_SUDO" == "true" && "$(uname -r)" == *"vpn"* ]]; then
             if [[ $(uname -n) == "steamdeck" ]]; then
@@ -94,60 +76,6 @@ PROCS[$!]="go"
     fi
 } &> /tmp/yadm-tailscale &
 PROCS[$!]="tailscale"
-
-{
-    if [[ "$(yadm config --get-all local.class)" == *"server"* ]]; then
-        curl -fsSL https://get.docker.com -o ~/.local/bin/get-docker
-        chmod +x ~/.local/bin/get-docker
-        sh ~/.local/bin/get-docker
-        sudo groupadd docker || echo "Group already exists"
-        sudo usermod -aG docker $USER
-        newgrp docker
-    else
-        if [[ ! -e ~/.local/bin/dockerd ]]; then
-            curl -o .local/bin/slirp4netns --fail -L https://github.com/rootless-containers/slirp4netns/releases/latest/download/slirp4netns-$(uname -m)
-            chmod +x .local/bin/slirp4netns
-
-            curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
-            chmod +x ~/.local/bin/get-docker-rootless
-            export DOCKER_BIN=~/.local/bin
-            export SKIP_IPTABLES=1 
-            sh ~/.local/bin/get-docker-rootless || ([[ $CAN_SUDO == "true" ]] && sh ~/.local/bin/get-docker-rootless | awk '/cat <<EOF.*/{flag=1;next}/EOF/{flag=0}flag' | sudo bash) && sh ~/.local/bin/get-docker-rootless
-
-            mkdir -p ~/.config/systemd/user/docker.service.d
-            echo "[Service]" > ~/.config/systemd/user/docker.service.d/override.conf
-            echo 'Environment="DOCKERD_ROOTLESS_ROOTLESSKIT_PORT_DRIVER=slirp4netns"' >> ~/.config/systemd/user/docker.service.d/override.conf
-            [[ $CAN_SUDO == "true" ]] && sudo loginctl enable-linger $(whoami)
-            export DOCKER_HOST=unix:///$XDG_RUNTIME_DIR/docker.sock
-            systemctl --user daemon-reload
-            systemctl --user restart docker
-            systemctl --user start docker
-            systemctl --user enable docker
-
-            export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-            mkdir -p $DOCKER_CONFIG/cli-plugins
-            curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-            chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
-            docker network inspect proxy || docker network create proxy
-            systemctl --user stop docker
-        else
-            rm -f ~/.local/bin/dockerd
-            curl -fsSL https://get.docker.com/rootless -o ~/.local/bin/get-docker-rootless
-            chmod +x ~/.local/bin/get-docker-rootless
-
-            export DOCKER_BIN=~/.local/bin
-            export SKIP_IPTABLES=1 
-            sh ~/.local/bin/get-docker-rootless
-        fi
-    fi
-
-    if [[ $(yadm config --get-all local.class) == *"dns"* ]]; then
-        sudo sh -c 'rm /etc/resolv.conf && ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf'
-        sudo sed -r -i.orig 's/#?DNSStubListener=yes/DNSStubListener=no/g' /etc/resolv.conf
-        sudo systemctl restart systemd-resolved
-    fi
-} &> /tmp/yadm-docker &
-PROCS[$!]="docker"
 
 FAILED=0
 for pid in ${!PROCS[@]}; do
