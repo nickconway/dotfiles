@@ -47,7 +47,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     sudo bash tailscale.sh
     source /etc/profile.d/tailscale.sh
 
-    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY --advertise-tags=tag:client,tag:server 
+    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY --advertise-tags=tag:client,tag:server
     sudo tailscale set --auto-update
 fi
 
@@ -87,7 +87,7 @@ if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
         sudo bash -c "echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
         sudo bash -c "echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
         sudo bash -c "echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"   
+        sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"
 fi
 
 [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
@@ -98,12 +98,12 @@ else
     eval $(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)
 fi
 
-if [[ "$(find ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then 
+if [[ "$(find ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
     ssh-add
 fi
 
 if [[ -e ~/.ssh/authorized_keys ]]; then
-    for f in ~/.ssh/*.pub; do 
+    for f in ~/.ssh/*.pub; do
         grep -qF "$(cat $f)" ~/.ssh/authorized_keys || echo "$(cat $f)" >> ~/.ssh/authorized_keys
     done
 else

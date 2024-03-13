@@ -11,10 +11,10 @@ for d in $DIR; do
             cd $repo
             if [[ $(git status --porcelain) != "" ]] && [[ $(git status --porcelain) != " M Makefile.Debug" ]] && [[ $(git status --porcelain) != " M Makefile.Debug_Linux" ]]; then
                 echo -----------------------------
-                echo 
+                echo
                 echo $repo;
                 git status
-                echo 
+                echo
             fi
         )
     done
