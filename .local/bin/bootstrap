@@ -17,11 +17,10 @@ if command -v termux-reload-settings; then
     pkg install openssh starship termux-api gnupg fzf dnsutils zsh python3 -y
 
     pip install wheel
-    pkg install rust
+    pip install rust
     export CARGO_BUILD_TARGET=aarch64-linux-android
     pip install cryptography
     pip install ansible
-    mkdir -p ~/.zsh
 fi
 
 if [[ $(uname -n) == "steamdeck" ]]; then
