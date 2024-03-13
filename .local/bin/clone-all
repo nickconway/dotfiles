@@ -2,10 +2,12 @@
 
 mkdir -p ~/Git
 cd ~/Git
-for r in $(ssh git.conway.dev -p 22 ls docker/gitea/data/git/repositories/$GITEA_USER); do
-    REPO_NAME="${r%.*}"
-    [[ $REPO_NAME != "dotfiles" ]] && ([[ -e ~/Git/$REPO_NAME ]] && (cd $REPO_NAME; pwd; git pull) || git clone git@git.conway.dev:$GITEA_USER/$r)
-done
+if [[ -n $GITEA_USER ]]; then
+    for r in $(ssh git.conway.dev -p 22 ls docker/gitea/data/git/repositories/$GITEA_USER); do
+	REPO_NAME="${r%.*}"
+        [[ $REPO_NAME != "dotfiles" ]] && ([[ -e ~/Git/$REPO_NAME ]] && (cd $REPO_NAME; pwd; git pull) || git clone git@git.conway.dev:$GITEA_USER/$r)
+    done
+fi
 
 for r in $(gh repo list | awk '{print $1}'); do
     REPO_NAME="$(echo $r | cut -d/ -f2)"
