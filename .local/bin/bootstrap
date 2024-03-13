@@ -16,7 +16,6 @@ if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
     pkg install openssh starship termux-api gnupg fzf dnsutils zsh python3 -y
 
-    pip install --upgrade pip
     pip install wheel
     pkg install rust
     export CARGO_BUILD_TARGET=aarch64-linux-android
