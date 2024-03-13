@@ -147,7 +147,7 @@ if command -v ansible /dev/null && [[ -e ~/Git/ansible/main.yml ]]; then
     )
 fi
 
-clone-all
+clone-all > /dev/null
 
 echo "All done!"
 
