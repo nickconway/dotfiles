@@ -155,9 +155,10 @@ mkdir -p ~/Git
 [[ -e ~/Git/ansible ]] || (cd ~/Git && git clone git@github.com:nickconway/ansible)
 
 if command -v ansible /dev/null && [[ -e ~/Git/ansible/main.yml ]]; then
-    cd ~/Git/ansible
-    ansible-playbook main.yml --limit localhost --ask-vault-pass
-    cd
+    (
+        cd ~/Git/ansible
+        ansible-playbook main.yml --limit localhost --ask-vault-pass
+    )
 fi
 
 clone-all
