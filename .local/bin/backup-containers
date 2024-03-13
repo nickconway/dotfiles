@@ -2,6 +2,8 @@
 
 set -xe
 
+[[ -e ~/Dropbox ]]
+
 export PATH=$HOME/.local/bin:$PATH
 . $HOME/.config/shell/common/encrypted.sh
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
