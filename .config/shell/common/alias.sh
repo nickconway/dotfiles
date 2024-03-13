@@ -90,7 +90,7 @@ function ghc() {
     mkdir -p $PROJECT_DIR
     (
         cd $PROJECT_DIR
-        GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone 
+        GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone
     )
 }
 
@@ -164,9 +164,9 @@ function pw() {
 
 alias rd="rm -rf"
 
-function replace () {
-    if ! command -v ag > /dev/null; then
-        echo "ag not found"
+function replace() {
+    if ! command -v rg > /dev/null; then
+        echo "rg not found"
         return
     fi
     if [ $# -lt 2 ]
@@ -176,7 +176,13 @@ function replace () {
         return
     fi
 
-    vim -u NONE -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(ag $1 -l)
+    nvim -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l)
+}
+
+function remove-whitespace() {
+    for d in $(rg '\s+$' -l); do
+        vim -u NONE -c "%s/\s\+$//g | :wq" $d
+    done
 }
 
 function s() {
