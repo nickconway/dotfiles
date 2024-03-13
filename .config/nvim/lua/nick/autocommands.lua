@@ -34,3 +34,10 @@ vim.api.nvim_create_autocmd(
         group = Ag
     }
 )
+
+vim.api.nvim_create_autocmd(
+    "BufWritePre",
+    {
+        pattern = { "*" }, command = [[%s/\s\+$//e]],
+    }
+)

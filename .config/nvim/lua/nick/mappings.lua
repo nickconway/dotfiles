@@ -90,6 +90,10 @@ map("n", "<leader>bd", ":bp|bd #<CR>", "Delete buffer")
 map("n", "<leader>bn", ":bn<CR>", "Next buffer")
 map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 
+map("n", "<leader>F", function()
+    vim.lsp.buf.format({ async = false })
+end, "Format buffer")
+
 map("n", "<leader>q", ":qa<CR>", "Quit neovim")
 
 map("n", "<leader>so", ":so %<CR>", "Source current file")
