@@ -16,11 +16,26 @@ if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
     pkg install openssh starship termux-api gnupg fzf dnsutils zsh python -y
 
+    mkdir -p ~/.zsh
+    (
+        cd ~/.zsh
+        [[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
+        [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
+        [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+    )
+    export GPG_TTY
+    GPG_TTY=$(tty)
+    yadm decrypt
+    yadm alt
+    chsh -s zsh
+
     pip install wheel
-    pip install rust
+    pkg install rust
     export CARGO_BUILD_TARGET=aarch64-linux-android
     pip install cryptography
     pip install ansible
+
+    exit
 fi
 
 if [[ $(uname -n) == "steamdeck" ]]; then
