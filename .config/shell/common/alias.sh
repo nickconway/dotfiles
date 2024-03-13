@@ -88,9 +88,10 @@ alias gsw='git switch'
 
 function ghc() {
     mkdir -p $PROJECT_DIR
-    cd $PROJECT_DIR
-    GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone 
-    cd -
+    (
+        cd $PROJECT_DIR
+        GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone 
+    )
 }
 
 function ghpr() {
@@ -115,11 +116,12 @@ alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E lazydocker || l
 
 function lg() {
     if git rev-parse --is-inside-work-tree &> /dev/null; then
-        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E lazygit || lazygit
+        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E "cd $(pwd); lazygit" || lazygit
     else
-        cd ~
-        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E yadm enter lazygit || yadm enter lazygit
-        cd - &> /dev/null
+        (
+            cd ~
+            [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E yadm enter lazygit || yadm enter lazygit
+        )
     fi;
 }
 
