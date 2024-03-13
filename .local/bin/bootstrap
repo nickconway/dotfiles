@@ -14,7 +14,7 @@ yadm remote add https "https://github.com/nickconway/dotfiles.git" &> /dev/null 
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
-    pkg install openssh starship termux-api gnupg fzf dnsutils zsh python3 -y
+    pkg install openssh starship termux-api gnupg fzf dnsutils zsh python -y
 
     pip install wheel
     pip install rust
