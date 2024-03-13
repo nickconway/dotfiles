@@ -30,8 +30,8 @@ if command -v termux-reload-settings; then
     chsh -s zsh
 
     pip install wheel
-    pkg install rust
-    export CARGO_BUILD_TARGET=aarch64-linux-android
+    pip install rust
+    pkg install binutils -y
     pip install cryptography
     pip install ansible
 
