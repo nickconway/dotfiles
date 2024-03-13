@@ -271,6 +271,7 @@ alias vm='s alma'
 alias work='s alma'
 
 alias x='[[ -z $TMUX ]] && exit 0 || [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]] && exit 0 || tmux detach'
+alias xc='[[ -z $TMUX ]] && exit 0 || [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]] && exit 0 || (tmux detach && clear)'
 
 alias ya="yadm add"
 alias yalt="yadm alt"
