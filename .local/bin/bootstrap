@@ -10,6 +10,7 @@ export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/
 cd
 
 yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+yadm remote add https "https://github.com/nickconway/dotfiles.git" &> /dev/null || true
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
