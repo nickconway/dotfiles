@@ -127,7 +127,7 @@ fi
     && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
     && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 
-if [[ "$CAN_SUDO" == "true" ]]; then
+if [[ "$CAN_SUDO" == "true" ]] && ! command -v pip > /dev/null; then
     if command -v apt > /dev/null; then
         sudo apt install python3-pip -y
     else
@@ -135,12 +135,12 @@ if [[ "$CAN_SUDO" == "true" ]]; then
     fi
 fi
 
-command -v pip > /dev/null && pip install --user ansible
+command -v ansible > /dev/null || pip install --user ansible
 
 mkdir -p ~/Git
 [[ -e ~/Git/ansible ]] || (cd ~/Git && git clone git@github.com:nickconway/ansible)
 
-if command -v ansible /dev/null && [[ -e ~/Git/ansible/main.yml ]]; then
+if [[ -e ~/Git/ansible/main.yml ]]; then
     (
         cd ~/Git/ansible
         ansible-playbook main.yml --limit localhost --ask-vault-pass
