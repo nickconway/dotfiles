@@ -180,9 +180,7 @@ function replace() {
 }
 
 function remove-whitespace() {
-    for d in $(rg '\s+$' -l); do
-        vim -u NONE -c "%s/\s\+$//g | :wq" $d
-    done
+    rg '\s+$' -l | xargs sed -i 's/\s\+$//g'
 }
 
 function s() {
