@@ -10,21 +10,26 @@ sed -i '/leader_sequences/e cat ~/.config/zmk/macros.dtsi' leader.dtsi
 cd $PROJECT_DIR/zmk/app
 if [ $(find . $PROJECT_DIR/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
-        docker exec -it zmk bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\""
-        docker exec -it zmk bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\""
+        docker exec -it zmk bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\"" || FAILED=1
+        docker exec -it zmk bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\"" || FAILED=1
     else
-        docker exec -it zmk bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left\""
-        docker exec -it zmk bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right\""
+        docker exec -it zmk bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left\"" || FAILED=1
+        docker exec -it zmk bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right\"" || FAILED=1
     fi
-    [[ -e $DROPBOX ]] && [[ -e build/$1 ]] && cp build/$1/left/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/left.uf2
-    [[ -e $DROPBOX ]] && [[ -e build/$1 ]] && cp build/$1/right/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/right.uf2
+
+    if [[ -z $FAILED ]]; then
+        [[ -e $DROPBOX ]] && [[ -e build/$1 ]] && cp build/$1/left/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/left.uf2
+        [[ -e $DROPBOX ]] && [[ -e build/$1 ]] && cp build/$1/right/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/right.uf2
+    fi
 else
     if [ "$2" = "nv" ]; then
-        docker exec -it zmk bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1 nice_view_adapter nice_view\""
+        docker exec -it zmk bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1 nice_view_adapter nice_view\"" || FAILED=1
     else
-        docker exec -it zmk bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1\""
+        docker exec -it zmk bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1\"" || FAILED=1
     fi
-    [[ -e $DROPBOX ]] && cp build/$1/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/
+    if [[ -z $FAILED ]]; then
+        [[ -e $DROPBOX ]] && [[ -e build/$1 ]] && cp build/$1/zephyr/zmk.uf2 $DROPBOX/Documents/ZMK/$1/
+    fi
 fi
 
 cd $PROJECT_DIR/zmk-config/config/include/
