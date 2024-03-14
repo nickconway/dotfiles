@@ -110,6 +110,8 @@ rm -rf password-store
 
 pip install --user keyring-pass &> /dev/null
 
+.local/bin/pass init $(whoami)
+
 if ! vault-keyring-client &> /dev/null; then
     find ~/.config/gpg/* &> /dev/null && gpg --import ~/.config/gpg/* &> /dev/null
     vault-keyring-client --set
