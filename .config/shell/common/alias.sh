@@ -108,7 +108,7 @@ function ghprm() {
 alias internet-connection='ping -c 1 8.8.8.8 &> /dev/null'
 
 function lab() {
-    (cd ~/Git/ansible/lab && ap main.yml --ask-vault-pass $@)
+    (cd ~/Git/ansible/lab && ansible-galaxy install -f -r requirements.yml && ap main.yml --ask-vault-pass $@)
 }
 
 alias l='ls -h --color'

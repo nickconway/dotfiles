@@ -142,7 +142,7 @@ mkdir -p ~/Git
 
 (
     cd ~/Git/ansible/bootstrap
-    ansible-galaxy install -r requirements.yml
+    ansible-galaxy install -f -r requirements.yml
     ansible-playbook main.yml --ask-vault-pass
 )
 
