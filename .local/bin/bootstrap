@@ -1,8 +1,11 @@
 #!/bin/bash
 
 export PATH=~/bin:~/.local/bin:$PATH
-
 cd
+
+if ! [[ -e ~/.local/bin/yadm ]]; then
+    mkdir -p ~/.local/bin && curl -o ~/.local/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.local/bin/yadm && chmod +x ~/.local/bin/yadm && ~/.local/bin/yadm clone https://github.com/nickconway/dotfiles
+fi
 
 yadm decrypt &> /dev/null
 
