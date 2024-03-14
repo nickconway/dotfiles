@@ -32,7 +32,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
         if [[ "$YADM_CLASS" != "" ]]; then
             yadm config --add local.class "$YADM_CLASS"
         fi
-        read -rp "Enter YADM class [passwordless, vm, work] (q to quit): " YADM_CLASS
+        read -rp "Enter YADM class [passwordless, work] (q to quit): " YADM_CLASS
     done
 fi
 
@@ -68,7 +68,7 @@ else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
 
-if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]]; then
+if [[ "$(yadm config --get-all local.class)" == *"work"* ]] && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null; then
     . ~/.config/shell/common/work.sh && work-setup
     curl -d "Work setup complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
 fi
