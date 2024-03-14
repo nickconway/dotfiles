@@ -2,9 +2,6 @@
 
 set -e
 
-export CAN_SUDO
-CAN_SUDO=$(sudo true && echo "true" || echo "false")
-
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 cd
@@ -29,6 +26,15 @@ if command -v termux-reload-settings; then
     exit
 fi
 
+if [[ $(yadm config --get-all local.class) == "" ]]; then
+    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
+        if [[ "$YADM_CLASS" != "" ]]; then
+            yadm config --add local.class "$YADM_CLASS"
+        fi
+        read -rp "Enter YADM class [passwordless, vm, work] (q to quit): " YADM_CLASS
+    done
+fi
+
 if [[ $(uname -n) == "steamdeck" ]]; then
     {
         sudo systemctl enable --now sshd
@@ -49,15 +55,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
 
     sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY --advertise-tags=tag:client,tag:server
     sudo tailscale set --auto-update
-fi
-
-if [[ $(yadm config --get-all local.class) == "" ]]; then
-    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
-        if [[ "$YADM_CLASS" != "" ]]; then
-            yadm config --add local.class "$YADM_CLASS"
-        fi
-        read -rp "Enter YADM class [passwordless, vm, work] (q to quit): " YADM_CLASS
-    done
 fi
 
 [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
@@ -93,7 +90,7 @@ fi
     && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
     && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 
-if [[ "$CAN_SUDO" == "true" ]] && ! command -v pip > /dev/null; then
+if ! command -v pip > /dev/null; then
     if command -v apt > /dev/null; then
         sudo apt install python3-pip -y
     else
