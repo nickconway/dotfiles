@@ -4,4 +4,6 @@
 .config/yadm/alt/**/*c.work
 .config/zmk/macros.dtsi
 .config/zmk/leader.dtsi
+.password-store/.gpg-id
+.password-store/python-keyring/**/*.*
 .ssh/id_*
