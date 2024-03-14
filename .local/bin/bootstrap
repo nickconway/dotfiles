@@ -2,15 +2,14 @@
 
 set -e
 
-export CAN_SUDO
-CAN_SUDO=$(sudo true && echo "true" || echo "false")
-
 export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 cd
 
-yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm remote add https "https://github.com/nickconway/dotfiles.git" &> /dev/null || true
+if command -v yadm > /dev/null; then
+    yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+    yadm remote add https "https://github.com/nickconway/dotfiles.git" &> /dev/null || true
+fi
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
@@ -29,18 +28,17 @@ if command -v termux-reload-settings; then
     exit
 fi
 
+if [[ $(yadm config --get-all local.class) == "" ]]; then
+    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
+        if [[ "$YADM_CLASS" != "" ]]; then
+            yadm config --add local.class "$YADM_CLASS"
+        fi
+        read -rp "Enter YADM class [passwordless, vm, work] (q to quit): " YADM_CLASS
+    done
+fi
+
 if [[ $(uname -n) == "steamdeck" ]]; then
-    {
-        sudo systemctl enable --now sshd
-        sudo steamos-readonly disable
-        sudo rm -rf /etc/pacman.d/gnupg
-        sudo pacman-key --init
-        sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
-        sudo pacman-key --init
-        sudo pacman-key --populate archlinux
-        sudo pacman -Syu --noconfirm
-        sudo pacman -Sy base-devel --noconfirm
-    } || echo "Steamdeck read-only disabling failed"
+    sudo systemctl enable --now sshd
 
     [[ -e ~/.local/source/deck-tailscale ]] || git clone https://github.com/tailscale-dev/deck-tailscale.git ~/.local/source/deck-tailscale
     cd ~/.local/source/deck-tailscale
@@ -49,39 +47,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
 
     sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY --advertise-tags=tag:client,tag:server
     sudo tailscale set --auto-update
-fi
-
-if [[ $(yadm config --get-all local.class) == "" ]]; then
-    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
-        if [[ "$YADM_CLASS" != "" ]]; then
-            yadm config --add local.class "$YADM_CLASS"
-        fi
-        read -rp "Enter YADM class [passwordless, surface, vm, work] (q to quit): " YADM_CLASS
-    done
-fi
-
-if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
-    if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
-        wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
-        echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
-        sudo apt update -o DPkg::Lock::Timeout=300 -y
-        sudo apt install -o DPkg::Lock::Timeout=300 linux-image-surface linux-headers-surface libwacom-surface iptsd -y
-        sudo apt install -o DPkg::Lock::Timeout=300 linux-surface-secureboot-mok -y
-        sudo update-grub
-    fi
-
-    sudo mkdir -p /etc/libinput && \
-        sudo bash -c "echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo '' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"
 fi
 
 [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
@@ -104,19 +69,9 @@ else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
 
-[[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
-
 if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]]; then
     . ~/.config/shell/common/work.sh && work-setup
     curl -d "Work setup complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
-fi
-
-if command -v fc-cache > /dev/null; then
-    mkdir -p ~/.local/share/fonts/hack-nerd-font
-    wget -O Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
-    unzip -o Hack.zip -d ~/.local/share/fonts/hack-nerd-font
-    fc-cache -fv
-    rm -rf Hack.zip
 fi
 
 (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
@@ -127,7 +82,7 @@ fi
     && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
     && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 
-if [[ "$CAN_SUDO" == "true" ]]; then
+if ! command -v pip > /dev/null; then
     if command -v apt > /dev/null; then
         sudo apt install python3-pip -y
     else
@@ -135,20 +90,25 @@ if [[ "$CAN_SUDO" == "true" ]]; then
     fi
 fi
 
-command -v pip > /dev/null && pip install --user ansible
+command -v ansible > /dev/null || pip install --user ansible
 
 mkdir -p ~/Git
-[[ -e ~/Git/ansible ]] || (cd ~/Git && git clone git@github.com:nickconway/ansible)
-
-if command -v ansible /dev/null && [[ -e ~/Git/ansible/main.yml ]]; then
-    (
-        cd ~/Git/ansible
-        ansible-playbook main.yml --limit localhost --ask-vault-pass
-    )
+if [[ -e ~/Git/ansible ]]; then
+    (cd ~/Git/ansible && git pull > /dev/null)
+else
+    (cd ~/Git && git clone git@github.com:nickconway/ansible)
 fi
+
+(
+    cd ~/Git/ansible/bootstrap
+    ansible-galaxy install -f -r requirements.yml > /dev/null
+    ansible-playbook main.yml --ask-vault-pass
+)
 
 clone-all > /dev/null
 
 echo "All done!"
 
-curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+if [[ -n $NTFY_TOKEN ]]; then
+    curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+fi
