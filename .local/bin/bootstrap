@@ -2,14 +2,9 @@
 
 set -e
 
-export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
+export PATH=~/bin:~/.local/bin:$PATH
 
 cd
-
-if command -v yadm > /dev/null; then
-    yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-    yadm remote add https "https://github.com/nickconway/dotfiles.git" &> /dev/null || true
-fi
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
@@ -82,6 +77,10 @@ fi
     && sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
     && sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 
+if ! command -v python > /dev/null; then
+    ln -s $(which python3) ~/.local/bin/python
+fi
+
 if ! command -v pip > /dev/null; then
     if command -v apt > /dev/null; then
         sudo apt install python3-pip -y
@@ -94,15 +93,28 @@ command -v ansible > /dev/null || pip install --user ansible
 
 mkdir -p ~/Git
 if [[ -e ~/Git/ansible ]]; then
-    (cd ~/Git/ansible && git pull > /dev/null)
+    (cd ~/Git/ansible && git pull &> /dev/null)
 else
-    (cd ~/Git && git clone git@github.com:nickconway/ansible)
+    (cd ~/Git && git clone git@github.com:nickconway/ansible &> /dev/null)
 fi
+
+git clone https://git.zx2c4.com/password-store &> /dev/null
+(
+    cd password-store
+    make install PREFIX=$HOME/.local
+) &> /dev/null
+rm -rf password-store
+
+pip install --user keyring-pass &> /dev/null
 
 (
     cd ~/Git/ansible/bootstrap
     ansible-galaxy install -f -r requirements.yml > /dev/null
-    ansible-playbook main.yml --ask-vault-pass
+    if vault-keyring-client &> /dev/null; then
+        ansible-playbook main.yml --vault-id $HOME/.local/bin/vault-keyring-client
+    else
+        ansible-playbook main.yml --ask-vault-pass
+    fi
 )
 
 clone-all > /dev/null
