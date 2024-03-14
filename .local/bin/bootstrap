@@ -6,8 +6,10 @@ export PATH=~/bin:~/.local/bin:~/.local/homebrew/bin:/home/linuxbrew/.linuxbrew/
 
 cd
 
-yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
-yadm remote add https "https://github.com/nickconway/dotfiles.git" &> /dev/null || true
+if command -v yadm > /dev/null; then
+    yadm remote set-url origin "git@github.com:nickconway/dotfiles.git"
+    yadm remote add https "https://github.com/nickconway/dotfiles.git" &> /dev/null || true
+fi
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
@@ -36,17 +38,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
 fi
 
 if [[ $(uname -n) == "steamdeck" ]]; then
-    {
-        sudo systemctl enable --now sshd
-        sudo steamos-readonly disable
-        sudo rm -rf /etc/pacman.d/gnupg
-        sudo pacman-key --init
-        sudo bash -c "echo 'keyserver hkps://keyserver.ubuntu.com' >> /etc/pacman.d/gnupg/gpg.conf"
-        sudo pacman-key --init
-        sudo pacman-key --populate archlinux
-        sudo pacman -Syu --noconfirm
-        sudo pacman -Sy base-devel --noconfirm
-    } || echo "Steamdeck read-only disabling failed"
+    sudo systemctl enable --now sshd
 
     [[ -e ~/.local/source/deck-tailscale ]] || git clone https://github.com/tailscale-dev/deck-tailscale.git ~/.local/source/deck-tailscale
     cd ~/.local/source/deck-tailscale
@@ -113,4 +105,6 @@ clone-all > /dev/null
 
 echo "All done!"
 
-curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+if [[ -n $NTFY_TOKEN ]]; then
+    curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+fi
