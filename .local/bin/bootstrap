@@ -56,32 +56,8 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
         if [[ "$YADM_CLASS" != "" ]]; then
             yadm config --add local.class "$YADM_CLASS"
         fi
-        read -rp "Enter YADM class [passwordless, surface, vm, work] (q to quit): " YADM_CLASS
+        read -rp "Enter YADM class [passwordless, vm, work] (q to quit): " YADM_CLASS
     done
-fi
-
-if [[ "$(yadm config --get-all local.class)" == *"surface"* ]]; then
-    if command -v apt > /dev/null && [[ ! -e /etc/apt/sources.list.d/linux-surface.list ]]; then
-        wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg
-        echo "deb [arch=amd64] https://pkg.surfacelinux.com/debian release main" | sudo tee /etc/apt/sources.list.d/linux-surface.list
-        sudo apt update -o DPkg::Lock::Timeout=300 -y
-        sudo apt install -o DPkg::Lock::Timeout=300 linux-image-surface linux-headers-surface libwacom-surface iptsd -y
-        sudo apt install -o DPkg::Lock::Timeout=300 linux-surface-secureboot-mok -y
-        sudo update-grub
-    fi
-
-    sudo mkdir -p /etc/libinput && \
-        sudo bash -c "echo '[Microsoft Surface Laptop Studio Touchpad]' > /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchVendor=0x045E' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchProduct=0x09AF' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchUdevType=touchpad' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'AttrPressureRange=2:1' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'AttrPalmPressureThreshold=500' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo '' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo '[Microsoft Surface Laptop Studio Built-In Peripherals]' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchName=*Microsoft Surface*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'MatchDMIModalias=dmi:*svnMicrosoftCorporation:*pnSurfaceLaptopStudio:*' >> /etc/libinput/local-overrides.quirks" && \
-        sudo bash -c "echo 'ModelTabletModeNoSuspend=1' >> /etc/libinput/local-overrides.quirks"
 fi
 
 [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
@@ -103,8 +79,6 @@ if [[ -e ~/.ssh/authorized_keys ]]; then
 else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
 fi
-
-[[ $(ls "$HOME"/.config/gpg) ]] && gpg --import "$HOME"/.config/gpg/*
 
 if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get-all local.class)" == *"vm"* ]]; then
     . ~/.config/shell/common/work.sh && work-setup
