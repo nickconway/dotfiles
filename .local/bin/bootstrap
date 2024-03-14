@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 export PATH=~/bin:~/.local/bin:$PATH
 cd
 
