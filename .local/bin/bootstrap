@@ -111,14 +111,6 @@ if [[ "$(yadm config --get-all local.class)" == *"work"* && "$(yadm config --get
     curl -d "Work setup complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
 fi
 
-if command -v fc-cache > /dev/null; then
-    mkdir -p ~/.local/share/fonts/hack-nerd-font
-    wget -O Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
-    unzip -o Hack.zip -d ~/.local/share/fonts/hack-nerd-font
-    fc-cache -fv
-    rm -rf Hack.zip
-fi
-
 (curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n) \
     && ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
     && mkdir -p ~/.local/share/applications \
