@@ -57,16 +57,6 @@ fi
 [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
 [[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
 
-if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
-    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
-else
-    eval $(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)
-fi
-
-if [[ "$(find ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
-    ssh-add
-fi
-
 if [[ -e ~/.ssh/authorized_keys ]]; then
     for f in ~/.ssh/*.pub; do
         grep -qF "$(cat $f)" ~/.ssh/authorized_keys || echo "$(cat $f)" >> ~/.ssh/authorized_keys
