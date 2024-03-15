@@ -148,3 +148,5 @@ echo "All done!"
 if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 fi
+
+command -v zsh &> /dev/null && exec zsh
