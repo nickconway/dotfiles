@@ -100,8 +100,6 @@ fi
 
 command -v ansible > /dev/null || pip install --user ansible
 
-clone-all > /dev/null
-
 mkdir -p ~/Git
 if [[ -e ~/Git/ansible ]]; then
     (cd ~/Git/ansible && git pull &> /dev/null)
@@ -133,6 +131,8 @@ fi
         ansible-playbook main.yml --ask-vault-pass
     fi
 )
+
+clone-all > /dev/null
 
 if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
