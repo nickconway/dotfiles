@@ -4,6 +4,8 @@ set -e
 export PATH=~/bin:~/.local/bin:$PATH
 cd
 
+touch .hushlogin
+
 if ! command -v pip > /dev/null || ! command -v python3 > /dev/null || command -v ansible > /dev/null; then
     if command -v apt > /dev/null; then
         sudo apt update -y && sudo apt upgrade -y
