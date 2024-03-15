@@ -100,14 +100,13 @@ fi
 
 command -v ansible > /dev/null || pip install --user ansible
 
+clone-all > /dev/null
+
 mkdir -p ~/Git
 if [[ -e ~/Git/ansible ]]; then
     (cd ~/Git/ansible && git pull &> /dev/null)
 else
-    (
-        cd ~/Git && git clone https://github.com/nickconway/ansible &> /dev/null
-        cd ~/Git/ansible && git remote set-url origin git@github.com:nickconway/ansible
-    )
+    (cd ~/Git && git clone git@github.com:nickconway/ansible &> /dev/null)
 fi
 
 git clone https://git.zx2c4.com/password-store &> /dev/null
@@ -134,10 +133,6 @@ fi
         ansible-playbook main.yml --ask-vault-pass
     fi
 )
-
-clone-all > /dev/null
-
-echo "All done!"
 
 if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
