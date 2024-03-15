@@ -4,6 +4,12 @@ set -e
 export PATH=~/bin:~/.local/bin:$PATH
 cd
 
+if ! command -v pip > /dev/null; then
+    if command -v apt > /dev/null; then
+        sudo apt update -y && sudo apt upgrade -y
+    fi
+fi
+
 if ! [[ -e ~/.local/bin/yadm ]]; then
     mkdir -p ~/.local/bin && curl -o ~/.local/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.local/bin/yadm && chmod +x ~/.local/bin/yadm && ~/.local/bin/yadm clone https://github.com/nickconway/dotfiles
 fi
@@ -79,10 +85,6 @@ if ! command -v python > /dev/null; then
 fi
 
 if ! command -v pip > /dev/null; then
-    if command -v apt > /dev/null; then
-        sudo apt update -y && sudo apt upgrade -y
-    fi
-
     if command -v apt > /dev/null; then
         sudo apt install python3-pip -y
     else
