@@ -42,6 +42,20 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
     done
 fi
 
+if [[ -e $XDG_RUNTIME_DIR ]]; then
+    if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
+    else
+        eval $(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)
+    fi
+else
+    eval $(ssh-agent -t 12h -s)
+fi
+
+if [[ "$(find ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
+    ssh-add
+fi
+
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo systemctl enable --now sshd
 
