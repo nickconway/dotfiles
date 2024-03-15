@@ -49,6 +49,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
 fi
 
 [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
+[[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
 
 if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
     export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
@@ -100,7 +101,6 @@ fi
 
 if ! grep git.conway.dev ~/.ssh/known_hosts &> /dev/null; then
     echo 'git.conway.dev ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJ308+nAV0FTUbT+JX4+57gNxqq0Z4H4Yt0xg/nlM+TABirY8URTq2Hj44JgjRbcF/Ar2w5uh4Xnp3PQjVF6XiA=' >> ~/.ssh/known_hosts
-    echo 'git.conway.dev ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBKHOXZuG9hk3wr+zqoX1kYridX5YcNGNxua0+FK6N5cXv74YD/0SpCzk6cZBPfvM1deIMZUgE/nmO41WsI47/Jc=' >> ~/.ssh/known_hosts
 fi
 
 mkdir -p ~/Git
