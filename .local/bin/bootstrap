@@ -148,4 +148,7 @@ if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 fi
 
-command -v zsh &> /dev/null && exec zsh && exit
+SHELL_NAME="$(basename "$(ps -p $$ | awk 'NR==2 {print $4}')")"
+if [[ $SHELL_NAME != "bootstrap" ]] && [[ $SHELL_NAME != "zsh" ]]; then
+    command -v zsh &> /dev/null && exec zsh && exit
+fi
