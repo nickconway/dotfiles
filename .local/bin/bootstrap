@@ -142,8 +142,6 @@ fi
     fi
 )
 
-clone-all > /dev/null
-
 if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 fi
