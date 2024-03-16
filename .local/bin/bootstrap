@@ -6,7 +6,7 @@ cd
 
 touch .hushlogin
 
-if ! command -v pip > /dev/null || ! command -v python3 > /dev/null || command -v ansible > /dev/null; then
+if ! command -v pip > /dev/null || ! command -v python3 > /dev/null || ! command -v ansible > /dev/null; then
     if command -v apt > /dev/null; then
         sudo apt update -y && sudo apt upgrade -y
     fi
@@ -14,9 +14,8 @@ fi
 
 if ! [[ -e ~/.local/bin/yadm ]]; then
     mkdir -p ~/.local/bin && curl -o ~/.local/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.local/bin/yadm && chmod +x ~/.local/bin/yadm && ~/.local/bin/yadm clone https://github.com/nickconway/dotfiles
+    yadm decrypt &> /dev/null
 fi
-
-yadm decrypt &> /dev/null
 
 if command -v termux-reload-settings; then
     apt update -y && apt upgrade -y
@@ -42,6 +41,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
         fi
         read -rp "Enter YADM class [passwordless, work] (q to quit): " YADM_CLASS
     done
+    yadm alt
 fi
 
 if [[ -e $XDG_RUNTIME_DIR ]]; then
@@ -91,12 +91,12 @@ if ! grep git.conway.dev ~/.ssh/known_hosts &> /dev/null; then
     echo 'git.conway.dev ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJ308+nAV0FTUbT+JX4+57gNxqq0Z4H4Yt0xg/nlM+TABirY8URTq2Hj44JgjRbcF/Ar2w5uh4Xnp3PQjVF6XiA=' >> ~/.ssh/known_hosts
 fi
 
-if [[ "$(yadm config --get-all local.class)" == *"work"* ]] && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null; then
+if [[ $(dig +short git.dev.4net9) != "" ]] && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null; then
     . ~/.config/shell/common/work.sh && work-setup
     curl -d "Work setup complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}"
 fi
 
-if ! command -v python > /dev/null; then
+if ! command -v python > /dev/null && command -v python3 > /dev/null; then
     ln -s $(which python3) ~/.local/bin/python
 fi
 
@@ -117,12 +117,8 @@ else
     (cd ~/Git && git clone git@github.com:nickconway/ansible &> /dev/null)
 fi
 
-git clone https://git.zx2c4.com/password-store &> /dev/null
-(
-    cd password-store
-    make install PREFIX=$HOME/.local
-) &> /dev/null
-rm -rf password-store
+mkdir -p .local/source
+[[ -e ~/.local/source/password-store ]] || (git clone https://git.zx2c4.com/password-store ~/.local/source/password-store; cd ~/.local/source/password-store; make install PREFIX=$HOME/.local)
 
 pip install --user keyring-pass &> /dev/null
 
