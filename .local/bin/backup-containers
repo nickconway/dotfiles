@@ -13,7 +13,6 @@ cd ~
 stop-containers
 sudo tar czfv docker-$(hostname)-"$DATE".tar.gz --exclude=docker/data docker $(sudo test -e /var/lib/docker/volumes && echo /var/lib/docker/volumes) $([[ -e ~/.local/share/docker/volumes ]] && echo .local/share/docker/volumes)
 sudo chown $(whoami):$(whoami) docker-$(hostname)-"$DATE".tar.gz
-start-containers
 
 mv docker-$(hostname)-"$DATE".tar.gz ~/Dropbox/Documents/Backups/
 cd ~/Dropbox
@@ -22,3 +21,5 @@ dropbox exclude add Documents/Backups/docker-$(hostname)-"$DATE".tar.gz
 until [[ $(curl -f -s -d "Docker backup on $(hostname) complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") ]]; do
     sleep 3
 done
+
+start-containers
