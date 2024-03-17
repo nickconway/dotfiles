@@ -87,7 +87,12 @@ command -v ansible > /dev/null || pip install --user ansible
 
 mkdir -p ~/Git
 if ! [[ -e ~/Git/ansible ]]; then
-    (cd ~/Git && git clone https://github.com/nickconway/ansible &> /dev/null)
+    (
+        cd ~/Git
+        git clone https://github.com/nickconway/ansible &> /dev/null
+        cd ansible
+        git remote set-url origin git@github.com:nickconway/ansible
+    )
 fi
 
 (
