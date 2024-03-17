@@ -18,8 +18,8 @@ mv docker-$(hostname)-"$DATE".tar.gz ~/Dropbox/Documents/Backups/
 cd ~/Dropbox
 dropbox exclude add Documents/Backups/docker-$(hostname)-"$DATE".tar.gz
 
+start-containers
+
 until [[ $(curl -f -s -d "Docker backup on $(hostname) complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}") ]]; do
     sleep 3
 done
-
-start-containers
