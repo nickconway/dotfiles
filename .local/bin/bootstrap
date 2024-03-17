@@ -95,6 +95,16 @@ if ! [[ -e ~/Git/ansible ]]; then
     )
 fi
 
+if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
+else
+    eval $(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)
+fi
+
+if [[ "$(find ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
+    ssh-add
+fi
+
 (
     cd ~/Git/ansible/bootstrap
     ansible-galaxy install -f -r requirements.yml > /dev/null
