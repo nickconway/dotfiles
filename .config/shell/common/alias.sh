@@ -108,7 +108,7 @@ function ghprm() {
 alias internet-connection='ping -c 1 8.8.8.8 &> /dev/null'
 
 function lab() {
-    cd ~/Git/ansible/bootstrap
+    cd ~/Git/ansible/lab
     ansible-galaxy install -f -r requirements.yml > /dev/null
     if vault-keyring-client &> /dev/null; then
         ansible-playbook main.yml --vault-id $HOME/.local/bin/vault-keyring-client $@
