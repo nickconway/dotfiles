@@ -86,9 +86,7 @@ fi
 command -v ansible > /dev/null || pip install --user ansible
 
 mkdir -p ~/Git
-if [[ -e ~/Git/ansible ]]; then
-    (cd ~/Git/ansible && git pull &> /dev/null)
-else
+if ! [[ -e ~/Git/ansible ]]; then
     (cd ~/Git && git clone https://github.com/nickconway/ansible &> /dev/null)
 fi
 
