@@ -332,4 +332,6 @@ function syp() {
 }
 alias sys='sysyadm status'
 
+alias wsls='wsl.exe --shutdown'
+
 alias z="zellij"
