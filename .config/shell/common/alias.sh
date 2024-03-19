@@ -169,6 +169,8 @@ function npa() {
         || curl -d "$ARGS failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 }
 
+alias pls='sudo $(fc -ln -1)'
+
 function pw() {
     rbw get $1 $2 | clip.exe
 }
