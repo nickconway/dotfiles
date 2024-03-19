@@ -20,7 +20,7 @@
 [diff]
 	colorMoved = zebra
 [rebase]
-	autostash = true
-	autosquash = true
+	autoStash = true
+	autoSquash = true
 [push]
 	default = simple
