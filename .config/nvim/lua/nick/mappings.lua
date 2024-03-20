@@ -1,5 +1,14 @@
-local function map(mode, lhs, rhs, description)
-    vim.keymap.set(mode, lhs, rhs, { silent = true, noremap = true, desc = description })
+local function map(mode, lhs, rhs, desc, opts)
+    local options = { silent = true, noremap = true }
+    if desc then
+        options = { silent = true, noremap = true, desc = desc }
+    end
+
+    if opts then
+        options = vim.tbl_extend("force", options, opts)
+    end
+
+    vim.keymap.set(mode, lhs, rhs, options)
 end
 
 local function is_git_repo()
@@ -55,6 +64,7 @@ end
 map("n", "x", '"_x')
 
 map("i", "<C-c>", "<Esc>")
+
 -- centering
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
@@ -120,7 +130,9 @@ map("n", "<leader>k", "<cmd>lnext<CR>zz", "Location list next")
 map("n", "<leader>j", "<cmd>lprev<CR>zz", "Location list previous")
 
 map("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>")
-map("n", "<leader>sw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Search word under cursor")
+
+map("n", "<leader>sw", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], "Search word under cursor", { silent = false })
+
 map("n", "<leader>x", "<cmd>!chmod +x %<CR>", "Make file executable")
 
 map("n", "<leader>u", vim.cmd.UndotreeToggle, "Toggle undotree")

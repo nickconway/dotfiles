@@ -59,10 +59,12 @@ return {
                     submode_resize = true,
                 }),
                 miniclue.gen_clues.z(),
+
                 { mode = "n", keys = "<Leader>b", desc = "Buffers" },
                 { mode = "n", keys = "<Leader>d", desc = "DAP" },
                 { mode = "n", keys = "<Leader>f", desc = "Find" },
                 { mode = "n", keys = "<Leader>h", desc = "Harpoon" },
+                { mode = "n", keys = "<Leader>s", desc = "Save / Search" },
                 { mode = "n", keys = "<Leader>w", desc = "Window" },
             },
 
