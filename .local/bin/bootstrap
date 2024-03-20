@@ -52,7 +52,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     sudo bash tailscale.sh
     source /etc/profile.d/tailscale.sh
 
-    sudo tailscale up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY --advertise-tags=tag:client,tag:server
+    sudo tailscale up --ssh --accept-routes --operator="$(whoami)" --authkey "$VPN_KEY" --advertise-tags=tag:client,tag:server
     sudo tailscale set --auto-update
 fi
 
@@ -61,7 +61,7 @@ fi
 
 if [[ -e ~/.ssh/authorized_keys ]]; then
     for f in ~/.ssh/*.pub; do
-        grep -qF "$(cat $f)" ~/.ssh/authorized_keys || echo "$(cat $f)" >> ~/.ssh/authorized_keys
+        grep -qF "$(cat "$f")" ~/.ssh/authorized_keys || cat "$f" >> ~/.ssh/authorized_keys
     done
 else
     [[ $(ls ~/.ssh/*.pub) ]] && cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys
@@ -72,7 +72,7 @@ if [[ $(dig +short git.dev.4net9) != "" ]] && grep '^flags.*hypervisor' /proc/cp
 fi
 
 if ! command -v python > /dev/null && command -v python3 > /dev/null; then
-    ln -s $(which python3) ~/.local/bin/python
+    ln -s "$(which python3)" ~/.local/bin/python
 fi
 
 if ! command -v pip > /dev/null; then
@@ -99,10 +99,10 @@ if [[ -e "$XDG_RUNTIME_DIR" ]]; then
     if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
         export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
     else
-        eval $(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)
+        eval "$(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)"
     fi
 else
-    eval $(ssh-agent)
+    eval "$(ssh-agent)"
 fi
 
 if [[ "$(find ~/.ssh/*.pub | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
@@ -113,7 +113,7 @@ fi
     cd ~/Git/ansible/bootstrap
     ansible-galaxy install -f -r requirements.yml > /dev/null
     if vault-keyring-client &> /dev/null; then
-        ansible-playbook main.yml --vault-id $HOME/.local/bin/vault-keyring-client
+        ansible-playbook main.yml --vault-id "$HOME"/.local/bin/vault-keyring-client
     else
         ansible-playbook main.yml --ask-vault-pass
     fi
