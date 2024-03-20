@@ -27,9 +27,14 @@ return {
 
         local winbar_sections = {
             lualine_c = {
-                "navic",
-                color_correction = nil,
-                navic_opts = nil,
+                {
+                    function()
+                        return require("nvim-navic").get_location()
+                    end,
+                    cond = function()
+                        return package.loaded["nvim-navic"] and require("nvim-navic").is_available()
+                    end,
+                },
             },
         }
 
