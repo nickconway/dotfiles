@@ -32,6 +32,6 @@ if [[ -n "$PS1" ]] && [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
         # zellij a -c main
     else
         # zellij a -c ssh; exit
-        command -v tmux > /dev/null && tmux new -e SSH_CONNECTION='' -e SSH_CLIENT='' -e SSH_TTY='' -As ssh $TMUX_SHELL && exit 0
+        command -v tmux > /dev/null && tmux new -As ssh $TMUX_SHELL && exit 0
     fi
 fi
