@@ -1,6 +1,6 @@
 #! /bin/bash
-if [[ -n $2 ]]; then
-    DIR=${@:2}
+if [[ -n $1 ]]; then
+    DIR=$1
 else
     DIR=$(pwd)
 fi
