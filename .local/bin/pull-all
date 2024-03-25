@@ -2,8 +2,6 @@
 FAILED=()
 loop_flag=false
 
-CWD=$PWD
-
 while getopts 'l' flag; do
   case "${flag}" in
     l) loop_flag='true'; shift ;;
@@ -18,10 +16,7 @@ fi
 
 for d in $DIR; do
     for repo in $d/*; do
-        echo $repo
-        cd $repo
-        git pull || [[ ${FAILED[*]} =~ $repo ]] || FAILED+=("$repo")
-        cd $CWD
+        (echo $repo; cd $repo; git pull) || FAILED+=("$repo")
     done
 done
 
@@ -29,10 +24,7 @@ if [[ "$loop_flag" == "true" ]]; then
     while [[ ${#FAILED[@]} -ne 0 ]] ; do
         sleep 30
         for repo in "${FAILED[@]}"; do
-            echo $repo
-            cd $repo
-            git pull && FAILED=( "${FAILED[*]/$repo}") || [[ ${FAILED[*]} =~ $repo ]] || FAILED+=("$repo")
-            cd $CWD
+            (echo $repo; cd $repo; git pull) && FAILED=("${FAILED[*]/$repo}") || [[ ${FAILED[*]} =~ $repo ]] || FAILED+=("$repo")
         done
     done
 fi
