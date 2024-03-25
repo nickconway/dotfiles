@@ -315,25 +315,6 @@ alias yrh="yadm reset --hard"
 alias ys="yadm status"
 alias yu="yadm upgrade"
 
-alias sysyadm='sudo GPG_TTY=$GPG_TTY SSH_AUTH_SOCK=$SSH_AUTH_SOCK PATH=$PATH $(which yadm) --yadm-dir /etc/yadm --yadm-data /etc/yadm/data'
-alias sya='sysyadm add'
-alias syalt='sysyadm alt'
-alias sycam='sysyadm commit -am'
-alias syd='sysyadm diff'
-alias sydec="sysyadm decrypt"
-alias syenc="sysyadm encrypt"
-alias syi='sysyadm clone -w / https://github.com/nickconway/dotfiles --single-branch --branch sys; sysyadm remote set-url origin git@github.com:nickconway/dotfiles.git'
-alias syl='sysyadm pull'
-function syp() {
-    if [[ $# -eq 0 ]]; then
-        sycam "Update config"
-        sysyadm push
-    else
-        sycam $@; sysyadm push
-    fi
-}
-alias sys='sysyadm status'
-
 alias wsls='wsl.exe --shutdown'
 
 alias z="zellij"
