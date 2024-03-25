@@ -1,4 +1,15 @@
 #! /bin/bash
+FAILED=()
+loop_flag=false
+
+CWD=$PWD
+
+while getopts 'l' flag; do
+  case "${flag}" in
+    l) loop_flag='true'; shift ;;
+  esac
+done
+
 if [[ -n $1 ]]; then
     DIR=$@
 else
@@ -7,6 +18,21 @@ fi
 
 for d in $DIR; do
     for repo in $d/*; do
-        (echo $repo; cd $repo; git pull)
+        echo $repo
+        cd $repo
+        git pull || FAILED+=("$repo")
+        cd $CWD
     done
 done
+
+if [[ "$loop_flag" == "true" ]]; then
+    while [[ ${#FAILED[@]} -ne 0 ]] ; do
+        sleep 30
+        for repo in "${FAILED[@]}"; do
+            echo $repo
+            cd $repo
+            git pull || FAILED+=("$repo")
+            cd $CWD
+        done
+    done
+fi
