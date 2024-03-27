@@ -74,7 +74,11 @@ alias gcp='git cherry-pick'
 alias gd='git diff'
 alias gds='git diff --staged'
 function ggp() {
-    git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)
+    if [[ -n $1 ]]; then
+        git push origin HEAD:refs/for/$1
+    else
+        git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)
+    fi
 }
 alias gif='git update-index --assume-unchanged'
 alias glgg='git log --graph'
