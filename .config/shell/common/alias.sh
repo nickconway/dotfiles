@@ -77,7 +77,7 @@ function ggp() {
     if [[ -n $1 ]]; then
         git push origin HEAD:refs/for/$1
     else
-        git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)
+        git push origin HEAD:refs/for/master
     fi
 }
 alias gif='git update-index --assume-unchanged'
