@@ -315,6 +315,7 @@ alias yrh="yadm reset --hard"
 alias ys="yadm status"
 alias yu="yadm upgrade"
 
+alias winget='winget.exe'
 alias wsls='wsl.exe --shutdown'
 
 alias z="zellij"
