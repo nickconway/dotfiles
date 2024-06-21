@@ -1,0 +1,17 @@
+#!/bin/bash
+
+mkdir -p ~/Git
+cd ~/Git || exit
+if [[ -n $GITEA_TOKEN ]] && [[ -n $GITEA_USER ]]; then
+    for r in $(curl -s -H "Authorization: token $GITEA_TOKEN" https://git.conway.dev/api/v1/user/repos | jq | grep -o '"name": "\w\+"' | cut -d \" -f 4); do
+        REPO_NAME="${r%.*}"
+        [[ $REPO_NAME != "dotfiles" ]] && ([[ -e ~/Git/$REPO_NAME ]] && (cd $REPO_NAME; echo $REPO_NAME; git pull) || git clone git@git.conway.dev:$GITEA_USER/$r)
+    done
+fi
+
+if command -v gh > /dev/null; then
+    for r in $(gh repo list | awk '{print $1}'); do
+        REPO_NAME="$(echo $r | cut -d/ -f2)"
+        [[ $REPO_NAME != "dotfiles" ]] && ([[ -e ~/Git/$REPO_NAME ]] && (cd $REPO_NAME; echo $REPO_NAME; git pull) || gh repo clone $r)
+    done
+fi

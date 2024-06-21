@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PROFILE="$(grep profile .aws/config | awk '{print $2}' | rev | cut -c 2- | rev | fzf-tmux -p)"
+if [[ -n $PROFILE ]]; then
+    if [[ -z "$@" ]]; then
+        read -p "Enter the command: " COMMAND
+        aws --profile "$PROFILE" $COMMAND
+    else
+        aws --profile "$PROFILE" $@
+    fi
+fi

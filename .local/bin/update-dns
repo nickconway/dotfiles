@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+cd
+[[ -e ~/docker/pihole/data/custom.list ]]
+find ~/docker/*/compose.yml > /dev/null
+[[ -e ~/docker/traefik/configs/config.yml ]]
+
+echo "Updating DNS:"
+
+CHANGED=0
+IP="$(ip addr | sed -nr 's/inet (\S*) .*/\1/p' | grep 10.0 | cut -d '/' -f 1 | xargs)"
+
+for d in $(sed -nr 's/.*Host\(`(\S*)`\).*/\1/p' ~/docker/*/compose.yml ~/docker/traefik/configs/config.yml 2>/dev/null | sort | uniq); do
+    if ! grep -q "$d" ~/docker/pihole/data/custom.list; then
+        echo "Adding: $IP $d"
+        echo $IP $d >> ~/docker/pihole/data/custom.list
+        CHANGED=1
+    elif ! grep -q "$IP $d" ~/docker/pihole/data/custom.list; then
+        LINE="$(grep "$d" ~/docker/pihole/data/custom.list)"
+        echo "Updating: $d from $(echo $LINE | awk '{print $1}') to $IP"
+        sed -i "s/$(echo $LINE | awk '{print $1}') $d/$IP $d/g" ~/docker/pihole/data/custom.list
+        CHANGED=1
+    fi
+done
+
+if [[ $CHANGED -eq 1 ]]; then
+    sort -o ~/docker/pihole/data/custom.list ~/docker/pihole/data/custom.list
+    docker exec -it pihole service pihole-FTL restart
+fi

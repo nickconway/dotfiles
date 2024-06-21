@@ -1,0 +1,9 @@
+.aws/**/*
+.config/gpg/*
+.config/shell/common/encrypted.sh
+.config/rclone/rclone.conf
+.config/yadm/alt/**/*c.work
+.config/zmk/macros.dtsi
+.config/zmk/leader.dtsi
+.password-store/.gpg-id
+.password-store/python-keyring/**/*.*

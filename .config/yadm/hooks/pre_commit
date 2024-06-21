@@ -1,0 +1,2 @@
+#!/bin/bash
+yadm enter "gitleaks protect --verbose --redact --staged"

@@ -1,0 +1,15 @@
+themes {
+    one-dark {
+        fg "#abb2bf"
+        bg "#1e2127"
+        red "#e06c75"
+        green "#98c379"
+        yellow "#e5c07b"
+        blue "#61afef"
+        magenta "#be5046"
+        orange "#d19a66"
+        cyan "#56b6c2"
+        black "#282c34"
+        white "#cccccc"
+    }
+}

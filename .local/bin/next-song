@@ -1,0 +1,2 @@
+#!/bin/bash
+playerctl -p Feishin next && playerctl -p Feishin play && now-playing

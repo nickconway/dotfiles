@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function rotate() {
+    if [[ "$1" == "normal" ]]; then
+        TRANSFORM=0
+        OFFSET="0x1125"
+    elif [[ "$1" == "left-up" ]]; then
+        TRANSFORM=1
+        OFFSET="-1125x0"
+    elif [[ "$1" == "bottom-up" ]]; then
+        TRANSFORM=2
+        OFFSET="0x-1125"
+    elif [[ "$1" == "right-up" ]]; then
+        TRANSFORM=3
+        OFFSET="1125x0"
+    fi
+
+    hyprctl keyword monitor "eDP-1,2880x1800@120,0x0,1.6,transform,$TRANSFORM,bitdepth,10"
+    if [[ "$(hyprctl monitors all -j | jq '.[] | select(.name == "eDP-2") .disabled')" == "false" ]]; then
+        hyprctl keyword monitor "eDP-2,2880x1800@120,$OFFSET,1.6,transform,$TRANSFORM,bitdepth,10"
+    fi
+}
+
+export -f rotate
+monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL sed 's/[ )]//g' | xargs -I '{}' bash -c "rotate '{}'"

@@ -1,0 +1,12 @@
+#! /bin/bash
+if [[ -n $1 ]]; then
+    DIR=$@
+else
+    DIR=$(pwd)
+fi
+
+for d in $DIR; do
+    for repo in $d/*; do
+        (echo $repo; cd $repo; git reset --hard)
+    done
+done

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+update_flag=false
+
+while getopts 'u' flag; do
+  case "${flag}" in
+    u) update_flag=true; shift ;;
+  esac
+done
+
+if [[ -e ~/Git/zmk-config/config/include/leader.dtsi ]]; then
+    sed -i.bkp '/btclear/e cat ~/.config/zmk/leader.dtsi' ~/Git/zmk-config/config/include/leader.dtsi
+    sed -i '/leader_sequences/e cat ~/.config/zmk/macros.dtsi' ~/Git/zmk-config/config/include/leader.dtsi
+fi
+
+function zmkrun() {
+    docker run \
+        -v ~/Git/zmk:/workspace \
+        -v ~/Git/zmk-config:/workspace/zmk-config \
+        -v ~/Git/zmk/zephyr:/workspace/zephyr \
+        -v ~/Git/zmk/modules:/workspace/modules \
+        -v ~/Git/zmk/tools:/workspace/tools \
+        -v ~/Git/zmk/app/build:/workspace/app/build \
+        -w /workspace/app \
+        --rm \
+        zmk "$@"
+}
+
+if ! docker image inspect zmk &> /dev/null; then
+    docker build -t zmk ~/Git/zmk/.devcontainer
+    zmkrun bash -c "west init -l ."
+    zmkrun bash -c "west update"
+else
+    if [[ $update_flag == true ]]; then
+        zmkrun bash -c "west update"
+    fi
+fi
+
+if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
+    if [ "$2" = "nv" ]; then
+        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\"" \
+        && zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\""
+    else
+        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left\"" \
+        && zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right\""
+    fi
+else
+    if [ "$2" = "nv" ]; then
+        zmkrun bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1 nice_view_adapter nice_view\""
+    else
+        zmkrun bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1\""
+    fi
+fi
+
+function clean(){
+    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
+        mv ~/Git/zmk-config/config/include/leader.dtsi.bkp ~/Git/zmk-config/config/include/leader.dtsi
+    fi
+}
+
+trap clean ERR EXIT

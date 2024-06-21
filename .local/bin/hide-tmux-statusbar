@@ -1,0 +1,19 @@
+#!/bin/env bash
+
+starting_pane=$(tmux display -p '#{pane_pid}')
+status=off
+
+tmux set status $status
+while ps -p $1 &> /dev/null; do
+    current_pane="$(tmux display -p '#{pane_pid}')"
+    if [[ -n "$current_pane" && -n "$starting_pane" && "$current_pane" == "$starting_pane" ]]; then
+        prefix_mode="$(tmux display -p '#{?client_prefix,on,off}')"
+        if [[ $status != $prefix_mode ]]; then
+            status=$prefix_mode
+            echo $prefix_mode
+            tmux set status $prefix_mode
+        fi
+    fi
+    sleep 0.1
+done
+exit

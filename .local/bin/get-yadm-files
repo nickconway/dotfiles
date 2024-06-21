@@ -1,0 +1,16 @@
+#!/bin/env bash
+
+function get-files() {
+    shopt -s dotglob globstar
+    yadm -C $HOME ls-files
+
+    for line in $(cat $HOME/.config/yadm/encrypt); do
+        for pattern in $line; do
+            if [[ -e $pattern ]]; then
+                ls -a $pattern
+            fi
+        done
+    done
+}
+
+get-files | sort | uniq

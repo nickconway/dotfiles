@@ -1,0 +1,39 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = false
+
+continuation_prompt = "[▶▶](bold purple)"
+
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+error_symbol = "[➜](bold red)"
+
+[container]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[custom.yadm]
+when="[[ -e ~/.local/share/yadm && $(pwd) == $HOME ]]"
+command="""
+YADM_STATUS="$(cd ~/.local/share/yadm/repo.git; git status)"
+YADM_STASH=$(cd ~/.local/share/yadm/repo.git; git stash list | wc -l)
+YADM_PROMPT=''
+
+[[ "$YADM_STATUS" == *'ahead'* ]] && YADM_PROMPT+='⇡';
+[[ "$YADM_STATUS" == *'behind'* ]] && YADM_PROMPT+='⇣';
+[[ $YADM_STASH -ne 0 ]] && YADM_PROMPT+='$';
+[[ "$YADM_STATUS" == *'modified'* ]] && YADM_PROMPT+='!';
+[[ "$YADM_STATUS" == *'new file'* ]] && YADM_PROMPT+='+';
+[[ "$YADM_STATUS" == *'deleted'* ]] && YADM_PROMPT+='✘';
+
+[[ $YADM_PROMPT != '' ]] && printf "[$YADM_PROMPT]";
+"""
+style='bold red'
+format='[$symbol($output)]($style) '
+
+[username]
+detect_env_vars = ['SSH_CONNECTION']

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SCREEN_ON=
+
+while true; do
+    if [[ -n $SCREEN_ON ]] && [[ "$(lsusb)" == *"ASUSTek Computer, Inc. ASUS Zenbook Duo Keyboard"* ]]; then
+        hyprctl keyword monitor "eDP-2,disabled"
+        SCREEN_ON=
+    elif [[ -z $SCREEN_ON ]] && [[ "$(lsusb)" != *"ASUSTek Computer, Inc. ASUS Zenbook Duo Keyboard"* ]]; then
+        hyprctl keyword monitor "eDP-2,2880x1800@120,0x1125,1.6,bitdepth,10"
+        SCREEN_ON=1
+    fi
+    sleep 1
+done

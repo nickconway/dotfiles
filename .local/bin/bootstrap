@@ -1,0 +1,155 @@
+#!/bin/bash
+
+export PATH=~/bin:~/.local/bin:$PATH
+cd
+
+touch .hushlogin
+
+if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
+    mkdir -p ~/.local/bin \
+        && curl -o ~/.local/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.local/bin/yadm \
+        && chmod +x ~/.local/bin/yadm \
+        && ~/.local/bin/yadm clone https://github.com/nickconway/dotfiles
+    yadm decrypt
+    yadm alt
+    yadm gitconfig user.name "Nick Conway" && yadm gitconfig user.email nick@conway.dev && yadm gitconfig "user.signingkey" AA850592E4C1D453
+fi
+
+if command -v termux-reload-settings > /dev/null; then
+    apt update -y && apt upgrade -y
+    pkg install openssh starship termux-api gnupg fzf dnsutils zsh python3 binutils pass pipx -y
+    pipx install keyring-pass
+    pipx install --include-deps ansible
+    mkdir -p ~/.zsh
+    cd ~/.zsh
+    [[ -e ~/.zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
+    [[ -e ~/.zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
+    [[ -e ~/.zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+    cd ~
+    GPG_TTY=$(tty)
+    export GPG_TTY
+    yadm decrypt
+    yadm alt
+    chsh -s zsh
+    exit
+fi
+
+if ! command -v pip > /dev/null || ! command -v python3 > /dev/null || ! command -v ansible > /dev/null; then
+    if command -v apt > /dev/null; then
+        sudo apt update -y && sudo apt upgrade -y
+    fi
+fi
+
+if [[ $(yadm config --get-all local.class) == "" ]]; then
+    YADM_CLASS=
+    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
+        if [[ "$YADM_CLASS" != "" ]]; then
+            yadm config --add local.class "$YADM_CLASS"
+        fi
+        read -rp "Enter YADM class [$(~/.local/bin/get-yadm-classes)] (q to quit): " YADM_CLASS
+    done
+    yadm alt
+fi
+
+[[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
+[[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
+
+if [[ $(uname -n) == "steamdeck" ]]; then
+    sudo systemctl enable --now sshd
+
+    if [[ ! -e ~/.local/source/deck-tailscale ]]; then
+        git clone https://github.com/tailscale-dev/deck-tailscale.git ~/.local/source/deck-tailscale
+        cd ~/.local/source/deck-tailscale
+        sudo bash tailscale.sh
+    fi
+    source /etc/profile.d/tailscale.sh
+    sudo tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
+    sudo tailscale set --auto-update
+
+    distrobox create -n arch -i archlinux
+    distrobox enter arch
+    exit
+fi
+
+if ping -c 1 git.dev.4net9 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null && ! [[ -e /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
+    . ~/.config/shell/common/work.sh && work-setup
+fi
+
+if ! command -v python > /dev/null && command -v python3 > /dev/null; then
+    ln -s "$(which python3)" ~/.local/bin/python
+fi
+
+if ! command -v pip > /dev/null; then
+    if command -v apt > /dev/null; then
+        sudo apt install python3-pip pipx -y
+    else
+        python3 -m ensurepip --upgrade
+        if command -v yum > /dev/null; then
+            sudo yum install pipx -y
+        elif command -v pacman > /dev/null; then
+            sudo pacman -S python-pip python-pipx
+        fi
+    fi
+fi
+
+if ! command -v ansible > /dev/null; then
+    pipx install --include-deps ansible
+    pipx inject ansible netaddr
+fi
+
+if [[ -e "$XDG_RUNTIME_DIR" ]]; then
+    if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
+    else
+        eval "$(ssh-agent -t 12h -s -a "$XDG_RUNTIME_DIR"/agent.sock)"
+    fi
+else
+    eval "$(ssh-agent)"
+fi
+
+if [[ "$(find ~/.ssh/*.pub 2>/dev/null | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
+    ssh-add $(find ~/.ssh/*.pub | cut -d \. -f 1-2)
+fi
+
+(
+    mkdir -p ~/Git
+
+    cd ~/Git
+    if ! [[ -e ~/Git/ansible ]]; then
+        git clone https://github.com/nickconway/ansible &> /dev/null
+    fi
+    cd ~/Git/ansible
+    git remote set-url origin https://github.com/nickconway/ansible
+    git pull &> /dev/null
+    git remote set-url origin git@github.com:nickconway/ansible
+    if [[ $(git remote) != *"https"* ]]; then
+        git remote add https https://github.com/nickconway/ansible
+    fi
+
+    cd ~/Git/ansible/bootstrap
+
+    if ! [[ -e ~/.local/bin/vault-keyring-client ]]; then
+        curl https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/vault/vault-keyring-client.py -o ~/.local/bin/vault-keyring-client &> /dev/null
+        chmod +x ~/.local/bin/vault-keyring-client
+    fi
+
+    if vault-keyring-client &> /dev/null; then
+        ansible-playbook main.yml --vault-id ~/.local/bin/vault-keyring-client -l 'localhost' $@
+    else
+        ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
+    fi
+    if [[ $? -ne 0 ]]; then
+        exit 1
+    fi
+)
+
+if [[ $? -eq 0 ]]; then
+    if [[ -n $NTFY_TOKEN ]]; then
+        curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+    fi
+else
+    if [[ -n $NTFY_TOKEN ]]; then
+        curl -d "Bootstrapping failed on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+    fi
+    exit 1
+fi

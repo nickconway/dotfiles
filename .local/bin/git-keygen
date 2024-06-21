@@ -1,0 +1,26 @@
+#!/bin/bash
+
+GITHUB_FILE=~/.ssh/github_ed25519
+GITEA_FILE=~/.ssh/gitea_ed25519
+if command -v termux-info &> /dev/null; then
+    NAME=termux
+else
+    NAME=$(uname -n)
+fi
+
+if ! [[ -e $GITHUB_FILE ]]; then
+    ssh-keygen -t ed25519 -f $GITHUB_FILE -q -N "$1" -C "github $(whoami)@$NAME"
+
+    curl -s -H "Authorization: token ${GH_TOKEN}" \
+        -X POST --data-binary "{\"title\":\"$NAME\",\"key\":\"$(cat $GITHUB_FILE.pub)\"}" \
+      https://api.github.com/user/keys
+fi
+
+if ! [[ -e $GITEA_FILE ]]; then
+    ssh-keygen -t ed25519 -f $GITEA_FILE -q -N "$1" -C "gitea $(whoami)@$NAME"
+
+    curl -s -H "Authorization: token ${GITEA_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -X POST --data-binary "{\"title\":\"$NAME\",\"key\":\"$(cat $GITEA_FILE.pub)\"}" \
+        https://git.conway.dev/api/v1/user/keys
+fi

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CLASSES=()
+
+cd ~/.config/yadm/alt || exit 1
+for f in $(find .*c.*); do
+    NAME=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\1/p")
+    CLASS=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\2/p")
+    if [[ $NAME == $CLASS ]]; then
+        CLASSES+=("$CLASS")
+    fi
+done
+if [[ -n $CLASSES ]]; then
+    echo "${CLASSES[@]}" | sed 's/ /, /g'
+fi

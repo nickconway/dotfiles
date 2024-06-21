@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for CLASS in "$@"; do
+    if [[ ! -e ~/.config/yadm/alt/.$CLASS##c.$CLASS ]]; then
+        touch ~/.config/yadm/alt/.$CLASS##c.$CLASS
+        yadm add ~/.config/yadm/alt/.$CLASS##c.$CLASS
+    fi
+done

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [[ -e ~/docker ]]; then
+    for d in ~/docker/*; do
+        cd $d
+        echo $d
+        if [[ -e docker-compose.yaml ]] || [[ -e docker-compose.yml ]] || [[ -e compose.yaml ]] || [[ -e compose.yml ]]; then
+            if [[ -z "$@" ]] || grep -q $@ compose.yml; then
+                if [[ -e /usr/bin/docker-compose ]]; then
+                    docker-compose pull
+                    docker-compose up -d
+                else
+                    docker compose up -d --pull=always
+                fi
+            fi
+        fi
+    done
+fi

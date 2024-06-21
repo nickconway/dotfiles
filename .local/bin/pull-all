@@ -1,0 +1,31 @@
+#! /bin/bash
+FAILED=()
+loop_flag=false
+
+while getopts 'l' flag; do
+  case "${flag}" in
+    l) loop_flag='true'; shift ;;
+  esac
+done
+
+if [[ -n $1 ]]; then
+    DIR=$@
+else
+    DIR=$(pwd)
+fi
+
+for d in $DIR; do
+    for repo in $d/*; do
+        (echo $repo; cd $repo; git pull) || FAILED+=("$repo")
+    done
+done
+
+if [[ "$loop_flag" == "true" ]]; then
+    while [[ ${#FAILED[@]} -ne 0 ]] ; do
+        echo "Failed:" "${FAILED[@]}"
+        sleep 60
+        for repo in "${FAILED[@]}"; do
+            (echo $repo; cd $repo; git pull) && FAILED=(${FAILED[*]/$repo}) || [[ ${FAILED[*]} =~ $repo ]] || FAILED+=("$repo")
+        done
+    done
+fi

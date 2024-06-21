@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -euo pipefail
+
+random='false'
+
+while getopts 'r' flag; do
+  case "${flag}" in
+    r) random='true' ;;
+  esac
+done
+
+if [[ "$random" == "true" ]]; then
+    IMG="$(find ~/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)"
+else
+    IMG="$HOME/Pictures/Wallpapers/PC/$(ls ~/Pictures/Wallpapers/PC | while read A ; do  echo -en "$A\x00icon\x1f~/Pictures/Wallpapers/PC/$A\n"; done | rofi -dmenu)"
+fi
+
+if [[ -n "$IMG" ]]; then
+    cp "$IMG" ~/.config/wallpaper
+    hyprctl hyprpaper unload all
+    hyprctl hyprpaper preload "$IMG"
+    hyprctl hyprpaper wallpaper ", $IMG"
+    wal --cols16 -i "$IMG"
+
+    [[ -e /usr/share/sddm/themes/sugar-candy ]] && cp .config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
+    [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' .cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
+
+    killall -SIGUSR2 waybar || true
+    echo Theme changed
+fi

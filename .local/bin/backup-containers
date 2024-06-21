@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [[ ! -e ~/docker ]]; then
+    echo Docker directory does not exist
+    exit 1
+fi
+
+if [[ ! -e /mnt/dropbox ]] || [[ -z "$(ls -A /mnt/dropbox)" ]]; then
+    echo Dropbox directory does not exist or is empty
+    exit 1
+fi
+
+function fail(){
+    curl -f -s -d "Docker backup on $(hostname) failed" https://ntfy.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
+}
+
+function clean(){
+    start-containers "$CONTAINERS_RUNNING"
+}
+
+trap fail ERR
+trap clean EXIT
+
+set -euo pipefail
+
+DATE=$(date +"%d-%b-%Y-%H-%M-%S")
+
+export BASE_DIR="/mnt/dropbox/Documents/Backups/docker"
+export BORG_REPO="$BASE_DIR/${1:-$(hostname)}"
+CONTAINER_COUNT=$(docker ps -q | wc -l)
+CONTAINER_NAMES="$(docker ps --format \"{{.Names}}\")"
+CONTAINERS_RUNNING="$(docker ps -q)"
+
+dump-containers
+
+stop-containers
+
+mkdir -p $BASE_DIR
+if [[ ! -e "$BORG_REPO" ]]; then
+    sudo -E $(which borg) init $BORG_REPO -e repokey
+fi
+sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc --exclude='docker/data/media/movies' --exclude='docker/data/media/tv' --exclude="docker/kasm-workspaces/data/kasm/*/certs" --exclude='docker/kasm-workspaces/data/kasm/*/conf/database' --exclude-caches ::"$DATE" docker
+sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
+sudo -E $(which borg) compact -v --progress

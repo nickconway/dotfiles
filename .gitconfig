@@ -1,0 +1,30 @@
+[user]
+    name = Nick Conway
+    email = nick@conway.dev
+[init]
+	defaultBranch = main
+[merge]
+	tool = "nvim"
+[mergetool]
+	keepBackup = false
+	prompt = false
+[mergetool "nvim"]
+	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+[pull]
+	rebase = true
+[fetch]
+	prune = true
+[diff]
+	colorMoved = zebra
+[rebase]
+	autoStash = true
+	autoSquash = true
+[push]
+	default = simple
+	autoSetupRemote = true
+[rerere]
+	enabled = true
+[commit]
+	gpgsign = true
+[include]
+    path = ~/.gitconfig.local

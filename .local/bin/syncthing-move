@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -euo pipefail
+
+LOCK=/tmp/syncthing-move-lock
+
+if [[ -e $LOCK ]]; then
+    exit
+fi
+
+trap rmlock EXIT
+
+function rmlock(){
+    rm $LOCK
+}
+
+touch $LOCK
+
+cd ~/docker/syncthing/sync
+
+find * -type f -not -path '**.st*' -not -path 'config/**' -exec bash -c '
+for file; do
+    dest=$(echo "$file" | sed "s/^.*_\(.*\/.*\)/\1/g")
+    echo $file to dropbox/$dest
+    rclone moveto "$file" dropbox:"$dest"
+done
+' _ {} +

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+[[ -n $NTFY_TOKEN ]]
+UPDATES="$(dockcheck -n | awk "x==1 {print} /Containers with updates available:/,EOF {x=1}" | grep -v "No updates installed" | awk NF)"
+UPDATES="${UPDATES//$'\n'/ }"
+UPDATES="$(echo "$UPDATES" | sed 's/ /, /g')"
+if [[ -n "$UPDATES" ]]; then
+    echo "$UPDATES"
+    curl -sSL https://run.conway.dev/api/GetDashboardComponents
+    curl -H "Title: Docker updates available on $(uname -n)" \
+        https://ntfy.conway.dev/docker \
+        -H "Authorization: Bearer ${NTFY_TOKEN}" \
+        -d "The following have updates available: $UPDATES" \
+        -H "Actions: http, Update Now, https://run.conway.dev/api/StartAction, method=POST, clear=true, body='{ \"actionId\": \"updateContainers\", \"arguments\": [{ \"name\": \"hostname\", \"value\": \"$(uname -n)\" }] }'"
+fi
+
+echo "$UPDATES"

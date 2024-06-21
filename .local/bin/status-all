@@ -1,0 +1,21 @@
+#! /bin/bash
+if [[ -n $1 ]]; then
+    DIR=$@
+else
+    DIR=$(pwd)
+fi
+
+for d in $DIR; do
+    for repo in $d/*; do
+        (
+            cd $repo
+            if [[ $(git status --porcelain) != "" ]] && [[ $(git status --porcelain) != " M Makefile.Debug" ]] && [[ $(git status --porcelain) != " M Makefile.Debug_Linux" ]]; then
+                echo -----------------------------
+                echo
+                echo $repo;
+                git status
+                echo
+            fi
+        )
+    done
+done
