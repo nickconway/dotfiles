@@ -7,4 +7,3 @@ done
 for f in ~/.config/shell/zsh/*; do
     source $f
 done
-test
