@@ -11,9 +11,9 @@ while getopts 'r' flag; do
 done
 
 if [[ "$random" == "true" ]]; then
-    IMG="$(find ~/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)"
+    IMG="$(find /mnt/dropbox/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)"
 else
-    IMG="$HOME/Pictures/Wallpapers/PC/$(ls ~/Pictures/Wallpapers/PC | while read A ; do  echo -en "$A\x00icon\x1f~/Pictures/Wallpapers/PC/$A\n"; done | rofi -dmenu)"
+    IMG="/mnt/dropbox/Pictures/Wallpapers/PC/$(ls /mnt/dropbox/Pictures/Wallpapers/PC | while read A ; do  echo -en "$A\x00icon\x1f/mnt/dropbox/Pictures/Wallpapers/PC/$A\n"; done | rofi -dmenu)"
 fi
 
 if [[ -n "$IMG" ]]; then
