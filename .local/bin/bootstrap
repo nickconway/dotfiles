@@ -12,7 +12,13 @@ if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
         && ~/.local/bin/yadm clone https://github.com/nickconway/dotfiles
     yadm decrypt
     yadm alt
-    yadm gitconfig user.name "Nick Conway" && yadm gitconfig user.email nick@conway.dev && yadm gitconfig user.signingkey AA850592E4C1D453
+
+    [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
+    [[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
+
+    yadm gitconfig user.name $GIT_NAME
+    yadm gitconfig user.email $GIT_EMAIL
+    yadm gitconfig user.signingkey $GIT_GPG_KEY
 fi
 
 if command -v termux-reload-settings > /dev/null; then
@@ -50,9 +56,6 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
     done
     yadm alt
 fi
-
-[[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
-[[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
 
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo systemctl enable --now sshd

@@ -76,3 +76,7 @@ export FZF_TMUX_OPTS="-p --reverse"
 export GITEA_USER=nick
 
 [[ -e /run/docker.sock ]] && export DOCKER_HOST=unix:///run/docker.sock || export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+
+export GIT_NAME="Nick Conway"
+export GIT_EMAIL="nick@conway.dev"
+export GIT_GPG_KEY="AA850592E4C1D453"
