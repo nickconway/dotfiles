@@ -12,8 +12,7 @@ if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
         && ~/.local/bin/yadm clone https://github.com/nickconway/dotfiles
     yadm decrypt
     yadm alt
-    [[ -e .config/shell/common/alias ]] && . ~/.config/shell/common/alias.sh
-    yconfig
+    yadm gitconfig user.name "Nick Conway" && yadm gitconfig user.email nick@conway.dev && yadm gitconfig user.signingkey AA850592E4C1D453
 fi
 
 if command -v termux-reload-settings > /dev/null; then
