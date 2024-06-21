@@ -17,9 +17,7 @@ if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
     [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
     [[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
 
-    [[ -n $GIT_NAME ]] && yadm gitconfig user.name $GIT_NAME
-    [[ -n $GIT_EMAIL ]] && yadm gitconfig user.email $GIT_EMAIL
-    [[ -n $GIT_GPG_KEY ]] && yadm gitconfig user.signingkey $GIT_GPG_KEY
+    eval $(grep yconfig ~/.config/shell/common/alias.sh | cut -d "=" -f 2 | cut -c 2- | rev | cut -c 2- | rev)
 fi
 
 if command -v termux-reload-settings > /dev/null; then
