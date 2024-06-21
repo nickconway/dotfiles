@@ -75,7 +75,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     exit
 fi
 
-if ping -c 1 git.dev.4net9 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null && ! [[ -e /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
+if ping -c 1 $WORK_SERVER 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null && ! [[ -e /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
     . ~/.config/shell/common/work.sh && work-setup
 fi
 
