@@ -2,7 +2,7 @@ if [ -f /etc/os-release ]; then
     # freedesktop.org and systemd
     . /etc/os-release
     OS=$NAME
-    [[ -n $VERSION_ID ]] && VER=$VERSION_ID
+    [[ -z "${VERSION_ID:-}" ]] && VER=$VERSION_ID
 elif type lsb_release >/dev/null 2>&1; then
     # linuxbase.org
     OS=$(lsb_release -si)
