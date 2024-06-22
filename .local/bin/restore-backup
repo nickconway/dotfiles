@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 cd
 
 export BORG_PASSPHRASE=$BORG_PASSPHRASE
