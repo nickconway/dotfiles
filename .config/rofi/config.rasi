@@ -172,4 +172,4 @@ configuration {
 */
 }
 
-@theme ".local/share/rofi/themes/spotlight-dark.rasi"
+@theme ".cache/wal/colors-rofi-dark.rasi"
