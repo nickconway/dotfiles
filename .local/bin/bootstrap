@@ -73,7 +73,7 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     exit
 fi
 
-if ping -c 1 $WORK_SERVER 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null && ! [[ -e /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
+if ping -c 1 $WORK_SERVER 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null && ! [[ "$(systemd-detect-virt)" == "wsl" ]]; then
     . ~/.config/shell/common/work.sh && work-setup
 fi
 
@@ -109,7 +109,7 @@ else
     eval "$(ssh-agent)"
 fi
 
-if [[ "$(find ~/.ssh/*.pub 2>/dev/null | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
+if [[ -n "$(ls .ssh/*.pub)" && "$(find ~/.ssh/*.pub 2>/dev/null | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
     ssh-add $(find ~/.ssh/*.pub | cut -d \. -f 1-2)
 fi
 
