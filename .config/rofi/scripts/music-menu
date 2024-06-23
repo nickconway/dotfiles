@@ -83,7 +83,13 @@ rofi_cmd() {
 		-mesg "$mesg" \
 		${active} ${urgent} \
 		-markup-rows \
-		-theme ${theme}
+		-theme ${theme} \
+        -kb-custom-1 "t" \
+        -kb-custom-2 "s" \
+        -kb-custom-3 "p" \
+        -kb-custom-4 "n" \
+        -kb-custom-5 "r" \
+        -kb-custom-6 "h"
 }
 
 # Pass variables to rofi dmenu
@@ -93,19 +99,29 @@ run_rofi() {
 
 # Actions
 chosen="$(run_rofi)"
+code=$?
+
+case ${code} in
+    10) playerctl play-pause;;
+    11) playerctl stop;;
+    12) previous-song;;
+    13) next-song;;
+    14) if [[ ${loop_status} == "Playlist" ]]; then
+            playerctl loop Track
+        elif [[ ${loop_status} == "Track" ]]; then
+            playerctl loop None
+        elif [[ ${loop_status} == "None" ]]; then
+            playerctl loop Playlist
+        fi;;
+    15) playerctl shuffle toggle;;
+esac
+[[ $code == 0 ]] || exit
+
 case ${chosen} in
-    $option_1)
-		playerctl play-pause
-        ;;
-    $option_2)
-		playerctl stop
-        ;;
-    $option_3)
-		previous-song
-        ;;
-    $option_4)
-		next-song
-        ;;
+    $option_1) playerctl play-pause;;
+    $option_2) playerctl stop;;
+    $option_3) previous-song;;
+    $option_4) next-song;;
     $option_5)
         if [[ ${loop_status} == "Playlist" ]]; then
             playerctl loop Track
@@ -115,7 +131,5 @@ case ${chosen} in
             playerctl loop Playlist
         fi
         ;;
-    $option_6)
-		playerctl shuffle toggle
-        ;;
+    $option_6) playerctl shuffle toggle;;
 esac
