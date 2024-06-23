@@ -135,8 +135,8 @@ fi
         chmod +x ~/.local/bin/vault-keyring-client
     fi
 
-    if vault-keyring-client &> /dev/null; then
-        ansible-playbook main.yml --vault-id ~/.local/bin/vault-keyring-client -l 'localhost' $@
+    if ansible-vault-password &> /dev/null; then
+        ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
     else
         ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
     fi
