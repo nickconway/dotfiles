@@ -12,8 +12,8 @@ if [[ -z "$status" ]]; then
 	prompt='Offline'
 	mesg="Nothing is Playing"
 else
-	prompt="`playerctl metadata -f "{{artist}}"`"
-	mesg="`playerctl metadata -f "{{title}}"` :: `playerctl metadata -f "{{album}}"`"
+	prompt="`playerctl metadata -f "{{artist}}" | sed "s/&/&amp;/g"`"
+	mesg="`playerctl metadata -f "{{title}}" | sed "s/&/&amp;/g"` :: `playerctl metadata -f "{{album}}" | sed "s/&/&amp;/g"`"
 fi
 
 if [[ ( "$theme" == *'type-1'* ) || ( "$theme" == *'type-3'* ) || ( "$theme" == *'type-5'* ) ]]; then
