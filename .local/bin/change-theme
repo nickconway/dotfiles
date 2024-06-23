@@ -18,7 +18,7 @@ else
     IMG="$(cd /mnt/dropbox/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
-if [[ -e ~/.cache/wal/wal ]] && [[ "$IMG" != "$(cat ~/.cache/wal/wal)" ]]; then
+if [[ -e ~/.cache/wal/wal ]] && [[ -n "$IMG" ]] && [[ "$IMG" != "$(cat ~/.cache/wal/wal)" ]]; then
     cp "$IMG" ~/.config/wallpaper
     hyprctl hyprpaper unload all
     echo
