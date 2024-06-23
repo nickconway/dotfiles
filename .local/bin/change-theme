@@ -10,21 +10,26 @@ while getopts 'r' flag; do
   esac
 done
 
+echo "" > /tmp/wallpaper
+
 if [[ "$random" == "true" ]]; then
     IMG="$(find /mnt/dropbox/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)"
 else
-    IMG="/mnt/dropbox/Pictures/Wallpapers/PC/$(ls /mnt/dropbox/Pictures/Wallpapers/PC | while read A ; do  echo -en "$A\x00icon\x1f/mnt/dropbox/Pictures/Wallpapers/PC/$A\n"; done | rofi -dmenu)"
+    IMG="$(cd /mnt/dropbox/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
-if [[ -n "$IMG" ]]; then
+if [[ -e ~/.cache/wal/wal ]] && [[ "$IMG" != "$(cat ~/.cache/wal/wal)" ]]; then
     cp "$IMG" ~/.config/wallpaper
     hyprctl hyprpaper unload all
+    echo
     hyprctl hyprpaper preload "$IMG"
+    echo
     hyprctl hyprpaper wallpaper ", $IMG"
+    echo
     wal --cols16 -i "$IMG"
 
-    [[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp .config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
-    [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' .cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
+    [[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
+    [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
 
     killall -SIGUSR2 waybar || true
     echo Theme changed
