@@ -12,6 +12,8 @@ fi
 
 function fail(){
     curl -f -s -d "LXC backup on $(uname -n) failed" https://ntfy.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
+}
+
 trap fail ERR
 
 set -euo pipefail
