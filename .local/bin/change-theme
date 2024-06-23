@@ -32,5 +32,5 @@ if [[ -e ~/.cache/wal/wal ]] && [[ -n "$IMG" ]] && [[ "$IMG" != "$(cat ~/.cache/
     [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
 
     killall -SIGUSR2 waybar || true
-    echo Theme changed
+    fastfetch
 fi
