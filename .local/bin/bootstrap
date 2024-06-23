@@ -85,11 +85,17 @@ if ! command -v pip > /dev/null; then
     if command -v apt > /dev/null; then
         sudo apt install python3-pip pipx -y
     else
-        python3 -m ensurepip --upgrade
         if command -v yum > /dev/null; then
+            python3 -m ensurepip --upgrade
             sudo yum install pipx -y
+        elif command -v apt > /dev/null; then
+            python3 -m ensurepip --upgrade
+            sudo apt install pipx -y
         elif command -v pacman > /dev/null; then
             sudo pacman -S python-pip python-pipx
+        else
+            python3 -m ensurepip --upgrade
+
         fi
     fi
 fi
