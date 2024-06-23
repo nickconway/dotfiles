@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd
+
 if [[ ! -e ~/docker ]]; then
     echo Docker directory does not exist
     exit 1
@@ -11,7 +13,7 @@ if [[ ! -e /mnt/dropbox ]] || [[ -z "$(ls -A /mnt/dropbox)" ]]; then
 fi
 
 function fail(){
-    curl -f -s -d "Docker backup on $(hostname) failed" https://ntfy.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
+    curl -f -s -d "Docker backup on $(uname -n) failed" https://ntfy.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
 }
 
 function clean(){
@@ -26,7 +28,7 @@ set -euo pipefail
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
 export BASE_DIR="/mnt/dropbox/Documents/Backups/docker"
-export BORG_REPO="$BASE_DIR/${1:-$(hostname)}"
+export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 CONTAINER_COUNT=$(docker ps -q | wc -l)
 CONTAINER_NAMES="$(docker ps --format \"{{.Names}}\")"
 CONTAINERS_RUNNING="$(docker ps -q)"
