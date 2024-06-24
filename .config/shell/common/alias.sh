@@ -400,6 +400,15 @@ alias yrh="yadm reset --hard"
 alias ys="yadm status"
 alias yu="yadm upgrade"
 
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd "$cwd"
+	fi
+	rm -f "$tmp"
+}
+
 alias winget='winget.exe'
 alias wsls='wsl.exe --shutdown'
 
