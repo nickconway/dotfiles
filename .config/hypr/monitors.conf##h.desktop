@@ -1,3 +1,3 @@
-monitor=DP-1,25600x1440@165,2560x0,1,bitdepth,10
-monitor=DP-2,25600x1440@165,-2560x0,1,bitdepth,10
-monitor=DP-3,25600x1440@165,0x0,1,bitdepth,10
+monitor=DP-1,2560x1440@165,2560x0,1,bitdepth,10
+monitor=DP-2,2560x1440@165,-2560x0,1,bitdepth,10
+monitor=DP-3,2560x1440@165,0x0,1,bitdepth,10
