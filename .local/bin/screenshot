@@ -3,4 +3,5 @@
 set -euo pipefail
 IMG=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g "$(slurp -c cba67f88 -b 00000099 -w 0)" $IMG
 wl-copy < $IMG
-notify-send -i "$IMG" 'Screenshot Saved and Copied to Clipboard'
+ACTION=$(notify-send -i "$IMG" 'Screenshot Saved and Copied to Clipboard' --action "open=Open")
+[[ "$ACTION" == "open" ]] && xdg-open "$IMG"
