@@ -387,7 +387,9 @@ function yl(){
     fi
 }
 function yp() {
-    if [[ -n $(yadm status --porcelain) ]]; then
+    if yadm status --porcelain | grep "^M"; then
+        yadm commit -m "Update config" || return
+    elif [[ -n $(yadm status --porcelain) ]]; then
         if [[ $# -eq 0 ]]; then
             ycam "Update config" || return
         else
