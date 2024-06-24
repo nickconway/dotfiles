@@ -10,7 +10,7 @@ source "$HOME"/.config/rofi/applets/shared/theme.bash
 theme="$type/$style"
 
 # Theme Elements
-prompt="`hostname`"
+prompt="`uname -n`"
 mesg="Uptime : `uptime -p | sed -e 's/up //g'`"
 
 if [[ ( "$theme" == *'type-1'* ) || ( "$theme" == *'type-3'* ) || ( "$theme" == *'type-5'* ) ]]; then
@@ -81,7 +81,7 @@ confirm_exit() {
 confirm_run () {
 	selected="$(confirm_exit)"
 	if [[ "$selected" == "$yes" ]]; then
-        ${1} && ${2}
+        ${1}; ${2}
     else
         exit
     fi
