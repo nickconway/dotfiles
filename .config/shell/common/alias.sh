@@ -368,15 +368,17 @@ alias yenc="yadm encrypt"
 function yl(){
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
-    ALT_FILES_BEFORE="$(sha1sum $(find ~/.config/yadm/alt -type f))"
-    yadm pull $@
+    ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H | rg '##' || find ~/.config/yadm/alt -type f))"
+    RESULT="$(yadm pull $@)"
+    echo "$RESULT"
+    [[ "$RESULT" == "Already up to date." ]] && return
 
     YADM_ARCHIVE_AFTER="$(sha1sum ~/.local/share/yadm/archive)"
     if [[ $YADM_ARCHIVE_BEFORE != $YADM_ARCHIVE_AFTER ]]; then
         ydec
     fi
 
-    ALT_FILES_AFTER="$(sha1sum $(find ~/.config/yadm/alt -type f))"
+    ALT_FILES_AFTER="$(sha1sum $(command -v fd && fd -H | rg '##' || find ~/.config/yadm/alt -type f))"
     if [[ $ALT_FILES_BEFORE != $ALT_FILES_AFTER ]]; then
         yalt
     fi
