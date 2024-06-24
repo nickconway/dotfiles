@@ -115,10 +115,6 @@ else
     eval "$(ssh-agent)"
 fi
 
-if [[ -n "$(ls .ssh/*.pub)" && "$(find ~/.ssh/*.pub 2>/dev/null | wc -l)" != "$(ssh-add -l | wc -l)" ]]; then
-    ssh-add $(find ~/.ssh/*.pub | cut -d \. -f 1-2)
-fi
-
 (
     mkdir -p ~/Git
 
