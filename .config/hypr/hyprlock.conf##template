@@ -38,9 +38,9 @@ label {
     monitor =
     text = cmd[update:1000] echo "$(date +"%-I:%M%p")"
     color = rgba(255, 255, 255, 0.6)
-{% if YADM_HOSTNAME == "desktop" %}
+{% if yadm.hostname == "desktop" %}
     font_size = 75
-{% elif YADM_HOSTNAME == "laptop" %}
+{% elif yadm.hostname == "laptop" %}
     font_size = 120
 {% else %}
     font_size = 100
@@ -56,9 +56,9 @@ label {
     monitor =
     text = cmd[] bash -c 'echo Hi there, ${USER^}'
     color = rgba(255, 255, 255, 0.6)
-{% if YADM_HOSTNAME == "desktop" %}
+{% if yadm.hostname == "desktop" %}
     font_size = 20
-{% elif YADM_HOSTNAME == "laptop" %}
+{% elif yadm.hostname == "laptop" %}
     font_size = 25
 {% else %}
     font_size = 20
@@ -74,9 +74,9 @@ label {
     monitor =
     text = cmd[update:1000] ~/.config/hypr/scripts/get-song
     color = rgba(255, 255, 255, 0.6)
-{% if YADM_HOSTNAME == "desktop" %}
+{% if yadm.hostname == "desktop" %}
     font_size = 14
-{% elif YADM_HOSTNAME == "laptop" %}
+{% elif yadm.hostname == "laptop" %}
     font_size = 18
 {% else %}
     font_size = 14
