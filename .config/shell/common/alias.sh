@@ -417,3 +417,7 @@ alias winget='winget.exe'
 alias wsls='wsl.exe --shutdown'
 
 alias z="zellij"
+
+function dis() {
+    $@ &> /dev/null & disown
+}
