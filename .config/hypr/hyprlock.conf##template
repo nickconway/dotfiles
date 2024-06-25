@@ -40,10 +40,9 @@ label {
     color = rgba(255, 255, 255, 0.6)
 {% if yadm.hostname == "desktop" %}
     font_size = 75
-{% elif yadm.hostname == "laptop" %}
+{% endif %}
+{% if yadm.hostname == "laptop" %}
     font_size = 120
-{% else %}
-    font_size = 100
 {% endif %}
     font_family = JetBrains Mono Nerd Font Mono ExtraBold
     position = 0, -300
@@ -58,10 +57,9 @@ label {
     color = rgba(255, 255, 255, 0.6)
 {% if yadm.hostname == "desktop" %}
     font_size = 20
-{% elif yadm.hostname == "laptop" %}
+{% endif %}
+{% if yadm.hostname == "laptop" %}
     font_size = 25
-{% else %}
-    font_size = 20
 {% endif %}
     font_family = JetBrains Mono Nerd Font Mono
     position = 0, -40
@@ -76,10 +74,9 @@ label {
     color = rgba(255, 255, 255, 0.6)
 {% if yadm.hostname == "desktop" %}
     font_size = 14
-{% elif yadm.hostname == "laptop" %}
+{% endif %}
+{% if yadm.hostname == "laptop" %}
     font_size = 18
-{% else %}
-    font_size = 14
 {% endif %}
     font_family = JetBrainsMono, Font Awesome 6 Free Solid
     position = 0, 0
