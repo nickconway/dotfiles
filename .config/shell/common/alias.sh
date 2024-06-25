@@ -269,8 +269,15 @@ alias server='s server'
 
 alias steamdeck='s steamdeck'
 
+function sci() {
+    if [[ -e ~/.ssh/id_ed25519 ]]; then
+        PUB_KEY="$(cat ~/.ssh/id_ed25519.pub)"
+        ssh $@ "grep \"$PUB_KEY\" ~/.ssh/authorized_keys -q || echo \"$PUB_KEY\" >> ~/.ssh/authorized_keys"
+    fi
+}
+
 function sudop(){
-    sudo -E -s $(which $1) ${@:2}
+    sudo -E -s $(which $1 | cut -d ' ' -f 4-) ${@:2}
 }
 
 alias tldrf="tldr --list | fzf-tmux -p --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
