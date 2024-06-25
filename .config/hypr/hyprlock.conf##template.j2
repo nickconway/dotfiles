@@ -38,11 +38,13 @@ label {
     monitor =
     text = cmd[update:1000] echo "$(date +"%-I:%M%p")"
     color = rgba(255, 255, 255, 0.6)
-    {% if yadm.hostname == "desktop" %}
+{% if YADM_HOSTNAME == "desktop" %}
     font_size = 80
-    {% elif yadm.hostname == "laptop" %}
+{% elif YADM_HOSTNAME == "laptop" %}
     font_size = 120
-    {% endif }
+{% else %}
+    {{ YADM_HOSTNAME }}
+{% endif %}
     font_family = JetBrains Mono Nerd Font Mono ExtraBold
     position = 0, -300
     halign = center
@@ -64,7 +66,7 @@ label {
 # CURRENT SONG
 label {
     monitor =
-    text = cmd[update:1000] playerctl metadata --format '   {{title}} - {{artist}}'
+    text = cmd[update:1000] ~/.config/hypr/scripts/get-song
     color = rgba(255, 255, 255, 0.6)
     font_size = 18
     font_family = JetBrainsMono, Font Awesome 6 Free Solid
