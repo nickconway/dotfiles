@@ -1,2 +1,2 @@
 #!/bin/bash
-cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy && paste-keys
+cliphist list | rofi -dmenu -display-columns 2 -p Clipboard | cliphist decode | wl-copy && paste-keys
