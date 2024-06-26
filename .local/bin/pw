@@ -3,7 +3,7 @@ if [[ -z "$@" ]]; then
     LIST=$(rbw list --fields name,user,id | sed "s/\t/ /g")
 
     if command -v rofi &> /dev/null; then
-        SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | rofi -dmenu -p Vault)
+        SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | rofi -dmenu -p Vault -i)
     else
         SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | fzf-tmux -p)
     fi
