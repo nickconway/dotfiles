@@ -1,0 +1,11 @@
+bind = $mainMod, B, focusworkspaceoncurrentmonitor, 1
+bind = $mainMod, T, focusworkspaceoncurrentmonitor, 2
+bind = $mainMod, D, focusworkspaceoncurrentmonitor, 3
+bind = $mainMod, M, focusworkspaceoncurrentmonitor, 4
+bind = $mainMod, F, focusworkspaceoncurrentmonitor, 5
+
+workspace = 1, on-created-empty: flatpak run com.google.Chrome
+workspace = 2, on-created-empty: kitty
+workspace = 3, on-created-empty: flatpak run com.discordapp.Discord
+workspace = 4, on-created-empty: thunderbird-beta
+workspace = 5, on-created-empty: feishin --ozone-platform-hint=auto
