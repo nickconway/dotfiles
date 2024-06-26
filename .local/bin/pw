@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+
 if [[ -z "$@" ]]; then
     LIST=$(rbw list --fields name,user,id | sed "s/\t/ /g")
 

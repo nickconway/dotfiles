@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+
 if [[ -n "$DISPLAY" ]] && command -v rofi &> /dev/null; then
     cliphist list | rofi -dmenu -display-columns 2 -p Clipboard -i | cliphist decode | wl-copy && paste-keys
 else
