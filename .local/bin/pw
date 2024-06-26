@@ -2,7 +2,7 @@
 if [[ -z "$@" ]]; then
     LIST=$(rbw list --fields name,user,id | sed "s/\t/ /g")
 
-    if command -v rofi &> /dev/null; then
+    if [[ -n "$DISPLAY" ]] && command -v rofi &> /dev/null; then
         SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | rofi -dmenu -p Vault -i)
     else
         SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | fzf-tmux -p)
@@ -12,14 +12,18 @@ if [[ -z "$@" ]]; then
         ID=$(echo "$LIST" | rg "$SELECTED" | awk '{print $NF}')
         if command -v clip.exe > /dev/null; then
             echo -n $(rbw get $ID) | clip.exe
-        elif command -v wl-copy > /dev/null; then
+        elif [[ -n "$DISPLAY" ]] && command -v wl-copy > /dev/null; then
             echo -n $(rbw get $ID) | wl-copy && paste-keys
+        else
+            echo -n $(rbw get $ID)
         fi
     fi
 else
     if command -v clip.exe > /dev/null; then
         echo -n $(rbw get $@) | clip.exe
-    elif command -v wl-copy > /dev/null; then
+    elif [[ -n "$DISPLAY" ]] && command -v wl-copy > /dev/null; then
         echo -n $(rbw get $@) | wl-copy && paste-keys
+    else
+        echo -n $(rbw get $@)
     fi
 fi
