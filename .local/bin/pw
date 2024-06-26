@@ -15,7 +15,7 @@ if [[ -z "$@" ]]; then
         elif [[ -n "$DISPLAY" ]] && command -v wl-copy > /dev/null; then
             echo -n $(rbw get $ID) | wl-copy && paste-keys
         else
-            echo -n $(rbw get $ID)
+            echo $(rbw get $ID)
         fi
     fi
 else
@@ -24,6 +24,6 @@ else
     elif [[ -n "$DISPLAY" ]] && command -v wl-copy > /dev/null; then
         echo -n $(rbw get $@) | wl-copy && paste-keys
     else
-        echo -n $(rbw get $@)
+        echo $(rbw get $@)
     fi
 fi
