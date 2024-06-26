@@ -6,4 +6,4 @@ bind = $mainMod, F, focusworkspaceoncurrentmonitor, 3
 
 workspace = 1, on-created-empty: flatpak run com.google.Chrome
 workspace = 2, on-created-empty: kitty; flatpak run com.discordapp.Discord; thunderbird-beta
-workspace = 3, on-created-empty: feishin --ozone-platform-hint=auto
+workspace = 3, on-created-empty: feishin --ozone-platform-hint=auto; flatpak 'run' '--command=/app/bin/chrome' 'com.google.Chrome' '--profile-directory=Default' '--app-id=hpfldicfbfomlpcikngkocigghgafkph'; flatpak run app.bluebubbles.BlueBubbles
