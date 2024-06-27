@@ -1,0 +1,5 @@
+#!/bin/bash
+while true; do
+    pidof go-hass-agent || go-hass-agent run &> /dev/null & disown
+    sleep 5
+done
