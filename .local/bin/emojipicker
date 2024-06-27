@@ -7,4 +7,4 @@ if [[ ! -e ~/.cache/emojis || "$1" == "download" ]]; then
       > ~/.cache/emojis
 fi
 
-cat ~/.cache/emojis | rofi -dmenu --prompt-text "Emoji: " --placeholder-text='...' -i | cut -d ' ' -f 1 | tr -d '\n' | wl-copy && sleep .1 && paste-keys
+cat ~/.cache/emojis | rofi -dmenu --prompt-text "Emoji: " --placeholder-text='...' -i | cut -d ' ' -f 1 | tr -d '\n' | wl-copy && paste-keys
