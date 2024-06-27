@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+if [[ ! -e ~/.local/bin/steam_desktop_updater.py ]]; then
+    curl https://raw.githubusercontent.com/gasinvein/steam-desktop-updater/master/steam_desktop_updater.py -o ~/.local/bin/steam_desktop_updater.py
+fi
+
+if [[ ! -e ~/.venvs/venv ]]; then
+    mkdir -p $HOME/.venvs
+    python3 -m venv $HOME/.venvs/venv
+    source $HOME/.venvs/venv/bin/activate
+    pip install pillow vdf steam
+fi
+
+source $HOME/.venvs/venv/bin/activate
+sudo steam_desktop_updater.py ~/.var/app/com.valvesoftware.Steam/data/Steam
