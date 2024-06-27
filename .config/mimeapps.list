@@ -1,3 +1,4 @@
 
 [Default Applications]
+x-scheme-handler/nc=com.nextcloud.desktopclient.nextcloud.desktop
 image/png=feh.desktop
