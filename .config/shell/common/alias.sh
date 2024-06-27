@@ -377,7 +377,7 @@ function yl(){
     cd
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
-    ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' -E .vim || find ~/.config/yadm/alt -type f))"
+    ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' -E .vim -E dropbox || find ~/.config/yadm/alt -type f))"
     RESULT="$(yadm pull $@)"
     echo "$RESULT"
     [[ "$RESULT" == "Already up to date." ]] && return
