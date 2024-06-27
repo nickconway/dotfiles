@@ -1,9 +1,9 @@
-bind = $mainMod, B, focusworkspaceoncurrentmonitor, 1
-bind = $mainMod, T, focusworkspaceoncurrentmonitor, 2
-bind = $mainMod, D, focusworkspaceoncurrentmonitor, 2
-bind = $mainMod, M, focusworkspaceoncurrentmonitor, 2
-bind = $mainMod, F, focusworkspaceoncurrentmonitor, 3
+bind = $mainMod, B, focuswindow, chrome
+bind = $mainMod, T, focuswindow, kitty
+bind = $mainMod, D, focuswindow, discord
+bind = $mainMod, M, focuswindow, thunderbird
+bind = $mainMod, F, focuswindow, feishin
 
-workspace = 1, on-created-empty: flatpak run com.google.Chrome
-workspace = 2, on-created-empty: kitty & flatpak run com.discordapp.Discord & thunderbird-beta
-workspace = 3, on-created-empty: feishin --ozone-platform-hint=auto & flatpak 'run' '--command=/app/bin/chrome' 'com.google.Chrome' '--profile-directory=Default' '--app-id=hpfldicfbfomlpcikngkocigghgafkph' & flatpak run app.bluebubbles.BlueBubbles
+exec-once=[workspace 1 silent] flatpak run com.google.Chrome
+exec-once=[workspace 2 slient] kitty & flatpak run com.discordapp.Discord & thunderbird-beta
+exec-once=[workspace 3 slient] feishin --ozone-platform-hint=auto & flatpak 'run' '--command=/app/bin/chrome' 'com.google.Chrome' '--profile-directory=Default' '--app-id=hpfldicfbfomlpcikngkocigghgafkph' & flatpak run app.bluebubbles.BlueBubbles
