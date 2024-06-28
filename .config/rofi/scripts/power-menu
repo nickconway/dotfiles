@@ -94,9 +94,9 @@ run_cmd() {
 	elif [[ "$1" == '--opt2' ]]; then
 		confirm_run 'kill -9 -1'
 	elif [[ "$1" == '--opt3' ]]; then
-		confirm_run 'playerctl -a pause' 'systemctl suspend'
+		confirm_run 'hyprsleep'
 	elif [[ "$1" == '--opt4' ]]; then
-		confirm_run 'systemctl hibernate'
+		confirm_run 'hyprsleep'
 	elif [[ "$1" == '--opt5' ]]; then
 		confirm_run 'systemctl reboot'
 	elif [[ "$1" == '--opt6' ]]; then
