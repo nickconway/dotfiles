@@ -3,6 +3,7 @@ set -euo pipefail
 
 if [[ ! -e ~/.local/bin/steam_desktop_updater.py ]]; then
     curl https://raw.githubusercontent.com/gasinvein/steam-desktop-updater/master/steam_desktop_updater.py -o ~/.local/bin/steam_desktop_updater.py
+    chmod +x ~/.local/bin/steam_desktop_updater.py
 fi
 
 if [[ ! -e ~/.venvs/venv ]]; then
