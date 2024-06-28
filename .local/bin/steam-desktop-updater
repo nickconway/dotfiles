@@ -8,9 +8,8 @@ fi
 if [[ ! -e ~/.venvs/venv ]]; then
     mkdir -p $HOME/.venvs
     python3 -m venv $HOME/.venvs/venv
-    source $HOME/.venvs/venv/bin/activate
-    pip install pillow vdf steam
 fi
 
 source $HOME/.venvs/venv/bin/activate
+pip install pillow vdf steam &> /dev/null
 sudo steam_desktop_updater.py ~/.var/app/com.valvesoftware.Steam/data/Steam
