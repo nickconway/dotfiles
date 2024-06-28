@@ -9,5 +9,5 @@ exec-once=[workspace 2 slient] kitty & flatpak run com.discordapp.Discord & thun
 exec-once=[workspace 2 slient] flatpak run com.discordapp.Discord
 exec-once=[workspace 2 slient] thunderbird-beta
 exec-once=[workspace 3 slient] feishin --ozone-platform-hint=auto
-exec-once=[workspace 3 slient] flatpak 'run' '--command=/app/bin/chrome' 'com.google.Chrome' '--profile-directory=Default' '--app-id=hpfldicfbfomlpcikngkocigghgafkph'
+exec-once=[workspace 3 slient] flatpak run --command=/app/bin/chrome com.google.Chrome --profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph
 exec-once=[workspace 3 slient] flatpak run app.bluebubbles.BlueBubbles
