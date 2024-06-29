@@ -5,10 +5,15 @@ GITEA_FILE=~/.ssh/gitea_ed25519
 if command -v termux-info &> /dev/null; then
     NAME=termux
 else
-    NAME=$(uname -n)
+    if command -v systemd-detect-virt > /dev/null && [[ "$(systemd-detect-virt)" == "wsl" ]]; then
+        NAME=$(uname -n)-wsl
+    else
+        NAME=$(uname -n)
+    fi
 fi
 
 if ! [[ -e $GITHUB_FILE ]]; then
+
     ssh-keygen -t ed25519 -f $GITHUB_FILE -q -N "$1" -C "github $(whoami)@$NAME"
 
     curl -s -H "Authorization: token ${GH_TOKEN}" \
@@ -17,7 +22,11 @@ if ! [[ -e $GITHUB_FILE ]]; then
 fi
 
 if ! [[ -e $GITEA_FILE ]]; then
-    ssh-keygen -t ed25519 -f $GITEA_FILE -q -N "$1" -C "gitea $(whoami)@$NAME"
+    if command -v systemd-detect-virt > /dev/null && [[ "$(systemd-detect-virt)" == "wsl" ]]; then
+        ssh-keygen -t ed25519 -f $GITEA_FILE -q -N "$1" -C "gitea $(whoami)@$NAME-wsl"
+    else
+        ssh-keygen -t ed25519 -f $GITEA_FILE -q -N "$1" -C "gitea $(whoami)@$NAME"
+    fi
 
     curl -s -H "Authorization: token ${GITEA_TOKEN}" \
         -H "Content-Type: application/json" \
