@@ -377,7 +377,7 @@ function yl(){
     cd
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
-    ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' -E .vim -E dropbox -E docker || find ~/.config/yadm/alt -type f))"
+    ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
     RESULT="$(yadm pull $@)"
     echo "$RESULT"
     [[ "$RESULT" == "Already up to date." ]] && return
@@ -387,7 +387,7 @@ function yl(){
         ydec
     fi
 
-    ALT_FILES_AFTER="$(sha1sum $(command -v fd && fd -H | rg '##' || find ~/.config/yadm/alt -type f))"
+    ALT_FILES_AFTER="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
     if [[ $ALT_FILES_BEFORE != $ALT_FILES_AFTER ]]; then
         yalt
     fi
