@@ -6,11 +6,10 @@ if [[ ! -e ~/.local/bin/steam_desktop_updater.py ]]; then
     chmod +x ~/.local/bin/steam_desktop_updater.py
 fi
 
-if [[ ! -e ~/.venvs/venv ]]; then
-    mkdir -p $HOME/.venvs
-    python3 -m venv $HOME/.venvs/venv
+if [[ ! -e ~/.venv ]]; then
+    python3 -m venv $HOME/.venv
 fi
 
-source $HOME/.venvs/venv/bin/activate
+source $HOME/.venv/bin/activate
 pip install pillow vdf steam &> /dev/null
 sudo steam_desktop_updater.py ~/.var/app/com.valvesoftware.Steam/data/Steam
