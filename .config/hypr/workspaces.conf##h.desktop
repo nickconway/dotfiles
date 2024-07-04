@@ -15,3 +15,4 @@ exec-once = [workspace 2] thunderbird-beta
 exec-once = [workspace 3] feishin --ozone-platform-hint=auto
 exec-once = [workspace 3] flatpak run --command=/app/bin/chrome com.google.Chrome --profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph
 exec-once = [workspace 3] flatpak run app.bluebubbles.BlueBubbles
+exec-once = [workspace 3] flatpak run --command=/app/bin/chrome com.google.Chrome --profile-directory=Default --app-id=lodlkdfmihgonocnmddehnfgiljnadcf
