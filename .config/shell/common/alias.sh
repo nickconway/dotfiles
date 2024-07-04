@@ -209,7 +209,8 @@ function npa() {
 
 alias pls='sudo $(fc -ln -1)'
 
-alias rd="rm -rf"
+alias rd='rm -rf'
+alias rg='rg --hidden'
 
 function replace() {
     if ! command -v rg > /dev/null; then
