@@ -63,6 +63,7 @@ alias dcupdate="docker compose up -d --pull=always"
 alias ga='git add'
 alias gaa='git add --all'
 alias gb='git branch'
+alias gca='git commit -av'
 alias gcam='git commit --all --message'
 alias gcl='git clone --recurse-submodules'
 alias gco='git checkout'
@@ -363,7 +364,7 @@ alias yalt="yadm alt"
 alias yau="yadm add -u"
 alias yb='yadm bootstrap'
 alias yc="yadm commit"
-alias yca="yadm commit -a"
+alias yca="yadm commit -av"
 alias ycam="yadm commit -a -m"
 alias ycl="yadm config --get-all local.class"
 alias ycla="yadm config --add local.class"
