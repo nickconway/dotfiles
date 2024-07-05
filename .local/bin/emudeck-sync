@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euo pipefail
+
+function sync-saves() {
+    rclone copy dropbox:Documents/Emulation/Saves/ ~/Emulation/saves -PLMuv
+    rclone copy ~/Emulation/saves/ dropbox:Documents/Emulation/Saves -PLMuv
+}
+
+function sync-games() {
+    rclone copy dropbox:Documents/Emulation/Games/ ~/Emulation/roms -PLMuv
+    rclone copy ~/Emulation/roms/ dropbox:Documents/Emulation/Games -PLMuv
+}
+
+function sync-bios() {
+    rclone copy dropbox:Documents/Emulation/BIOS/ ~/Emulation/bios -PLMuv
+    rclone copy ~/Emulation/bios/ dropbox:Documents/Emulation/BIOS -PLMuv
+
+}
+
+if [[ $# == 0 ]]; then
+    sync-games
+    sync-saves
+    sync-bios
+else
+    for arg in $@; do
+        sync-$arg
+    done
+fi
