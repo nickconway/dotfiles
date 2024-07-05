@@ -61,8 +61,8 @@ alias dcudb="docker compose up -d --build"
 alias dcupdate="docker compose up -d --pull=always"
 
 function fn() {
-    SELECTED="$(fzf-tmux -p --preview="bat --color=always --style=plain {}")"
-    [[ -n "$SELECTED" ]] && nvim "$SELECTED"
+    SELECTED=("${(@f)$(fzf-tmux -m -p --preview="bat --color=always --style=plain {}")}")
+    [[ -n "$SELECTED" ]] && $EDITOR "${SELECTED[@]}"
     unset SELECTED
 }
 alias ga='git add'
