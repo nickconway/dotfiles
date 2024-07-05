@@ -108,7 +108,13 @@ function gsa() {
         git stash pop $@
     fi
 }
-alias gsw='git switch'
+function gsw() {
+    if [[ -z "$@" ]] || [[ "$@" == "-" ]]; then
+        git switch -
+    else
+        git show-branch $@ &>/dev/null && git switch $@ || git switch -c $@
+    fi
+}
 
 function ghc() {
     mkdir -p $PROJECT_DIR
