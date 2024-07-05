@@ -7,4 +7,3 @@ done
 for f in ~/.config/shell/$SHELL_NAME/*; do
     source $f
 done
-jjjjjjjj
