@@ -221,8 +221,8 @@ function npa() {
 
 alias pls='sudo $(fc -ln -1)'
 
-alias rd='rm -rf'
 alias rg='rg --hidden'
+alias rm='rip'
 
 function replace() {
     if ! command -v rg > /dev/null; then
@@ -289,8 +289,8 @@ function sci() {
     fi
 }
 
-function sudop(){
-    sudo -E -s $(which $1 | cut -d ' ' -f 4-) ${@:2}
+function sudo(){
+    command sudo -E -s $(which $1 | cut -d ' ' -f 4-) ${@:2}
 }
 
 alias tldrf="tldr --list | fzf-tmux -p --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
