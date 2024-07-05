@@ -60,6 +60,11 @@ alias dcub="docker compose up --build"
 alias dcudb="docker compose up -d --build"
 alias dcupdate="docker compose up -d --pull=always"
 
+function fn() {
+    SELECTED="$(fzf-tmux -p --preview="bat --color=always --style=plain {}")"
+    [[ -n "$SELECTED" ]] && nvim "$SELECTED"
+    unset SELECTED
+}
 alias ga='git add'
 alias gaa='git add --all'
 alias gb='git branch'

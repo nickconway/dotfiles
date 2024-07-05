@@ -28,3 +28,5 @@
 	gpgsign = true
 [include]
     path = ~/.gitconfig.local
+[core]
+	editor = nvim -c startinsert
