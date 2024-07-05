@@ -405,7 +405,7 @@ function yp() {
         yadm commit -m "Update config" || return
     elif [[ -n $(yadm status --porcelain) ]]; then
         if [[ $# -eq 0 ]]; then
-            ycam "Update config" || return
+            yca || return
         else
             ycam $@ || return
         fi
