@@ -2,21 +2,21 @@
 set -euo pipefail
 
 function sync-saves() {
-    rclone copy dropbox:Documents/Emulation/Saves/ ~/Emulation/saves -PLMuv
+    rclone copy dropbox:Documents/Emulation/Saves/ ~/Documents/Emulation/saves -PLMuv
     echo
-    rclone copy ~/Emulation/saves/ dropbox:Documents/Emulation/Saves -PLMuv
+    rclone copy ~/Documents/Emulation/saves/ dropbox:Documents/Emulation/Saves -PLMuv
 }
 
 function sync-games() {
-    rclone copy dropbox:Documents/Emulation/Games/ ~/Emulation/roms -PLMuv
+    rclone copy dropbox:Documents/Emulation/Games/ ~/Documents/Emulation/roms -PLMuv
     echo
-    rclone copy ~/Emulation/roms/ dropbox:Documents/Emulation/Games -PLMuv
+    rclone copy ~/Documents/Emulation/roms/ dropbox:Documents/Emulation/Games -PLMuv
 }
 
 function sync-bios() {
-    rclone copy dropbox:Documents/Emulation/BIOS/ ~/Emulation/bios -PLMuv
+    rclone copy dropbox:Documents/Emulation/BIOS/ ~/Documents/Emulation/bios -PLMuv
     echo
-    rclone copy ~/Emulation/bios/ dropbox:Documents/Emulation/BIOS -PLMuv
+    rclone copy ~/Documents/Emulation/bios/ dropbox:Documents/Emulation/BIOS -PLMuv
 
 }
 
