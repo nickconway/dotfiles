@@ -289,7 +289,9 @@ function sci() {
     fi
 }
 
-alias sudo='sudo -E '
+function sudo(){
+    command sudo -E $(which $1 | cut -d ' ' -f 4-) ${@:2}
+}
 
 alias tldrf="tldr --list | fzf-tmux -p --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
 
