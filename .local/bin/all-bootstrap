@@ -2,7 +2,7 @@
 set -eou pipefail
 
 function fail() {
-    if [[ -n $NTFY_TOKEN ]]; then
+    if [[ -n ${NTFY_TOKEN:-} ]]; then
         curl -d "Provisioning failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
     fi
 }
@@ -21,10 +21,10 @@ if [[ "$(uname -n)" == "ansible" ]]; then
         ansible-playbook main.yml --ask-vault-pass $@
     fi
 
-    if [[ -n $NTFY_TOKEN ]]; then
+    if [[ -n ${NTFY_TOKEN:-} ]]; then
         curl -d "Provisioning complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
     fi
 else
-    ssh '$SHELL -lc ansible ~/.local/bin/all-bootstrap'
+    ssh ansible 'source ~/.config/shell/common/encrypted.sh && ~/.local/bin/all-bootstrap'
 fi
 
