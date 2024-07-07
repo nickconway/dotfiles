@@ -84,7 +84,7 @@ function ggp() {
     fi
 }
 alias gif='git update-index --assume-unchanged'
-alias glgg='git log --graph'
+alias glog='git log --graph'
 alias gm='git merge'
 alias gmm='git merge main'
 alias gms='git merge --squash'
