@@ -2,29 +2,24 @@
 set -eou pipefail
 
 function fail() {
-    if [[ -n ${NTFY_TOKEN:-} ]]; then
+    if [[ -n $NTFY_TOKEN ]]; then
         curl -d "Provisioning failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
     fi
 }
 
 trap fail ERR
 
-if [[ "$(uname -n)" == "ansible" ]]; then
-    cd ~/Git/ansible
-    git pull &> /dev/null
-    cd ~/Git/ansible/bootstrap
-    if command -v termux-reload-settings > /dev/null; then
-        ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
-    elif ansible-vault-password &> /dev/null; then
-        ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password $@
-    else
-        ansible-playbook main.yml --ask-vault-pass $@
-    fi
-
-    if [[ -n ${NTFY_TOKEN:-} ]]; then
-        curl -d "Provisioning complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
-    fi
+cd ~/Git/ansible
+git pull &> /dev/null
+cd ~/Git/ansible/bootstrap
+if command -v termux-reload-settings > /dev/null; then
+    ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
+elif ansible-vault-password &> /dev/null; then
+    ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password $@
 else
-    ssh ansible 'source ~/.config/shell/common/encrypted.sh && ~/.local/bin/all-bootstrap'
+    ansible-playbook main.yml --ask-vault-pass $@
 fi
 
+if [[ -n $NTFY_TOKEN ]]; then
+    curl -d "Provisioning complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+fi
