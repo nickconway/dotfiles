@@ -143,30 +143,6 @@ function gpge() {
 
 alias internet-connection='ping -c 1 8.8.8.8 &> /dev/null'
 
-function all-bootstrap() {
-    (
-        cd ~/Git/ansible || return
-        git pull &> /dev/null || return
-        cd ~/Git/ansible/bootstrap || return
-        if command -v termux-reload-settings > /dev/null; then
-            ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
-        elif ansible-vault-password &> /dev/null; then
-            ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password $@
-        else
-            ansible-playbook main.yml --ask-vault-pass $@
-        fi
-        if [[ $? -eq 0 ]]; then
-            if [[ -n $NTFY_TOKEN ]]; then
-                curl -d "Provisioning complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
-            fi
-        else
-            if [[ -n $NTFY_TOKEN ]]; then
-                curl -d "Provisioning failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
-            fi
-        fi
-    )
-}
-
 alias l='ls -h --color'
 alias la='ls -lAh --color'
 alias ll='ls -lh --color'
