@@ -362,8 +362,6 @@ alias ydec="yadm decrypt"
 alias ye="(cd; n)"
 alias yenc="yadm encrypt"
 function yl(){
-    (
-    cd
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
     ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
@@ -385,7 +383,6 @@ function yl(){
     if [[ $SHELL_FILES_BEFORE != $SHELL_FILES_AFTER ]]; then
         exec $SHELL_NAME
     fi
-    )
 }
 function yp() {
     if yadm status --porcelain | grep "^M"; then
