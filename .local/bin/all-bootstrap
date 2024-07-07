@@ -25,6 +25,6 @@ if [[ "$(uname -n)" == "ansible" ]]; then
         curl -d "Provisioning complete" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
     fi
 else
-    ssh ansible ~/.local/bin/all-bootstrap
+    ssh '$SHELL -lc ansible ~/.local/bin/all-bootstrap'
 fi
 
