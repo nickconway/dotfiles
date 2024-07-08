@@ -65,9 +65,12 @@ function fn() {
     [[ -n "$SELECTED" ]] && $EDITOR "${SELECTED[@]}"
     unset SELECTED
 }
+
+alias g='git status'
 alias ga='git add'
 alias gaa='git add --all'
 alias gb='git branch'
+alias gc='git commit -v'
 alias gca='git commit -av'
 alias gcam='git commit --all --message'
 alias gcl='git clone --recurse-submodules'
@@ -93,11 +96,10 @@ alias gp='git push'
 alias gr='git remote'
 alias grh='git reset --hard'
 alias gru='git remote update'
-alias gs='git status'
-alias gst='git stash -p'
-alias gsta='git stash --all'
-alias gstu='git stash --include-untracked'
-function gsa() {
+alias gs='git stash'
+alias gsa='git stash --all'
+alias gsu='git stash --include-untracked'
+function gsp() {
     if ! git rev-parse --is-inside-work-tree &> /dev/null; then
         return
     fi
