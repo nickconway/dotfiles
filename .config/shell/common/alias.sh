@@ -72,7 +72,9 @@ alias gaa='git add --all'
 alias gb='git branch'
 alias gc='git commit -v'
 alias gca='git commit -av'
-alias gcam='git commit --all --message'
+alias gcam='git commit -a -m'
+alias gce='git commit -e'
+alias gce='git commit -m'
 alias gcl='git clone --recurse-submodules'
 alias gco='git checkout'
 alias gcom='git checkout main && git pull origin main'
@@ -87,13 +89,14 @@ function ggp() {
     fi
 }
 alias gif='git update-index --assume-unchanged'
-alias glog='git log --graph'
+alias gl='git pull'
+alias glog='git log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
 alias gm='git merge'
 alias gmm='git merge main'
 alias gms='git merge --squash'
-alias gl='git pull'
 alias gp='git push'
 alias gr='git remote'
+alias gre='git reset'
 alias grh='git reset --hard'
 alias gru='git remote update'
 alias gs='git stash'
@@ -105,7 +108,11 @@ function gsp() {
     fi
 
     if [[ -z "$@" ]]; then
-        git stash pop "$(git stash list | fzf-tmux -p --preview 'git stash show --color -p $(echo {1} | tr -d :)' | awk '{print $1}' | tr -d :)"
+        if [[ "$(git stash list | wc -l)" == "1" ]]; then
+            git stash pop
+        else
+            git stash pop "$(git stash list | fzf-tmux -p --preview 'git stash show --color -p $(echo {1} | tr -d :)' | awk '{print $1}' | tr -d :)"
+        fi
     else
         git stash pop $@
     fi
@@ -184,7 +191,7 @@ function mkcd() {
     mkdir -p -- "$1" && cd -P -- "$1"
 }
 
-alias n="nvim"
+alias n='nvim'
 
 function np() {
     curl -d "$@" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
