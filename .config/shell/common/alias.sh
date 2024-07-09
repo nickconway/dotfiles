@@ -34,7 +34,6 @@ alias desktop='s desktop'
 alias dbr='eval "$(devbox global shellenv --recompute)"'
 
 function dr() {
-
     if [[ $# -gt 0 ]]; then
         docker restart $@
     else
