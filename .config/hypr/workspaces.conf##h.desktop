@@ -13,6 +13,6 @@ exec-once = [workspace 2] kitty
 exec-once = [workspace 2] flatpak run com.discordapp.Discord
 exec-once = [workspace 2] thunderbird-beta
 exec-once = [workspace 3] feishin --ozone-platform-hint=auto
-exec-once = [workspace 3] flatpak run --command=/app/bin/chrome com.google.Chrome --profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph
+exec-once = [workspace 3] flatpak run com.google.Chrome --app=https://messages.google.com/web
 exec-once = [workspace 3] flatpak run app.bluebubbles.BlueBubbles
-exec-once = [workspace 3] flatpak run --command=/app/bin/chrome com.google.Chrome --profile-directory=Default --app-id=lodlkdfmihgonocnmddehnfgiljnadcf
+exec-once = [workspace 3] flatpak run com.google.Chrome --app=https://x.com
