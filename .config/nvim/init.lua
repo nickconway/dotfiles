@@ -1,4 +1,4 @@
-require 'nick.lazy'
-require 'nick.options'
-require 'nick.mappings'
-require 'nick.autocommands'
+require 'config.lazy'
+require 'config.options'
+require 'config.mappings'
+require 'config.autocommands'
