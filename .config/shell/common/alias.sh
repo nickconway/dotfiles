@@ -20,7 +20,10 @@ alias ah='ansible-doc --list | awk "{print \$1}" | fzf-tmux -p --preview "ansibl
 alias ap='ansible-playbook'
 alias apl='ansible-playbook --limit localhost'
 
+alias bat='bat --style=plain'
+
 alias c='clear'
+alias cat='bat --style=plain'
 
 alias clipqr='xclip -o | qrencode -t utf8'
 
@@ -111,7 +114,7 @@ function gsp() {
         if [[ "$(git stash list | wc -l)" == "1" ]]; then
             git stash pop
         else
-            git stash pop "$(git stash list | fzf-tmux -p --preview 'git stash show --color -p $(echo {1} | tr -d :)' | awk '{print $1}' | tr -d :)"
+            git stash pop "$(git stash list | fzf-tmux -p --preview 'git stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
         fi
     else
         git stash pop $@
