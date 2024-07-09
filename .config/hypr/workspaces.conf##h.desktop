@@ -1,4 +1,4 @@
-bind = $mainMod, B, focuswindow, chrome
+bind = $mainMod, B, focuswindow, chromium
 bind = $mainMod, T, focuswindow, kitty
 bind = $mainMod, D, focuswindow, discord
 bind = $mainMod, M, focuswindow, thunderbird
@@ -8,11 +8,11 @@ workspace = 1, monitor:DP-3, default:true
 workspace = 2, monitor:DP-1, default:true
 workspace = 3, monitor:DP-2, default:true
 
-exec-once = [workspace 1] flatpak run com.google.Chrome
+exec-once = [workspace 1] chromium
 exec-once = [workspace 2] kitty
 exec-once = [workspace 2] flatpak run com.discordapp.Discord
 exec-once = [workspace 2] thunderbird-beta
 exec-once = [workspace 3] feishin --ozone-platform-hint=auto
-exec-once = [workspace 3] flatpak run com.google.Chrome --app=https://messages.google.com/web
+exec-once = [workspace 3] chromium --app=https://messages.google.com/web
 exec-once = [workspace 3] flatpak run app.bluebubbles.BlueBubbles
-exec-once = [workspace 3] flatpak run com.google.Chrome --app=https://x.com
+exec-once = [workspace 3] chromium --app=https://x.com

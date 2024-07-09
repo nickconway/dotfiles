@@ -5,9 +5,9 @@ bind = $mainMod, X, focusworkspaceoncurrentmonitor, 4
 bind = $mainMod, M, focusworkspaceoncurrentmonitor, 5
 bind = $mainMod, F, focusworkspaceoncurrentmonitor, 6
 
-workspace = 1, on-created-empty: flatpak run com.google.Chrome
+workspace = 1, on-created-empty: chromium
 workspace = 2, on-created-empty: kitty
 workspace = 3, on-created-empty: flatpak run com.discordapp.Discord
-workspace = 4, on-created-empty: flatpak run com.google.Chrome --app=https://messages.google.com/web & flatpak run app.bluebubbles.BlueBubbles
+workspace = 4, on-created-empty: chromium --app=https://messages.google.com/web & flatpak run app.bluebubbles.BlueBubbles
 workspace = 5, on-created-empty: thunderbird-beta
 workspace = 6, on-created-empty: feishin --ozone-platform-hint=auto
