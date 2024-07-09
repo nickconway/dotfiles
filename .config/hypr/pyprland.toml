@@ -13,8 +13,7 @@ plugins = [
 
 [scratchpads.term]
 animation = "fromTop"
-command = "kitty --class kitty-dropterm"
+command = "kitty --class kitty-dropterm tmux new -As Scratch"
 class = "kitty-dropterm"
 size = "80% 60%"
 max_size = "100% 100%"
-position = "0% 0%"
