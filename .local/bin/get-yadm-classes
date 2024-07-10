@@ -1,13 +1,17 @@
 #!/bin/bash
+set -euo pipefail
 
 CLASSES=()
+CURRENT="$(yadm config --get-all local.class)"
 
-cd ~/.config/yadm/alt || exit 1
+cd ~/.config/yadm/alt
 for f in $(find .*c.*); do
     NAME=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\1/p")
     CLASS=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\2/p")
     if [[ $NAME == $CLASS ]]; then
-        CLASSES+=("$CLASS")
+        if [[ $# -eq 0 ]] && [[ "$CURRENT" != *"$CLASS"* ]] || [[ $# -eq 1 ]]; then
+            CLASSES+=("$CLASS")
+        fi
     fi
 done
 if [[ -n $CLASSES ]]; then
