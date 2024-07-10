@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 update_flag=false
 
@@ -38,11 +39,11 @@ fi
 
 if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "$2" = "nv" ]; then
-        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\"" \
-        && zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\""
+        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\""
+        zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\""
     else
-        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left\"" \
-        && zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right\""
+        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left\""
+        zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right\""
     fi
 else
     if [ "$2" = "nv" ]; then
