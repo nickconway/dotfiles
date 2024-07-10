@@ -159,7 +159,7 @@ alias la='ls -lA'
 alias ll='ls -l'
 function ls() {
     if command -v eza &> /dev/null; then
-        eza --icons --color $@
+        eza --icons=always --color $@
     else
         command ls -h --color $@
     fi
@@ -344,7 +344,7 @@ function tu() {
 }
 
 alias v='nvim'
-alias venv='. ~/.venvs/$(ls ~/.venvs | fzf-tmux -p)/bin/activate'
+alias venv='. ~/.venvs/$(ls --color=never ~/.venvs | fzf-tmux -p)/bin/activate'
 alias vm='s alma'
 
 alias work='s alma'
