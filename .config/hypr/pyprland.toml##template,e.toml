@@ -21,7 +21,12 @@ max_size = "100% 100%"
 hide_delay = 0.5
 margin = 0
 position = "10% 10%"
+{% if yadm.hostname == "desktop" %}
+offset = "120%"
+{% endif %}
+{% if yadm.hostname == "laptop" %}
 offset = "215%"
+{% endif %}
 unfocus = "hide"
 
 [scratchpads.update]
@@ -33,7 +38,12 @@ max_size = "100% 100%"
 hide_delay = 0.5
 margin = 0
 position = "10% 10%"
+{% if yadm.hostname == "desktop" %}
+offset = "120%"
+{% endif %}
+{% if yadm.hostname == "laptop" %}
 offset = "215%"
+{% endif %}
 unfocus = "hide"
 
 [scratchpads.theme]
@@ -45,7 +55,12 @@ max_size = "100% 100%"
 hide_delay = 0.5
 margin = 0
 position = "10% 10%"
+{% if yadm.hostname == "desktop" %}
+offset = "120%"
+{% endif %}
+{% if yadm.hostname == "laptop" %}
 offset = "215%"
+{% endif %}
 unfocus = "hide"
 
 [scratchpads.audio]
@@ -57,6 +72,11 @@ max_size = "100% 100%"
 hide_delay = 0.5
 margin = 0
 position = "10% 10%"
+{% if yadm.hostname == "desktop" %}
+offset = "120%"
+{% endif %}
+{% if yadm.hostname == "laptop" %}
 offset = "215%"
+{% endif %}
 unfocus = "hide"
 lazy = true
