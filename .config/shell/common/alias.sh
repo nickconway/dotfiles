@@ -154,11 +154,16 @@ function gpge() {
 
 alias internet-connection='ping -c 1 8.8.8.8 &> /dev/null'
 
-alias l='ls -h --color'
-alias la='ls -lAh --color'
-alias ll='ls -lh --color'
-alias ls='ls --color'
-alias lsa='ls -lah --color'
+alias l='ls'
+alias la='ls -lA'
+alias ll='ls -l'
+function ls() {
+    if command -v eza &> /dev/null; then
+        eza --icons --color $@
+    else
+        command ls -h --color $@
+    fi
+}
 
 alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E lazydocker || lazydocker'
 
