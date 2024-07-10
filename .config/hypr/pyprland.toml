@@ -19,7 +19,9 @@ class = "kitty-dropterm"
 size = "80% 60%"
 max_size = "100% 100%"
 hide_delay = 0.5
-offset = "180%"
+margin = 0
+position = "10% 20%"
+offset = "215%"
 
 [scratchpads.update]
 animation = "fromTop"
@@ -28,7 +30,9 @@ class = "kitty-dropterm"
 size = "80% 60%"
 max_size = "100% 100%"
 hide_delay = 0.5
-offset = "180%"
+margin = 0
+position = "10% 20%"
+offset = "215%"
 
 [scratchpads.theme]
 animation = "fromTop"
@@ -37,4 +41,6 @@ class = "kitty-dropterm"
 size = "80% 60%"
 max_size = "100% 100%"
 hide_delay = 0.5
-offset = "180%"
+margin = 0
+position = "10% 20%"
+offset = "215%"
