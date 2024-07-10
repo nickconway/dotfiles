@@ -16,31 +16,31 @@ plugins = [
 animation = "fromTop"
 command = "kitty --class kitty-dropterm tmux new -As Scratch"
 class = "kitty-dropterm"
-size = "80% 60%"
+size = "80% 80%"
 max_size = "100% 100%"
 hide_delay = 0.5
 margin = 0
-position = "10% 20%"
+position = "10% 10%"
 offset = "215%"
 
 [scratchpads.update]
 animation = "fromTop"
 command = "kitty --class kitty-dropterm yay --noconfirm"
 class = "kitty-dropterm"
-size = "80% 60%"
+size = "80% 80%"
 max_size = "100% 100%"
 hide_delay = 0.5
 margin = 0
-position = "10% 20%"
+position = "10% 10%"
 offset = "215%"
 
 [scratchpads.theme]
 animation = "fromTop"
 command = "kitty --class kitty-dropterm $SHELL -c 'YAZI_CONFIG_HOME=~/.config/yazi/wal change-theme'"
 class = "kitty-dropterm"
-size = "80% 60%"
+size = "80% 80%"
 max_size = "100% 100%"
 hide_delay = 0.5
 margin = 0
-position = "10% 20%"
+position = "10% 10%"
 offset = "215%"
