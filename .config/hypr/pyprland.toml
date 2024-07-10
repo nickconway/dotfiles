@@ -4,6 +4,7 @@ plugins = [
  "fetch_client_menu",
  "lost_windows",
  "magnify",
+ "layout_center",
  "scratchpads",
  "shift_monitors",
  "toggle_special",
@@ -17,3 +18,23 @@ command = "kitty --class kitty-dropterm tmux new -As Scratch"
 class = "kitty-dropterm"
 size = "80% 60%"
 max_size = "100% 100%"
+hide_delay = 0.5
+offset = "180%"
+
+[scratchpads.update]
+animation = "fromTop"
+command = "kitty --class kitty-dropterm yay --noconfirm"
+class = "kitty-dropterm"
+size = "80% 60%"
+max_size = "100% 100%"
+hide_delay = 0.5
+offset = "180%"
+
+[scratchpads.theme]
+animation = "fromTop"
+command = "kitty --class kitty-dropterm $SHELL -c 'YAZI_CONFIG_HOME=~/.config/yazi/wal change-theme'"
+class = "kitty-dropterm"
+size = "80% 60%"
+max_size = "100% 100%"
+hide_delay = 0.5
+offset = "180%"
