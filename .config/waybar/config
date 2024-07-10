@@ -163,7 +163,7 @@
                 ""
             ]
         },
-        "on-click": "pypr toggle audio",
+        "on-click": "hyprctl dispatch togglespecialworkspace audio",
         "ignored_sinks": [
             "easyeffects_sink"
         ]

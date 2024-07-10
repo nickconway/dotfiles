@@ -99,10 +99,10 @@ alias gm='git merge'
 alias gmm='git merge main'
 alias gms='git merge --squash'
 alias gp='git push'
-alias gr='git remote'
-alias gre='git reset'
+alias gr='git reset'
+alias gre='git remote'
 alias grh='git reset --hard'
-alias gru='git remote update'
+alias greu='git remote update'
 alias gs='git stash'
 alias gsa='git stash --all'
 alias gsu='git stash --include-untracked'
@@ -417,7 +417,8 @@ function yp() {
     yadm push
 }
 alias yrh="yadm reset --hard"
-alias ys="yadm status"
+alias y="yadm status"
+alias ys="yadm stash"
 alias yu="yadm upgrade"
 
 function yy() {

@@ -8,75 +8,10 @@ plugins = [
  "scratchpads",
  "shift_monitors",
  "toggle_special",
- # "workspaces_follow_focus",
+ "workspaces_follow_focus",
  "shortcuts_menu",
 ]
 
-[scratchpads.term]
-animation = "fromTop"
-command = "kitty --class kitty-dropterm tmux new -As Scratch"
-class = "kitty-dropterm"
-size = "80% 80%"
-max_size = "100% 100%"
-hide_delay = 0.5
-margin = 0
-position = "10% 10%"
-{% if yadm.hostname == "desktop" %}
-offset = "120%"
-{% endif %}
-{% if yadm.hostname == "laptop" %}
-offset = "215%"
-{% endif %}
-unfocus = "hide"
-
-[scratchpads.update]
-animation = "fromTop"
-command = "kitty --class kitty-dropterm yay --noconfirm"
-class = "kitty-dropterm"
-size = "80% 80%"
-max_size = "100% 100%"
-hide_delay = 0.5
-margin = 0
-position = "10% 10%"
-{% if yadm.hostname == "desktop" %}
-offset = "120%"
-{% endif %}
-{% if yadm.hostname == "laptop" %}
-offset = "215%"
-{% endif %}
-unfocus = "hide"
-
-[scratchpads.theme]
-animation = "fromTop"
-command = "kitty --class kitty-dropterm $SHELL -c 'YAZI_CONFIG_HOME=~/.config/yazi/wal change-theme'"
-class = "kitty-dropterm"
-size = "80% 80%"
-max_size = "100% 100%"
-hide_delay = 0.5
-margin = 0
-position = "10% 10%"
-{% if yadm.hostname == "desktop" %}
-offset = "120%"
-{% endif %}
-{% if yadm.hostname == "laptop" %}
-offset = "215%"
-{% endif %}
-unfocus = "hide"
-
-[scratchpads.audio]
-animation = "fromTop"
-command = "pavucontrol"
-class = "org.pulseaudio.pavucontrol"
-size = "80% 80%"
-max_size = "100% 100%"
-hide_delay = 0.5
-margin = 0
-position = "10% 10%"
-{% if yadm.hostname == "desktop" %}
-offset = "120%"
-{% endif %}
-{% if yadm.hostname == "laptop" %}
-offset = "215%"
-{% endif %}
-unfocus = "hide"
-lazy = true
+[magnify]
+factor = 2
+duration = 10
