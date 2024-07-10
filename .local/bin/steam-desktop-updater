@@ -7,9 +7,9 @@ if [[ ! -e ~/.local/bin/steam_desktop_updater.py ]]; then
 fi
 
 if [[ ! -e ~/.venv ]]; then
-    python3 -m venv $HOME/.venv
+    python3 -m venv $HOME/.venvs/steam-desktop-updater
 fi
 
-source $HOME/.venv/bin/activate
+source $HOME/.venvs/steam-desktop-updater/bin/activate
 pip install pillow vdf steam &> /dev/null
 sudo steam_desktop_updater.py ~/.var/app/com.valvesoftware.Steam/data/Steam

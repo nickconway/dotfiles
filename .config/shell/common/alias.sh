@@ -343,7 +343,8 @@ function tu() {
     eval "$TS_COMMAND set --auto-update"
 }
 
-alias v="nvim"
+alias v='nvim'
+alias venv='. ~/.venvs/$(ls ~/.venvs | fzf-tmux -p)/bin/activate'
 alias vm='s alma'
 
 alias work='s alma'
