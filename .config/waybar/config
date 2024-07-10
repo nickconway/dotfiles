@@ -163,7 +163,7 @@
                 ""
             ]
         },
-        "on-click": "pavucontrol",
+        "on-click": "pypr toggle audio",
         "ignored_sinks": [
             "easyeffects_sink"
         ]
@@ -296,7 +296,7 @@
         // "exec": "~/.local/bin/waybar-expand power",
         "exec": "echo '{\"text\":\"⏻\",\"tooltip\":\"Power\"}'",
         "return-type": "json",
-        "on-click": "wlogout"
+        "on-click": "~/.config/rofi/scripts/power-menu"
     },
     "custom/custom": {
         "format": "{}",
