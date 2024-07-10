@@ -62,6 +62,8 @@ alias dcub="docker compose up --build"
 alias dcudb="docker compose up -d --build"
 alias dcupdate="docker compose up -d --pull=always"
 
+alias er='flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &!'
+
 function fn() {
     SELECTED=("${(@f)$(fzf-tmux -m -p --preview="bat --color=always --style=plain {}")}")
     [[ -n "$SELECTED" ]] && $EDITOR "${SELECTED[@]}"
