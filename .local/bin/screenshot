@@ -9,13 +9,20 @@ elif [[ "$1" == "window" ]]; then
         | jq -r '.[] | select(.workspace.id == '"$(hyprctl activeworkspace -j | jq ".id"))"' | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' \
         | slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
 elif [[ "$1" == "monitor" ]]; then
-    REGION="$(hyprctl monitors -j \
-        | jq -r '.[] | "\(.x),\(.y) \(.width)x\(.height)"' \
-        | slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
+    if [[ "$(hyprctl monitors -j | jq -r '.[] | .name' | wc -l)" == "1" ]]; then
+        REGION="$(hyprctl monitors -j \
+            | jq -r '.[] | "\(.x),\(.y) \(.width)x\(.height)"')"
+    else
+        REGION="$(hyprctl monitors -j \
+            | jq -r '.[] | "\(.x),\(.y) \(.width)x\(.height)"' \
+            | slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
+    fi
 else
     exit
 fi
 grim -g "$REGION"  -l 0 $IMG
 wl-copy < $IMG
-ACTION=$(notify-send -i "$IMG" "Screenshot Saved and Copied to Clipboard: $IMG" --action "open=Open")
-[[ "$ACTION" == "open" ]] && xdg-open "$IMG"
+(
+    ACTION=$(notify-send -i "$IMG" "Screenshot Saved and Copied to Clipboard: $IMG" --action "open=Open")
+    [[ "$ACTION" == "open" ]] && xdg-open "$IMG"
+) &
