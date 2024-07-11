@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+if [[ $# -gt 0 ]]; then
+    hyprctl keyword misc:initial_workspace_tracking 0
+    hyprctl dispatch togglespecialworkspace $1
+    hyprctl keyword misc:initial_workspace_tracking 1
+fi

@@ -163,7 +163,7 @@
                 ""
             ]
         },
-        "on-click": "hyprctl dispatch togglespecialworkspace audio",
+        "on-click": "hyprland-special audio",
         "ignored_sinks": [
             "easyeffects_sink"
         ]

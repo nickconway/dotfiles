@@ -78,7 +78,7 @@ alias gc='git commit -v'
 alias gca='git commit -av'
 alias gcam='git commit -a -m'
 alias gce='git commit -e'
-alias gce='git commit -m'
+alias gcm='git commit -m'
 alias gcl='git clone --recurse-submodules'
 alias gco='git checkout'
 alias gcom='git checkout main && git pull origin main'
@@ -366,11 +366,12 @@ function x(){
 }
 alias xc='x && clear'
 
+alias y="yadm status"
 alias ya="yadm add"
 alias yalt="yadm alt"
 alias yau="yadm add -u"
 alias yb='yadm bootstrap'
-alias yc="yadm commit"
+alias yc="yadm commit -v"
 alias yca="yadm commit -av"
 alias ycam="yadm commit -a -m"
 alias ycl="yadm config --get-all local.class"
@@ -378,6 +379,7 @@ alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
 alias yconfig='yadm gitconfig user.name $GIT_NAME && yadm gitconfig user.email $GIT_EMAIL && yadm gitconfig user.signingkey $GIT_GPG_KEY'
 alias yd="yadm diff"
+alias yds="yadm diff --staged"
 alias ydec="yadm decrypt"
 alias ye="(cd; n)"
 alias yenc="yadm encrypt"
@@ -404,6 +406,7 @@ function yl(){
         exec $SHELL_NAME
     fi
 }
+alias ylog='yadm log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
 function yp() {
     if yadm status --porcelain | grep "^M"; then
         yadm commit -m "Update config" || return
@@ -417,8 +420,18 @@ function yp() {
     yadm push
 }
 alias yrh="yadm reset --hard"
-alias y="yadm status"
 alias ys="yadm stash"
+function ysp() {
+    if [[ -z "$@" ]]; then
+        if [[ "$(yadm stash list | wc -l)" == "1" ]]; then
+            yadm stash pop
+        else
+            yadm stash pop "$(yadm stash list | fzf-tmux -p --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+        fi
+    else
+        yadm stash pop $@
+    fi
+}
 alias yu="yadm upgrade"
 
 function yy() {
