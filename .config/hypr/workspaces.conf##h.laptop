@@ -1,9 +1,9 @@
-bind = $mainMod, B, focusworkspaceoncurrentmonitor, 1
-bind = $mainMod, T, focusworkspaceoncurrentmonitor, 2
-bind = $mainMod, D, focusworkspaceoncurrentmonitor, 3
-bind = $mainMod, X, focusworkspaceoncurrentmonitor, 4
-bind = $mainMod, M, focusworkspaceoncurrentmonitor, 5
-bind = $mainMod, F, focusworkspaceoncurrentmonitor, 6
+bind = $mainMod, B, exec, hyprland-workspace 1
+bind = $mainMod, T, exec, hyprland-workspace 2
+bind = $mainMod, D, exec, hyprland-workspace 3
+bind = $mainMod, X, exec, hyprland-workspace 4
+bind = $mainMod, M, exec, hyprland-workspace 5
+bind = $mainMod, F, exec, hyprland-workspace 6
 
 workspace = 1, on-created-empty: chromium
 workspace = 2, on-created-empty: kitty
