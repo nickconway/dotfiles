@@ -10,7 +10,7 @@ workspace = 3, monitor:DP-2, default:true
 
 exec-once = [workspace 1] chromium
 exec-once = [workspace 2] kitty
-exec-once = [workspace 2] rm /run/user/1000/discord-ipc-0 && flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
+exec-once = [workspace 2] rm /run/user/1000/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
 exec-once = [workspace 2] thunderbird-beta
 exec-once = [workspace 3] feishin --ozone-platform-hint=auto
 exec-once = [workspace 3] chromium --app=https://messages.google.com/web
