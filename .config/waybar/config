@@ -61,13 +61,13 @@
     "cpu": {
         "format": " {usage}%",
         "tooltip": true,
-        "on-click": "~/.local/bin/kitty --start-as=fullscreen --title all_is_kitty sh -c '~/.local/bin/btop'",
+        "on-click": "hyprland-special top",
         "interval": 2
     },
     "memory": {
         "format": " {}%",
         "tooltip": true,
-        "on-click": "~/.local/bin/kitty --start-as=fullscreen --title all_is_kitty sh -c '~/.local/bin/btop'",
+        "on-click": "hyprland-special top",
         "interval": 2
     },
     "temperature": {
@@ -82,19 +82,19 @@
             ""
         ],
         "tooltip": true,
-        "on-click": "~/.local/bin/kitty --start-as=fullscreen --title all_is_kitty sh -c '~/.local/bin/btop'",
+        "on-click": "hyprland-special top",
         "interval": 2
     },
     "disk": {
         "format": " {percentage_used}% ({free})",
         "tooltip": true,
-        "on-click": "~/.local/bin/kitty --start-as=fullscreen --title all_is_kitty sh -c '~/.local/bin/btop'",
+        "on-click": "hyprland-special top",
         "interval": 2
     },
     "custom/updates": {
         "format": "{}",
-        "exec": "~/.local/bin/arch-updates",
-        "on-click": "~/.local/bin/arch-updates update",
+        "exec": "arch-updates",
+        "on-click": "arch-updates update",
         "interval": 600,
         "tooltip": true,
         // "tooltip-format": "{}",
@@ -109,7 +109,7 @@
         },
         "escape": true,
         "tooltip": true,
-        "exec": "~/.local/bin/caway -b 10 -e",
+        "exec": "caway -b 10 -e",
         "return-type": "json",
         "on-click": "playerctl play-pause",
         "on-scroll-up": "playerctl previous",
@@ -260,47 +260,47 @@
     "custom/weather": {
         "tooltip": true,
         "format": "{}",
-        "exec": "~/.local/bin/waybar-expand weather",
+        "exec": "waybar-expand weather",
         "return-type": "json"
     },
     "custom/ss": {
         "format": "{}",
-        "exec": "~/.local/bin/waybar-expand ss-icon",
+        "exec": "waybar-expand ss-icon",
         "return-type": "json",
-        "on-click": "IMG=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g \"$(slurp -c cba67f88 -b 00000099 -w 0)\" $IMG && wl-copy < $IMG && notify-send 'Screenshot Saved and Copied to Clipboard'"
+        "on-click": "screenshot"
     },
     "custom/cycle_wall": {
         "format": "{}",
-        "exec": "~/.local/bin/waybar-expand wall",
+        "exec": "waybar-expand wall",
         "return-type": "json",
         // "interval": 1,
-        "on-click": "~/.local/bin/waybar-expand cycle",
-        "on-click-right": "~/.local/bin/waybar-expand cycler"
+        "on-click": "waybar-expand cycle",
+        "on-click-right": "waybar-expand cycler"
     },
     "custom/clipboard": {
         "format": "{}",
-        "exec": "~/.local/bin/waybar-expand clipboard",
+        "exec": "waybar-expand clipboard",
         "return-type": "json",
         // Window position is managed in Hyperland config's windowrulev2
         // "on-click": "pkill tofi || sleep 0.15 && cliphist list | tofi -c ~/.config/tofi/tofi.clip.conf | cliphist decode | wl-copy",
         // "on-click-middle": "rm -f ~/.cache/cliphist/db",
         // "on-click-right": "pkill tofi || sleep 0.15 && cliphist list | tofi -c ~/.config/tofi/tofi.clip.conf | cliphist delete",
         // Here "-l top_right -x -15 -y 10" doesn't matter as '-n' mode is used
-        "on-click": "~/.local/bin/clipboard-history",
+        "on-click": "clipboard-history",
         "on-click-middle": "rm -f ~/.cache/cliphist/db",
         "on-click-right": "pkill wofi || cliphist list | wofi --dmenu -p clippick -l top_right -x -15 -y 10 -n | cliphist delete",
         "escape": true
     },
     "custom/power": {
         "format": "{}",
-        // "exec": "~/.local/bin/waybar-expand power",
+        // "exec": "waybar-expand power",
         "exec": "echo '{\"text\":\"⏻\",\"tooltip\":\"Power\"}'",
         "return-type": "json",
         "on-click": "~/.config/rofi/scripts/power-menu"
     },
     "custom/custom": {
         "format": "{}",
-        "exec": "~/.local/bin/waybar-expand arrow-icon",
+        "exec": "waybar-expand arrow-icon",
         "on-click": "~/.local/bin/waybar-expand-toolbar",
         "return-type": "json"
     }
