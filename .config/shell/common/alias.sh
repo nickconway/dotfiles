@@ -62,7 +62,7 @@ alias dcub="docker compose up --build"
 alias dcudb="docker compose up -d --build"
 alias dcupdate="docker compose up -d --pull=always"
 
-alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &!'
+alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
 function fn() {
     SELECTED=("${(@f)$(fzf-tmux -m -p --preview="bat --color=always --style=plain {}")}")
