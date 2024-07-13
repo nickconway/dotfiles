@@ -20,6 +20,8 @@ alias ah='ansible-doc --list | awk "{print \$1}" | fzf-tmux -p --preview "ansibl
 alias ap='ansible-playbook'
 alias apl='ansible-playbook --limit localhost'
 
+alias atuin-login='atuin login -u "$ATUIN_USER" -p "$ATUIN_PASSWORD" -k "$ATUIN_KEY"'
+
 alias bat='bat --style=plain'
 
 alias c='clear'

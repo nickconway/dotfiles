@@ -22,10 +22,10 @@ if [[ -z "$@" ]]; then
     fi
 else
     if command -v clip.exe > /dev/null; then
-        echo -n $(rbw get $@) | clip.exe
+        echo -n $(rbw get "$@") | clip.exe
     elif [[ -n "$DISPLAY" ]] && command -v wl-copy > /dev/null; then
-        echo -n $(rbw get $@) | wl-copy && paste-keys
+        echo -n $(rbw get "$@") | wl-copy && paste-keys
     else
-        echo $(rbw get $@)
+        echo $(rbw get "$@")
     fi
 fi
