@@ -408,14 +408,10 @@ function yl(){
 }
 alias ylog='yadm log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
 function yp() {
-    if yadm status --porcelain | grep "^M"; then
-        yadm commit -m "Update config" || return
-    elif [[ -n $(yadm status --porcelain) ]]; then
-        if [[ $# -eq 0 ]]; then
-            yca || return
-        else
-            ycam $@ || return
-        fi
+    if [[ $# -eq 0 ]]; then
+        yca || return
+    else
+        ycam $@ || return
     fi
     yadm push
 }
