@@ -6,7 +6,7 @@ else
     trap "rm -rf '$tmpdir'" EXIT HUP INT TERM
     __atuin_output=$(
         cat "$tmpdir/pipe" &
-        tmux display-popup -d $(pwd) -B -E -E -h 80% -w 80% -- \
+        tmux display-popup -d $(pwd) -E -E -h 80% -w 80% -- \
             "$(printf "%q " ATUIN_SHELL_BASH=t ATUIN_LOG=error ATUIN_QUERY="$READLINE_LINE" atuin search "$@" -i) 1>&2 2>$tmpdir/pipe"
     )
     rm -rf "$tmpdir"
