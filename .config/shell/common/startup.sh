@@ -3,7 +3,8 @@ command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 command -v fzf > /dev/null && eval "$(fzf --$SHELL_NAME)"
 [[ -e $HOME/.atuin/bin/env ]] && . "$HOME/.atuin/bin/env"
-command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME)"
+command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow)"
+
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock

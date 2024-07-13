@@ -27,15 +27,13 @@ if [[ -n "${terminfo[knp]}" ]]; then
 fi
 
 # Start typing + [Up-Arrow] - fuzzy find history forward
-if ! command -v atuin &> /dev/null; then
-    if [[ -n "${terminfo[kcuu1]}" ]]; then
-      autoload -U up-line-or-beginning-search
-      zle -N up-line-or-beginning-search
+if [[ -n "${terminfo[kcuu1]}" ]]; then
+  autoload -U up-line-or-beginning-search
+  zle -N up-line-or-beginning-search
 
-      bindkey -M emacs "${terminfo[kcuu1]}" up-line-or-beginning-search
-      bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
-      bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
-    fi
+  bindkey -M emacs "${terminfo[kcuu1]}" up-line-or-beginning-search
+  bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
+  bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
 fi
 # Start typing + [Down-Arrow] - fuzzy find history backward
 if [[ -n "${terminfo[kcud1]}" ]]; then
