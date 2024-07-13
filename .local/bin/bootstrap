@@ -24,7 +24,6 @@ if command -v termux-reload-settings > /dev/null; then
     apt update -y && apt upgrade -y
     pkg install openssh starship termux-api gnupg fzf dnsutils zsh python3 binutils pass rip -y
     python3 -m pip install --user pipx
-    pipx install keyring-pass
     pipx install --include-deps ansible
     mkdir -p ~/.zsh
     cd ~/.zsh
