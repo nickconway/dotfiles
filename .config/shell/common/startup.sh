@@ -1,6 +1,7 @@
 command -v brew > /dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
+command -v fzf > /dev/null && eval "$(fzf --$SHELL_NAME)"
 [[ -e $HOME/.atuin/bin/env ]] && . "$HOME/.atuin/bin/env"
 command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME)"
 
@@ -12,8 +13,6 @@ if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
 else
     eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
 fi
-
-command -v fzf > /dev/null && eval "$(fzf --$SHELL_NAME)"
 
 if command -v termux-reload-settings > /dev/null; then
     s && exit || return
