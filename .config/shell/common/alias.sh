@@ -231,7 +231,10 @@ function replace() {
         return
     fi
 
-    nvim -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l)
+    if rg "$1"
+    then
+        nvim -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l)
+    fi
 }
 
 function remove-whitespace() {
