@@ -85,8 +85,8 @@ alias gcl='git clone --recurse-submodules'
 alias gco='git checkout'
 alias gcom='git checkout main && git pull origin main'
 alias gcp='git cherry-pick'
-alias gd='git diff'
-alias gds='git diff --staged'
+alias gd='git diff HEAD'
+alias gds='git diff --staged HEAD'
 function ggp() {
     if [[ -n $1 ]]; then
         git push origin HEAD:refs/for/$1
@@ -383,8 +383,8 @@ alias ycl="yadm config --get-all local.class"
 alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
 alias yconfig='yadm gitconfig user.name $GIT_NAME && yadm gitconfig user.email $GIT_EMAIL && yadm gitconfig user.signingkey $GIT_GPG_KEY'
-alias yd="yadm diff"
-alias yds="yadm diff --staged"
+alias yd="yadm diff HEAD"
+alias yds="yadm diff --staged HEAD"
 alias ydec="yadm decrypt"
 alias ye="(cd; n)"
 alias yenc="yadm encrypt"
