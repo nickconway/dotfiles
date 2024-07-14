@@ -200,7 +200,7 @@ map("n", "<leader>gl", function()
         dir = "git_dir",
         direction = "float",
         float_opts = {
-            border = "single",
+            border = "rounded",
         },
         -- function to run on opening the terminal
         on_open = function(term)
@@ -225,3 +225,6 @@ end, "LazyGit")
 
 map("n", "<leader>gn", "<cmd>Gitsigns next_hunk<CR>", "Next hunk")
 map("n", "<leader>gp", "<cmd>Gitsigns prev_hunk<CR>", "Previous hunk")
+
+map("v", "<lt>", "<lt>gv")
+map("v", ">", ">gv")
