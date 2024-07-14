@@ -23,7 +23,7 @@ return {
                     chat = true,
                     command = true,
                     model = { model = "llama3" },
-                    -- system_prompt = "Answer any query with just: Sure thing..",
+                    system_prompt = "Answer any query with just: Sure thing..",
                 },
             },
         })

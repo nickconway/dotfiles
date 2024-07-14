@@ -30,13 +30,40 @@ return {
         { "onsails/lspkind-nvim" },
     },
     config = function()
-        local lsp = require("lsp-zero")
+        local lsp_zero = require("lsp-zero")
 
-        lsp.on_attach(function(client, bufnr)
+        lsp_zero.on_attach(function(client, bufnr)
             if client.server_capabilities.documentSymbolProvider then
                 require("nvim-navic").attach(client, bufnr)
             end
-            lsp.default_keymaps({ buffer = bufnr })
+            lsp_zero.default_keymaps({ buffer = bufnr })
+
+            vim.api.nvim_create_autocmd("CursorHold", {
+                buffer = bufnr,
+                callback = function()
+                    local float_opts = {
+                        focusable = false,
+                        close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+                        border = "rounded",
+                        source = "always", -- show source in diagnostic popup window
+                        prefix = " ",
+                    }
+
+                    if not vim.b.diagnostics_pos then
+                        vim.b.diagnostics_pos = { nil, nil }
+                    end
+
+                    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+                    if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2]) and #vim.diagnostic.get() > 0
+                    then
+                        vim.diagnostic.open_float(nil, float_opts)
+                        -- else
+                        --     vim.lsp.buf.hover()
+                    end
+
+                    vim.b.diagnostics_pos = cursor_pos
+                end,
+            })
         end)
 
         require('mason').setup({})
@@ -48,28 +75,27 @@ return {
                 "rust_analyzer",
             },
             handlers = {
-                lsp.default_setup,
+                lsp_zero.default_setup,
                 lua_ls = function()
-                    require('lspconfig').lua_ls.setup({})
+                    require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
                 end
             },
         })
 
-        lsp.set_sign_icons({
+        lsp_zero.set_sign_icons({
             error = '✘',
             warn = '▲',
             hint = '⚑',
             info = '»'
         })
 
-        lsp.set_server_config({
+        lsp_zero.set_server_config({
             on_init = function(client)
                 client.server_capabilities.semanticTokensProvider = nil
             end,
         })
 
-        lsp.nvim_lua_ls()
-        lsp.setup()
+        lsp_zero.setup()
 
         local cmp = require('cmp')
         local cmp_action = require('lsp-zero').cmp_action()
@@ -80,6 +106,10 @@ return {
                 ['<Tab>'] = cmp_action.luasnip_supertab(),
                 ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
             }),
+            window = {
+                completion = cmp.config.window.bordered(),
+                documentation = cmp.config.window.bordered(),
+            },
             sources = {
                 { name = 'nvim_lsp' },
                 { name = 'buffer' },

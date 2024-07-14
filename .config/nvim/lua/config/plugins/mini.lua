@@ -70,8 +70,16 @@ return {
             },
 
             window = {
+                -- Floating window config
+                config = {},
 
-            }
+                -- Delay before showing clue window
+                delay = 1000,
+
+                -- Keys to scroll inside the clue window
+                scroll_down = '<C-d>',
+                scroll_up = '<C-u>',
+            },
         })
     end,
 }
