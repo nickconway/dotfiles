@@ -20,6 +20,14 @@ alias ah='ansible-doc --list | awk "{print \$1}" | fzf-tmux -p --preview "ansibl
 alias ap='ansible-playbook'
 alias apl='ansible-playbook --limit localhost'
 
+function atuin-fix() {
+    atuin store purge
+    atuin store verify
+    atuin store push --force
+    atuin store pull --force
+    atuin store rebuild history
+    atuin sync
+}
 alias atuin-login='atuin login -u "$ATUIN_USER" -p "$ATUIN_PASSWORD" -k "$ATUIN_KEY"'
 
 alias bat='bat --style=plain'
