@@ -6,7 +6,9 @@ return {
         require("mini.jump").setup()
         require("mini.files").setup({
             mappings = {
+                go_out_plus = '<BS>',
                 go_in_plus = "<CR>",
+                reset = 'r',
             }
         })
         require("mini.surround").setup()
@@ -63,6 +65,7 @@ return {
                 { mode = "n", keys = "<Leader>b", desc = "Buffers" },
                 { mode = "n", keys = "<Leader>d", desc = "DAP" },
                 { mode = "n", keys = "<Leader>f", desc = "Find" },
+                { mode = "n", keys = "<Leader>g", desc = "Git" },
                 { mode = "n", keys = "<Leader>h", desc = "Harpoon" },
                 { mode = "n", keys = "<Leader>l", desc = "Lazy" },
                 { mode = "n", keys = "<Leader>s", desc = "Save / Search" },
@@ -71,7 +74,9 @@ return {
 
             window = {
                 -- Floating window config
-                config = {},
+                config = {
+                    border = "rounded"
+                },
 
                 -- Delay before showing clue window
                 delay = 1000,
