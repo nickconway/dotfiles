@@ -106,7 +106,8 @@ function ggp() {
 
 function gi() {
     if [[ $# -eq 0 ]]; then
-        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" | fzf-tmux $FZF_TMUX_OPTS)"
+        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" \
+            | fzf-tmux $(echo $FZF_TMUX_OPTS) --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
     else
         GI_TYPE="${(j:,:)@}"
     fi
