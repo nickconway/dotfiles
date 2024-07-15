@@ -7,7 +7,7 @@ else
     command() (find ~/ "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d; zoxide query -l; tmux list-sessions -F "#S")
 fi
 
-export TMUXP_START_DIR=$(command | sort | uniq | fzf-tmux -p --prompt=" > " --preview 'eza {1} -1 --icons --color=always 2>/dev/null || ls {1} --color')
+export TMUXP_START_DIR=$(command | sort | uniq | fzf-tmux $(echo $FZF_TMUX_OPTS) --prompt=" > " --preview 'eza {1} -1 --icons --color=always 2>/dev/null || ls {1} --color')
 
 if [[ -z $TMUXP_START_DIR ]]; then
     exit 0

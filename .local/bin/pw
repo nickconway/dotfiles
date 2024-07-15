@@ -7,7 +7,7 @@ if [[ -z "$@" ]]; then
     if [[ -n "$DISPLAY" ]] && command -v rofi &> /dev/null; then
         SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | rofi -dmenu -p Vault -i)
     else
-        SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | fzf-tmux -p)
+        SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | fzf-tmux $(echo $FZF_TMUX_OPTS))
     fi
 
     if [[ -n $SELECTED ]]; then

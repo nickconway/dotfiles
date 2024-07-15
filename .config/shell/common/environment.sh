@@ -71,7 +71,7 @@ export FZF_CTRL_R_OPTS="
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
 
-export FZF_TMUX_OPTS="-p --reverse"
+export FZF_TMUX_OPTS="-p"
 
 export GITEA_USER=nick
 

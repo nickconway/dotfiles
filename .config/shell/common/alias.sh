@@ -16,7 +16,7 @@ alias 8='cd -8'
 alias 9='cd -9'
 
 alias a='ansible'
-alias ah='ansible-doc --list | awk "{print \$1}" | fzf-tmux -p --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
+alias ah='ansible-doc --list | awk "{print \$1}" | fzf-tmux $(echo $FZF_TMUX_OPTS) --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
 alias ap='ansible-playbook'
 alias apl='ansible-playbook --limit localhost'
 alias av='ansible-vault'
@@ -48,7 +48,7 @@ function dr() {
     if [[ $# -gt 0 ]]; then
         docker restart $@
     else
-        SELECTED=$(docker ps -a --format {{.Names}} | fzf-tmux -p --prompt=" > ")
+        SELECTED=$(docker ps -a --format {{.Names}} | fzf-tmux $(echo $FZF_TMUX_OPTS) --prompt=" > ")
         [[ -z $SELECTED ]] || docker restart $SELECTED
         unset SELECTED
     fi
@@ -106,12 +106,18 @@ function ggp() {
 
 function gi() {
     if [[ $# -eq 0 ]]; then
-        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" | fzf)"
-        [[ -n "$GI_TYPE" ]] && curl -fLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE"
-        unset GI_TYPE
+        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" | fzf-tmux $FZF_TMUX_OPTS)"
     else
-        curl -fLw '\n' https://www.toptal.com/developers/gitignore/api/"${(j:,:)@}"
+        GI_TYPE="${(j:,:)@}"
     fi
+    [[ -n "$GI_TYPE" ]] && curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE" \
+        | grep -v '# Created' | grep -iv "### $GI_TYPE ###" \
+        | grep -v '# Edit at' | grep -v '# End of' \
+        | grep -iv -E "#+ $GI_TYPE" \
+        | sed '1{/^$/d}' | sed '1{/^$/d}' \
+        | sed '${/^$/d}' | sed '${/^$/d}'
+    unset GI_TYPE
+
 }
 
 alias gif='git update-index --assume-unchanged'
@@ -137,7 +143,7 @@ function gsp() {
         if [[ "$(git stash list | wc -l)" == "1" ]]; then
             git stash pop
         else
-            git stash pop "$(git stash list | fzf-tmux -p --preview 'git stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+            git stash pop "$(git stash list | fzf-tmux $(echo $FZF_TMUX_OPTS) --preview 'git stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
         fi
     else
         git stash pop $@
@@ -155,16 +161,16 @@ function ghc() {
     mkdir -p $PROJECT_DIR
     (
         cd $PROJECT_DIR
-        GH_FORCE_TTY=100% gh repo list | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone
+        GH_FORCE_TTY=100% gh repo list | fzf-tmux $(echo $FZF_TMUX_OPTS) --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone
     )
 }
 
 function ghpr() {
-    GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-tmux $(echo $FZF_TMUX_OPTS) --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
 }
 
 function ghprm() {
-    GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-tmux -p --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-tmux $(echo $FZF_TMUX_OPTS) --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
     gsw -
     gm -
 }
@@ -272,7 +278,7 @@ function s() {
         SSH_HOSTS=$(grep "Host " ~/.ssh/config | awk '{print $2}')
         TAILSCALE_HOSTS="$(command -v tailscale > /dev/null && tailscale status | grep -v '^#' | awk '{print $2}')"
         TAILSCALE_WSL_HOSTS="$(command -v tailscale.exe > /dev/null && tailscale.exe status | grep -v '^#' | awk '{print $2}')"
-        SELECTED=$((echo "$SSH_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzf-tmux -p --prompt=" > ")
+        SELECTED=$((echo "$SSH_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzf-tmux $(echo $FZF_TMUX_OPTS) --prompt=" > ")
     fi
 
     if [[ -n $TMUX ]]; then
@@ -315,7 +321,7 @@ function sudo(){
     command sudo -E $(which $1 | cut -d ' ' -f 4-) ${@:2}
 }
 
-alias tldrf="tldr --list | fzf-tmux -p --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
+alias tldrf="tldr --list | fzf-tmux $(echo $FZF_TMUX_OPTS) --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
 
 function toggleproxy() {
     test -z $http_proxy && {
@@ -373,7 +379,7 @@ function tu() {
 }
 
 alias v='nvim'
-alias venv='. ~/.venvs/$(ls --color=never ~/.venvs | fzf-tmux -p)/bin/activate'
+alias venv='. ~/.venvs/$(ls --color=never ~/.venvs | fzf-tmux $(echo $FZF_TMUX_OPTS))/bin/activate'
 alias vm='s alma'
 
 alias work='s alma'
@@ -449,7 +455,7 @@ function ysp() {
         if [[ "$(yadm stash list | wc -l)" == "1" ]]; then
             yadm stash pop
         else
-            yadm stash pop "$(yadm stash list | fzf-tmux -p --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+            yadm stash pop "$(yadm stash list | fzf-tmux $(echo $FZF_TMUX_OPTS) --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
         fi
     else
         yadm stash pop $@
