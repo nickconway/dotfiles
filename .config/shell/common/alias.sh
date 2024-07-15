@@ -103,6 +103,17 @@ function ggp() {
         git push origin HEAD:refs/for/master
     fi
 }
+
+function gi() {
+    if [[ $# -eq 0 ]]; then
+        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" | fzf)"
+        [[ -n "$GI_TYPE" ]] && curl -fLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE"
+        unset GI_TYPE
+    else
+        curl -fLw '\n' https://www.toptal.com/developers/gitignore/api/"${(j:,:)@}"
+    fi
+}
+
 alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
 alias glog='git log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
