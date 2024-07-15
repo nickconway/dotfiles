@@ -21,8 +21,13 @@ zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
 zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' menu no
+
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always --icons $realpath'
 zstyle ':fzf-tab:complete:ls:*' fzf-preview 'eza -1 --color=always --icons $realpath'
+
+zstyle ':fzf-tab:*cd*' accept-line enter
+zstyle ':fzf-tab:*ls*' accept-line enter
+
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
 set -o vi
