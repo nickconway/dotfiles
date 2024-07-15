@@ -17,7 +17,7 @@ disabled = true
 disabled = true
 
 [custom.yadm]
-when="[[ -e ~/.local/share/yadm && \"$PWD\" == \"$HOME\"* ]]"
+when="! git rev-parse --is-inside-work-tree && [[ -e ~/.local/share/yadm && \"$PWD\" == \"$HOME\"* ]]"
 command="""
 YADM_STATUS="$(cd ~/.local/share/yadm/repo.git; git status)"
 YADM_STASH=$(cd ~/.local/share/yadm/repo.git; git stash list | wc -l)

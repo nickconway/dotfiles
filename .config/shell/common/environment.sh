@@ -82,3 +82,5 @@ export GIT_EMAIL="nick@conway.dev"
 export GIT_GPG_KEY="AA850592E4C1D453"
 
 export ATUIN_USER=nick
+
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.zsh/zsh-syntax-highlighting/highlighters
