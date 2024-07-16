@@ -5,8 +5,7 @@ command -v asciinema &> /dev/null || pipx install asciinema
 command -v svg-term &> /dev/null || npm install -g svg-term-cli
 command -v svgembed &> /dev/null || npm install -g git+https://github.com/miraclx/svgembed
 
-mkdir -p $(date +%Y/%B)
-asciinema rec $(date +%Y/%B)/$1.cast --overwrite
-cat $(date +%Y/%B)/$1.cast | svg-term --out $(date +%Y/%B)/$1.svg --window --profile=Seti --height=20 --width=80 --term=iterm2
-svgembed -i $(date +%Y/%B)/$1.svg demo.svg -o $(date +%Y/%B)/$1-embed.svg -r -f ~/.local/share/fonts/hack-nerd-font/HackNerdFontMono-Regular.ttf --hover --overwrite ${@:2}
-command -v xdg-open &> /dev/null && xdg-open $(date +%Y/%B)/$1-embed.svg
+asciinema rec $1.cast --overwrite
+cat $1.cast | svg-term --out $1.svg --window --profile=Seti --height=20 --width=80 --term=iterm2
+svgembed -i $1.svg demo.svg -o $1-embed.svg -r -f ~/.local/share/fonts/hack-nerd-font/HackNerdFontMono-Regular.ttf --hover --overwrite ${@:2}
+command -v xdg-open &> /dev/null && xdg-open $1-embed.svg
