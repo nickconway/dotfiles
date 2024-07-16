@@ -16,9 +16,7 @@ else
     eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
 fi
 
-if command -v termux-reload-settings > /dev/null; then
-    s && exit || return
-elif command -v steamos-update > /dev/null; then
+if command -v steamos-update > /dev/null; then
     if [[ -n "$PS1" ]]; then
         distrobox enter arch && exit || return
     fi
@@ -35,4 +33,8 @@ else
             fi
         fi
     fi
+fi
+
+if command -v termux-reload-settings > /dev/null; then
+    s && exit || return
 fi
