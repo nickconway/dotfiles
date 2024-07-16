@@ -284,7 +284,7 @@ function s() {
 
     if [[ -n $TMUX ]]; then
         PANE_PID="$(tmux display -p '#{pane_pid}')"
-        S_FILE="/tmp/tmux-$PANE_PID"
+        S_FILE="$PREFIX/tmp/tmux-$PANE_PID"
         (&>/dev/null hide-tmux-statusbar $PANE_PID & echo $! > $S_FILE)
         tmux set prefix C-h
         tmux bind C-h send-prefix
