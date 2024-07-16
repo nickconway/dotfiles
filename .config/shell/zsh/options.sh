@@ -1,4 +1,5 @@
 if [[ -d ~/.zsh/zsh-completions ]]; then
+    [[ -e ~/.zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.zsh/zsh-completions/src/_gh
     fpath=(~/.zsh/zsh-completions/src $fpath)
 fi
 
