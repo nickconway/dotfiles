@@ -6,6 +6,12 @@ command -v svg-term &> /dev/null || npm install -g svg-term-cli
 command -v svgembed &> /dev/null || npm install -g git+https://github.com/miraclx/svgembed
 
 asciinema rec $1.cast --overwrite
+
+# Remove weird percent signs
+sed -i '/"\\u001b\[1m\\u001b\[3m\%\\u001b\[23m\\u001b\[1m\\u001b\[0m/d' $1.cast
+sed -i 's/\\u001b\[1m\\u001b\[3m\%\\u001b\[23m\\u001b\[1m\\u001b\[0m//g' $1.cast
+sed -i "s/  */ /g" $1.cast
+
 cat $1.cast | svg-term --out $1.svg --window --profile=Seti --height=20 --width=80 --term=iterm2
 svgembed -i $1.svg demo.svg -o $1-embed.svg -r -f ~/.local/share/fonts/hack-nerd-font/HackNerdFontMono-Regular.ttf --hover --overwrite ${@:2}
 command -v xdg-open &> /dev/null && xdg-open $1-embed.svg
