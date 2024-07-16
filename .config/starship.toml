@@ -36,5 +36,11 @@ YADM_PROMPT=''
 style='bold red'
 format='[$symbol($output)]($style) '
 
+[custom.asciinema]
+when="[[ -n $ASCIINEMA_REC ]]"
+command="echo ⏺"
+style='bold red'
+format='[$symbol($output)]($style) '
+
 [username]
 detect_env_vars = ['SSH_CONNECTION']

@@ -9,3 +9,4 @@ x-scheme-handler/https=chromium.desktop
 x-scheme-handler/about=chromium.desktop
 x-scheme-handler/unknown=chromium.desktop
 application/pdf=chromium.desktop
+image/svg+xml=chromium.desktop

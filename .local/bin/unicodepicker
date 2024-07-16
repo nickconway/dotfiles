@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [[ ! -e ~/.cache/unicode || "$1" == "download" ]]; then
+    echo "Downloading emojis..."
+    curl -s https://www.unicode.org/charts/charindex.html | htmlq '.subtle-nb > tbody > tr' -r 'th' \
+        | sed "s/<\/\?td>/ /g" | sed "s/<\/\?tr>/ /g" | awk 'NF' | sed "s/^[ \t]*//" | sed 's/<a href=\"\S*\">/\\U/' | sed "s/<\/a>//g" \
+        > ~/.cache/unicode
+fi
+
+SYMBOL=$(cat ~/.cache/unicode | fzf-tmux -p --preview="echo -e {} | awk '{print \$NF}'" | awk '{print $NF}')
+echo -ne $SYMBOL | wl-copy && paste-keys
