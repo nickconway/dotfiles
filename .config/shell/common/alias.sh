@@ -592,7 +592,7 @@ function upgrade() {
             echo " Proceeding with full system upgrade."
         fi
         if command -v yay &> /dev/null; then
-            yay -Syu
+            yay -Syu --noconfirm
         elif command -v trizen &> /dev/null; then
             trizen -Syu
         elif command -v pacaur &> /dev/null; then
@@ -600,7 +600,7 @@ function upgrade() {
         elif command -v aura &> /dev/null; then
             sudo aura -Syu
         else
-            sudo pacman -Syu
+            sudo pacman -Syu --noconfirm
         fi
     fi
 }
