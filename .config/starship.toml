@@ -28,6 +28,7 @@ YADM_PROMPT=''
 [[ $YADM_STASH -ne 0 ]] && YADM_PROMPT+='$';
 [[ "$YADM_STATUS" == *'modified'* ]] && YADM_PROMPT+='!';
 [[ "$YADM_STATUS" == *'new file'* ]] && YADM_PROMPT+='+';
+[[ "$YADM_STATUS" == *'renamed'* ]] && YADM_PROMPT+='»';
 [[ "$YADM_STATUS" == *'deleted'* ]] && YADM_PROMPT+='✘';
 
 [[ $YADM_PROMPT != '' ]] && printf "[$YADM_PROMPT]";
