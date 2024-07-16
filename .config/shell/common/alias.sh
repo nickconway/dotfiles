@@ -112,9 +112,7 @@ function gi() {
         GI_TYPE="${(j:,:)@}"
     fi
     [[ -n "$GI_TYPE" ]] && curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE" \
-        | grep -v '# Created' | grep -iv "### $GI_TYPE ###" \
-        | grep -v '# Edit at' | grep -v '# End of' \
-        | grep -iv -E "#+ $GI_TYPE" \
+        | grep -v '# Created' | grep -v '# Edit at' | grep -v '# End of' \
         | sed '1{/^$/d}' | sed '1{/^$/d}' \
         | sed '${/^$/d}' | sed '${/^$/d}'
     unset GI_TYPE
