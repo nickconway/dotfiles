@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+function clean(){
+    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
+        mv ~/Git/zmk-config/config/include/leader.dtsi.bkp ~/Git/zmk-config/config/include/leader.dtsi
+    fi
+}
+
+trap clean ERR EXIT
+
 update_flag=false
 
 while getopts 'u' flag; do
@@ -41,26 +49,27 @@ if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "${2:-}" = "nv" ]; then
         zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\""
         zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="$1_left nice_view_adapter nice_view"
+        cp ~/Git/zmk/app/build/zephyr/zmk.uf2 "$1"_left.uf2
+
         zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\""
         zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="$1_right nice_view_adapter nice_view"
+        cp ~/Git/zmk/app/build/zephyr/zmk.uf2 "$1"_right.uf2
     else
         zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_left"
         zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_left
+        cp ~/Git/zmk/app/build/zephyr/zmk.uf2 "$1"_left.uf2
+
         zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_right"
         zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_right
+        cp ~/Git/zmk/app/build/zephyr/zmk.uf2 "$1"_right.uf2
     fi
 else
     if [ "${2:-}" = "nv" ]; then
+        zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1 nice_view_adapter nice_view"
         zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="$1 nice_view_adapter nice_view"
     else
+        zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1"
         zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1
     fi
+    cp ~/Git/zmk/app/build/zephyr/zmk.uf2 "$1".uf2
 fi
-
-function clean(){
-    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
-        mv ~/Git/zmk-config/config/include/leader.dtsi.bkp ~/Git/zmk-config/config/include/leader.dtsi
-    fi
-}
-
-trap clean ERR EXIT
