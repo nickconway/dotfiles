@@ -109,7 +109,7 @@ function gi() {
         GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" \
             | fzf-tmux $(echo $FZF_TMUX_OPTS) --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
     else
-        GI_TYPE="${(j:,:)@}"
+        GI_TYPE="$(echo $@ | sed "s/ /,/g")"
     fi
     [[ -n "$GI_TYPE" ]] && curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE" \
         | grep -v '# Created' | grep -v '# Edit at' | grep -v '# End of' \
@@ -535,7 +535,7 @@ function pacmansignkeys() {
   done
 }
 
-if (( $+commands[xdg-open] )); then
+if command -v xdg-open &> /dev/null; then
   function pacweb() {
     if [[ $# = 0 || "$1" =~ '--help|-h' ]]; then
       local underline_color="\e[${color[underline]}m"
