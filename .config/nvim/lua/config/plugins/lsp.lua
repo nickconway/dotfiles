@@ -76,10 +76,26 @@ return {
             },
             handlers = {
                 lsp_zero.default_setup,
+
                 lua_ls = function()
                     require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
-                end
-            },
+                end,
+
+                clangd = function()
+                    require('lspconfig').clangd.setup({
+                        capabilities = {
+                            offsetEncoding = 'utf8',
+                        },
+                        cmd = {
+                            "clangd",
+                            "--background-index",
+                        },
+                        on_init = function(client, _)
+                            client.server_capabilities.semanticTokensProvider = nil
+                        end,
+                    })
+                end,
+            }
         })
 
         lsp_zero.set_sign_icons({

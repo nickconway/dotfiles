@@ -39,8 +39,8 @@ vim.api.nvim_create_autocmd(
     "BufWritePre",
     {
         pattern = { "*" },
-        callback = function(ev)
-            save_cursor = vim.fn.getpos(".")
+        callback = function()
+            local save_cursor = vim.fn.getpos(".")
             vim.cmd([[%s/\s\+$//e]])
             vim.fn.setpos(".", save_cursor)
         end,
@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd(
 -- Hyprlang LSP
 vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     pattern = { "*.hl", "hypr*.conf*" },
-    callback = function(event)
+    callback = function()
         vim.lsp.start {
             name = "hyprlang",
             cmd = { "hyprls" },

@@ -38,18 +38,22 @@ else
 fi
 
 if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
-    if [ "$2" = "nv" ]; then
-        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\""
-        zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\""
+    if [ "${2:-}" = "nv" ]; then
+        zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\""
+        zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="$1_left nice_view_adapter nice_view"
+        zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right nice_view_adapter nice_view\""
+        zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="$1_right nice_view_adapter nice_view"
     else
-        zmkrun bash -c "west build -p -d build/$1/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left\""
-        zmkrun bash -c "west build -p -d build/$1/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_right\""
+        zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_left"
+        zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_left
+        zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_right"
+        zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1_right
     fi
 else
-    if [ "$2" = "nv" ]; then
-        zmkrun bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1 nice_view_adapter nice_view\""
+    if [ "${2:-}" = "nv" ]; then
+        zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="$1 nice_view_adapter nice_view"
     else
-        zmkrun bash -c "west build -p -d build/$1/ -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1\""
+        zmkrun west build -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=$1
     fi
 fi
 
