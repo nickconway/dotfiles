@@ -1,6 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+while getopts 'h:t:p:w:' flag; do
+  case "${flag}" in
+    h) HEIGHT=$OPTARG;;
+    t) TITLE=$OPTARG;;
+    p) PROFILE=$OPTARG;;
+    w) WIDTH=$OPTARG;;
+    *) ;;
+  esac
+done
+shift $((OPTIND-1))
+
 command -v asciinema &> /dev/null || pipx install asciinema
 command -v svg-term &> /dev/null || npm install -g svg-term-cli
 command -v svgembed &> /dev/null || npm install -g git+https://github.com/miraclx/svgembed
@@ -15,8 +26,8 @@ sed -i "s/  */ /g" $1.cast
 # Remove recording indicator
 sed -i 's/ \\u001b\[1;31m⏺\\u001b\[0m//g' test.cast
 
-cat $1.cast | svg-term --out $1.svg --window --profile=${4:-Seti} --height=${3:-20} --width=${2:-80} --term=iterm2
-svgembed -i $1.svg demo.svg -o $1-embed.svg -r -f ~/.local/share/fonts/hack-nerd-font/HackNerdFontMono-Regular.ttf --hover --overwrite ${@:2}
+cat $1.cast | svg-term --out $1.svg --window --profile=${PROFILE:-Seti} --height=${HEIGHT:-20} --width=${WIDTH:-80} --term=iterm2
+svgembed -i $1.svg -o $1-embed.svg -r -f ~/.local/share/fonts/hack-nerd-font/HackNerdFontMono-Regular.ttf --hover -t ${TITLE:-${1}} --overwrite
 rm $1.svg
 mv $1-embed.svg $1.svg
 command -v xdg-open &> /dev/null && xdg-open $1.svg
