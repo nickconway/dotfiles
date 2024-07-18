@@ -73,6 +73,11 @@ map("i", "<C-h>", "<Esc>cvb")
 
 -- change word
 map("n", "<CR>", "ciw")
+map("n", "<S-CR>", function()
+    vim.opt.iskeyword:append(".")
+    vim.cmd("normal! ciw")
+    vim.opt.iskeyword:remove(".")
+end)
 
 -- cursor stays on yank
 map("v", "y", "ygv<Esc>")
