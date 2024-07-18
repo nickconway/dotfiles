@@ -346,10 +346,10 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 function tu() {
     if [[ "$(uname -r)" == *"WSL"* ]]; then
         TS_COMMAND="tailscale.exe"
-        TS_FLAGS="up --accept-routes --authkey $VPN_KEY"
+        TS_FLAGS="up --unattended --accept-routes=true --authkey $VPN_KEY"
     else
         TS_COMMAND="tailscale"
-        TS_FLAGS="up --ssh --accept-routes --operator=$(whoami) --authkey $VPN_KEY"
+        TS_FLAGS="up --ssh --accept-routes=true --operator=$(whoami) --authkey $VPN_KEY"
     fi
 
     if [[ $(uname -n) == "steamdeck" ]]; then
@@ -360,10 +360,6 @@ function tu() {
         TS_FLAGS+=" --advertise-tags=tag:server"
     else
         TS_FLAGS+=" --advertise-tags=tag:client"
-    fi
-
-    if [[ "$(uname -r)" == *"WSL"* ]]; then
-        TS_FLAGS+=" --unattended"
     fi
 
     if [[ $(yadm config --get-all local.class) == *"dns"* ]]; then
