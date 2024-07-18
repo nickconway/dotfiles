@@ -20,22 +20,26 @@ setopt PUSHD_MINUS
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-zstyle ':completion:*:git-checkout:*' sort false
-zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*' menu no
+if [[ -e ~/.zsh/fzf-tab/fzf-tab.zsh ]]; then
+    zstyle ':completion:*:git-checkout:*' sort false
+    zstyle ':completion:*:descriptions' format '[%d]'
+    zstyle ':completion:*' menu no
 
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always --icons=always $realpath'
-zstyle ':fzf-tab:complete:ls:*' fzf-preview 'eza -1 --color=always --icons=always $realpath'
-zstyle ':fzf-tab:complete:eza:*' fzf-preview 'eza -1 --color=always --icons=always $realpath'
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
+    zstyle ':fzf-tab:complete:ls:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
+    zstyle ':fzf-tab:complete:eza:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
+    zstyle ':fzf-tab:complete:mv:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
+    zstyle ':fzf-tab:complete:cp:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
 
-zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-zstyle ':fzf-tab:*' popup-follow-cursor false
-zstyle ':fzf-tab:*' popup-min-size 120 24
+    zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+    zstyle ':fzf-tab:*' popup-follow-cursor false
+    zstyle ':fzf-tab:*' popup-min-size 120 24
 
-zstyle ':fzf-tab:*cd*' accept-line enter
-zstyle ':fzf-tab:*ls*' accept-line enter
-zstyle ':fzf-tab:*eza*' accept-line enter
+    zstyle ':fzf-tab:*cd*' accept-line enter
+    zstyle ':fzf-tab:*ls*' accept-line enter
+    zstyle ':fzf-tab:*eza*' accept-line enter
 
-zstyle ':fzf-tab:*' switch-group '<' '>'
+    zstyle ':fzf-tab:*' switch-group '<' '>'
+fi
 
 set -o vi
