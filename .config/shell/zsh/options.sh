@@ -1,5 +1,6 @@
 if [[ -d ~/.zsh/zsh-completions ]]; then
-    [[ -e ~/.zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.zsh/zsh-completions/src/_gh
+    command -v gh &> /dev/null && [[ -e ~/.zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.zsh/zsh-completions/src/_gh
+    command -v rg &> /dev/null && [[ -e ~/.zsh/zsh-completions/src/_rg ]] || rg --generate complete-zsh > ~/.zsh/zsh-completions/src/_rg
     fpath=(~/.zsh/zsh-completions/src $fpath)
 fi
 
