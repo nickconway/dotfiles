@@ -54,10 +54,31 @@ export DROPBOX=/c/Users/nickc/Dropbox
 
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[[ ! -e $NVM_DIR ]] && mkdir -p $NVM_DIR
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+function lazynvm() {
+    unset -f nvm node npm npx
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
+}
+
+function nvm() {
+  lazynvm
+  nvm $@
+}
+
+function node() {
+  lazynvm
+  node $@
+}
+
+function npm() {
+  lazynvm
+  npm $@
+}
+
+function npx() {
+  lazynvm
+  npx $@
+}
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
 
