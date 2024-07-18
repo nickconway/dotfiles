@@ -604,3 +604,5 @@ function upgrade() {
         fi
     fi
 }
+
+alias shell-debug='time DEBUGRC=1 '$SHELL_NAME' -i -c exit'
