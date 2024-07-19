@@ -106,4 +106,6 @@ export ATUIN_USER=nick
 
 export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.zsh/zsh-syntax-highlighting/highlighters
 
+export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc-2.0
+
 eval "$(dircolors)"

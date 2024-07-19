@@ -30,6 +30,7 @@ if [[ -e ~/.zsh/fzf-tab/fzf-tab.zsh ]]; then
     zstyle ':fzf-tab:complete:eza:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
     zstyle ':fzf-tab:complete:mv:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
     zstyle ':fzf-tab:complete:cp:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
+    zstyle ':fzf-tab:complete:rm:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
 
     zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
     zstyle ':fzf-tab:*' popup-follow-cursor false
