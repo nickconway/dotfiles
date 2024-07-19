@@ -61,23 +61,23 @@ function lazynvm() {
 }
 
 function nvm() {
-  lazynvm
-  nvm $@
+    lazynvm
+    nvm $@
 }
 
 function node() {
-  lazynvm
-  node $@
+    lazynvm
+    node $@
 }
 
 function npm() {
-  lazynvm
-  npm $@
+    lazynvm
+    npm $@
 }
 
 function npx() {
-  lazynvm
-  npx $@
+    lazynvm
+    npx $@
 }
 
 export FZF_DEFAULT_OPTS="--color=gutter:-1"
@@ -96,7 +96,11 @@ export FZF_TMUX_OPTS="-p"
 
 export GITEA_USER=nick
 
-[[ -e /run/docker.sock ]] && export DOCKER_HOST=unix:///run/docker.sock || export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+if [[ -e /run/docker.sock ]]; then
+    export DOCKER_HOST=unix:///run/docker.sock
+else
+    export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+fi
 
 export GIT_NAME="Nick Conway"
 export GIT_EMAIL="nick@conway.dev"
