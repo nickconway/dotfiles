@@ -122,6 +122,9 @@ function gi() {
 alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
 alias glog='git log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
+function glogc() {
+    glog --color | fzf-tmux -p --ansi --preview "echo {} | awk '{print \$2}' | xargs -i{} git diff {}~ {} | delta" | awk '{print $2}' | xargs git checkout
+}
 alias gm='git merge'
 alias gmm='git merge main'
 alias gms='git merge --squash'
@@ -152,7 +155,7 @@ function gsw() {
     if [[ -z "$@" ]] || [[ "$@" == "-" ]]; then
         git switch -
     else
-        git show-branch $@ &>/dev/null && git switch $@ || git switch -c $@
+        git checkout $@ 2>/dev/null || git checkout -b $@
     fi
 }
 
