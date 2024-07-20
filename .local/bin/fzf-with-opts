@@ -1,2 +1,2 @@
 #!/bin/bash
-fzf $(echo $FZF_DEFAULT_OPTS) $(echo $FZF_TMUX_OPTS) "$@"
+fzf $(echo $FZF_DEFAULT_OPTS) $(echo $FZF_TMUX_OPTS) --height=50% --tmux "$@"
