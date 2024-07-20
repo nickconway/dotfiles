@@ -76,9 +76,22 @@ alias dcupdate="docker compose up -d --pull=always"
 alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
 function fn() {
-    SELECTED=("${(@f)$(fzf-with-opts --preview="bat --color=always --style=plain {}")}")
-    [[ -n "$SELECTED" ]] && $EDITOR "${SELECTED[@]}"
+    SELECTED="$(fzf-with-opts --preview="bat --color=always --style=plain {}")"
+    [[ -n "$SELECTED" ]] && echo "$SELECTED" | xargs -d '\n' $EDITOR
     unset SELECTED
+}
+
+function fnv() {
+    SELECTED="$(rg --color=always --line-number --no-heading --smart-case "${*:-}" | fzf --ansi \
+          --color "hl:-1:underline,hl+:-1:underline:reverse" \
+          --delimiter : \
+          --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
+          --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+    )"
+    echo "$SELECTED"
+    if [[ -n "$SELECTED" ]]; then
+        echo "$SELECTED" | xargs -d '\n' $EDITOR
+    fi
 }
 
 alias g='git status'

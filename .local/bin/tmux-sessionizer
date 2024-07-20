@@ -26,11 +26,11 @@ export SELECTED=$(command | fzf-with-opts --border-label="Tmux Sessionizer" \
     --prompt=" > " \
     --preview 'fzf-preview {}' \
     --header "ctrl-w =   ctrl-s = ǂ  ctrl-z =   ctrl-a = ∀  ctrl-t = 󰐆   ctrl-u =   crtl-d = " \
-    --bind "ctrl-a:reload(tmux-sessionizer all)" \
-    --bind "ctrl-z:reload(tmux-sessionizer directories)" \
-    --bind "ctrl-w:reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
+    --bind "ctrl-a:change-border-label(Tmux Sessionizer (All))+change-prompt( > )+reload(tmux-sessionizer all)" \
+    --bind "ctrl-z:change-border-label(Tmux Sessionizer (Directories))+change-prompt( > )+reload(tmux-sessionizer directories)" \
+    --bind "ctrl-w:change-border-label(Tmux Sessionizer (Windows))+change-prompt( > )+reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
     --bind "$RENAME_SESSION" \
-    --bind "ctrl-s:reload(tmux-sessionizer sessions)")
+    --bind "ctrl-s:change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )+reload(tmux-sessionizer sessions)")
 
 if [[ -z $SELECTED ]]; then
     exit 0
