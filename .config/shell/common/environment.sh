@@ -80,7 +80,7 @@ function npx() {
     npx $@
 }
 
-export FZF_DEFAULT_OPTS='--tmux -m --color=gutter:0 --pointer=▶ --preview-window down'
+export FZF_DEFAULT_OPTS='--height 50% -m --color=gutter:0 --pointer=▶ --preview-window down --tmux'
 
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy
