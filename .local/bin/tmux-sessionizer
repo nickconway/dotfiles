@@ -1,13 +1,39 @@
 #!/usr/bin/env bash
 
-if [[ $# -eq 1 ]]; then
-    dir=$1
-    command() (find "$dir" -mindepth 1 -maxdepth 1 -type d)
-else
-    command() (find ~/ "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d; zoxide query -l; tmux list-sessions -F "#S")
+if [[ $# -eq 0 || $1 == "all" ]]; then
+    command() (
+        tmux list-sessions -F "#S" | grep -v $(tmux display-message -p '#S')
+        find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
+        zoxide query -l
+    )
+elif [[ $1 == "sessions" ]]; then
+    command() (
+        tmux list-sessions -F "#S"
+    )
+elif [[ $1 == "directories" ]]; then
+    command() (
+        find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
+        zoxide query -l
+    )
 fi
 
-export TMUXP_START_DIR=$(command | sort | uniq | fzf-tmux $(echo $FZF_TMUX_OPTS) --prompt=" > " --preview 'eza {1} -1 --icons --color=always 2>/dev/null || ls {1} --color')
+[[ $# -eq 1 ]] && command && exit
+
+RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux rename-session -t {1} "${name}"; '\'''
+RENAME_SESSION_RELOAD='bash -c '\'' tmux list-sessions | sed -E "s/:.*$//"; '\'''
+RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer sessions)"
+
+export TMUXP_START_DIR=$(command | fzf-with-opts --border-label="Tmux Sessionizer" \
+    --prompt=" > " \
+    --preview 'fzf-preview {}' \
+    --header "ctrl-w =   ctrl-s = ǂ  ctrl-z =   ctrl-a = ∀  ctrl-t = 󰐆   ctrl-u =   crtl-d = " \
+    --bind "ctrl-d:preview-half-page-down" \
+    --bind "ctrl-u:preview-half-page-up" \
+    --bind "ctrl-a:reload(tmux-sessionizer all)" \
+    --bind "ctrl-z:reload(tmux-sessionizer directories)" \
+    --bind "ctrl-w:reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
+    --bind "$RENAME_SESSION" \
+    --bind "ctrl-s:reload(tmux-sessionizer sessions)")
 
 if [[ -z $TMUXP_START_DIR ]]; then
     exit 0

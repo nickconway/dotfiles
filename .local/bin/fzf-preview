@@ -1,0 +1,25 @@
+#!/bin/bash
+
+dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}
+if [[ $dim = x ]]; then
+  dim=$(stty size < /dev/tty | awk '{print $2 "x" $@}')
+elif ! [[ $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $@}') )); then
+  # Avoid scrolling issue when the Sixel image touches the bottom of the screen
+  # * https://github.com/junegunn/fzf/issues/2544
+  dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
+fi
+
+cells_width=$(echo $dim | cut -d x -f 1)
+cells_height=$(echo $dim | cut -d x -f 2)
+
+if tmux has-session -t "$@" 2> /dev/null; then
+    tmux capture-pane -ep -t "$@"
+elif [[ -d "$@" ]]; then
+    eza "$@" -1 --icons --color=always
+else
+    if [[ "$(file "$@")" =~ "image" ]]; then
+        kitty icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" --use-window-size="$cells_width,$cells_height,$(($cells_width * 8)),$(($cells_height * 8))" "$@" | sed '$d' | sed $'$s/$/\e[m/'
+    else
+        bat "$@" --color=always --style=plain
+    fi
+fi

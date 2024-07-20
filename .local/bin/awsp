@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROFILE="$(grep profile .aws/config | awk '{print $2}' | rev | cut -c 2- | rev | fzf-tmux $(echo $FZF_TMUX_OPTS))"
+PROFILE="$(grep profile .aws/config | awk '{print $2}' | rev | cut -c 2- | rev | fzf-with-opts)"
 if [[ -n $PROFILE ]]; then
     if [[ -z "$@" ]]; then
         read -p "Enter the command: " COMMAND
