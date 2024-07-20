@@ -293,7 +293,7 @@ function s() {
         SSH_HOSTS=$(grep "Host " ~/.ssh/config | awk '{print $2}')
         TAILSCALE_HOSTS="$(command -v tailscale > /dev/null && tailscale status | grep -v '^#' | awk '{print $2}')"
         TAILSCALE_WSL_HOSTS="$(command -v tailscale.exe > /dev/null && tailscale.exe status | grep -v '^#' | awk '{print $2}')"
-        SELECTED=$((echo "$SSH_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzf-tmux $(echo $FZF_TMUX_OPTS) --prompt=" > ")
+        SELECTED=$((echo "$SSH_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzf-with-opts --prompt=" > ")
     fi
 
     if [[ -n $TMUX ]]; then
