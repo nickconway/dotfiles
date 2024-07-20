@@ -23,7 +23,7 @@ RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux renam
 RENAME_SESSION_RELOAD='bash -c '\'' tmux list-sessions | sed -E "s/:.*$//"; '\'''
 RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer sessions)"
 
-export TMUXP_START_DIR=$(command | fzf-with-opts --border-label="Tmux Sessionizer" \
+export SELECTED=$(command | fzf-with-opts --border-label="Tmux Sessionizer" \
     --prompt=" > " \
     --preview 'fzf-preview {}' \
     --header "ctrl-w =   ctrl-s = ǂ  ctrl-z =   ctrl-a = ∀  ctrl-t = 󰐆   ctrl-u =   crtl-d = " \
@@ -35,29 +35,31 @@ export TMUXP_START_DIR=$(command | fzf-with-opts --border-label="Tmux Sessionize
     --bind "$RENAME_SESSION" \
     --bind "ctrl-s:reload(tmux-sessionizer sessions)")
 
-if [[ -z $TMUXP_START_DIR ]]; then
+if [[ -z $SELECTED ]]; then
     exit 0
 fi
 
-export SELECTED_FILE=$(basename "$TMUXP_START_DIR")
-export TMUXP_SESSION_NAME=$(basename "$TMUXP_START_DIR" | tr . _)
+for TMUXP_START_DIR in $SELECTED; do
+    export SELECTED_FILE=$(basename "$TMUXP_START_DIR")
+    export TMUXP_SESSION_NAME=$(basename "$TMUXP_START_DIR" | tr . _)
 
-export TMUX_RUNNING=$(pgrep tmux)
+    export TMUX_RUNNING=$(pgrep tmux)
 
-if tmux has-session -t="$TMUXP_SESSION_NAME" 2> /dev/null; then
-    tmux switch-client -t "$TMUXP_SESSION_NAME"
-elif [[ -e ~/.config/tmuxp/"$SELECTED_FILE".yaml ]]; then
-    tmuxp load ~/.config/tmuxp/"$SELECTED_FILE".yaml -y > /dev/null
-elif [[ -z $TMUX ]] && [[ -z $TMUX_RUNNING ]]; then
-    tmux new-session -s "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
-else
-    for F in ~/.config/tmuxp/*; do
-        F="$(basename "$F")"
-        if [[ -e "$TMUXP_START_DIR/${F%.*}" || -e "$TMUXP_START_DIR/.${F%.*}" ]]; then
-            tmuxp load ~/.config/tmuxp/"$F" -y > /dev/null
-            exit
-        fi
-    done
-    tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
-    tmux switch-client -t "$TMUXP_SESSION_NAME"
-fi
+    if tmux has-session -t="$TMUXP_SESSION_NAME" 2> /dev/null; then
+        tmux switch-client -t "$TMUXP_SESSION_NAME"
+    elif [[ -e ~/.config/tmuxp/"$SELECTED_FILE".yaml ]]; then
+        tmuxp load ~/.config/tmuxp/"$SELECTED_FILE".yaml -y > /dev/null
+    elif [[ -z $TMUX ]] && [[ -z $TMUX_RUNNING ]]; then
+        tmux new-session -s "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
+    else
+        for F in ~/.config/tmuxp/*; do
+            F="$(basename "$F")"
+            if [[ -e "$TMUXP_START_DIR/${F%.*}" || -e "$TMUXP_START_DIR/.${F%.*}" ]]; then
+                tmuxp load ~/.config/tmuxp/"$F" -y > /dev/null
+                exit
+            fi
+        done
+        tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
+        tmux switch-client -t "$TMUXP_SESSION_NAME"
+    fi
+done
