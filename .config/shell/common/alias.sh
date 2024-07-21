@@ -158,10 +158,10 @@ function gsw() {
     if [[ "$@" == "-" ]]; then
         git switch -
     elif [[ -z "$@" ]]; then
-        BRANCH=$(_fzf_git_branches)
-        [[ -n "$BRANCH" ]] && git checkout $BRANCH
+        BRANCH=$(_fzf_git_all_branches)
+        [[ -n "$BRANCH" ]] && git switch "$(echo "$BRANCH" | cut -d '/' -f 2-)"
     else
-        git checkout $@ 2>/dev/null || git checkout -b $@
+        git switch $@ 2>/dev/null || git switch -c $@
     fi
 }
 
