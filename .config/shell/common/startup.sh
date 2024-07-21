@@ -7,6 +7,12 @@ command -v fzf > /dev/null && [[ -e ~/.fzf/fzf-git/fzf-git.sh ]] && source ~/.fz
 command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow | awk '/output=\$\(/{system("cat ~/.config/atuin/tmux.'$SHELL_NAME'");next}1')" \
     && (pgrep -f "atuin daemon" &> /dev/null || atuin daemon &> $XDG_RUNTIME_DIR/atuin.log &)
 
+_fzf_git_fzf() {
+  fzft --min-height=20 --border \
+    --tmux center,80% \
+    --preview-window='right,50%,border-left' \
+    "$@"
+}
 
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
