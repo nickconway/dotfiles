@@ -165,6 +165,18 @@ function gsw() {
     fi
 }
 
+function gwt(){
+    WORKTREE="$(_fzf_git_worktrees)"
+    [[ -n "$WORKTREE" ]] && cd "$WORKTREE"
+}
+
+function gwta(){
+    REF="${1:-$(_fzf_git_all_refs)}"
+    BRANCH="$(echo "$REF" | cut -d '/' -f 2-)"
+    SUFFIX="${2:-${BRANCH}}"
+    [[ -n "$REF" ]] && git worktree add -b "$SUFFIX" ../"$(basename `pwd`)"-"$SUFFIX" "$REF" && cd ../"$(basename "$(pwd)")"-"$SUFFIX"
+}
+
 function ghc() {
     mkdir -p $PROJECT_DIR
     (
