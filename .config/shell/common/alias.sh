@@ -250,11 +250,22 @@ alias pls='sudo $(fc -ln -1)'
 
 alias r='rip'
 function rgn() {
-    SELECTED=$(rg --color=always --line-number --no-heading --smart-case "${*:-}" | fzf-with-opts --ansi \
-          --color "hl:-1:underline,hl+:-1:underline:reverse" \
-          --delimiter : \
-          --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
-          --preview-window 'down,+{2}+3/3,~3'
+    SELECTED=$(
+rm -f /tmp/rg-fzf-{r,f}
+RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+INITIAL_QUERY="${*:-}"
+fzf --ansi --disabled --query "$INITIAL_QUERY" \
+    --bind "start:reload:$RG_PREFIX {q}" \
+    --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+    --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~ RG ]] &&
+      echo "rebind(change)+change-prompt(RG > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
+      echo "unbind(change)+change-prompt(FZF > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+    --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    --prompt 'RG > ' \
+    --delimiter : \
+    --header 'CTRL-R: Switch between ripgrep/fzf' \
+    --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
+    --preview-window 'down,+{2}+3/3,~3'
     )
 
     [[ -z "$SELECTED" ]] && return
