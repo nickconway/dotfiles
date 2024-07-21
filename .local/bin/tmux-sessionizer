@@ -22,7 +22,7 @@ fi
 RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux rename-session -t {1} "${name}"; '\'''
 RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer sessions)"
 
-export SELECTED=$(command | fzf-with-opts --border-label="Tmux Sessionizer" \
+export SELECTED=$(command | fzft --border-label="Tmux Sessionizer" \
     --prompt=" > " \
     --preview 'fzf-preview {}' \
     --header "ctrl-w =   ctrl-s = ǂ  ctrl-z =   ctrl-a = ∀  ctrl-t = 󰐆   ctrl-u =   crtl-d = " \

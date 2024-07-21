@@ -80,8 +80,7 @@ function npx() {
     npx $@
 }
 
-export FZF_DEFAULT_OPTS='-m --color=gutter:0 --pointer=▶ --preview-window down --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up --height=50%'
-export FZF_TMUX_OPTS='center'
+export FZF_DEFAULT_OPTS='-m --color=gutter:0 --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(border|hidden|)" --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up'
 
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy

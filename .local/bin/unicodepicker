@@ -7,5 +7,5 @@ if [[ ! -e ~/.cache/unicode || "$1" == "download" ]]; then
         > ~/.cache/unicode
 fi
 
-SYMBOL=$(cat ~/.cache/unicode | fzf-with-opts --preview="echo -e {} | awk '{print \$NF}'" | awk '{print $NF}')
+SYMBOL=$(cat ~/.cache/unicode | fzft --preview="echo -e {} | awk '{print \$NF}'" | awk '{print $NF}')
 echo -ne $SYMBOL | wl-copy && paste-keys

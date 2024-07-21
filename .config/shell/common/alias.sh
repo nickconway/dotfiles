@@ -16,7 +16,7 @@ alias 8='cd -8'
 alias 9='cd -9'
 
 alias a='ansible'
-alias ah='ansible-doc --list | awk "{print \$1}" | fzf-with-opts --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
+alias ah='ansible-doc --list | awk "{print \$1}" | fzft --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
 alias ap='ansible-playbook'
 alias apl='ansible-playbook --limit localhost'
 alias av='ansible-vault'
@@ -48,7 +48,7 @@ function dr() {
     if [[ $# -gt 0 ]]; then
         docker restart $@
     else
-        SELECTED=$(docker ps -a --format {{.Names}} | fzf-with-opts --prompt=" > ")
+        SELECTED=$(docker ps -a --format {{.Names}} | fzft --prompt=" > ")
         [[ -z $SELECTED ]] || docker restart $SELECTED
         unset SELECTED
     fi
@@ -76,7 +76,7 @@ alias dcupdate="docker compose up -d --pull=always"
 alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
 function fn() {
-    SELECTED="$(fzf-with-opts --preview="bat --color=always --style=plain {}")"
+    SELECTED="$(fzft --preview="bat --color=always --style=plain {}")"
     [[ -n "$SELECTED" ]] && echo "$SELECTED" | xargs -d '\n' $EDITOR
     unset SELECTED
 }
@@ -107,7 +107,7 @@ function ggp() {
 function gi() {
     if [[ $# -eq 0 ]]; then
         GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" \
-            | fzf-with-opts --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
+            | fzft --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
     else
         GI_TYPE="$(echo $@ | sed "s/ /,/g")"
     fi
@@ -123,7 +123,7 @@ alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
 alias glog='git log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
 function glogc() {
-    glog --color | fzf-with-opts --ansi --preview "echo {} | awk '{print \$2}' | xargs -i{} git diff {}~ {} | delta" | awk '{print $2}' | xargs git checkout
+    glog --color | fzft --ansi --preview "echo {} | awk '{print \$2}' | xargs -i{} git diff {}~ {} | delta" | awk '{print $2}' | xargs git checkout
 }
 alias gm='git merge'
 alias gmm='git merge main'
@@ -142,10 +142,12 @@ function gsp() {
     fi
 
     if [[ -z "$@" ]]; then
-        if [[ "$(git stash list | wc -l)" == "1" ]]; then
+        if [[ "$(git stash list | wc -l)" == "0" ]]; then
+            return
+        elif [[ "$(git stash list | wc -l)" == "1" ]]; then
             git stash pop
         else
-            git stash pop "$(git stash list | fzf-with-opts --preview 'git stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+            git stash pop "$(git stash list | fzft --preview 'git show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
         fi
     else
         git stash pop $@
@@ -163,16 +165,16 @@ function ghc() {
     mkdir -p $PROJECT_DIR
     (
         cd $PROJECT_DIR
-        GH_FORCE_TTY=100% gh repo list | fzf-with-opts --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone
+        GH_FORCE_TTY=100% gh repo list | fzft --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone
     )
 }
 
 function ghpr() {
-    GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-with-opts --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
 }
 
 function ghprm() {
-    GH_FORCE_TTY=100% gh pr list -L 1000 | fzf-with-opts --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
     gsw -
     gm -
 }
@@ -254,7 +256,7 @@ function rgn() {
         rm -f /tmp/rg-fzf-{r,f}
         RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
         INITIAL_QUERY="${*:-}"
-        fzf-with-opts --ansi --disabled --query "$INITIAL_QUERY" \
+        fzft --ansi --disabled --query "$INITIAL_QUERY" \
             --bind "start:reload:$RG_PREFIX {q}" \
             --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
             --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~ RG ]] &&
@@ -314,7 +316,7 @@ function s() {
         SSH_HOSTS=$(grep "Host " ~/.ssh/config | awk '{print $2}')
         TAILSCALE_HOSTS="$(command -v tailscale > /dev/null && tailscale status | grep -v '^#' | awk '{print $2}')"
         TAILSCALE_WSL_HOSTS="$(command -v tailscale.exe > /dev/null && tailscale.exe status | grep -v '^#' | awk '{print $2}')"
-        SELECTED=$((echo "$SSH_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzf-with-opts --prompt=" > ")
+        SELECTED=$((echo "$SSH_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzft --prompt=" > ")
     fi
 
     if [[ -n $TMUX ]]; then
@@ -357,7 +359,7 @@ function sudo(){
     command sudo -E $(which $1 | cut -d ' ' -f 4-) ${@:2}
 }
 
-alias tldrf="tldr --list | fzf-with-opts --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
+alias tldrf="tldr --list | fzft --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs tldr --color=always"
 
 function toggleproxy() {
     test -z $http_proxy && {
@@ -411,7 +413,7 @@ function tu() {
 }
 
 alias v='nvim'
-alias venv='. ~/.venvs/$(ls --color=never ~/.venvs | fzf-with-opts)/bin/activate'
+alias venv='. ~/.venvs/$(ls --color=never ~/.venvs | fzft)/bin/activate'
 alias vm='s alma'
 
 alias work='s alma'
@@ -487,7 +489,7 @@ function ysp() {
         if [[ "$(yadm stash list | wc -l)" == "1" ]]; then
             yadm stash pop
         else
-            yadm stash pop "$(yadm stash list | fzf-with-opts --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+            yadm stash pop "$(yadm stash list | fzft --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
         fi
     else
         yadm stash pop $@

@@ -1,2 +1,0 @@
-#!/bin/bash
-fzf $(echo $FZF_DEFAULT_OPTS) --tmux="$(echo $FZF_TMUX_OPTS)" "$@"
