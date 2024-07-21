@@ -80,7 +80,8 @@ function npx() {
     npx $@
 }
 
-export FZF_DEFAULT_OPTS='-m --color=gutter:0 --pointer=▶ --preview-window down --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up'
+export FZF_DEFAULT_OPTS='-m --color=gutter:0 --pointer=▶ --preview-window down --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up --height=50%'
+export FZF_TMUX_OPTS='center'
 
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy
@@ -91,8 +92,6 @@ export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
-
-export FZF_TMUX_OPTS=''
 
 export GITEA_USER=nick
 
