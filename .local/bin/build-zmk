@@ -5,6 +5,7 @@ function clean(){
     if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
         mv ~/Git/zmk-config/config/include/leader.dtsi.bkp ~/Git/zmk-config/config/include/leader.dtsi
     fi
+    [[ -e ~/Git/zmk/app/.clangd ]] && rm ~/Git/zmk/app/.clangd
 }
 
 trap clean ERR EXIT
@@ -44,6 +45,12 @@ else
         zmkrun bash -c "west update"
     fi
 fi
+
+cat << EOF > ~/Git/zmk/app/.clangd
+CompileFlags:
+  Add: -Wno-unknown-warning-option
+  Remove: [-m*, -f*]
+EOF
 
 if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "${2:-}" = "nv" ]; then

@@ -81,19 +81,6 @@ function fn() {
     unset SELECTED
 }
 
-function fnv() {
-    SELECTED="$(rg --color=always --line-number --no-heading --smart-case "${*:-}" | fzf --ansi \
-          --color "hl:-1:underline,hl+:-1:underline:reverse" \
-          --delimiter : \
-          --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
-          --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-    )"
-    echo "$SELECTED"
-    if [[ -n "$SELECTED" ]]; then
-        echo "$SELECTED" | xargs -d '\n' $EDITOR
-    fi
-}
-
 alias g='git status'
 alias ga='git add'
 alias gaa='git add --all'
@@ -262,7 +249,30 @@ function npa() {
 alias pls='sudo $(fc -ln -1)'
 
 alias r='rip'
-alias rg='rg --hidden'
+function rgn() {
+    SELECTED=$(rg --color=always --line-number --no-heading --smart-case "${*:-}" | fzf-with-opts --ansi \
+          --color "hl:-1:underline,hl+:-1:underline:reverse" \
+          --delimiter : \
+          --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
+          --preview-window 'down,+{2}+3/3,~3'
+    )
+
+    [[ -z "$SELECTED" ]] && return
+
+    COMMANDS=""
+    while IFS= read -r line; do
+        echo $line
+        if [[ "$COMMANDS" == "" ]]; then
+            COMMANDS+="$(echo $line | awk -F ':' '{printf "\"%s\" +%s", $1, $2}')"
+        else
+            COMMANDS+="$(echo $line | awk -F ':' '{printf " -c \"e %s | %s\"", $1, $2}')"
+        fi
+    done <<< "$SELECTED"
+
+    echo $EDITOR $COMMANDS -c first
+    eval "$EDITOR $COMMANDS -c first"
+    unset SELECTED
+}
 
 function replace() {
     if ! command -v rg > /dev/null; then
@@ -276,9 +286,11 @@ function replace() {
         return
     fi
 
-    if rg "$1"
+    if rg "$1" -q
     then
-        nvim -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l)
+        nvim /tmp -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l)
+    else
+        echo Pattern not found
     fi
 }
 
