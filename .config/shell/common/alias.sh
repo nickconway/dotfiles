@@ -147,15 +147,19 @@ function gsp() {
         elif [[ "$(git stash list | wc -l)" == "1" ]]; then
             git stash pop
         else
-            git stash pop "$(git stash list | fzft --preview 'git show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+            STASH=$(_fzf_git_stashes)
+            [[ -n "$STASH" ]] && git stash pop $STASH
         fi
     else
         git stash pop $@
     fi
 }
 function gsw() {
-    if [[ -z "$@" ]] || [[ "$@" == "-" ]]; then
+    if [[ "$@" == "-" ]]; then
         git switch -
+    elif [[ -z "$@" ]]; then
+        BRANCH=$(_fzf_git_branches)
+        [[ -n "$BRANCH" ]] && git checkout $BRANCH
     else
         git checkout $@ 2>/dev/null || git checkout -b $@
     fi
