@@ -1,0 +1,34 @@
+#!/bin/bash
+set -eou pipefail
+
+wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine.pkg.tar.zst") | .browser_download_url')"
+sudo pacman -U --noconfirm sunshine.pkg.tar.zst
+rm sunshine.pkg.tar.zst
+
+echo 'KERNEL=="uinput", SUBSYSTEM=="misc", OPTIONS+="static_node=uinput", TAG+="uaccess"' | \
+sudo tee /etc/udev/rules.d/60-sunshine.rules
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+sudo modprobe uinput
+
+sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
+
+cat << EOF > ~/.config/systemd/user/sunshine.service
+[Unit]
+Description=Sunshine self-hosted game stream host for Moonlight.
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+ExecStart=/usr/bin/sunshine
+Restart=on-failure
+RestartSec=5s
+#Flatpak Only
+#ExecStop=flatpak kill dev.lizardbyte.sunshine
+
+[Install]
+WantedBy=graphical-session.target
+EOF
+
+systemctl --user start sunshine
+systemctl --user enable sunshine
