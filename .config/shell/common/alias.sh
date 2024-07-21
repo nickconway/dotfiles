@@ -261,7 +261,6 @@ function rgn() {
 
     COMMANDS=""
     while IFS= read -r line; do
-        echo $line
         if [[ "$COMMANDS" == "" ]]; then
             COMMANDS+="$(echo $line | awk -F ':' '{printf "\"%s\" +%s", $1, $2}')"
         else
@@ -269,7 +268,6 @@ function rgn() {
         fi
     done <<< "$SELECTED"
 
-    echo $EDITOR $COMMANDS -c first
     eval "$EDITOR $COMMANDS -c first"
     unset SELECTED
 }
