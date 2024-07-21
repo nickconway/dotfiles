@@ -171,11 +171,17 @@ function gwt(){
 }
 
 function gwta(){
-    REF="${1:-$(_fzf_git_all_refs)}"
+    if [[ -z "${2:-}" ]]; then
+        REF="$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')"
+    elif [[ "${2:-}" == "-s" ]]; then
+        REF="$(_fzf_git_all_refs)"
+    else
+        REF="$2"
+    fi
     BRANCH="$(echo "$REF" | cut -d '/' -f 2-)"
-    SUFFIX="$(echo "${2:-${BRANCH}}" | tr '/' '-')"
-    WORKTREE_PATH="$(git worktree list | awk 'NR==1{print $1}')"-"$SUFFIX"
-    [[ -n "$REF" ]] && git worktree add -b "$BRANCH" "$WORKTREE_PATH" "$REF" && cd "$WORKTREE_PATH"
+    SUFFIX="$(echo "${1:-${BRANCH}}" | tr '/' '-')"
+    WORKTREE_PATH="$(git worktree list | awk 'NR==1{print $1}')"+"$SUFFIX"
+    [[ -n "$REF" ]] && git worktree add -b "$SUFFIX" "$WORKTREE_PATH" "$REF" && cd "$WORKTREE_PATH"
 }
 
 function ghc() {
