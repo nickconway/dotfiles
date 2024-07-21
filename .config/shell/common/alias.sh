@@ -173,8 +173,9 @@ function gwt(){
 function gwta(){
     REF="${1:-$(_fzf_git_all_refs)}"
     BRANCH="$(echo "$REF" | cut -d '/' -f 2-)"
-    SUFFIX="${2:-${BRANCH}}"
-    [[ -n "$REF" ]] && git worktree add -b "$SUFFIX" ../"$(basename `pwd`)"-"$SUFFIX" "$REF" && cd ../"$(basename "$(pwd)")"-"$SUFFIX"
+    SUFFIX="$(echo "${2:-${BRANCH}}" | tr '/' '-')"
+    WORKTREE_PATH="$(git worktree list | awk 'NR==1{print $1}')"-"$SUFFIX"
+    [[ -n "$REF" ]] && git worktree add -b "$BRANCH" "$WORKTREE_PATH" "$REF" && cd "$WORKTREE_PATH"
 }
 
 function ghc() {
