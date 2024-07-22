@@ -5,12 +5,15 @@ export PATH=~/bin:~/.local/bin:$PATH
 cd
 
 touch .hushlogin
+mkdir -p ~/.local/bin
+
+if ! [[ -e ~/.local/bin/yadm ]]; then
+    curl -s https://raw.githubusercontent.com/nickconway/yadm/master/yadm -o ~/.local/bin/yadm
+    chmod +x ~/.local/bin/yadm
+fi
 
 if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
-    mkdir -p ~/.local/bin \
-        && curl -o ~/.local/bin/yadm https://raw.githubusercontent.com/nickconway/dotfiles/master/.local/bin/yadm \
-        && chmod +x ~/.local/bin/yadm \
-        && ~/.local/bin/yadm clone https://github.com/nickconway/dotfiles
+    yadm clone https://github.com/nickconway/dotfiles
     yadm decrypt
     yadm alt
 
