@@ -29,6 +29,11 @@ function atuin-fix() {
     atuin store rebuild history
     atuin sync
 }
+
+alias nf='fastfetch'
+alias pf='fastfetch'
+alias ff='fastfetch'
+
 alias atuin-login='atuin login -u "$ATUIN_USER" -p "$ATUIN_PASSWORD" -k "$ATUIN_KEY"'
 
 alias bat='bat --style=plain'
@@ -255,7 +260,7 @@ function mkcd() {
     mkdir -p -- "$1" && cd -P -- "$1"
 }
 
-alias n='nvim'
+alias n='$EDITOR'
 alias notes='(cd ~/Documents/Notes; n)'
 
 function np() {
@@ -435,7 +440,7 @@ function tu() {
     eval "$TS_COMMAND set --auto-update"
 }
 
-alias v='nvim'
+alias v='$EDITOR'
 alias venv='. ~/.venvs/$(ls --color=never ~/.venvs | fzft)/bin/activate'
 alias vm='s alma'
 
