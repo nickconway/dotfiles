@@ -650,7 +650,7 @@ function upgrade() {
             echo " Proceeding with full system upgrade."
         fi
         if command -v yay &> /dev/null; then
-            yay -Syu --noconfirm
+            yay -Syu --noconfirm --color=always
         elif command -v trizen &> /dev/null; then
             trizen -Syu
         elif command -v pacaur &> /dev/null; then
