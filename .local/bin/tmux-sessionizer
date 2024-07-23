@@ -2,7 +2,15 @@
 
 if [[ $# -eq 0 || $1 == "all" ]]; then
     command() (
-        tmux display -p '#{client_last_session}'; tmux list-sessions -F "#S" | grep -v $(tmux display -p '#{client_last_session}') | grep -v $(tmux display-message -p '#S'); tmux display-message -p '#S'
+        [[ -n "$(tmux display -p '#{client_last_session}')" ]] && tmux display -p '#{client_last_session}'
+
+        if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
+            tmux list-sessions -F "#S" | grep -v $(tmux display -p '#{client_last_session}') | grep -v $(tmux display-message -p '#S')
+        else
+            tmux list-sessions -F "#S" | grep -v $(tmux display-message -p '#S')
+        fi
+
+        tmux display-message -p '#S'
         find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
         zoxide query -l
     )
@@ -25,7 +33,7 @@ RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer ses
 export SELECTED=$(command | fzft --border-label="Tmux Sessionizer" \
     --prompt=" > " \
     --preview 'fzf-preview {}' \
-    --header "ctrl-w =   ctrl-s = ǂ  ctrl-z =   ctrl-a = ∀  ctrl-t = 󰐆   ctrl-u =   crtl-d = " \
+    --header "ctrl-w   ctrl-s ǂ  ctrl-z   ctrl-a ∀  ctrl-t 󰐆  ctrl-r 󰑕  ctrl-u   crtl-d " \
     --bind "ctrl-a:change-border-label(Tmux Sessionizer (All))+change-prompt( > )+reload(tmux-sessionizer all)" \
     --bind "ctrl-z:change-border-label(Tmux Sessionizer (Directories))+change-prompt( > )+reload(tmux-sessionizer directories)" \
     --bind "ctrl-w:change-border-label(Tmux Sessionizer (Windows))+change-prompt( > )+reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
