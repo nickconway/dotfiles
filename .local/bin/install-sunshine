@@ -32,3 +32,5 @@ EOF
 
 systemctl --user start sunshine
 systemctl --user enable sunshine
+
+grep -q 'IgnorePkg.*sunshine' /etc/pacman.conf || sudo sed -i "s/#\?IgnorePkg\s\+=\(.*\)/IgnorePkg   =\1 sunshine/g" /etc/pacman.conf
