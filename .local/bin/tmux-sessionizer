@@ -2,7 +2,7 @@
 
 if [[ $# -eq 0 || $1 == "all" ]]; then
     command() (
-        tmux list-sessions -F "#S" | grep -v $(tmux display-message -p '#S'); tmux display-message -p '#S'
+        tmux display -p '#{client_last_session}'; tmux list-sessions -F "#S" | grep -v $(tmux display -p '#{client_last_session}') | grep -v $(tmux display-message -p '#S'); tmux display-message -p '#S'
         find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
         zoxide query -l
     )
