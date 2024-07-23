@@ -282,7 +282,7 @@ alias r='rip'
 function rgn() {
     SELECTED=$(
         rm -f /tmp/rg-fzf-{r,f}
-        RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+        RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden -g '!{**/node_modules/*,**/.github/*,**/.git/*}' "
         INITIAL_QUERY="${*:-}"
         fzft --ansi --disabled --query "$INITIAL_QUERY" \
             --bind "start:reload:$RG_PREFIX {q}" \
