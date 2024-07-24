@@ -1,23 +1,51 @@
 #!/bin/bash
 set -euo pipefail
 
+function pull-saves() {
+    echo "Pulling Saves"
+    rclone copy dropbox:Documents/Emulation/Saves/ "$(xdg-user-dir DOCUMENTS)"/Emulation/saves -PLMuv
+}
+function push-saves() {
+    echo "Pushing Saves"
+    rclone copy "$(xdg-user-dir DOCUMENTS)"/Emulation/saves/ dropbox:Documents/Emulation/Saves -PLMuv
+}
+
 function sync-saves() {
-    rclone copy dropbox:Documents/Emulation/Saves/ ~/Documents/Emulation/saves -PLMuv
+    pull-saves
     echo
-    rclone copy ~/Documents/Emulation/saves/ dropbox:Documents/Emulation/Saves -PLMuv
+    push-saves
+}
+
+function pull-games() {
+    echo "Pulling Games"
+    rclone copy dropbox:Documents/Emulation/Games/ "$(xdg-user-dir DOCUMENTS)"/Emulation/roms -PLMuv
+}
+
+function push-games() {
+    echo "Pushing Games"
+    rclone copy "$(xdg-user-dir DOCUMENTS)"/Emulation/roms/ dropbox:Documents/Emulation/Games -PLMuv
 }
 
 function sync-games() {
-    rclone copy dropbox:Documents/Emulation/Games/ ~/Documents/Emulation/roms -PLMuv
+    pull-games
     echo
-    rclone copy ~/Documents/Emulation/roms/ dropbox:Documents/Emulation/Games -PLMuv
+    push-games
+}
+
+function pull-bios() {
+    echo "Pulling BIOS"
+    rclone copy dropbox:Documents/Emulation/BIOS/ "$(xdg-user-dir DOCUMENTS)"/Emulation/bios -PLMuv
+}
+
+function push-bios() {
+    echo "Pushing BIOS"
+    rclone copy "$(xdg-user-dir DOCUMENTS)"/Emulation/bios/ dropbox:Documents/Emulation/BIOS -PLMuv
 }
 
 function sync-bios() {
-    rclone copy dropbox:Documents/Emulation/BIOS/ ~/Documents/Emulation/bios -PLMuv
+    pull-bios
     echo
-    rclone copy ~/Documents/Emulation/bios/ dropbox:Documents/Emulation/BIOS -PLMuv
-
+    push-bios
 }
 
 if [[ $# == 0 ]]; then
@@ -26,9 +54,33 @@ if [[ $# == 0 ]]; then
     sync-saves
     echo
     sync-bios
+elif [[ $# -eq 1 && "${1:-}" == "pull" ]]; then
+    pull-games
+    echo
+    pull-saves
+    echo
+    pull-bios
+elif [[ $# -eq 1 && "${1:-}" == "push" ]]; then
+    push-games
+    echo
+    push-saves
+    echo
+    push-bios
 else
-    for arg in $@; do
-        sync-$arg
-        echo
-    done
+    if [[ "${1:-}" == "pull" ]]; then
+        for arg in ${@:2}; do
+            pull-$arg
+            echo
+        done
+    elif [[ "${1:-}" == "push" ]]; then
+        for arg in ${@:2}; do
+            push-$arg
+            echo
+        done
+    else
+        for arg in $@; do
+            sync-$arg
+            echo
+        done
+    fi
 fi
