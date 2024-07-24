@@ -41,6 +41,8 @@ vim.opt.signcolumn = 'yes'
 
 vim.opt.winbar = " "
 
+vim.opt.conceallevel = 2
+
 vim.opt.listchars:append 'space:·'
 
 vim.cmd.colorscheme("onedark")
