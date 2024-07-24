@@ -28,7 +28,7 @@ fi
 [[ $# -eq 1 ]] && command && exit
 
 RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux rename-session -t {1} "${name}"; '\'''
-RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer sessions)"
+RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer sessions)+change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )"
 
 export SELECTED=$(command | fzft --border-label="Tmux Sessionizer" \
     --prompt=" > " \
