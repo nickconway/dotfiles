@@ -96,7 +96,14 @@ alias gcam='git commit -a -m'
 alias gce='git commit -e'
 alias gcm='git commit -m'
 alias gcl='git clone --recurse-submodules'
-alias gco='git checkout'
+function gco() {
+    if [[ $# -gt 0 ]]; then
+        git checkout "$1"
+    else
+        HASH=$(_fzf_git_stashes)
+        [[ -n "$HASH" ]] && git checkout "$(_fzf_git_hashes)"
+    fi
+}
 alias gcom='git checkout main && git pull origin main'
 alias gcp='git cherry-pick'
 alias gd='git diff HEAD'
@@ -124,17 +131,16 @@ function gi() {
 
 }
 
+GIT_LOG_FORMAT='%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset'
 alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
-alias glog='git log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
-function glogc() {
-    glog --color | fzft --ansi --preview "echo {} | awk '{print \$2}' | xargs -i{} git diff {}~ {} | delta" | awk '{print $2}' | xargs git checkout
-}
+alias glog='git log --graph --pretty=format:$GIT_LOG_FORMAT --abbrev-commit --date=short'
 alias gm='git merge'
 alias gmm='git merge main'
 alias gms='git merge --squash'
 alias gp='git push'
 alias gr='git reset'
+alias grb='git rebase'
 alias gre='git remote'
 alias grh='git reset --hard'
 alias greu='git remote update'
