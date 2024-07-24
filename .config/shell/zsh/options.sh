@@ -1,8 +1,8 @@
-if [[ -d ~/.zsh/zsh-completions ]]; then
-    command -v gh &> /dev/null && [[ -e ~/.zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.zsh/zsh-completions/src/_gh
-    command -v rg &> /dev/null && [[ -e ~/.zsh/zsh-completions/src/_rg ]] || rg --generate complete-zsh > ~/.zsh/zsh-completions/src/_rg
-    command -v fzf &> /dev/null && [[ -e ~/.zsh/zsh-completions/src/_fzf ]] || fzf --zsh > ~/.zsh/zsh-completions/src/_fzf
-    fpath=(~/.zsh/zsh-completions/src $fpath)
+if [[ -d ~/.config/zsh/zsh-completions ]]; then
+    command -v gh &> /dev/null && [[ -e ~/.config/zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.config/zsh/zsh-completions/src/_gh
+    command -v rg &> /dev/null && [[ -e ~/.config/zsh/zsh-completions/src/_rg ]] || rg --generate complete-zsh > ~/.config/zsh/zsh-completions/src/_rg
+    command -v fzf &> /dev/null && [[ -e ~/.config/zsh/zsh-completions/src/_fzf ]] || fzf --zsh > ~/.config/zsh/zsh-completions/src/_fzf
+    fpath=(~/.config/zsh/zsh-completions/src $fpath)
 fi
 
 autoload -Uz compinit && compinit
@@ -21,7 +21,7 @@ setopt PUSHD_MINUS
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-if [[ -e ~/.zsh/fzf-tab/fzf-tab.zsh ]]; then
+if [[ -e ~/.config/zsh/fzf-tab/fzf-tab.zsh ]]; then
     zstyle ':completion:*:git-checkout:*' sort false
     zstyle ':completion:*:descriptions' format '[%d]'
     zstyle ':completion:*' menu no

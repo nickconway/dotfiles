@@ -106,7 +106,7 @@ export GIT_GPG_KEY="AA850592E4C1D453"
 
 export ATUIN_USER=nick
 
-export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.zsh/zsh-syntax-highlighting/highlighters
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
 
 export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc-2.0
 
