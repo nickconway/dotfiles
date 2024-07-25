@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [[ $# -gt 0 ]]; then
+    SELECTED=$@
+else
+    SSH_HOSTS=$(grep "Host " ~/.ssh/config | awk '{print $2}')
+    KNOWN_HOSTS=$(cat .ssh/known_hosts | awk '{print $1}')
+    TAILSCALE_HOSTS="$(command -v tailscale > /dev/null && tailscale status | grep -v '^#' | awk '{print $2}')"
+    TAILSCALE_WSL_HOSTS="$(command -v tailscale.exe > /dev/null && tailscale.exe status | grep -v '^#' | awk '{print $2}')"
+    SELECTED=$((echo "$SSH_HOSTS"; echo "$KNOWN_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzft --prompt=" > ")
+fi
+
+if [[ -n $TMUX ]]; then
+    PANE_PID="$(tmux display -p '#{pane_pid}')"
+    S_FILE="$PREFIX/tmp/tmux-$PANE_PID"
+    (&>/dev/null hide-tmux-statusbar $PANE_PID & echo -n $! > $S_FILE)
+    tmux set prefix C-h
+    tmux bind C-h send-prefix
+fi
+
+if [[ -n $SELECTED ]]; then
+    ports=('5556' '5557' '5558' '5559' '5560')
+    for p in ${ports[@]}; do
+        if [[ "$(ss -n -4 state listening "( sport = $p )" | tail -n +2 | wc -l)" -eq 0 ]]; then
+            PORT=$p
+            break
+        fi
+    done
+    (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
+    ssh $SELECTED -R $PORT:localhost:$PORT
+fi
+
+if [[ -n $TMUX ]]; then
+    if ps -p $(cat $S_FILE) &> /dev/null; then
+        kill $(cat $S_FILE)
+    fi
+    tmux set status on
+    tmux bind C-Space send-prefix
+    tmux set prefix C-Space
+    rm "$S_FILE"
+fi
+
+[[ -z $SELECTED ]] && exit 1

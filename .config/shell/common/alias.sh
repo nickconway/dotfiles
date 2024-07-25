@@ -343,42 +343,6 @@ function remove-whitespace() {
     rg '\s+$' -l | xargs sed -i 's/\s\+$//g'
 }
 
-function s() {
-    if [[ $# -gt 0 ]]; then
-        SELECTED=$@
-    else
-        SSH_HOSTS=$(grep "Host " ~/.ssh/config | awk '{print $2}')
-        KNOWN_HOSTS=$(cat .ssh/known_hosts | awk '{print $1}')
-        TAILSCALE_HOSTS="$(command -v tailscale > /dev/null && tailscale status | grep -v '^#' | awk '{print $2}')"
-        TAILSCALE_WSL_HOSTS="$(command -v tailscale.exe > /dev/null && tailscale.exe status | grep -v '^#' | awk '{print $2}')"
-        SELECTED=$((echo "$SSH_HOSTS"; echo "$KNOWN_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzft --prompt=" > ")
-    fi
-
-    if [[ -n $TMUX ]]; then
-        PANE_PID="$(tmux display -p '#{pane_pid}')"
-        S_FILE="$PREFIX/tmp/tmux-$PANE_PID"
-        (&>/dev/null hide-tmux-statusbar $PANE_PID & echo $! > $S_FILE)
-        tmux set prefix C-h
-        tmux bind C-h send-prefix
-    fi
-
-    [[ -z $SELECTED ]] || ssh $(echo $SELECTED)
-
-    if [[ -n $TMUX ]]; then
-        if ps -p "$(cat $S_FILE)" &> /dev/null; then
-            kill "$(cat $S_FILE)"
-        fi
-        tmux set status on
-        tmux bind C-Space send-prefix
-        tmux set prefix C-Space
-        rm "$S_FILE"
-    fi
-
-    [[ -z $SELECTED ]] && return 1
-    unset SELECTED
-    unset S_FILE
-}
-
 alias server='s server'
 
 alias steamdeck='s steamdeck'
