@@ -42,3 +42,4 @@ if [[ -n $TMUX ]]; then
 fi
 
 [[ -z $SELECTED ]] && exit 1
+exit 0
