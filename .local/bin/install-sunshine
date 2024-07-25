@@ -29,8 +29,9 @@ RestartSec=5s
 [Install]
 WantedBy=graphical-session.target
 EOF
+systemctl --user daemon-reload
 
 systemctl --user start sunshine
 systemctl --user enable sunshine
 
-grep -q 'IgnorePkg.*sunshine' /etc/pacman.conf || sudo sed -i "s/#\?IgnorePkg\s\+=\(.*\)/IgnorePkg   =\1 sunshine/g" /etc/pacman.conf
+grep -q '^IgnorePkg.*sunshine' /etc/pacman.conf || sudo sed -i "s/#\?IgnorePkg\s\+=\(.*\)/IgnorePkg =\1 sunshine/g" /etc/pacman.conf
