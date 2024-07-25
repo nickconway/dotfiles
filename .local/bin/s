@@ -34,6 +34,7 @@ if [[ -n $TMUX ]]; then
     if ps -p $(cat $S_FILE) &> /dev/null; then
         kill $(cat $S_FILE)
     fi
+    kill $(pgrep "nc -l -p $PORT" -f)
     tmux set status on
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
