@@ -26,7 +26,9 @@ if [[ -n $SELECTED ]]; then
             break
         fi
     done
-    (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
+    if ! command -v termux-reload-settings &> /dev/null; then
+        (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
+    fi
     ssh $SELECTED -R $PORT:localhost:$PORT
 fi
 
@@ -34,7 +36,9 @@ if [[ -n $TMUX ]]; then
     if ps -p $(cat $S_FILE) &> /dev/null; then
         kill $(cat $S_FILE)
     fi
-    kill $(pgrep "nc -l -p $PORT" -f)
+    if ! command -v termux-reload-settings &> /dev/null; then
+        kill $(pgrep "nc -l -p $PORT" -f)
+    fi
     tmux set status on
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
