@@ -19,17 +19,19 @@ if [[ -n $TMUX ]]; then
 fi
 
 if [[ -n $SELECTED ]]; then
-    ports=('5556' '5557' '5558' '5559' '5560')
-    for p in ${ports[@]}; do
-        if [[ "$(ss -n -4 state listening "( sport = $p )" | tail -n +2 | wc -l)" -eq 0 ]]; then
-            PORT=$p
-            break
-        fi
-    done
     if ! command -v termux-reload-settings &> /dev/null; then
+        ports=('5556' '5557' '5558' '5559' '5560')
+        for p in ${ports[@]}; do
+            if [[ "$(ss -n -4 state listening "( sport = $p )" | tail -n +2 | wc -l)" -eq 0 ]]; then
+                PORT=$p
+                break
+            fi
+        done
         (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
+        ssh $SELECTED
+    else
+        ssh $SELECTED -R $PORT:localhost:$PORT
     fi
-    ssh $SELECTED -R $PORT:localhost:$PORT
 fi
 
 if [[ -n $TMUX ]]; then
