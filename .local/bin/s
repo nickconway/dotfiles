@@ -19,7 +19,7 @@ if [[ -n $TMUX ]]; then
 fi
 
 if [[ -n $SELECTED ]]; then
-    if ! command -v termux-reload-settings &> /dev/null; then
+    if command -v ss &> /dev/null; then
         ports=('5556' '5557' '5558' '5559' '5560')
         for p in ${ports[@]}; do
             if [[ "$(ss -n -4 state listening "( sport = $p )" | tail -n +2 | wc -l)" -eq 0 ]]; then
