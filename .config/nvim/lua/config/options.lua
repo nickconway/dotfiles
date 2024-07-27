@@ -45,6 +45,8 @@ vim.opt.conceallevel = 2
 
 vim.opt.listchars:append 'space:·'
 
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
 vim.cmd.colorscheme("onedark")
 vim.cmd("highlight Normal ctermbg=none guibg=none")
 vim.cmd("highlight NormalFloat ctermbg=none guibg=none")
