@@ -46,6 +46,7 @@ fi
 
 for TMUXP_START_DIR in $SELECTED; do
     export SELECTED_FILE=$(basename "$TMUXP_START_DIR")
+    export TMUXP_START_DIR="$TMUXP_START_DIR"
     export TMUXP_SESSION_NAME=$(basename "$TMUXP_START_DIR" | tr . _)
 
     export TMUX_RUNNING=$(pgrep tmux)

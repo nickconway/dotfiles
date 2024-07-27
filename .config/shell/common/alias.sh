@@ -283,6 +283,8 @@ function make-svelte() {
     npx svelte-add
     if [[ ! -e .git ]]; then
         git init && git add -A && git commit -m "Initial commit"
+        cp ~/.config/docker-compose/svelte-kit.yml docker-compose.yaml
+        sed -i "s/REPLACE-ME/$1/g"
     fi
 
     TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null

@@ -7,6 +7,12 @@ windows:
   panes:
   - focus: true
     shell_command:
+    - cmd: docker compose up -d || npm run dev -- --open --host
+    - cmd: xdg-open http://localhost:5173
     - cmd: nvim
+- layout: main-horizontal
+  options:
+    main-pane-height: 80%
+  panes:
   - shell_command:
-    - cmd: npm run dev -- --open --host
+    - cmd: sleep 3 && docker compose logs -f
