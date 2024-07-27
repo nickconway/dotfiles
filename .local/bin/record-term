@@ -12,6 +12,8 @@ while getopts 'h:t:p:w:' flag; do
 done
 shift $((OPTIND-1))
 
+[[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
 command -v asciinema &> /dev/null || pipx install asciinema
 command -v svg-term &> /dev/null || npm install -g svg-term-cli
 command -v svgembed &> /dev/null || npm install -g git+https://github.com/miraclx/svgembed
