@@ -43,6 +43,7 @@ return {
         dashboard.section.buttons.val = {
             dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
             dashboard.button("f", "  Find file", ":Telescope find_files hidden=true no_ignore=true<CR>"),
+            dashboard.button("s", "󰋃  Open last session", ":SessionRestore<CR>"),
             dashboard.button("g", " " .. " Find text", ":Telescope live_grep <CR>"),
             dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
             dashboard.button("u", "  Update plugins", ":Lazy sync<CR>"),
