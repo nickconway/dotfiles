@@ -2,6 +2,8 @@ services:
   REPLACE-ME:
     container_name: REPLACE-ME
     image: REPLACE-ME
+    volumes:
+      - ./:/app
     build: .
     restart: unless-stopped
     ports:
