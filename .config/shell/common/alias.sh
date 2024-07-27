@@ -279,7 +279,11 @@ function make-svelte() {
     npm create svelte@latest "$1"
     cd $1
     npm install
-    git init && git add -A && git commit -m "Initial commit"
+    npm install --save-dev typescript-svelte-plugin
+    npx svelte-add
+    if [[ ! -e .git ]]; then
+        git init && git add -A && git commit -m "Initial commit"
+    fi
 
     TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
     cd $dir
