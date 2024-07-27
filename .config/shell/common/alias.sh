@@ -291,6 +291,7 @@ function make-svelte() {
         cp ~/.config/docker-compose/svelte-kit.yml docker-compose.yml
         cp ~/.config/dockerfiles/svelte-kit.Dockerfile Dockerfile
         cp ~/.config/docker-compose/svelte-kit.env .env
+        cp ~/.config/dockerfiles/dockerignore .dockerignore
         sed -i "s/REPLACE-ME/$1/g" docker-compose.yml Dockerfile .env
         git add -A && git commit -m "Initialize docker files"
     fi
