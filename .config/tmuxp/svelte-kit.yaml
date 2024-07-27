@@ -16,4 +16,4 @@ windows:
     main-pane-height: 80%
   panes:
   - shell_command:
-    - cmd: until docker ps | grep -q rerereminder; do true; done && docker compose logs -f
+    - cmd: while true; do echo "Waiting for containers to start..."; until [[ -n "$(docker compose ps -q)" ]]; do true; done && docker compose logs -f; done
