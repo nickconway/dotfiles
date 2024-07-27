@@ -54,32 +54,6 @@ export DROPBOX=/c/Users/nickc/Dropbox
 
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
-function lazynvm() {
-    unset -f nvm node npm npx
-    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
-}
-
-function nvm() {
-    lazynvm
-    nvm $@
-}
-
-function node() {
-    lazynvm
-    node $@
-}
-
-function npm() {
-    lazynvm
-    npm $@
-}
-
-function npx() {
-    lazynvm
-    npx $@
-}
-
 export FZF_DEFAULT_OPTS='-m --color=gutter:0 --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(80%|20%|hidden|)" --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up'
 
 # CTRL-/ to toggle small preview window to see the full command

@@ -246,18 +246,42 @@ function lg() {
     fi;
 }
 
+function lazynvm() {
+    unset -f nvm node npm npx
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
+}
+
+function nvm() {
+    lazynvm
+    nvm $@
+}
+
+function node() {
+    lazynvm
+    node $@
+}
+
+function npm() {
+    lazynvm
+    npm $@
+}
+
+function npx() {
+    lazynvm
+    npx $@
+}
+
 function make-svelte() {
-    selected_name=$(basename "$1")
     session_name=$(basename "$1" | tr . _)
     dir=$PWD
 
-    cd $PROJECT_DIR
-    npm create svelte@latest $1
+    npm create svelte@latest "$1"
     cd $1
-    npm install
+    npm install --verbose
     git init && git add -A && git commit -m "Initial commit"
 
-    TMUXP_START_DIR=$selected TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
+    TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
     cd $dir
 }
 
