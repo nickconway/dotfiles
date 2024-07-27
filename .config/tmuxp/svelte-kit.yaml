@@ -10,9 +10,10 @@ windows:
     - cmd: docker compose up -d || npm run dev -- --open --host
     - cmd: xdg-open http://localhost:5173
     - cmd: nvim
+  - pane
 - layout: main-horizontal
   options:
     main-pane-height: 80%
   panes:
   - shell_command:
-    - cmd: sleep 3 && docker compose logs -f
+    - cmd: until docker ps | grep -q rerereminder; do true; done && docker compose logs -f

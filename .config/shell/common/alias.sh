@@ -276,15 +276,23 @@ function make-svelte() {
     session_name=$(basename "$1" | tr . _)
     dir=$PWD
 
-    npm create svelte@latest "$1"
+    if [[ ! -e "$1" ]]; then
+        npm create svelte@latest "$1"
+    fi
     cd $1
     npm install
     npm install --save-dev typescript-svelte-plugin
-    npx svelte-add
     if [[ ! -e .git ]]; then
         git init && git add -A && git commit -m "Initial commit"
-        cp ~/.config/docker-compose/svelte-kit.yml docker-compose.yaml
-        sed -i "s/REPLACE-ME/$1/g"
+
+        npx svelte-add@latest tailwindcss --tailwindcss-typography true drizzle --drizzle-database postgresql --drizzle-postgresql postgres.js --drizzle-docker true prettier eslint
+        git add -A && git commit -m "Add tooling"
+
+        cp ~/.config/docker-compose/svelte-kit.yml docker-compose.yml
+        cp ~/.config/dockerfiles/svelte-kit.Dockerfile Dockerfile
+        cp ~/.config/docker-compose/svelte-kit.env .env
+        sed -i "s/REPLACE-ME/$1/g" docker-compose.yml Dockerfile .env
+        git add -A && git commit -m "Initialize docker files"
     fi
 
     TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
