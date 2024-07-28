@@ -1,2 +1,4 @@
 #!/bin/bash
-openssl rand -base64 256 | tr -d '\n\r' | cut -c 1-$1
+set -euo pipefail
+
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1

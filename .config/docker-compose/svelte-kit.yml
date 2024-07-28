@@ -1,3 +1,7 @@
+volumes:
+  REPLACE-ME-db:
+    name: REPLACE-ME-db
+
 services:
   REPLACE-ME:
     container_name: REPLACE-ME
@@ -6,24 +10,27 @@ services:
       - ./:/app
     build: .
     restart: unless-stopped
-    user: 1000:1000
+    user: REPLACE-UID:REPLACE-GID
     ports:
       - 5173:5173
       - 4983:4983
     depends_on:
       - REPLACE-ME-db
     environment:
-      PUID: 1000
-      PGID: 1000
+      PUID: REPLACE-UID
+      PGID: REPLACE-GID
+      DATABASE_URL: ${DATABASE_URL}
   REPLACE-ME-db:
     container_name: REPLACE-ME-db
     image: postgres
     restart: unless-stopped
     ports:
       - 5432:5432
+    volumes:
+      - REPLACE-ME-db:/var/lib/postgresql/data
     environment:
-      PUID: 1000
-      PGID: 1000
+      PUID: REPLACE-UID
+      PGID: REPLACE-GID
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}

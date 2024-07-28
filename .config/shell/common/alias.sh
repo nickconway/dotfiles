@@ -292,6 +292,12 @@ function make-svelte() {
         cp ~/.config/docker-compose/svelte-kit.env .env
         cp ~/.config/dockerfiles/dockerignore .dockerignore
         sed -i "s/REPLACE-ME/$1/g" docker-compose.yml Dockerfile .env
+        sed -i "s/REPLACE-UID/$(id -u)/g" docker-compose.yml Dockerfile .env
+        sed -i "s/REPLACE-GID/$(id -g)/g" docker-compose.yml Dockerfile .env
+
+        PW="$(pwgen)"
+        sed -i "s/supersecretpassword/$PW/g" docker-compose.yml Dockerfile .env
+
         git add -A && git commit -m "Initialize docker files"
     fi
 
