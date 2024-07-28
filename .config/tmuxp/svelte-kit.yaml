@@ -1,19 +1,19 @@
 session_name: ${TMUXP_SESSION_NAME}
 start_directory: ${TMUXP_START_DIR}
 windows:
-- layout: main-horizontal
-  options:
-    main-pane-height: 80%
-  panes:
-  - focus: true
-    shell_command:
-    - cmd: docker compose up -d || npm run dev -- --open --host
-    - cmd: xdg-open http://localhost:5173
-    - cmd: nvim
-  - pane
-- layout: main-horizontal
-  options:
-    main-pane-height: 80%
-  panes:
-  - shell_command:
-    - cmd: while true; do echo "Waiting for containers to start..."; until [[ -n "$(docker compose ps -q)" ]]; do true; done && docker compose logs -f; done
+  - layout: main-horizontal
+    options:
+      main-pane-height: 80%
+    panes:
+      - focus: true
+        shell_command:
+          - cmd: docker compose up -d || npm run dev -- --open --host
+          - cmd: xdg-open http://localhost:5173
+          - cmd: nvim
+      - pane
+  - layout: even-horizontal
+    panes:
+      - shell_command:
+          - cmd: while true; do echo "Waiting for containers to start..."; until [[ -n "$(docker compose ps -q)" ]]; do true; done && docker compose logs -f; done
+      - shell_command:
+          - cmd: while true; do echo "Waiting for containers to start..."; until [[ -n "$(docker compose ps -q)" ]]; do true; done && docker exec -it $TMUXP_SESSION_NAME npx drizzle-kit studio --host 0.0.0.0 --verbose; done
