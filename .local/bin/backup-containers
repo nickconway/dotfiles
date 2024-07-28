@@ -21,7 +21,7 @@ function clean(){
 }
 
 trap fail ERR
-trap clean EXIT
+# trap clean EXIT
 
 set -euo pipefail
 
@@ -35,7 +35,7 @@ CONTAINERS_RUNNING="$(docker ps -q)"
 
 dump-containers
 
-stop-containers
+# stop-containers
 
 mkdir -p $BASE_DIR
 if [[ ! -e "$BORG_REPO" ]]; then
