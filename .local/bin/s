@@ -28,9 +28,18 @@ if [[ -n $SELECTED ]]; then
             fi
         done
         (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
-        ssh $SELECTED -R $PORT:localhost:$PORT
+
+        if [[ -n "$KITTY_WINDOW_ID" ]]; then
+            kitten ssh $SELECTED -R $PORT:localhost:$PORT
+        else
+            ssh $SELECTED -R $PORT:localhost:$PORT
+        fi
     else
-        ssh $SELECTED
+        if [[ -n "$KITTY_WINDOW_ID" ]]; then
+            kitten ssh $SELECTED -R $PORT:localhost:$PORT
+        else
+            ssh $SELECTED -R $PORT:localhost:$PORT
+        fi
     fi
 fi
 
