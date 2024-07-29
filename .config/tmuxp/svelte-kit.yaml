@@ -7,8 +7,7 @@ windows:
     panes:
       - focus: true
         shell_command:
-          - cmd: docker compose up -d || npm run dev -- --open --host
-          - cmd: xdg-open http://localhost:5173
+          - cmd: docker compose up -d; if [[ "$?" == "0" ]]; then command -v xdg-open &> /dev/null && xdg-open http://localhost:5173; else; npm run dev -- --open --host; fi
           - cmd: nvim
       - pane
   - layout: even-horizontal

@@ -291,7 +291,7 @@ function make-svelte() {
         cp ~/.config/dockerfiles/svelte-kit.Dockerfile Dockerfile
         cp ~/.config/docker-compose/svelte-kit.env .env
         cp ~/.config/dockerfiles/dockerignore .dockerignore
-        sed -i "s/REPLACE-ME/$1/g" docker-compose.yml Dockerfile .env
+        sed -i "s/REPLACE-ME/$(basename $1)/g" docker-compose.yml Dockerfile .env
         sed -i "s/REPLACE-UID/$(id -u)/g" docker-compose.yml Dockerfile .env
         sed -i "s/REPLACE-GID/$(id -g)/g" docker-compose.yml Dockerfile .env
 
