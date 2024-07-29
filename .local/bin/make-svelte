@@ -1,14 +1,18 @@
 #!/bin/bash
 set -euo pipefail
+set -x
 
 [[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
-
-session_name=$(basename "$1" | tr . _)
 
 if [[ ! -e "$1" ]]; then
     npm create svelte@latest "$1"
 fi
-cd $1
+
+cd "$1"
+FOLDER=${PWD##*/}
+FOLDER=${FOLDER:-/}
+session_name=$(echo $FOLDER | tr . _)
+
 npm install
 if [[ ! -e .git ]]; then
     git init
@@ -27,17 +31,14 @@ if [[ ! -e .git ]]; then
     cp ~/.config/docker-compose/svelte-kit.env .env
     cp ~/.config/dockerfiles/dockerignore .dockerignore
 
-    FOLDER=${PWD##*/}
-    FOLDER=${FOLDER:-/}
     sed -i "s/REPLACE-ME/$FOLDER/g" docker-compose.yml Dockerfile .env
     sed -i "s/REPLACE-UID/$(id -u)/g" docker-compose.yml Dockerfile .env
     sed -i "s/REPLACE-GID/$(id -g)/g" docker-compose.yml Dockerfile .env
 
     PW="$(pwgen)"
-    sed -i "s/supersecretpassword/$PW/g" docker-compose.yml Dockerfile .env
+    sed -i "s/REPLACE-PASSWORD/$PW/g" docker-compose.yml Dockerfile .env
 
     git add -A && git commit -m "Initialize docker files"
 fi
 
 TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
-

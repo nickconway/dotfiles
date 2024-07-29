@@ -1,8 +1,15 @@
 FROM node:lts-slim
 
-COPY . /app
+LABEL Developers="Nick Conway"
+
 WORKDIR /app
 
-RUN npm install
+COPY . .
 
-CMD npm run dev -- --host
+RUN npm ci
+RUN npm run build
+RUN npm prune --production
+
+USER node:node
+
+CMD ["node","build"]

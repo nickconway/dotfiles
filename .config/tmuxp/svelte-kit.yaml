@@ -7,12 +7,16 @@ windows:
     panes:
       - focus: true
         shell_command:
-          - cmd: docker compose up -d; if [[ "$?" == "0" ]]; then command -v xdg-open &> /dev/null && xdg-open http://localhost:5173; else; npm run dev -- --open --host; fi
           - cmd: nvim
-      - pane
-  - layout: even-horizontal
+      - shell_command:
+          - cmd: docker compose up -d
+  - layout: main-horizontal
+    options:
+      main-pane-height: 60%
     panes:
+      - shell_command:
+          - cmd: npm run dev -- --open --host
       - shell_command:
           - cmd: while true; do echo "Waiting for containers to start..."; until [[ -n "$(docker compose ps -q)" ]]; do true; done && docker compose logs -f; done
       - shell_command:
-          - cmd: while true; do echo "Waiting for containers to start..."; until [[ -n "$(docker compose ps -q)" ]]; do true; done && docker exec -it $TMUXP_SESSION_NAME npx drizzle-kit studio --host 0.0.0.0 --verbose; done
+          - cmd: npx drizzle-kit studio --verbose
