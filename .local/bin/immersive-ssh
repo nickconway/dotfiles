@@ -41,15 +41,17 @@ if [[ -n $SELECTED ]]; then
             ssh $SELECTED -R $PORT:localhost:$PORT
         fi
     fi
-fi
 
-if [[ -n $TMUX ]]; then
     if ps -p $(cat $S_FILE) &> /dev/null; then
         kill $(cat $S_FILE)
     fi
-    if ! command -v termux-reload-settings &> /dev/null; then
+
+    if pgrep "nc -l -p $PORT" -f &> /dev/null; then
         kill $(pgrep "nc -l -p $PORT" -f)
     fi
+fi
+
+if [[ -n $TMUX ]]; then
     tmux set status on
     tmux bind C-Space send-prefix
     tmux set prefix C-Space

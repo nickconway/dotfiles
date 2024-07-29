@@ -353,6 +353,7 @@ function remove-whitespace() {
     rg '\s+$' -l | xargs sed -i 's/\s\+$//g'
 }
 
+alias s='immersive-ssh'
 alias server='s server'
 
 alias steamdeck='s steamdeck'
