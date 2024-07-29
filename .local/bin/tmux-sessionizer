@@ -1,6 +1,37 @@
 #!/usr/bin/env bash
 
-if [[ $# -eq 0 || $1 == "all" ]]; then
+if [[ "${1:-}" == "--all" ]]; then
+    if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
+        tmux display -p '#{client_last_session}'
+    fi
+
+    if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
+        tmux list-sessions -F "#S" | grep -v $(tmux display -p '#{client_last_session}') | grep -v $(tmux display-message -p '#S')
+    else
+        tmux list-sessions -F "#S" | grep -v $(tmux display-message -p '#S')
+    fi
+
+    tmux display-message -p '#S'
+    find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
+    zoxide query -l
+    exit
+elif [[ "${1:-}" == "--sessions" ]]; then
+    tmux list-sessions -F "#S"
+    exit
+elif [[ "${1:-}" == "--directories" ]]; then
+    find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
+    zoxide query -l
+    exit
+elif [[ "${1:-}" == "--directories" ]]; then
+    find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
+    zoxide query -l
+    exit
+fi
+
+if [[ $# -eq 0 ]]; then
+    RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux rename-session -t {1} "${name}"; '\'''
+    RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer --sessions)+change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )"
+
     command() (
         [[ -n "$(tmux display -p '#{client_last_session}')" ]] && tmux display -p '#{client_last_session}'
 
@@ -14,31 +45,19 @@ if [[ $# -eq 0 || $1 == "all" ]]; then
         find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
         zoxide query -l
     )
-elif [[ $1 == "sessions" ]]; then
-    command() (
-        tmux list-sessions -F "#S"
-    )
-elif [[ $1 == "directories" ]]; then
-    command() (
-        find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
-        zoxide query -l
-    )
+
+    export SELECTED=$(command | fzft --border-label="Tmux Sessionizer" \
+        --prompt=" > " \
+        --preview 'fzf-preview {}' \
+        --header "ctrl-w   ctrl-s ǂ  ctrl-z   ctrl-a ∀  ctrl-t 󰐆  ctrl-r 󰑕  ctrl-u   crtl-d " \
+        --bind "ctrl-a:change-border-label(Tmux Sessionizer (All))+change-prompt( > )+reload(tmux-sessionizer --all)" \
+        --bind "ctrl-z:change-border-label(Tmux Sessionizer (Directories))+change-prompt( > )+reload(tmux-sessionizer --directories)" \
+        --bind "ctrl-w:change-border-label(Tmux Sessionizer (Windows))+change-prompt( > )+reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
+        --bind "$RENAME_SESSION" \
+        --bind "ctrl-s:change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )+reload(tmux-sessionizer --sessions)")
+else
+    export SELECTED="$1"
 fi
-
-[[ $# -eq 1 ]] && command && exit
-
-RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux rename-session -t {1} "${name}"; '\'''
-RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer sessions)+change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )"
-
-export SELECTED=$(command | fzft --border-label="Tmux Sessionizer" \
-    --prompt=" > " \
-    --preview 'fzf-preview {}' \
-    --header "ctrl-w   ctrl-s ǂ  ctrl-z   ctrl-a ∀  ctrl-t 󰐆  ctrl-r 󰑕  ctrl-u   crtl-d " \
-    --bind "ctrl-a:change-border-label(Tmux Sessionizer (All))+change-prompt( > )+reload(tmux-sessionizer all)" \
-    --bind "ctrl-z:change-border-label(Tmux Sessionizer (Directories))+change-prompt( > )+reload(tmux-sessionizer directories)" \
-    --bind "ctrl-w:change-border-label(Tmux Sessionizer (Windows))+change-prompt( > )+reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
-    --bind "$RENAME_SESSION" \
-    --bind "ctrl-s:change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )+reload(tmux-sessionizer sessions)")
 
 if [[ -z $SELECTED ]]; then
     exit 0
