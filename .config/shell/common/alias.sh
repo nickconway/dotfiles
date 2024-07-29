@@ -285,7 +285,7 @@ function make-svelte() {
         git init && git add -A && git commit -m "Initial commit"
 
         npx svelte-add@latest tailwindcss --tailwindcss-typography true drizzle --drizzle-database postgresql --drizzle-postgresql postgres.js --drizzle-docker true prettier eslint
-        sed -i $'/schema:/a out: \'./src/lib/migrations\',' drizzle.config.ts
+        sed -i $'/schema:/a out: \'./src/lib/server/db/migrations\',' drizzle.config.ts
         npx prettier --write drizzle.config.ts
         git add -A && git commit -m "Add tooling"
 
