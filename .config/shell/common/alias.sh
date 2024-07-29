@@ -285,13 +285,18 @@ function make-svelte() {
         git init && git add -A && git commit -m "Initial commit"
 
         npx svelte-add@latest tailwindcss --tailwindcss-typography true drizzle --drizzle-database postgresql --drizzle-postgresql postgres.js --drizzle-docker true prettier eslint
+        sed -i $'/schema:/a out: \'./src/lib/migrations\',' drizzle.config.ts
+        npx prettier --write drizzle.config.ts
         git add -A && git commit -m "Add tooling"
 
         cp ~/.config/docker-compose/svelte-kit.yml docker-compose.yml
         cp ~/.config/dockerfiles/svelte-kit.Dockerfile Dockerfile
         cp ~/.config/docker-compose/svelte-kit.env .env
         cp ~/.config/dockerfiles/dockerignore .dockerignore
-        sed -i "s/REPLACE-ME/$(basename $1)/g" docker-compose.yml Dockerfile .env
+
+        FOLDER=${PWD##*/}
+        FOLDER=${FOLDER:-/}
+        sed -i "s/REPLACE-ME/$FOLDER/g" docker-compose.yml Dockerfile .env
         sed -i "s/REPLACE-UID/$(id -u)/g" docker-compose.yml Dockerfile .env
         sed -i "s/REPLACE-GID/$(id -g)/g" docker-compose.yml Dockerfile .env
 
