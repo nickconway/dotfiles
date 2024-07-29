@@ -1,6 +1,5 @@
 #!/bin/bash
 set -euo pipefail
-set -x
 
 [[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
 
