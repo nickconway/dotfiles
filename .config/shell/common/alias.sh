@@ -311,7 +311,7 @@ function mkcd() {
 }
 
 alias n='$EDITOR'
-alias notes='(cd ~/Documents/Notes; n)'
+alias notes='(cd ~/Documents/Notes && n)'
 
 function np() {
     curl -d "$@" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null

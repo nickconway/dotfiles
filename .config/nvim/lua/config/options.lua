@@ -41,7 +41,7 @@ vim.opt.signcolumn = 'yes'
 
 vim.opt.winbar = " "
 
-vim.opt.conceallevel = 2
+vim.opt.conceallevel = 0
 
 vim.opt.listchars:append 'space:·'
 
