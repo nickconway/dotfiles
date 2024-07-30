@@ -36,9 +36,9 @@ if [[ -n $SELECTED ]]; then
         fi
     else
         if [[ -n "$KITTY_WINDOW_ID" ]]; then
-            kitten ssh $SELECTED -R $PORT:localhost:$PORT
+            kitten ssh $SELECTED
         else
-            ssh $SELECTED -R $PORT:localhost:$PORT
+            ssh $SELECTED
         fi
     fi
 
