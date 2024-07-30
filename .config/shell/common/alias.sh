@@ -345,7 +345,7 @@ function replace() {
 
     if rg "$1" -q
     then
-        nvim /tmp -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l ${@:3})
+        nvim -c ":execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l ${@:3})
     else
         echo Pattern not found
     fi
