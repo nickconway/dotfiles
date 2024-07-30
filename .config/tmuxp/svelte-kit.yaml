@@ -9,7 +9,7 @@ windows:
         shell_command:
           - cmd: nvim
       - shell_command:
-          - cmd: docker compose up -d
+          - cmd: docker compose up -d ${TMUXP_SESSION_NAME}-db
   - layout: main-horizontal
     options:
       main-pane-height: 60%

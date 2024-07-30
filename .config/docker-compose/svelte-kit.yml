@@ -3,6 +3,15 @@ volumes:
     name: REPLACE-ME-db
 
 services:
+  REPLACE-ME:
+    container_name: REPLACE-ME
+    image: REPLACE-ME
+    restart: unless-stopped
+    build: .
+    environment:
+      PUID: REPLACE-UID
+      PGID: REPLACE-GID
+      DATABASE_URL: ${DATABASE_URL}
   REPLACE-ME-db:
     container_name: REPLACE-ME-db
     image: postgres
