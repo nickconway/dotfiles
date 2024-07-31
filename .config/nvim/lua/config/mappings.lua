@@ -105,14 +105,27 @@ map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 map("n", "<leader>sql", ":DBUIToggle<CR>", "Toggle DBUI")
 
 map("n", "<leader>F", function()
-    vim.lsp.buf.format({ async = false })
+    local null_ls_sources = require('null-ls.sources')
+    local ft = vim.bo.filetype
+
+    local has_null_ls = #null_ls_sources.get_available(ft, 'NULL_LS_FORMATTING') > 0
+
+    vim.lsp.buf.format({
+        filter = function(client)
+            if has_null_ls then
+                return client.name == 'null-ls'
+            else
+                return true
+            end
+        end,
+    })
 end, "Format buffer")
 
 map("n", "<leader>q", ":qa<CR>", "Quit neovim")
 
 map("n", "<leader>so", ":so %<CR>", "Source current file")
-map("n", "<leader>ss", ":w<CR>", "Save file")
-map("n", "<leader>st", ":wq<CR>", "Save and close window")
+map("n", "<leader>ss", ":update<CR>", "Save file")
+map("n", "<leader>st", ":x<CR>", "Save and close window")
 
 map("n", "<leader>t", ":Trouble diagnostics toggle<CR>", "Trouble")
 

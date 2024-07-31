@@ -24,22 +24,24 @@ vim.api.nvim_create_autocmd(
 )
 
 vim.api.nvim_create_autocmd(
-    { "BufWritePre", "BufWritePost" },
+    { "BufWritePre" },
     {
         callback = function()
-            if not (vim.fn.hostname() == "alma") then
-                vim.lsp.buf.format({ async = false })
-            end
-        end,
-        group = Ag
-    }
-)
+            local null_ls_sources = require('null-ls.sources')
+            local ft = vim.bo.filetype
 
-vim.api.nvim_create_autocmd(
-    "BufWritePre",
-    {
-        pattern = { "*" },
-        callback = function()
+            local has_null_ls = #null_ls_sources.get_available(ft, 'NULL_LS_FORMATTING') > 0
+
+            vim.lsp.buf.format({
+                filter = function(client)
+                    if has_null_ls then
+                        return client.name == 'null-ls'
+                    else
+                        return true
+                    end
+                end,
+            })
+
             local save_cursor = vim.fn.getpos(".")
             vim.cmd([[%s/\s\+$//e]])
             vim.fn.setpos(".", save_cursor)
