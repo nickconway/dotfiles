@@ -38,32 +38,43 @@ return {
             end
             lsp_zero.default_keymaps({ buffer = bufnr })
 
-            vim.api.nvim_create_autocmd("CursorHold", {
-                buffer = bufnr,
-                callback = function()
-                    local float_opts = {
-                        focusable = false,
-                        close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-                        border = "rounded",
-                        source = "always", -- show source in diagnostic popup window
-                        prefix = " ",
-                    }
-
-                    if not vim.b.diagnostics_pos then
-                        vim.b.diagnostics_pos = { nil, nil }
-                    end
-
-                    local cursor_pos = vim.api.nvim_win_get_cursor(0)
-                    if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2]) and #vim.diagnostic.get() > 0
-                    then
-                        vim.diagnostic.open_float(nil, float_opts)
-                        -- else
-                        --     vim.lsp.buf.hover()
-                    end
-
-                    vim.b.diagnostics_pos = cursor_pos
-                end,
-            })
+            -- vim.api.nvim_create_autocmd("CursorHold", {
+            --     buffer = bufnr,
+            --     callback = function()
+            --         local float_opts = {
+            --             focusable = false,
+            --             close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+            --             border = "rounded",
+            --             source = "always", -- show source in diagnostic popup window
+            --             prefix = " ",
+            --         }
+            --
+            --         if not vim.b.diagnostics_pos then
+            --             vim.b.diagnostics_pos = { nil, nil }
+            --         end
+            --
+            --         local cursor_pos = vim.api.nvim_win_get_cursor(0)
+            --         if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2]) and #vim.diagnostic.get() > 0
+            --         then
+            --             vim.diagnostic.open_float(nil, float_opts)
+            --         else
+            --             local position_params = vim.lsp.util.make_position_params()
+            --             vim.lsp.buf_request_all(bufnr, "textDocument/hover", position_params, function(results)
+            --                 local b = false
+            --                 for _, result in pairs(results) do
+            --                     if result.result and result.result.contents then
+            --                         b = true
+            --                     end
+            --                 end
+            --                 if b then
+            --                     vim.lsp.buf.hover()
+            --                 end
+            --             end)
+            --         end
+            --
+            --         vim.b.diagnostics_pos = cursor_pos
+            --     end,
+            -- })
         end)
 
         require('mason').setup({})
