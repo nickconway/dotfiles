@@ -10,6 +10,10 @@ else
     SELECTED=$((echo "$SSH_HOSTS"; echo "$KNOWN_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzft --prompt=" > ")
 fi
 
+if [[ -z $SELECTED ]]; then
+    exit 1
+fi
+
 if [[ -n $TMUX ]]; then
     PANE_PID="$(tmux display -p '#{pane_pid}')"
     S_FILE="$PREFIX/tmp/tmux-$PANE_PID"
@@ -18,37 +22,35 @@ if [[ -n $TMUX ]]; then
     tmux bind C-h send-prefix
 fi
 
-if [[ -n $SELECTED ]]; then
-    if command -v ss &> /dev/null; then
-        ports=('5556' '5557' '5558' '5559' '5560')
-        for p in ${ports[@]}; do
-            if [[ "$(ss -n -4 state listening "( sport = $p )" | tail -n +2 | wc -l)" -eq 0 ]]; then
-                PORT=$p
-                break
-            fi
-        done
-        (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
-
-        if [[ -n "$KITTY_WINDOW_ID" ]]; then
-            kitten ssh $SELECTED -R $PORT:localhost:$PORT
-        else
-            ssh $SELECTED -R $PORT:localhost:$PORT
+if command -v ss &> /dev/null; then
+    ports=('5556' '5557' '5558' '5559' '5560')
+    for p in ${ports[@]}; do
+        if [[ "$(ss -n -4 state listening "( sport = $p )" | tail -n +2 | wc -l)" -eq 0 ]]; then
+            PORT=$p
+            break
         fi
+    done
+    (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
+
+    if [[ -n "$KITTY_WINDOW_ID" ]]; then
+        kitten ssh $SELECTED -R $PORT:localhost:$PORT
     else
-        if [[ -n "$KITTY_WINDOW_ID" ]]; then
-            kitten ssh $SELECTED
-        else
-            ssh $SELECTED
-        fi
+        ssh $SELECTED -R $PORT:localhost:$PORT
     fi
+else
+    if [[ -n "$KITTY_WINDOW_ID" ]]; then
+        kitten ssh $SELECTED
+    else
+        ssh $SELECTED
+    fi
+fi
 
-    if ps -p $(cat $S_FILE) &> /dev/null; then
-        kill $(cat $S_FILE)
-    fi
+if ps -p $(cat $S_FILE) &> /dev/null; then
+    kill $(cat $S_FILE)
+fi
 
-    if pgrep "nc -l -p $PORT" -f &> /dev/null; then
-        kill $(pgrep "nc -l -p $PORT" -f)
-    fi
+if pgrep "nc -l -p $PORT" -f &> /dev/null; then
+    kill $(pgrep "nc -l -p $PORT" -f)
 fi
 
 if [[ -n $TMUX ]]; then
@@ -57,6 +59,3 @@ if [[ -n $TMUX ]]; then
     tmux set prefix C-Space
     rm "$S_FILE"
 fi
-
-[[ -z $SELECTED ]] && exit 1
-exit 0
