@@ -488,11 +488,13 @@ function yl(){
 alias ylog='yadm log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
 function yp() {
     if [[ $# -eq 0 ]]; then
-        yca || return
+        yca
     else
-        ycam $@ || return
+        ycam $@
     fi
-    yadm push
+    if [[ "$(yadm status -sb)" == *"ahead"* ]]; then
+        yadm push
+    fi
 }
 alias yrh="yadm reset --hard"
 alias ys="yadm stash"
