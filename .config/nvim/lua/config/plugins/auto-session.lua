@@ -12,6 +12,7 @@ return {
             previewer = false
         })
         require('auto-session').setup {
+            auto_session_enabled = os.getenv("AUTOSESSION_ENABLED") ~= "no",
             log_level = 'error',
             auto_session_use_git_branch = true,
             auto_restore_lazy_delay_enabled = true,
