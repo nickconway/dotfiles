@@ -1,9 +1,13 @@
 #!/bin/bash
 set -eou pipefail
 
-wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine.pkg.tar.zst") | .browser_download_url')"
-sudo pacman -U --noconfirm sunshine.pkg.tar.zst
-rm sunshine.pkg.tar.zst
+# wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine.pkg.tar.zst") | .browser_download_url')"
+wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine_x86_64.flatpak") | .browser_download_url')"
+# sudo pacman -U --noconfirm sunshine.pkg.tar.zst
+sudo flatpak install --reinstall --or-update -y --system sunshine_x86_64.flatpak || echo "Already installed?"
+sudo -i flatpak run --command=additional-install.sh dev.lizardbyte.app.Sunshine
+# rm sunshine.pkg.tar.zst
+rm sunshine_x86_64.flatpak
 
 echo 'KERNEL=="uinput", SUBSYSTEM=="misc", OPTIONS+="static_node=uinput", TAG+="uaccess"' | \
 sudo tee /etc/udev/rules.d/60-sunshine.rules
@@ -11,27 +15,29 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger
 sudo modprobe uinput
 
-sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
+sudo chmod u+s /usr/bin/bwrap
 
-cat << EOF > ~/.config/systemd/user/sunshine.service
+# sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
+
+# ExecStart=/usr/bin/sunshine
+sudo bash -c "cat << EOF > /etc/systemd/system/sunshine.service
 [Unit]
 Description=Sunshine self-hosted game stream host for Moonlight.
 StartLimitIntervalSec=500
 StartLimitBurst=5
 
 [Service]
-ExecStart=/usr/bin/sunshine
+Environment=PULSE_SERVER=unix:$(pactl info | awk '/Server String/{print$3}')
+ExecStart=flatpak run dev.lizardbyte.app.Sunshine
 Restart=on-failure
 RestartSec=5s
 #Flatpak Only
-#ExecStop=flatpak kill dev.lizardbyte.sunshine
+ExecStop=flatpak kill dev.lizardbyte.app.Sunshine
 
 [Install]
 WantedBy=graphical-session.target
-EOF
-systemctl --user daemon-reload
+EOF"
 
-systemctl --user start sunshine
-systemctl --user enable sunshine
+sudo systemctl daemon-reload
 
-grep -q '^IgnorePkg.*sunshine' /etc/pacman.conf || sudo sed -i "s/#\?IgnorePkg\s\+=\(.*\)/IgnorePkg =\1 sunshine/g" /etc/pacman.conf
+sudo systemctl enable --now sunshine
