@@ -1,0 +1,29 @@
+#!/bin/bash
+set -eou pipefail
+
+mkdir -p ~/.local/sol
+wget https://github.com/SR-G/sleep-on-lan/releases/download/1.1.1-RELEASE/SleepOnLAN-1.1.1-RELEASE.zip
+
+mv SleepOnLAN-1.1.1-RELEASE.zip .local/sol
+cd .local/sol
+unzip ./SleepOnLAN-1.1.1-RELEASE.zip
+rm ./SleepOnLAN-1.1.1-RELEASE.zip
+
+sudo bash -c "cat << EOF > /etc/systemd/system/sleep-on-lan.service
+[Unit]
+Description=sleep-on-lan
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+ExecStart=$HOME/.local/sol/linux_amd64/sol
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=graphical-session.target
+EOF"
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable --now sleep-on-lan
