@@ -121,7 +121,8 @@ map("n", "<leader>F", function()
     })
 end, "Format buffer")
 
-map("n", "<leader>q", ":qa<CR>", "Quit neovim")
+map("n", "<leader>q", ":xa<CR>", "Quit")
+map("n", "<leader>Q", ":qa!<CR>", "Force quit")
 
 map("n", "<leader>so", ":so %<CR>", "Source current file")
 map("n", "<leader>ss", ":update<CR>", "Save file")

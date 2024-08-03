@@ -62,3 +62,27 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     end,
     group = Ag
 })
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+    pattern = "*git-rebase-todo",
+    callback = function()
+        vim.keymap.set({ "n", "x" }, "p", ":normal ^ciwpick<CR>", { silent = true, buffer = true })
+
+        vim.keymap.set({ "n", "x" }, "r", ":normal ^ciwreword<CR>", { buffer = true, silent = true })
+        vim.keymap.set({ "n", "x" }, "e", ":normal ^ciwedit<CR>", { buffer = true, silent = true })
+        vim.keymap.set({ "n", "x" }, "s", ":normal ^ciwsquash<CR>", { buffer = true, silent = true })
+        vim.keymap.set({ "n", "x" }, "f", ":normal ^ciwfixup -c<CR>", { buffer = true, silent = true })
+        vim.keymap.set({ "n", "x" }, "fc", ":normal ^ciwfixup -c<CR>", { buffer = true, silent = true })
+        vim.keymap.set({ "n", "x" }, "fC", ":normal ^ciwfixup -C<CR>", { buffer = true, silent = true })
+        vim.keymap.set("n", "x", "oexec ", { buffer = true, silent = true })
+        vim.keymap.set("n", "b", "obreak<ESC>", { buffer = true, silent = true })
+        vim.keymap.set({ "n", "x" }, "d", ":normal ^ciwdrop<CR>", { buffer = true, silent = true })
+        vim.keymap.set("n", "l", "olabel ", { buffer = true, silent = true })
+        vim.keymap.set("n", "t", "oreset ", { buffer = true, silent = true })
+
+        -- TODO: merge command
+        -- vim.keymap.set("n", "t", "oreset ", { buffer = true, silent = true})
+
+        vim.keymap.set("n", "U", "oupdate-ref ", { buffer = true, silent = true })
+    end
+})
