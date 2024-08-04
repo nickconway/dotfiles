@@ -6,6 +6,7 @@
 [merge]
     tool = "nvim"
     conflictstyle = diff3
+    ff = no
 [mergetool]
     keepBackup = false
     prompt = false

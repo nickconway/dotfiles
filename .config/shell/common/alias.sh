@@ -257,11 +257,11 @@ alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E lazydocker || l
 
 function lg() {
     if git rev-parse --is-inside-work-tree &> /dev/null; then
-        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E "cd $(pwd); lazygit" || lazygit
+        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E "cd $(pwd); lazygit $@" || lazygit $@
     else
         (
             cd ~
-            [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E yadm enter lazygit || yadm enter lazygit
+            [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E yadm enter lazygit $@ || yadm enter lazygit $@
         )
     fi;
 }
