@@ -95,6 +95,19 @@ alias gca='git commit -av'
 alias gcam='git commit -a -m'
 alias gcamend='git commit --amend --no-edit'
 alias gce='git commit -e'
+
+function gcf() {
+    if [[ -n $1 ]]; then
+        COMMIT_HASH=$1
+    else
+        COMMIT_HASH=$(glogv)
+    fi
+
+    if [[ -n $COMMIT_HASH ]]; then
+        git commit --fixup $COMMIT_HASH
+    fi
+}
+
 alias gcm='git commit -m'
 alias gcl='git clone --recurse-submodules'
 function gco() {
@@ -109,6 +122,7 @@ alias gcom='git checkout main && git pull origin main'
 alias gcp='git cherry-pick'
 alias gd='git diff HEAD'
 alias gds='git diff --staged HEAD'
+
 function ggp() {
     if [[ -n $1 ]]; then
         git push origin HEAD:refs/for/$1
@@ -145,7 +159,8 @@ alias gr='git reset'
 alias grb='git rebase'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
-alias grbi='GIT_EDITOR=$EDITOR git rebase -i'
+alias grbi='git rebase -i'
+alias grbiq='git -c sequence.editor=: rebase -i'
 alias gre='git remote'
 alias grh='git reset --hard'
 alias greu='git remote update'

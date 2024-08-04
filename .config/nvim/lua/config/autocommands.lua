@@ -71,7 +71,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
         vim.keymap.set({ "n", "x" }, "r", ":normal ^ciwreword<CR>", { buffer = true, silent = true })
         vim.keymap.set({ "n", "x" }, "e", ":normal ^ciwedit<CR>", { buffer = true, silent = true })
         vim.keymap.set({ "n", "x" }, "s", ":normal ^ciwsquash<CR>", { buffer = true, silent = true })
-        vim.keymap.set({ "n", "x" }, "f", ":normal ^ciwfixup -c<CR>", { buffer = true, silent = true })
+        vim.keymap.set({ "n", "x" }, "f", ":normal ^ciwfixup<CR>", { buffer = true, silent = true })
         vim.keymap.set({ "n", "x" }, "fc", ":normal ^ciwfixup -c<CR>", { buffer = true, silent = true })
         vim.keymap.set({ "n", "x" }, "fC", ":normal ^ciwfixup -C<CR>", { buffer = true, silent = true })
         vim.keymap.set("n", "x", "oexec ", { buffer = true, silent = true })
