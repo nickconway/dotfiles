@@ -149,7 +149,8 @@ map("n", "<leader>j", "<cmd>lprev<CR>zz", "Location list previous")
 
 map("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>")
 
-map("n", "<leader>sw", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], "Search word under cursor", { silent = false })
+map("n", "<leader>/", [[/\<<C-r><C-w>\><CR>]], "Search word under cursor", { silent = false })
+map("n", "<leader><leader>/", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], "Replace word under cursor", { silent = false })
 
 map("n", "<leader>x", "<cmd>!chmod +x %<CR>", "Make file executable")
 
