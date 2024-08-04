@@ -53,6 +53,7 @@ return {
             options = {
                 disabled_filetypes = {
                     statusline = { 'alpha' },
+                    tabline = { 'alpha' },
                     winbar = { 'alpha' },
                 },
                 ignore_focus = {},
