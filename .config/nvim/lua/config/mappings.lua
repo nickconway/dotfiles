@@ -80,7 +80,7 @@ map("n", "<S-CR>", function()
 end)
 
 -- cursor stays on yank
-map("v", "y", "ygv<Esc>")
+map("x", "y", "ygv<Esc>")
 
 -- cycle buffers
 map("n", "<Tab>", "<C-w>w")
@@ -91,8 +91,15 @@ map("n", "<BS>", ":b#<CR>")
 
 map("n", "J", "mzJ`z")
 
-map("v", "J", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
-map("v", "K", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
+map("x", "J", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
+map("n", "J", "V:m '>+1<CR>gv==kgvo<Esc>=kgvo<Esc>")
+map("x", "<C-Down>", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
+map("n", "<C-Down>", "V:m '>+1<CR>gv==kgvo<Esc>=kgvo<Esc>")
+
+map("x", "K", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
+map("n", "K", "V:m '<-2<CR>gv==jgvo<Esc>=jgvo")
+map("x", "<C-Up>", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
+map("n", "<C-Up>", "V:m '<-2<CR>gv==jgvo<Esc>=jgvo<Esc>")
 
 map("x", "<leader>p", '"_dP')
 
