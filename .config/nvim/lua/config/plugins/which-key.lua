@@ -23,7 +23,7 @@ return {
             { "<leader>g", group = "Git" },
             { "<leader>h", group = "Harpoon" },
             { "<leader>l", group = "Lazy" },
-            { "<leader>s", group = "Save / Search" },
+            { "<leader>s", group = "Save" },
             { "<leader>w", group = "Window" },
         })
     end

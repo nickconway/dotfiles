@@ -102,7 +102,7 @@ map("n", "<leader>bd", ":bp|bd #<CR>", "Delete buffer")
 map("n", "<leader>bn", ":bn<CR>", "Next buffer")
 map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 
-map("n", "<leader>sql", ":DBUIToggle<CR>", "Toggle DBUI")
+map("n", "<leader>D", ":DBUIToggle<CR>", "Toggle DBUI")
 
 map("n", "<leader>F", function()
     local null_ls_sources = require('null-ls.sources')
@@ -124,15 +124,14 @@ end, "Format buffer")
 map("n", "<leader>q", ":xa<CR>", "Quit")
 map("n", "<leader>Q", ":qa!<CR>", "Force quit")
 
-map("n", "<leader>so", ":so %<CR>", "Source current file")
-map("n", "<leader>ss", ":update<CR>", "Save file")
-map("n", "<leader>st", ":x<CR>", "Save and close window")
+map("n", "<leader>s", ":update<CR>", "Save file")
 
 map("n", "<leader>t", ":Trouble diagnostics toggle<CR>", "Trouble")
 
 map("n", "<leader>=", "<c-w>T", "Move to new tab")
 map("n", "<leader>ww", "<c-w>=", "Resize windows equally")
 
+map("n", "<leader>wc", ":wq<CR>", "Close window")
 map("n", "<leader>ws", function()
     vim.cmd('split')
     get_files()
