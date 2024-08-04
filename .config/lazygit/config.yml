@@ -1,4 +1,7 @@
 os:
   editPreset: 'nvim-remote'
 
+git:
+  parseEmoji: true
+
 promptToReturnFromSubprocess: false
