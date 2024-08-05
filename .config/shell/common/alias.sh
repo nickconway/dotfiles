@@ -315,6 +315,10 @@ function npa() {
 alias pls='sudo $(fc -ln -1)'
 
 alias r='rip'
+function reload() {
+    exec $(ps -p $$ | tail -n -1 | awk '{print $4}')
+}
+
 function rgn() {
     SELECTED=$(
         rm -f /tmp/rg-fzf-{r,f}
