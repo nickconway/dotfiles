@@ -457,7 +457,7 @@ function x(){
         if [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]]; then
             exit 0
         else
-            tmux detach -P
+            tmux detach
         fi
     fi
 }
