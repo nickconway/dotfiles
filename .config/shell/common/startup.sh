@@ -32,11 +32,11 @@ else
         [[ "$(basename $SHELL)" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
         if [[ -n "$PS1" ]] && [[ -z $TMUX ]] && [[ -z $ZELLIJ ]]; then
             if [[ -z $SSH_CONNECTION ]]; then
-                command -v tmux > /dev/null && tmux -u new -As Main $TMUX_SHELL && exit 0
+                command -v tmux > /dev/null && tmux -u new -As Main $TMUX_SHELL
                 # zellij a -c main
             else
                 # zellij a -c ssh; exit
-                command -v tmux > /dev/null && tmux -u new -As SSH $TMUX_SHELL && exit 0
+                command -v tmux > /dev/null && tmux -u new -As SSH $TMUX_SHELL
             fi
         fi
     fi
