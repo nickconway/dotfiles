@@ -43,5 +43,8 @@ else
 fi
 
 if command -v termux-reload-settings > /dev/null; then
-    s && exit || return
+    if [[ -n "$PS1" ]] && [[ -n $TMUX ]] && [[ -n $ZELLIJ ]]; then
+        s
+        exit
+    fi
 fi
