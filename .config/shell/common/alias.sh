@@ -462,6 +462,7 @@ function x(){
     fi
 }
 alias xc='x && clear'
+alias xx='tmux switch-client -l && exit'
 
 alias y="yadm status"
 alias ya="yadm add"
