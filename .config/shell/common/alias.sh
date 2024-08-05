@@ -449,9 +449,7 @@ alias vm='s alma'
 alias work='s alma'
 
 function x(){
-    if command -v termux-reload-settings > /dev/null; then
-        exit 0
-    elif [[ -z $TMUX ]]; then
+    if [[ -z $TMUX ]]; then
         exit 0
     else
         if [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]]; then
