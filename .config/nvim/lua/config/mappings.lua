@@ -1,4 +1,16 @@
-local function map(mode, lhs, rhs, desc, opts)
+local function multimap(modes, lhs, rhs, opts)
+    for _, m in pairs(modes) do
+        if type(lhs) == "string" then
+            vim.keymap.set(m, lhs, rhs, opts)
+        else
+            for key in lhs do
+                vim.keymap.set(m, key, rhs, opts)
+            end
+        end
+    end
+end
+
+local function map(modes, lhs, rhs, desc, opts)
     local options = { silent = true, noremap = true }
     if desc then
         options = { silent = true, noremap = true, desc = desc }
@@ -8,7 +20,22 @@ local function map(mode, lhs, rhs, desc, opts)
         options = vim.tbl_extend("force", options, opts)
     end
 
-    vim.keymap.set(mode, lhs, rhs, options)
+    if type(modes) == "string" then
+        if type(lhs) == "string" then
+            vim.keymap.set(modes, lhs, rhs, options)
+        else
+            for key in lhs do
+                vim.keymap.set(modes, key, rhs, options)
+            end
+        end
+    else
+        multimap(modes, lhs, rhs, options)
+    end
+end
+
+local function nxmap(lhs, rhs, desc, opts)
+    map("n", lhs, "V" .. rhs .. "<Esc>", desc, opts)
+    map("x", lhs, rhs, desc, opts)
 end
 
 local function is_git_repo()
@@ -91,15 +118,8 @@ map("n", "<BS>", ":b#<CR>")
 
 map("n", "J", "mzJ`z")
 
-map("x", "J", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
-map("n", "J", "V:m '>+1<CR>gv==kgvo<Esc>=kgvo<Esc>")
-map("x", "<C-Down>", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
-map("n", "<C-Down>", "V:m '>+1<CR>gv==kgvo<Esc>=kgvo<Esc>")
-
-map("x", "K", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
-map("n", "K", "V:m '<-2<CR>gv==jgvo<Esc>=jgvo")
-map("x", "<C-Up>", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
-map("n", "<C-Up>", "V:m '<-2<CR>gv==jgvo<Esc>=jgvo<Esc>")
+nxmap("<C-Down>", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
+nxmap("<C-Up>", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
 
 map("x", "<leader>p", '"_dP')
 
