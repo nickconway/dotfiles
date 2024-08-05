@@ -27,8 +27,11 @@ else
 fi
 KERNEL=$(uname -r)
 
-export PATH=~/.local/bin:~/bin:~/.npm-global/bin:~/.local/podman/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$HOME/.cargo/bin:~/.local/go/bin:~/.fzf/bin:$PATH
-export GOPATH=~/.local/go
+export GOROOT=~/.local/go/go
+export GOPATH=~/.local/go/packages
+
+export PATH=~/.local/bin:~/.local/podman/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$HOME/.cargo/bin:"$GOROOT"/bin:$GOPATH/bin:~/.config/fzf/bin:$PATH
+
 [[ -n "${TTY:-}" ]] && export GPG_TTY=$TTY
 
 export HOSTNAME="$(uname -n)"
