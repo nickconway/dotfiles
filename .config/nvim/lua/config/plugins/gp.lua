@@ -18,12 +18,18 @@ return {
                     disable = true,
                 },
                 {
-                    name = "Ollama",
                     provider = "ollama",
+                    name = "Ollama",
                     chat = true,
                     command = true,
-                    model = { model = "llama3.1" },
-                    system_prompt = "Answer any query with just: Sure thing..",
+                    model = {
+                        model = "llama3.1",
+                        temperature = 0.4,
+                        top_p = 1,
+                        min_p = 0.05,
+                    },
+                    -- system prompt (use this to specify the persona/role of the AI)
+                    system_prompt = require("gp.defaults").code_system_prompt,
                 },
             },
         })
