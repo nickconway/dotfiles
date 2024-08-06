@@ -17,7 +17,7 @@ fi
 if [[ -n $TMUX ]]; then
     PANE_PID="$(tmux display -p '#{pane_pid}')"
     S_FILE="$PREFIX/tmp/tmux-$PANE_PID"
-    (&>/dev/null hide-tmux-statusbar $PANE_PID & echo -n $! > $S_FILE)
+    (&>/dev/null hide-tmux-statusbar $PANE_PID & echo -n $! > "$S_FILE")
     tmux set prefix C-h
     tmux bind C-h send-prefix
 fi
@@ -30,7 +30,10 @@ if command -v ss &> /dev/null; then
             break
         fi
     done
-    (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> $S_FILE)
+
+    if [[ -n $TMUX ]]; then
+        (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> "$S_FILE")
+    fi
 
     if [[ -n "$KITTY_WINDOW_ID" ]]; then
         kitten ssh $SELECTED -R $PORT:localhost:$PORT
@@ -45,8 +48,10 @@ else
     fi
 fi
 
-if ps -p $(cat $S_FILE) &> /dev/null; then
-    kill $(cat $S_FILE)
+if [[ -n $TMUX ]]; then
+    if ps -p $(cat "$S_FILE") &> /dev/null; then
+        kill $(cat "$S_FILE")
+    fi
 fi
 
 if pgrep "nc -l -p $PORT" -f &> /dev/null; then
@@ -57,5 +62,5 @@ if [[ -n $TMUX ]]; then
     tmux set status on
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
-    rm "$S_FILE"
+    rm ""$S_FILE""
 fi
