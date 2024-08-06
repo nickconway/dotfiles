@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eou pipefail
+set -x
 
 mkdir -p ~/.local/sol
 wget https://github.com/SR-G/sleep-on-lan/releases/download/1.1.1-RELEASE/SleepOnLAN-1.1.1-RELEASE.zip

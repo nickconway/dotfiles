@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eou pipefail
+set -x
 
 # wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine.pkg.tar.zst") | .browser_download_url')"
 wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine_x86_64.flatpak") | .browser_download_url')"
