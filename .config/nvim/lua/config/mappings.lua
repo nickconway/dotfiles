@@ -1,15 +1,3 @@
-local function multimap(modes, lhs, rhs, opts)
-    for _, m in pairs(modes) do
-        if type(lhs) == "string" then
-            vim.keymap.set(m, lhs, rhs, opts)
-        else
-            for key in lhs do
-                vim.keymap.set(m, key, rhs, opts)
-            end
-        end
-    end
-end
-
 local function map(modes, lhs, rhs, desc, opts)
     local options = { silent = true, noremap = true }
     if desc then
@@ -20,16 +8,12 @@ local function map(modes, lhs, rhs, desc, opts)
         options = vim.tbl_extend("force", options, opts)
     end
 
-    if type(modes) == "string" then
-        if type(lhs) == "string" then
-            vim.keymap.set(modes, lhs, rhs, options)
-        else
-            for key in lhs do
-                vim.keymap.set(modes, key, rhs, options)
-            end
-        end
+    if type(lhs) == "string" then
+        vim.keymap.set(modes, lhs, rhs, options)
     else
-        multimap(modes, lhs, rhs, options)
+        for key in lhs do
+            vim.keymap.set(modes, key, rhs, options)
+        end
     end
 end
 
