@@ -35,7 +35,7 @@ RestartSec=5s
 ExecStop=flatpak kill dev.lizardbyte.app.Sunshine
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=graphical.target
 EOF"
 
 sudo systemctl daemon-reload

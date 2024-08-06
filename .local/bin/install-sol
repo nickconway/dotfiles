@@ -21,7 +21,7 @@ Restart=on-failure
 RestartSec=5s
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=multi-user.target
 EOF"
 
 sudo systemctl daemon-reload
