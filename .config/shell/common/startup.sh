@@ -2,7 +2,7 @@ command -v brew > /dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
 command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
 command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
 command -v fzf > /dev/null && eval "$(fzf --$SHELL_NAME)"
-command -v fzf > /dev/null && [[ -e ~/.fzf/fzf-git/fzf-git.sh ]] && source ~/.fzf/fzf-git/fzf-git.sh
+command -v fzf > /dev/null && [[ -e ~/.config/fzf/fzf-git/fzf-git.sh ]] && source ~/.config/fzf/fzf-git/fzf-git.sh
 [[ -e $HOME/.atuin/bin/env ]] && . "$HOME/.atuin/bin/env"
 command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow | awk '/output=\$\(/{system("cat ~/.config/atuin/tmux.'$SHELL_NAME'");next}1')" \
     && (pgrep -f "atuin daemon" &> /dev/null || atuin daemon &> $XDG_RUNTIME_DIR/atuin.log &)
