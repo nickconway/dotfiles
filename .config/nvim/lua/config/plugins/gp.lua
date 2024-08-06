@@ -22,7 +22,7 @@ return {
                     provider = "ollama",
                     chat = true,
                     command = true,
-                    model = { model = "llama3" },
+                    model = { model = "llama3.1" },
                     system_prompt = "Answer any query with just: Sure thing..",
                 },
             },
