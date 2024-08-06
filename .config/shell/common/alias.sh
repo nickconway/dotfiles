@@ -466,6 +466,7 @@ function x(){
     fi
 }
 alias xc='x && clear'
+alias xd='tmux detach -E false'
 alias xx='tmux switch-client -l && tmux kill-session'
 
 alias y="yadm status"
