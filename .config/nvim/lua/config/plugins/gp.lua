@@ -8,18 +8,14 @@ return {
                     endpoint = os.getenv("OLLAMA_URL") .. "/v1/chat/completions",
                 },
             },
+            default_command_agent = "Ollama",
+            default_chat_agent = "Ollama",
+            command_prompt_prefix_template = "{{agent}}",
             agents = {
-                {
-                    name = "ChatGPT3-5",
-                    disable = true,
-                },
-                {
-                    name = "ChatGPT4o",
-                    disable = true,
-                },
                 {
                     provider = "ollama",
                     name = "Ollama",
+                    disable = false,
                     chat = true,
                     command = true,
                     model = {
@@ -28,7 +24,6 @@ return {
                         top_p = 1,
                         min_p = 0.05,
                     },
-                    -- system prompt (use this to specify the persona/role of the AI)
                     system_prompt = require("gp.defaults").code_system_prompt,
                 },
             },
