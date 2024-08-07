@@ -1,7 +1,6 @@
 return {
     "nvim-lualine/lualine.nvim",
-    dependencies = {
-    },
+    dependencies = {},
     config = function()
         local colors = require("onedark.colors")
         local transparent = require("lualine.themes.onedark")
@@ -18,7 +17,7 @@ return {
             lualine_a = { "mode" },
             lualine_b = { "branch", "diff", "diagnostics" },
             lualine_c = {
-                { 'filename', path = 1 },
+                { "filename", path = 1 },
                 {
                     require("noice").api.statusline.mode.get,
                     cond = require("noice").api.statusline.mode.has,
@@ -28,7 +27,7 @@ return {
                         name = name:gsub(" LINE", "")
                         name = name:gsub("-- --", "")
                         return name
-                    end
+                    end,
                 },
             },
             lualine_x = { "encoding", "fileformat", "filetype" },
@@ -52,9 +51,9 @@ return {
         require("lualine").setup({
             options = {
                 disabled_filetypes = {
-                    statusline = { 'alpha' },
-                    tabline = { 'alpha' },
-                    winbar = { 'alpha' },
+                    statusline = { "alpha" },
+                    tabline = { "alpha" },
+                    winbar = { "alpha" },
                 },
                 ignore_focus = {},
                 always_divide_middle = true,
