@@ -33,10 +33,19 @@ vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
 
 vim.opt.foldmethod = 'indent'
 vim.opt.foldenable = false
-vim.opt.fillchars = 'eob: '
+vim.opt.fillchars = {
+    foldopen = "",
+    foldclose = "",
+    fold = " ",
+    foldsep = " ",
+    diff = "╱",
+    eob = " ",
+}
 vim.opt.laststatus = 3
 
 vim.opt.updatetime = 50
+
+vim.opt.virtualedit = "block"
 
 vim.opt.signcolumn = 'yes'
 
@@ -47,6 +56,8 @@ vim.opt.conceallevel = 0
 vim.opt.listchars:append 'space:·'
 
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+vim.opt.smoothscroll = true
 
 vim.cmd.colorscheme("onedark")
 vim.cmd("highlight Normal ctermbg=none guibg=none")
