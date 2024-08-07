@@ -22,8 +22,8 @@
     autoStash = true
     autoSquash = true
 [push]
-    default = simple
     autoSetupRemote = true
+    default = simple
 [rerere]
     enabled = true
 [commit]
@@ -37,8 +37,21 @@
     editor = nvim
 [interactive]
     diffFilter = delta --color-only
-[include]
-    path = ~/.config/delta/themes.gitconfig
 [delta]
-    features = collared-trogon
+    true-color = always
     navigate = true    # use n and N to move between diff sections
+    hyperlinks = true
+    line-numbers = true
+    commit-style = raw
+    commit-decoration-style = blue box
+    file-style = normal
+    file-decoration-style = normal ol
+    hunk-header-style = file line-number syntax
+    hunk-header-file-style = red
+    hunk-header-line-number-style = green
+    hunk-header-decoration-style = blue box
+    map-styles = bold purple => syntax magenta, bold cyan => syntax blue
+    merge-conflict-ours-diff-header-style = bold red
+    merge-conflict-ours-diff-header-decoration-style = red box
+    merge-conflict-theirs-diff-header-style = bold blue
+    merge-conflict-theirs-diff-header-decoration-style = blue box
