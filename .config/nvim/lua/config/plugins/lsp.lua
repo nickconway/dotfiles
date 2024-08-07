@@ -196,7 +196,7 @@ return {
                 "hyprls",
                 "gopls",
             },
-            automatic_installation = false,
+            automatic_installation = true,
             handlers = {
                 function(server_name)
                     require("lspconfig")[server_name].setup({})
