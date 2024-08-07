@@ -46,7 +46,7 @@ if [[ $# -eq 0 ]]; then
         zoxide query -l
     )
 
-    export SELECTED=$(command | fzft --border-label="Tmux Sessionizer" \
+    export SELECTED=$(command | fzft --border-label=" Tmux Sessionizer " \
         --prompt=" > " \
         --preview 'fzf-preview {}' \
         --header "ctrl-w   ctrl-s ǂ  ctrl-z   ctrl-a ∀  ctrl-t 󰐆  ctrl-r 󰑕  ctrl-u   crtl-d " \
