@@ -40,8 +40,6 @@ local function get_files()
     if vim.fn.getcwd() == vim.fn.getenv("HOME") then
         local topts = {}
 
-        local yadm_command = { "get-yadm-files" }
-
         topts.entry_maker = function(entry)
             local str = entry
             str = string.gsub(str, ".config/yadm/alt/", "")
@@ -56,7 +54,7 @@ local function get_files()
         pickers.new(topts, {
             prompt_title = "Yadm Files",
             finder = finders.new_oneshot_job(
-                vim.tbl_flatten { yadm_command, },
+                { "get-yadm-files" },
                 topts
             ),
             previewer = conf.file_previewer(topts),
@@ -206,9 +204,6 @@ map("n", "<leader>fm", "<cmd>Telescope oldfiles<cr>", "Recent files")
 map("n", "<leader>fs", ":SearchSession<CR>", "Sessions")
 map("n", "<leader>fo", ":Telescope file_browser<CR>", "File browser")
 
-map("n", "<leader>ll", ":Lazy<CR>", "Lazy")
-map("n", "<leader>lu", ":Lazy update<CR>", "Lazy update")
-
 map("n", "<leader>z", ":ZenMode<CR>", "Zen mode")
 
 map("n", "<leader>gg", function()
@@ -264,6 +259,9 @@ map("n", "<leader>gh", "<cmd>Gitsigns preview_hunk_inline<CR>", "Preview hunk")
 map("n", "<leader>gn", "<cmd>Gitsigns next_hunk<CR>", "Next hunk")
 map("n", "<leader>gp", "<cmd>Gitsigns prev_hunk<CR>", "Previous hunk")
 map("n", "<leader>g", "<cmd>Git<CR>", "Git status")
+
+map("n", "<leader>pu", ":Lazy update<CR>", "Lazy update")
+map("n", "<leader>pp", ":Lazy<CR>", "Lazy")
 
 map("x", "<lt>", "<lt>gv")
 map("x", ">", ">gv")

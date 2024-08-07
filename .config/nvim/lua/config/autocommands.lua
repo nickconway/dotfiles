@@ -27,9 +27,12 @@ vim.api.nvim_create_autocmd(
     { "BufWritePre" },
     {
         callback = function()
+            local save_cursor = vim.fn.getpos(".")
+            vim.cmd([[%s/\s\+$//e]])
+            vim.fn.setpos(".", save_cursor)
+
             local null_ls_sources = require('null-ls.sources')
             local ft = vim.bo.filetype
-
             local has_null_ls = #null_ls_sources.get_available(ft, 'NULL_LS_FORMATTING') > 0
 
             vim.lsp.buf.format({
@@ -40,11 +43,8 @@ vim.api.nvim_create_autocmd(
                         return true
                     end
                 end,
+                async = false,
             })
-
-            local save_cursor = vim.fn.getpos(".")
-            vim.cmd([[%s/\s\+$//e]])
-            vim.fn.setpos(".", save_cursor)
         end,
         group = Ag
     }
