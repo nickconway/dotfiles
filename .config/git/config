@@ -42,7 +42,7 @@
     navigate = true    # use n and N to move between diff sections
     hyperlinks = true
     line-numbers = true
-    commit-style = raw
+    commit-style = normal
     commit-decoration-style = blue box
     file-style = normal
     file-decoration-style = normal ol
@@ -55,3 +55,15 @@
     merge-conflict-ours-diff-header-decoration-style = red box
     merge-conflict-theirs-diff-header-style = bold blue
     merge-conflict-theirs-diff-header-decoration-style = blue box
+    grep-file-style = purple
+    grep-line-number-style = green
+    whitespace-error-style = reverse purple
+    minus-style = normal 52
+    minus-non-emph-style = normal
+    minus-emph-style = bold normal 52
+    minus-empty-line-marker-style = normal 52
+    zero-style = normal
+    plus-style = normal 22
+    plus-non-emph-style = normal
+    plus-emph-style = bold normal 22
+    plus-empty-line-marker-style = normal 22
