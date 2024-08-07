@@ -10,8 +10,8 @@ local function map(modes, lhs, rhs, desc, opts)
 
     if type(lhs) == "string" then
         vim.keymap.set(modes, lhs, rhs, options)
-    else
-        for key in lhs do
+    elseif type(lhs) == "table" then
+        for _, key in pairs(lhs) do
             vim.keymap.set(modes, key, rhs, options)
         end
     end
@@ -140,7 +140,13 @@ map("n", "<leader>t", ":Trouble diagnostics toggle<CR>", "Trouble")
 map("n", "<leader>=", "<c-w>T", "Move to new tab")
 map("n", "<leader>ww", "<c-w>=", "Resize windows equally")
 
-map("n", "<leader>wc", ":wq<CR>", "Close window")
+map("n", { "<leader>wq", "<leader>wc" }, function()
+    if vim.bo[vim.api.nvim_win_get_buf(0)].readonly then
+        vim.cmd("q!")
+    else
+        vim.cmd("wq")
+    end
+end, "Close window")
 map("n", "<leader>ws", function()
     vim.cmd('split')
     get_files()

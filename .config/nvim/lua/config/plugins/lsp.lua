@@ -144,6 +144,7 @@ return {
             matching = { disallow_symbol_nonprefix_matching = false }
         })
 
+        require('lspconfig.ui.windows').default_options.border = 'rounded'
         lspconfig.util.default_config.capabilities = vim.tbl_deep_extend(
             'force',
             lspconfig.util.default_config.capabilities,
