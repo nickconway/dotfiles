@@ -53,17 +53,17 @@ return {
                     vim.keymap.set(m, lhs, rhs, key_opts)
                 end
 
-                map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover documentation")
-                map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to definition")
-                map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to declaration")
-                map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation")
-                map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to type definition")
-                map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to reference")
-                map("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Show function signature")
-                map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol")
-                map("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format file")
-                map("x", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format selection")
-                map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute code action")
+                map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover Documentation")
+                map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to Definition")
+                map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to Declaration")
+                map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to Implementation")
+                map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to Type Definition")
+                map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to Reference")
+                map("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Show Function Signature")
+                map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol")
+                map("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format File")
+                map("x", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format Selection")
+                map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action")
             end,
         })
     end,

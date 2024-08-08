@@ -17,11 +17,6 @@ local function map(modes, lhs, rhs, desc, opts)
     end
 end
 
-local function nxmap(lhs, rhs, desc, opts)
-    map("n", lhs, "V" .. rhs .. "<Esc>", desc, opts)
-    map("x", lhs, rhs, desc, opts)
-end
-
 local function is_git_repo()
     vim.fn.system("git rev-parse --is-inside-work-tree")
     return vim.v.shell_error == 0
@@ -101,10 +96,21 @@ map("n", "<BS>", ":b#<CR>")
 
 map("n", "J", "mzJ`z")
 
-nxmap("<C-Down>", ":m '>+1<CR>gv==kgvo<Esc>=kgvo")
-nxmap("<C-Up>", ":m '<-2<CR>gv==jgvo<Esc>=jgvo")
+-- Move lines
+map("n", "<C-Down>", "<cmd>m .+1<cr>==", "Move Down")
+map("n", "<C-Up>", "<cmd>m .-2<cr>==", "Move Up")
+map("i", "<C-Down>", "<esc><cmd>m .+1<cr>==gi", "Move Down")
+map("i", "<C-Up>", "<esc><cmd>m .-2<cr>==gi", "Move Up")
+map("v", "<C-Down>", ":m '>+1<cr>gv=gv", "Move Down")
+map("v", "<C-Up>", ":m '<-2<cr>gv=gv", "Move Up")
 
-map("x", "<leader>p", '"_dP')
+map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", "Escape and Clear hlsearch")
+
+-- commenting
+map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Below")
+map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Above")
+
+map("x", "p", '"_dP')
 
 map("n", "<leader><CR>", ":so ~/.config/nvim/init.lua<CR>", "Reload config")
 

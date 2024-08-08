@@ -55,7 +55,7 @@ vim.opt.conceallevel = 0
 
 vim.opt.listchars:append 'space:·'
 
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.o.sessionoptions = "buffers,curdir,folds,globals,help,tabpages,winsize,winpos,skiprtp,terminal,localoptions"
 
 vim.opt.smoothscroll = true
 

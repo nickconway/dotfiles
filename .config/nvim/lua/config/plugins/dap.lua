@@ -4,15 +4,14 @@ return {
         "rcarriga/nvim-dap-ui",
         "jay-babu/mason-nvim-dap.nvim",
         "nvim-neotest/nvim-nio",
+        "theHamsta/nvim-dap-virtual-text",
     },
     config = function()
         require("mason-nvim-dap").setup({
             ensure_installed = {},
+            automatic_installation = true,
             handlers = {
                 function(config)
-                    -- all sources with no handler get passed here
-
-                    -- Keep original functionality
                     require("mason-nvim-dap").default_setup(config)
                 end,
                 python = function(config)
