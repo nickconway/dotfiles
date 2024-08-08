@@ -1,26 +1,6 @@
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
-        -- LSP Support
-        { "williamboman/mason.nvim" },
-        { "williamboman/mason-lspconfig.nvim" },
-        { "simrat39/rust-tools.nvim" },
-        { "folke/neodev.nvim" },
-
-        -- Autocompletion
-        { "hrsh7th/nvim-cmp" },
-        { "hrsh7th/cmp-cmdline" },
-        { "hrsh7th/cmp-buffer" },
-        { "hrsh7th/cmp-path" },
-        { "saadparwaiz1/cmp_luasnip" },
-        { "hrsh7th/cmp-nvim-lsp" },
-        { "hrsh7th/cmp-nvim-lua" },
-        { "petertriho/cmp-git" },
-
-        -- Snippets
-        { "L3MON4D3/LuaSnip" },
-        { "rafamadriz/friendly-snippets" },
-
         { "onsails/lspkind-nvim" },
     },
     config = function()
@@ -46,99 +26,12 @@ return {
             end
         end
 
-        vim.diagnostic.config({ signs = { text = text } })
+        vim.diagnostic.config({
+            virtual_text = { spacing = 4, source = "if_many", prefix = "●" },
+            signs = { text = text },
+        })
 
         local lspconfig = require("lspconfig")
-        local cmp = require("cmp")
-        local luasnip = require("luasnip")
-
-        cmp.setup({
-            mapping = cmp.mapping.preset.insert({
-                ["<CR>"] = cmp.mapping.confirm({ select = false }),
-                ["<Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_next_item()
-                    elseif luasnip.locally_jumpable(1) then
-                        luasnip.jump(1)
-                    else
-                        fallback()
-                    end
-                end, { "i", "s" }),
-                ["<S-Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_prev_item()
-                    elseif luasnip.locally_jumpable(-1) then
-                        luasnip.jump(-1)
-                    else
-                        fallback()
-                    end
-                end, { "i", "s" }),
-            }),
-            snippet = {
-                expand = function(args)
-                    require("luasnip").lsp_expand(args.body)
-                end,
-            },
-            window = {
-                completion = cmp.config.window.bordered(),
-                documentation = cmp.config.window.bordered(),
-            },
-            sources = {
-                { name = "nvim_lsp" },
-                { name = "luasnip" },
-                { name = "buffer" },
-                { name = "cmp" },
-                { name = "path" },
-            },
-            formatting = {
-                fields = { "abbr", "kind", "menu" },
-                format = require("lspkind").cmp_format({
-                    before = require("tailwindcss-colorizer-cmp").formatter,
-                    mode = "symbol_text", -- show only symbol annotations
-                    maxwidth = 50, -- prevent the popup from showing more than provided characters
-                    ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
-                }),
-            },
-        })
-
-        cmp.setup.filetype("gitcommit", {
-            sources = cmp.config.sources({
-                { name = "git" },
-            }, {
-                { name = "buffer" },
-            }),
-        })
-        require("cmp_git").setup()
-
-        cmp.setup.filetype({ "sql" }, {
-            sources = {
-                { name = "vim-dadbod-completion" },
-                { name = "nvim_lsp" },
-                { name = "buffer" },
-                { name = "cmp" },
-                { name = "path" },
-            },
-        })
-
-        cmp.setup.cmdline({ "/", "?" }, {
-            mapping = cmp.mapping.preset.cmdline(),
-            sources = {
-                { name = "buffer" },
-            },
-        })
-
-        cmp.setup.cmdline(":", {
-            mapping = cmp.mapping.preset.cmdline(),
-            sources = cmp.config.sources({
-                { name = "buffer" },
-                { name = "path" },
-            }, {
-                {
-                    name = "cmdline",
-                },
-            }),
-            matching = { disallow_symbol_nonprefix_matching = false },
-        })
 
         require("lspconfig.ui.windows").default_options.border = "rounded"
         lspconfig.util.default_config.capabilities = vim.tbl_deep_extend(
@@ -151,7 +44,7 @@ return {
             callback = function(args)
                 local bufnr = args.buf
                 local client = vim.lsp.get_client_by_id(args.data.client_id)
-                if client.server_capabilities.documentSymbolProvider then
+                if client ~= nil and client.server_capabilities.documentSymbolProvider then
                     require("nvim-navic").attach(client, bufnr)
                 end
 
@@ -172,87 +65,6 @@ return {
                 map("x", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format selection")
                 map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute code action")
             end,
-        })
-
-        require("mason").setup({
-            ui = {
-                border = "rounded",
-                icons = {
-                    package_installed = "✓",
-                    package_pending = "➜",
-                    package_uninstalled = "✗",
-                },
-            },
-        })
-
-        require("mason-lspconfig").setup({
-            ensure_installed = {
-                "tsserver",
-                "eslint",
-                "lua_ls",
-                "rust_analyzer",
-                "tailwindcss",
-                "svelte",
-                "hyprls",
-                "gopls",
-            },
-            automatic_installation = true,
-            handlers = {
-                function(server_name)
-                    require("lspconfig")[server_name].setup({})
-                end,
-
-                lua_ls = function()
-                    require("lspconfig").lua_ls.setup({
-                        on_init = function(client)
-                            local path = client.workspace_folders[1].name
-                            if
-                                vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc")
-                            then
-                                return
-                            end
-
-                            client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-                                runtime = {
-                                    -- Tell the language server which version of Lua you're using
-                                    -- (most likely LuaJIT in the case of Neovim)
-                                    version = "LuaJIT",
-                                },
-                                -- Make the server aware of Neovim runtime files
-                                workspace = {
-                                    checkThirdParty = false,
-                                    library = {
-                                        vim.env.VIMRUNTIME,
-                                        -- Depending on the usage, you might want to add additional paths here.
-                                        -- "${3rd}/luv/library"
-                                        -- "${3rd}/busted/library",
-                                    },
-                                    -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                                    -- library = vim.api.nvim_get_runtime_file("", true)
-                                },
-                            })
-                        end,
-                        settings = {
-                            Lua = {},
-                        },
-                    })
-                end,
-
-                clangd = function()
-                    require("lspconfig").clangd.setup({
-                        capabilities = {
-                            offsetEncoding = "utf-16",
-                        },
-                        cmd = {
-                            "clangd",
-                            "--background-index",
-                        },
-                        on_init = function(client, _)
-                            client.server_capabilities.semanticTokensProvider = nil
-                        end,
-                    })
-                end,
-            },
         })
     end,
 }

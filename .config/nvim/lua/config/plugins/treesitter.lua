@@ -1,10 +1,49 @@
 return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    init = function(plugin)
+        -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
+        -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
+        -- no longer trigger the **nvim-treesitter** module to be loaded in time.
+        -- Luckily, the only things that those plugins need are the custom queries, which we make available
+        -- during startup.
+        require("lazy.core.loader").add_to_rtp(plugin)
+        require("nvim-treesitter.query_predicates")
+    end,
     config = function()
         require("nvim-treesitter.configs").setup({
             -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-            ensure_installed = { "html", "css", "scss", "javascript", "typescript", "python", "c", "go", "rust", "cpp" },
+            ensure_installed = {
+                "bash",
+                "c",
+                "cpp",
+                "css",
+                "scss",
+                "diff",
+                "go",
+                "html",
+                "javascript",
+                "jsdoc",
+                "json",
+                "jsonc",
+                "lua",
+                "luadoc",
+                "luap",
+                "markdown",
+                "markdown_inline",
+                "printf",
+                "python",
+                "query",
+                "regex",
+                "rust",
+                "toml",
+                "tsx",
+                "typescript",
+                "vim",
+                "vimdoc",
+                "xml",
+                "yaml",
+            },
 
             -- Install parsers synchronously (only applied to `ensure_installed`)
             sync_install = false,
@@ -45,16 +84,16 @@ return {
             },
             incremental_selection = {
                 enable = true,
-                -- keymaps = {
-                -- 	init_selection = "v",
-                -- 	node_incremental = "v",
-                -- 	node_decremental = "V",
-                -- },
+                keymaps = {
+                    init_selection = "<S-CR>",
+                    node_incremental = "<S-CR>",
+                    node_decremental = "<BS>",
+                },
             },
 
             vim.filetype.add({
                 pattern = { [".*/hypr/.*%.conf.*"] = "hyprlang" },
-            })
+            }),
         })
     end,
 }

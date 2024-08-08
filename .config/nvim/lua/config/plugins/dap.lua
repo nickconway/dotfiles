@@ -4,7 +4,6 @@ return {
         "rcarriga/nvim-dap-ui",
         "jay-babu/mason-nvim-dap.nvim",
         "nvim-neotest/nvim-nio",
-        "folke/neodev.nvim"
     },
     config = function()
         require("mason-nvim-dap").setup({
@@ -28,10 +27,6 @@ return {
                     require("mason-nvim-dap").default_setup(config) -- don't forget this!
                 end,
             },
-        })
-
-        require("neodev").setup({
-            library = { plugins = { "nvim-dap-ui" }, types = true },
         })
 
         require("dapui").setup({
@@ -101,8 +96,8 @@ return {
                 },
             },
             floating = {
-                max_height = nil,  -- These can be integers or a float between 0 and 1.
-                max_width = nil,   -- Floats will be treated as percentage of your screen.
+                max_height = nil, -- These can be integers or a float between 0 and 1.
+                max_width = nil, -- Floats will be treated as percentage of your screen.
                 border = "single", -- Border style. Can be "single", "double" or "rounded"
                 mappings = {
                     close = { "q", "<Esc>" },
