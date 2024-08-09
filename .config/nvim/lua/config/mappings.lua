@@ -118,6 +118,8 @@ map("n", "<leader>bd", ":bp|bd #<CR>", "Delete buffer")
 map("n", "<leader>bn", ":bn<CR>", "Next buffer")
 map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 
+map("n", "<leader>a", ":Neotree<CR>", "NeoTree")
+
 map("n", "<leader>D", ":DBUIToggle<CR>", "Toggle DBUI")
 
 map("n", "<leader>F", function()
@@ -138,9 +140,9 @@ map("n", "<leader>F", function()
 end, "Format buffer")
 
 map("n", "<leader>q", ":xa<CR>", "Quit")
-map("n", "<leader>Q", ":qa!<CR>", "Force quit")
+map("n", "<leader>Q", ":qa!<CR>", "Force Quit")
 
-map("n", "<leader>s", ":update<CR>", "Save file")
+map("n", "<C-s>", ":update<CR>", "Save File")
 
 map("n", "<leader>t", ":Trouble diagnostics toggle<CR>", "Trouble")
 
@@ -170,10 +172,10 @@ map("n", "<leader>j", "<cmd>lprev<CR>zz", "Location list previous")
 
 map("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>")
 
-map("n", "<leader>/", [[/\<<C-r><C-w>\><CR>]], "Search word under cursor", { silent = false })
-map("n", "<leader><leader>/", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], "Replace word under cursor", { silent = false })
+map("n", "<leader>/", "*", "Search word under cursor")
+map("n", "<leader><A-/>", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], "Replace word under cursor", { silent = false })
 
-map("n", "<leader>x", "<cmd>!chmod +x %<CR>", "Make file executable")
+map("n", "<leader>X", "<cmd>!chmod +x %<CR>", "Make file executable")
 
 map("n", "<leader>u", vim.cmd.UndotreeToggle, "Toggle undotree")
 

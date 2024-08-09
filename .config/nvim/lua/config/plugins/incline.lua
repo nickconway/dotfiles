@@ -2,13 +2,12 @@ return {
     "b0o/incline.nvim",
     event = "VeryLazy",
     config = function()
-        local helpers = require("incline.helpers")
         local navic = require("nvim-navic")
         local devicons = require("nvim-web-devicons")
         require("incline").setup({
             window = {
                 padding = 0,
-                margin = { horizontal = 0, vertical = 0 },
+                margin = { horizontal = 1, vertical = 0 },
             },
             render = function(props)
                 local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
@@ -18,9 +17,9 @@ return {
                 local ft_icon, ft_color = devicons.get_icon_color(filename)
                 local modified = vim.bo[props.buf].modified
                 local res = {
-                    { " ", filename, gui = modified and "bold" or "" },
-                    " ",
-                    ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
+                    -- { " ", filename, gui = modified and "bold" or "" },
+                    -- " ",
+                    -- ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
                 }
                 if props.focused then
                     local crumbs = {}
@@ -38,9 +37,9 @@ return {
                             })
                         end
                     end
-                    if #crumbs > 0 then
-                        table.insert(res, 1, " |")
-                    end
+                    -- if #crumbs > 0 then
+                    --     table.insert(res, 1, " |")
+                    -- end
                     for idx, item in ipairs(crumbs) do
                         if idx > 5 then
                             table.insert(res, 1, {
