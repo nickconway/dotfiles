@@ -42,7 +42,7 @@
     navigate = true    # use n and N to move between diff sections
     hyperlinks = true
     line-numbers = true
-    commit-style = normal
+    commit-style = red
     commit-decoration-style = blue box
     file-style = normal
     file-decoration-style = normal ol
