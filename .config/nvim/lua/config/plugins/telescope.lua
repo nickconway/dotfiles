@@ -23,7 +23,7 @@ return {
                     "--line-number",
                     "--column",
                     "--smart-case",
-                    "--trim" -- add this value
+                    "--trim", -- add this value
                 },
             },
             extensions = {
@@ -53,7 +53,6 @@ return {
         })
 
         require("telescope").load_extension("gh")
-        require("telescope").load_extension("session-lens")
         require("telescope").load_extension("noice")
         require("telescope").load_extension("file_browser")
         require("telescope").load_extension("fzy_native")
