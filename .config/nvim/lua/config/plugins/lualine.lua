@@ -5,19 +5,21 @@ return {
         local colors = require("onedark.colors")
         local transparent = require("lualine.themes.onedark")
 
-        transparent.normal.a.bg = "none"
+        transparent.normal.a.bg = nil
         transparent.normal.a.fg = colors.grey
-        transparent.normal.b.bg = "none"
+        transparent.normal.b.bg = nil
         transparent.normal.b.fg = colors.grey
-        transparent.normal.c.bg = "none"
+        transparent.normal.c.bg = nil
         transparent.normal.c.fg = colors.grey
-        transparent.inactive.c.bg = "none"
+        transparent.inactive.c.bg = nil
 
         local lualine_sections = {
             lualine_a = { "mode" },
-            lualine_b = { "branch", "diff", "diagnostics" },
+            lualine_b = { { "filename", path = 1 } },
             lualine_c = {
-                { "filename", path = 1 },
+                "branch",
+                "diff",
+                "diagnostics",
                 {
                     require("noice").api.statusline.mode.get,
                     cond = require("noice").api.statusline.mode.has,
@@ -33,19 +35,6 @@ return {
             lualine_x = { "encoding", "fileformat", "filetype" },
             lualine_y = { "progress" },
             lualine_z = { "location" },
-        }
-
-        local winbar_sections = {
-            lualine_c = {
-                {
-                    function()
-                        return require("nvim-navic").get_location()
-                    end,
-                    cond = function()
-                        return package.loaded["nvim-navic"] and require("nvim-navic").is_available()
-                    end,
-                },
-            },
         }
 
         require("lualine").setup({
@@ -71,8 +60,6 @@ return {
             },
             sections = lualine_sections,
             inactive_sections = lualine_sections,
-            winbar = winbar_sections,
-            inactive_winbar = winbar_sections,
         })
     end,
 }

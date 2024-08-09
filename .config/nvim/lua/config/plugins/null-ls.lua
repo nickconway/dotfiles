@@ -10,6 +10,7 @@ return {
         require("mason-null-ls").setup({
             ensure_installed = {
                 "black",
+                "prettierd",
                 "stylua",
                 "shellcheck",
                 "shfmt",

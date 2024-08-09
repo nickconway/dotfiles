@@ -1,7 +1,7 @@
 vim.opt.number = true
 vim.opt.relativenumber = true
 
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 vim.opt.mousemoveevent = true
 
 vim.opt.tabstop = 4
@@ -29,9 +29,9 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 vim.opt.scrolloff = 8
-vim.opt.clipboard:append { 'unnamedplus', 'unnamed' }
+vim.opt.clipboard:append({ "unnamedplus", "unnamed" })
 
-vim.opt.foldmethod = 'indent'
+vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
 vim.opt.fillchars = {
     foldopen = "",
@@ -47,13 +47,11 @@ vim.opt.updatetime = 50
 
 vim.opt.virtualedit = "block"
 
-vim.opt.signcolumn = 'yes'
-
-vim.opt.winbar = " "
+vim.opt.signcolumn = "yes"
 
 vim.opt.conceallevel = 0
 
-vim.opt.listchars:append 'space:·'
+vim.opt.listchars:append("space:·")
 
 vim.o.sessionoptions = "buffers,curdir,folds,globals,help,tabpages,winsize,winpos,skiprtp,terminal,localoptions"
 

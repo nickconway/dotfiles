@@ -52,7 +52,6 @@ return {
                 "svelte",
                 "hyprls",
                 "gopls",
-                "prettierd",
             },
             automatic_installation = true,
             handlers = {
