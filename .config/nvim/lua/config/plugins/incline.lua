@@ -18,7 +18,7 @@ return {
                 local ft_icon, ft_color = devicons.get_icon_color(filename)
                 local modified = vim.bo[props.buf].modified
                 local res = {
-                    { filename, gui = modified and "bold" or "" },
+                    { " ", filename, gui = modified and "bold" or "" },
                     " ",
                     ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
                 }
@@ -39,7 +39,7 @@ return {
                         end
                     end
                     if #crumbs > 0 then
-                        table.insert(res, 1, " | ")
+                        table.insert(res, 1, " |")
                     end
                     for idx, item in ipairs(crumbs) do
                         if idx > 5 then
