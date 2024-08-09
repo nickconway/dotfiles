@@ -50,6 +50,19 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     group = Ag,
 })
 
+vim.api.nvim_create_autocmd({ "VimEnter" }, {
+    group = Ag,
+    nested = true,
+    callback = function()
+        if os.getenv("AUTOSESSION_ENABLED") == "no" then
+            return
+        end
+        if vim.fn.argc() == 0 and not vim.g.started_with_stdin then
+            require("persistence").load()
+        end
+    end,
+})
+
 -- Hyprlang LSP
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = { "*.hl", "hypr*.conf*" },
