@@ -64,6 +64,7 @@ end
 map("n", "<Home>", "^")
 
 map("n", "x", '"_x')
+map("n", "c", '"_c')
 
 map("i", "<C-c>", "<Esc>")
 
@@ -77,11 +78,13 @@ map("n", "<C-u>", "<C-u>zz")
 map("i", "<C-h>", "<Esc>cvb")
 
 -- change word
-map("n", "<CR>", "ciw")
+map("n", "<CR>", '"_ciw')
 map("n", "<S-CR>", function()
-    vim.opt.iskeyword:append(".")
-    vim.cmd("normal! ciw")
-    vim.opt.iskeyword:remove(".")
+    vim.opt_local.iskeyword:append(".")
+    vim.cmd('normal! "_ciw')
+    vim.cmd('normal! l')
+    vim.cmd("startinsert")
+    vim.opt_local.iskeyword:remove(".")
 end)
 
 -- cursor stays on yank

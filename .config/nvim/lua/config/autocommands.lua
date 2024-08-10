@@ -1,19 +1,21 @@
-Ag = vim.api.nvim_create_augroup("main", { clear = true })
-
 vim.api.nvim_create_autocmd(
     { "BufNewFile", "BufRead" },
-    { pattern = "*.keymap", command = "set filetype=dts", group = Ag }
+    {
+        group = vim.api.nvim_create_augroup("keymap-dts", { clear = true }),
+        pattern = "*.keymap",
+        command = "set filetype=dts",
+    }
 )
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
-        require("vim.highlight").on_yank({ timeout = 40 })
+        require("vim.highlight").on_yank({ timeout = 50 })
     end,
-    group = Ag,
+    group = vim.api.nvim_create_augroup("highlight-on-yank", { clear = true }),
 })
 
 vim.api.nvim_create_autocmd("VimResized", {
-    group = Ag,
+    group = vim.api.nvim_create_augroup("equal-windows", { clear = true }),
     callback = function()
         local current_tab = vim.fn.tabpagenr()
         vim.cmd("tabdo wincmd =")
@@ -23,12 +25,12 @@ vim.api.nvim_create_autocmd("VimResized", {
 
 vim.api.nvim_create_autocmd("FocusLost", {
     command = "silent! update",
-    group = Ag,
+    group = vim.api.nvim_create_augroup("save-on-focus-lost", { clear = true }),
 })
 
 -- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ "FileType" }, {
-    group = Ag,
+    group = vim.api.nvim_create_augroup("save-on-focus-lost", { clear = true }),
     pattern = { "json", "jsonc", "json5" },
     callback = function()
         vim.opt_local.conceallevel = 0
@@ -37,7 +39,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
-    group = Ag,
+    group = vim.api.nvim_create_augroup("spell-wrap", { clear = true }),
     pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
     callback = function()
         vim.opt_local.wrap = true
@@ -66,11 +68,11 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
             async = false,
         })
     end,
-    group = Ag,
+    group = vim.api.nvim_create_augroup("autosave", { clear = true }),
 })
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, {
-    group = Ag,
+    group = vim.api.nvim_create_augroup("autosession", { clear = true }),
     nested = true,
     callback = function()
         if os.getenv("AUTOSESSION_ENABLED") == "no" then
@@ -92,12 +94,12 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
             root_dir = vim.fn.getcwd(),
         })
     end,
-    group = Ag,
+    group = vim.api.nvim_create_augroup("hyprls", { clear = true }),
 })
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = "*git-rebase-todo",
-    group = Ag,
+    group = vim.api.nvim_create_augroup("rebase-keymaps", { clear = true }),
     callback = function()
         vim.keymap.set({ "n", "x" }, "p", ":normal ^ciwpick<CR>", { silent = true, buffer = true })
 
@@ -122,7 +124,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    group = Ag,
+    group = vim.api.nvim_create_augroup("create-directories", { clear = true }),
     callback = function(event)
         if event.match:match("^%w%w+:[\\/][\\/]") then
             return
@@ -134,7 +136,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
 -- close some filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
-    group = Ag,
+    group = vim.api.nvim_create_augroup("q-close", { clear = true }),
     pattern = {
         "PlenaryTestPopup",
         "grug-far",
@@ -165,7 +167,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Check if we need to reload the file when it changed
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-    group = Ag,
+    group = vim.api.nvim_create_augroup("update-focus", { clear = true }),
     callback = function()
         if vim.o.buftype ~= "nofile" then
             vim.cmd("checktime")
