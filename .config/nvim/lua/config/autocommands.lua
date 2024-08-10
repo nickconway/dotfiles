@@ -138,6 +138,7 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = {
         "PlenaryTestPopup",
         "grug-far",
+        "grug-far-history",
         "help",
         "lspinfo",
         "notify",
