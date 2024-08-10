@@ -21,17 +21,18 @@ return {
                 function(source_name, methods)
                     require("mason-null-ls").default_setup(source_name, methods)
                 end,
-                stylua = function(source_name, methods)
-                    null_ls.register(null_ls.builtins.formatting.stylua)
+                shfmt = function()
+                    null_ls.builtins.formatting.shfmt.with({
+                        extra_args = { "-i", "1" },
+                    })
+                end,
+                stylua = function()
+                    null_ls.builtins.formatting.stylua.with({
+                        extra_args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
+                    })
                 end,
             },
         })
-        require("null-ls").setup({
-            sources = {
-                null_ls.builtins.formatting.stylua.with({
-                    extra_args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
-                }),
-            },
-        })
+        require("null-ls").setup({})
     end,
 }

@@ -133,15 +133,15 @@ function ggp() {
 
 function gi() {
     if [[ $# -eq 0 ]]; then
-        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" \
-            | fzft --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
+        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" |
+            fzft --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
     else
         GI_TYPE="$(echo $@ | sed "s/ /,/g")"
     fi
-    [[ -n "$GI_TYPE" ]] && curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE" \
-        | grep -v '# Created' | grep -v '# Edit at' | grep -v '# End of' \
-        | sed '1{/^$/d}' | sed '1{/^$/d}' \
-        | sed '${/^$/d}' | sed '${/^$/d}'
+    [[ -n "$GI_TYPE" ]] && curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE" |
+        grep -v '# Created' | grep -v '# Edit at' | grep -v '# End of' |
+        sed '1{/^$/d}' | sed '1{/^$/d}' |
+        sed '${/^$/d}' | sed '${/^$/d}'
     unset GI_TYPE
 
 }
@@ -168,7 +168,7 @@ alias gs='git stash'
 alias gsa='git stash --all'
 alias gsu='git stash --include-untracked'
 function gsp() {
-    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+    if ! git rev-parse --is-inside-work-tree &>/dev/null; then
         return
     fi
 
@@ -196,12 +196,12 @@ function gsw() {
     fi
 }
 
-function gwt(){
+function gwt() {
     WORKTREE="$(_fzf_git_worktrees)"
     [[ -n "$WORKTREE" ]] && cd "$WORKTREE"
 }
 
-function gwta(){
+function gwta() {
     if [[ -z "${2:-}" ]]; then
         REF="$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')"
     elif [[ "${2:-}" == "-s" ]]; then
@@ -234,10 +234,10 @@ function ghprm() {
 }
 
 function gpge() {
-    gpg --export --armor "$@" > ~/.config/gpg/"$@".pub.asc
-    gpg --export-secret-keys --armor "$@" > ~/.config/gpg/"$@".priv.asc
-    gpg --export-secret-subkeys --armor "$@" > ~/.config/gpg/"$@".sub-priv.asc
-    gpg --export-ownertrust > ~/.config/gpg/"$@".trust
+    gpg --export --armor "$@" >~/.config/gpg/"$@".pub.asc
+    gpg --export-secret-keys --armor "$@" >~/.config/gpg/"$@".priv.asc
+    gpg --export-secret-subkeys --armor "$@" >~/.config/gpg/"$@".sub-priv.asc
+    gpg --export-ownertrust >~/.config/gpg/"$@".trust
 }
 
 alias internet-connection='ping -c 1 8.8.8.8 &> /dev/null'
@@ -246,7 +246,7 @@ alias l='ls'
 alias la='ls -lA'
 alias ll='ls -l'
 function ls() {
-    if command -v eza &> /dev/null; then
+    if command -v eza &>/dev/null; then
         eza --icons=always --color $@
     else
         command ls -h --color $@
@@ -256,14 +256,14 @@ function ls() {
 alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E lazydocker || lazydocker'
 
 function lg() {
-    if git rev-parse --is-inside-work-tree &> /dev/null; then
-        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E "cd $(pwd); lazygit $@" || lazygit $@
+    if git rev-parse --is-inside-work-tree &>/dev/null; then
+        [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -B -E -d "$PWD" "lazygit $@" || lazygit $@
     else
         (
             cd ~
-            [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -E yadm enter lazygit $@ || yadm enter lazygit $@
+            [[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -B -E yadm enter lazygit $@ || yadm enter lazygit $@
         )
-    fi;
+    fi
 }
 
 function lazynvm() {
@@ -300,16 +300,20 @@ alias n='$EDITOR'
 alias notes='(cd ~/Documents/Notes && n)'
 
 function np() {
-    curl -d "$@" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+    curl -d "$@" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 }
 
 function npa() {
     ARGS="$@"
-    eval $@ \
-        && (curl -d "$ARGS finished successfully" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null; \
-            command -v notify-send &> /dev/null && notify-send "$ARGS finished successfully") \
-        || (curl -d "$ARGS failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null; \
-            command -v notify-send &> /dev/null && notify-send "$ARGS failed")
+    eval $@ &&
+        (
+            curl -d "$ARGS finished successfully" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+            command -v notify-send &>/dev/null && notify-send "$ARGS finished successfully"
+        ) ||
+        (
+            curl -d "$ARGS failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+            command -v notify-send &>/dev/null && notify-send "$ARGS failed"
+        )
 }
 
 alias pls='sudo $(fc -ln -1)'
@@ -347,26 +351,24 @@ function rgn() {
         else
             COMMANDS+="$(echo $line | awk -F ':' '{printf " -c \"e %s | %s\"", $1, $2}')"
         fi
-    done <<< "$SELECTED"
+    done <<<"$SELECTED"
 
     eval "$EDITOR $COMMANDS -c first"
     unset SELECTED
 }
 
 function replace() {
-    if ! command -v rg > /dev/null; then
+    if ! command -v rg >/dev/null; then
         echo "rg not found"
         return
     fi
-    if [ $# -lt 2 ]
-    then
+    if [ $# -lt 2 ]; then
         echo "Recursive, interactive text replacement"
         echo "Usage: replace text replacement"
         return
     fi
 
-    if rg "$1" -q
-    then
+    if rg "$1" -q; then
         AUTOSESSION_ENABLED="no" nvim -c ":set nohlsearch | :execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l ${@:3})
     else
         echo Pattern not found
@@ -389,7 +391,7 @@ function sci() {
     fi
 }
 
-function sudo(){
+function sudo() {
     command sudo -E $(which $1 | cut -d ' ' -f 4-) ${@:2}
 }
 
@@ -399,7 +401,7 @@ function toggleproxy() {
     test -z $http_proxy && {
         echo "Enabling proxy ✅"
         for i in http_proxy https_proxy HTTP_PROXY HTTPS_PROXY; do
-                export $i=$PROXY
+            export $i=$PROXY
         done
     } || {
         echo "Disabling proxy ❌"
@@ -452,8 +454,8 @@ alias vm='s alma'
 
 alias work='s alma'
 
-function x(){
-    if command -v termux-reload-settings > /dev/null; then
+function x() {
+    if command -v termux-reload-settings >/dev/null; then
         exit 0
     elif [[ -z $TMUX ]]; then
         exit 0
@@ -486,7 +488,7 @@ alias yds="yadm diff --staged HEAD"
 alias ydec="yadm decrypt"
 alias ye="(cd; n)"
 alias yenc="yadm encrypt"
-function yl(){
+function yl() {
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
     ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
@@ -536,12 +538,12 @@ function ysp() {
 alias yu="yadm upgrade"
 
 function yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		cd "$cwd"
-	fi
-	rm -f "$tmp"
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        cd "$cwd"
+    fi
+    rm -f "$tmp"
 }
 
 alias winget='winget.exe'
@@ -550,7 +552,8 @@ alias wsls='wsl.exe --shutdown'
 alias z="zellij"
 
 function dis() {
-    $@ &> /dev/null & disown
+    $@ &>/dev/null &
+    disown
 }
 
 alias pacupg='sudo pacman -Syu'
@@ -575,59 +578,59 @@ alias pacown='pacman -Qo'
 alias pacupd="sudo pacman -Sy"
 
 function paclist() {
-  pacman -Qqe | xargs -I{} -P0 --no-run-if-empty pacman -Qs --color=auto "^{}\$"
+    pacman -Qqe | xargs -I{} -P0 --no-run-if-empty pacman -Qs --color=auto "^{}\$"
 }
 
 function pacdisowned() {
-  local tmp_dir db fs
-  tmp_dir=$(mktemp --directory)
-  db=$tmp_dir/db
-  fs=$tmp_dir/fs
+    local tmp_dir db fs
+    tmp_dir=$(mktemp --directory)
+    db=$tmp_dir/db
+    fs=$tmp_dir/fs
 
-  trap "rm -rf $tmp_dir" EXIT
+    trap "rm -rf $tmp_dir" EXIT
 
-  pacman -Qlq | sort -u > "$db"
+    pacman -Qlq | sort -u >"$db"
 
-  find /etc /usr ! -name lost+found \
-    \( -type d -printf '%p/\n' -o -print \) | sort > "$fs"
+    find /etc /usr ! -name lost+found \
+        \( -type d -printf '%p/\n' -o -print \) | sort >"$fs"
 
-  comm -23 "$fs" "$db"
+    comm -23 "$fs" "$db"
 
-  rm -rf $tmp_dir
+    rm -rf $tmp_dir
 }
 
 alias pacmanallkeys='sudo pacman-key --refresh-keys'
 
 function pacmansignkeys() {
-  local key
-  for key in $@; do
-    sudo pacman-key --recv-keys $key
-    sudo pacman-key --lsign-key $key
-    printf 'trust\n3\n' | sudo gpg --homedir /etc/pacman.d/gnupg \
-      --no-permission-warning --command-fd 0 --edit-key $key
-  done
+    local key
+    for key in $@; do
+        sudo pacman-key --recv-keys $key
+        sudo pacman-key --lsign-key $key
+        printf 'trust\n3\n' | sudo gpg --homedir /etc/pacman.d/gnupg \
+            --no-permission-warning --command-fd 0 --edit-key $key
+    done
 }
 
-if command -v xdg-open &> /dev/null; then
-  function pacweb() {
-    if [[ $# = 0 || "$1" =~ '--help|-h' ]]; then
-      local underline_color="\e[${color[underline]}m"
-      echo "$0 - open the website of an ArchLinux package"
-      echo
-      echo "Usage:"
-      echo "    $bold_color$0$reset_color ${underline_color}target${reset_color}"
-      return 1
-    fi
+if command -v xdg-open &>/dev/null; then
+    function pacweb() {
+        if [[ $# = 0 || "$1" =~ '--help|-h' ]]; then
+            local underline_color="\e[${color[underline]}m"
+            echo "$0 - open the website of an ArchLinux package"
+            echo
+            echo "Usage:"
+            echo "    $bold_color$0$reset_color ${underline_color}target${reset_color}"
+            return 1
+        fi
 
-    local pkg="$1"
-    local infos="$(LANG=C pacman -Si "$pkg")"
-    if [[ -z "$infos" ]]; then
-      return
-    fi
-    local repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
-    local arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
-    xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
-  }
+        local pkg="$1"
+        local infos="$(LANG=C pacman -Si "$pkg")"
+        if [[ -z "$infos" ]]; then
+            return
+        fi
+        local repo="$(grep -m 1 '^Repo' <<<"$infos" | grep -oP '[^ ]+$')"
+        local arch="$(grep -m 1 '^Arch' <<<"$infos" | grep -oP '[^ ]+$')"
+        xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
+    }
 fi
 
 alias yaconf='yay -Pg'
@@ -650,9 +653,9 @@ alias yamir='yay -Syy'
 alias yaupd="yay -Sy"
 
 function upgrade() {
-    if command -v apt &> /dev/null; then
+    if command -v apt &>/dev/null; then
         sudo apt update && sudo apt upgrade -y
-    elif command -v pacman &> /dev/null; then
+    elif command -v pacman &>/dev/null; then
         echo ":: Checking Arch Linux PGP Keyring..."
         local installedver="$(LANG= sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
         local currentver="$(LANG= sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
@@ -664,13 +667,13 @@ function upgrade() {
             echo " Arch Linux PGP Keyring is up to date."
             echo " Proceeding with full system upgrade."
         fi
-        if command -v yay &> /dev/null; then
+        if command -v yay &>/dev/null; then
             yay -Syu --noconfirm --color=always
-        elif command -v trizen &> /dev/null; then
+        elif command -v trizen &>/dev/null; then
             trizen -Syu
-        elif command -v pacaur &> /dev/null; then
+        elif command -v pacaur &>/dev/null; then
             pacaur -Syu
-        elif command -v aura &> /dev/null; then
+        elif command -v aura &>/dev/null; then
             sudo aura -Syu
         else
             sudo pacman -Syu --noconfirm

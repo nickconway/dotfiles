@@ -15,7 +15,7 @@ windows:
       main-pane-height: 60%
     panes:
       - shell_command:
-          - cmd: npm run dev -- --open --host
+          - cmd: npm run dev -- --open --host --turbo
       - shell_command:
           - cmd: while true; do echo "Waiting for containers to start..."; until [[ -n "$(docker compose ps -q)" ]]; do true; done && docker compose logs -f; done
       - shell_command:

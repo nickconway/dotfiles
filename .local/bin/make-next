@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+[[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
+
+if [[ ! -e "$1" ]]; then
+    npx create-next-app@latest "$1" --eslint --turbo --ts --tailwind --src-dir src --app --import-alias "@/*"
+fi
+
+cd "$1"
+FOLDER=${PWD##*/}
+FOLDER=${FOLDER:-/}
+session_name=$(echo $FOLDER | tr . _)
+
+if ! tmux has-session -t "$session_name"; then
+    tmux new -ds "$session_name"
+fi
+if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "$session_name"
+else
+    tmux attach -t "$session_name"
+fi

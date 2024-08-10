@@ -70,17 +70,17 @@ for TMUXP_START_DIR in $SELECTED; do
 
     export TMUX_RUNNING=$(pgrep tmux)
 
-    if tmux has-session -t="$TMUXP_SESSION_NAME" 2> /dev/null; then
+    if tmux has-session -t="$TMUXP_SESSION_NAME" 2>/dev/null; then
         tmux switch-client -t "$TMUXP_SESSION_NAME"
     elif [[ -e ~/.config/tmuxp/"$SELECTED_FILE".yaml ]]; then
-        tmuxp load ~/.config/tmuxp/"$SELECTED_FILE".yaml -y > /dev/null
+        tmuxp load ~/.config/tmuxp/"$SELECTED_FILE".yaml -y >/dev/null
     elif [[ -z $TMUX ]] && [[ -z $TMUX_RUNNING ]]; then
         tmux new-session -s "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
     else
         for F in ~/.config/tmuxp/*; do
             F="$(basename "$F")"
             if [[ -e "$TMUXP_START_DIR/${F%.*}" || -e "$TMUXP_START_DIR/.${F%.*}" ]]; then
-                tmuxp load ~/.config/tmuxp/"$F" -y > /dev/null
+                tmuxp load ~/.config/tmuxp/"$F" -y >/dev/null
                 exit
             fi
         done

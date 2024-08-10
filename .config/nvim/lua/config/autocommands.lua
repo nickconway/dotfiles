@@ -26,6 +26,25 @@ vim.api.nvim_create_autocmd("FocusLost", {
     group = Ag,
 })
 
+-- Fix conceallevel for json files
+vim.api.nvim_create_autocmd({ "FileType" }, {
+    group = Ag,
+    pattern = { "json", "jsonc", "json5" },
+    callback = function()
+        vim.opt_local.conceallevel = 0
+    end,
+})
+
+-- wrap and check for spell in text filetypes
+vim.api.nvim_create_autocmd("FileType", {
+    group = Ag,
+    pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+    callback = function()
+        vim.opt_local.wrap = true
+        vim.opt_local.spell = true
+    end,
+})
+
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     callback = function()
         local save_cursor = vim.fn.getpos(".")

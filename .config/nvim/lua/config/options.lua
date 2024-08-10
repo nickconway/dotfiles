@@ -49,7 +49,7 @@ vim.opt.virtualedit = "block"
 
 vim.opt.signcolumn = "yes"
 
-vim.opt.conceallevel = 0
+vim.opt.conceallevel = 2
 
 vim.opt.listchars:append("space:·")
 
