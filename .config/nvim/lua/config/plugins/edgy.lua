@@ -33,7 +33,8 @@ return {
                     return vim.bo[buf].buftype == "help"
                 end,
             },
-            { title = "Neotest Output", ft = "neotest-output-panel", size = { height = 15 } },
+            { title = "Search and Replace", ft = "grug-far",             size = { height = 0.4 } },
+            { title = "Neotest Output",     ft = "neotest-output-panel", size = { height = 15 } },
         },
         left = {
             { title = "Neotest Summary", ft = "neotest-summary" },
