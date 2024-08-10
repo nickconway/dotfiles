@@ -449,7 +449,12 @@ function tu() {
 }
 
 alias v='$EDITOR'
-alias venv='. ~/.venvs/$(ls --color=never ~/.venvs | fzft)/bin/activate'
+function venv() {
+    if [[ ! -e .venv ]]; then
+        python -m venv .venv
+    fi
+    . .venv/bin/activate
+}
 alias vm='s alma'
 
 alias work='s alma'

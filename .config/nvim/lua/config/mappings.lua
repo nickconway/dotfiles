@@ -144,8 +144,6 @@ map("n", "<leader>Q", ":qa!<CR>", "Force Quit")
 
 map("n", "<C-s>", ":update<CR>", "Save File")
 
-map("n", "<leader>t", ":Trouble diagnostics toggle<CR>", "Trouble")
-
 map("n", "<leader>=", "<c-w>T", "Move to new tab")
 map("n", "<leader>ww", "<c-w>=", "Resize windows equally")
 
@@ -179,36 +177,7 @@ map("n", "<leader>X", "<cmd>!chmod +x %<CR>", "Make file executable")
 
 map("n", "<leader>u", vim.cmd.UndotreeToggle, "Toggle undotree")
 
-local mark = require("harpoon.mark")
-local ui = require("harpoon.ui")
-
-map("n", "<leader>ha", mark.add_file, "Add file")
-map("n", "<leader>hh", ui.toggle_quick_menu, "Menu")
-
-map("n", "<leader>ht", function()
-    ui.nav_file(1)
-end, "File 1")
-map("n", "<leader>hs", function()
-    ui.nav_file(2)
-end, "File 2")
-map("n", "<leader>hr", function()
-    ui.nav_file(3)
-end, "File 3")
-map("n", "<leader>ha", function()
-    ui.nav_file(4)
-end, "File 4")
-
 map("n", "-", ":lua MiniFiles.open()<CR>")
-
-map("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>", "Toggle breakpoint")
-map("n", "<leader>dc", "<cmd>DapContinue<CR>", "Continue")
-map("n", "<leader>di", "<cmd>DapStepInto<CR>", "Step into")
-map("n", "<leader>do", "<cmd>DapStepOut<CR>", "Stop out")
-map("n", "<leader>dt", "<cmd>DapTerminate<CR>", "Terminate")
-map("n", "<leader>dv", "<cmd>DapStepOver<CR>", "Step over")
-map("n", "<leader>dr", function()
-    require("dap").repl.open()
-end, "Open repl")
 
 map("n", "<leader>fb", builtin.buffers, "Buffers")
 map("n", "<leader>ff", get_files, "Files")
