@@ -67,5 +67,38 @@ return {
             mode = { "n", "v" },
             desc = "Search and Replace Current Word in Current File",
         },
+        {
+            "<leader>sh",
+            function()
+                local grug = require("grug-far")
+                local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+                grug.grug_far({
+                    transient = true,
+                    prefills = {
+                        flags = "--hidden",
+                        filesFilter = ext and ext ~= "" and "*." .. ext or nil,
+                    },
+                })
+            end,
+            mode = { "n", "v" },
+            desc = "Search and Replace in All Files",
+        },
+        {
+            "<leader>sH",
+            function()
+                local grug = require("grug-far")
+                local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+                grug.grug_far({
+                    transient = true,
+                    prefills = {
+                        search = vim.fn.expand("<cword>"),
+                        flags = "--hidden",
+                        filesFilter = ext and ext ~= "" and "*." .. ext or nil,
+                    },
+                })
+            end,
+            mode = { "n", "v" },
+            desc = "Search and Replace Current Word in All Files",
+        },
     },
 }
