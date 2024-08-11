@@ -11,11 +11,28 @@ if [ $# -lt 2 ]; then
     return
 fi
 
+while getopts 'f' flag; do
+    case "${flag}" in
+    f)
+        force='true'
+        shift
+        ;;
+    esac
+done
+
 if rg "$1" -q; then
     if [[ -z "$TMUX" ]]; then
-        AUTOSESSION_ENABLED="no" nvim -c ":set nohlsearch | :execute ':argdo %s/$1/$2/gc | update' | :qa!" $(rg "$1" -l ${@:3})
+        if [[ -z ${force:-} ]]; then
+            AUTOSESSION_ENABLED="no" nvim -c ":set nohlsearch | :execute ':argdo %s/$1/$2/gc | update' | :qa!" $(rg "$1" -l ${@:3})
+        else
+            AUTOSESSION_ENABLED="no" nvim -c ":set nohlsearch | :execute ':argdo %s/$1/$2/g | update' | :qa!" $(rg "$1" -l ${@:3})
+        fi
     else
-        tmux display-popup -w 80% -h 80% -d $PWD -E "TMUX= replace $*"
+        if [[ -z ${force:-} ]]; then
+            tmux display-popup -w 80% -h 80% -d $PWD -E "TMUX= replace $*"
+        else
+            tmux display-popup -w 80% -h 80% -d $PWD -E "TMUX= replace -f $*"
+        fi
     fi
 else
     echo Pattern not found
