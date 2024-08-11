@@ -15,4 +15,3 @@ done
 if [[ -n "$DEBUGRC" ]]; then
   zprof
 fi
-
