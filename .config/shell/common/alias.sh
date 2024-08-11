@@ -357,24 +357,6 @@ function rgn() {
     unset SELECTED
 }
 
-function replace() {
-    if ! command -v rg >/dev/null; then
-        echo "rg not found"
-        return
-    fi
-    if [ $# -lt 2 ]; then
-        echo "Recursive, interactive text replacement"
-        echo "Usage: replace text replacement"
-        return
-    fi
-
-    if rg "$1" -q; then
-        AUTOSESSION_ENABLED="no" nvim -c ":set nohlsearch | :execute ':argdo %s/$1/$2/gc | update' | :q" $(rg "$1" -l ${@:3})
-    else
-        echo Pattern not found
-    fi
-}
-
 function remove-whitespace() {
     rg '\s+$' -l | xargs sed -i 's/\s\+$//g'
 }
