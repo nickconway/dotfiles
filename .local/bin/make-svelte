@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-[[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
+[[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
 if [[ ! -e "$1" ]]; then
     npm create svelte@latest "$1"
@@ -10,7 +10,7 @@ fi
 cd "$1"
 FOLDER=${PWD##*/}
 FOLDER=${FOLDER:-/}
-session_name=$(echo $FOLDER | tr . _)
+session_name="$(echo "$FOLDER" | tr . _)"
 
 npm install
 if [[ ! -e .git ]]; then
@@ -40,4 +40,4 @@ if [[ ! -e .git ]]; then
     git add -A && git commit -m "Initialize docker files"
 fi
 
-TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y > /dev/null
+TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y >/dev/null
