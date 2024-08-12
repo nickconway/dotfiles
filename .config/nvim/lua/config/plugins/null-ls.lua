@@ -27,9 +27,7 @@ return {
                     })
                 end,
                 stylua = function()
-                    null_ls.builtins.formatting.stylua.with({
-                        extra_args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
-                    })
+                    null_ls.builtins.formatting.stylua.with({})
                 end,
             },
         })

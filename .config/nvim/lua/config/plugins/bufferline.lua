@@ -2,7 +2,7 @@ return {
     "akinsho/bufferline.nvim",
     opts = function()
         ---@param buf number?
-        function bufremove(buf)
+        local function bufremove(buf)
             buf = buf or 0
             buf = buf == 0 and vim.api.nvim_get_current_buf() or buf
 
@@ -51,14 +51,18 @@ return {
             Info  = " ",
         }
 
+        vim.opt.mousemoveevent = true
         local o = {
             options = {
-                -- stylua: ignore
+                style_preset = require("bufferline").style_preset.minimal,
+                show_close_icon = true,
+                show_buffer_close_icons = true,
+                separator_style = { "", "" },
                 close_command = function(n) bufremove(n) end,
-                -- stylua: ignore
                 right_mouse_command = function(n) bufremove(n) end,
                 diagnostics = "nvim_lsp",
                 always_show_bufferline = false,
+                auto_toggle_bufferline = true,
                 diagnostics_indicator = function(_, _, diag)
                     local icons = diagnostics_icons
                     local ret = (diag.error and icons.Error .. diag.error .. " " or "")
@@ -66,12 +70,11 @@ return {
                     return vim.trim(ret)
                 end,
                 indicator = {
-                    icon = '',
-                    style = 'icon',
+                    style = 'none',
                 },
                 hover = {
                     enabled = true,
-                    delay = 200,
+                    delay = 0,
                     reveal = { 'close' }
                 },
                 offsets = {
