@@ -8,6 +8,7 @@ if [[ ! -e "$1" ]]; then
 fi
 
 cd "$1"
+mkdir -p .next
 FOLDER=${PWD##*/}
 FOLDER=${FOLDER:-/}
 session_name="$(echo "$FOLDER" | tr . _)"
