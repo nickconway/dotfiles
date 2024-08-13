@@ -1,6 +1,7 @@
 return {
     "3rd/image.nvim",
     dependencies = { "leafo/magick" },
+    enabled = vim.fn.executable("magick") == 1,
     config = function()
         require("image").setup({
             backend = "kitty",
