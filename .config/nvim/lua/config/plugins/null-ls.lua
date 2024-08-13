@@ -1,9 +1,9 @@
 return {
-    "nvimtools/none-ls.nvim",
+    "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
         "williamboman/mason.nvim",
-        "jay-babu/mason-null-ls.nvim",
+        "nvimtools/none-ls.nvim",
     },
     config = function()
         local null_ls = require("null-ls")
@@ -22,15 +22,26 @@ return {
                     require("mason-null-ls").default_setup(source_name, methods)
                 end,
                 shfmt = function()
-                    null_ls.builtins.formatting.shfmt.with({
-                        extra_args = { "-i", "1" },
-                    })
+                    null_ls.register(null_ls.builtins.formatting.shfmt.with({
+                        extra_args = { "-i", vim.opt.tabstop, "-ci", "-bn" },
+                    }))
+                end,
+                shellcheck = function(source_name, methods)
+                    require("mason-null-ls").default_setup(source_name, methods)
                 end,
                 stylua = function()
-                    null_ls.builtins.formatting.stylua.with({})
+                    null_ls.register(null_ls.builtins.formatting.stylua.with({
+                        condition = function(utils)
+                            return utils.root_has_file({ "stylua.toml", ".stylua.toml" })
+                        end,
+                    }))
                 end,
             },
         })
-        require("null-ls").setup({})
+        require("null-ls").setup({
+            sources = {
+                -- Anything not supported by mason.
+            },
+        })
     end,
 }
