@@ -4,7 +4,7 @@ set -euo pipefail
 [[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
 if [[ ! -e "$1" ]]; then
-    npx create-next-app@latest "$1" --eslint --turbo --ts --tailwind --src-dir src --app --import-alias "@/*"
+    npx create-next-app@latest "$1" --eslint --turbo --ts --tailwind --no-src-dir --app --import-alias "@/*"
 fi
 
 cd "$1"
