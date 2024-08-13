@@ -86,21 +86,6 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
     end,
 })
 
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-    pattern = "sh",
-    callback = function()
-        vim.lsp.start({
-            name = "shfmt",
-            root_dir = vim.fn.getcwd(),
-        })
-        vim.lsp.start({
-            name = "shellcheck",
-            root_dir = vim.fn.getcwd(),
-        })
-    end,
-    group = vim.api.nvim_create_augroup("shfmt", { clear = true }),
-})
-
 -- Hyprlang LSP
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = { "*.hl", "hypr*.conf*" },
