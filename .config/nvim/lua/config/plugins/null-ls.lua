@@ -18,6 +18,9 @@ return {
             },
             automatic_installation = true,
             handlers = {
+                function(source_name, methods)
+                    require("mason-null-ls").default_setup(source_name, methods)
+                end,
                 shfmt = function()
                     null_ls.register(null_ls.builtins.formatting.shfmt.with({
                         extra_args = { "-i", vim.opt.tabstop, "-ci", "-bn" },
