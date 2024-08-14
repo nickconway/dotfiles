@@ -3,4 +3,4 @@ config:
   show-name: false # show the window name with the icon
 
 icons:
-  ssh: '󰑔'
+  ssh: "󰑔"
