@@ -33,6 +33,7 @@
 [core]
     editor = nvim -c startinsert
     pager = delta
+    excludesfile = ~/.config/git/ignore
 [sequence]
     editor = nvim
 [interactive]
