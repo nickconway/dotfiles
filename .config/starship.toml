@@ -10,6 +10,10 @@ continuation_prompt = "[▶▶](bold purple)"
 success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 error_symbol = "[➜](bold red)"
 
+[direnv]
+disabled = false
+symbol = '󰓴 '
+
 [container]
 disabled = true
 
