@@ -6,7 +6,7 @@ command -v fzf > /dev/null && [[ -e ~/.config/fzf/fzf-git/fzf-git.sh ]] && sourc
 [[ -e $HOME/.atuin/bin/env ]] && . "$HOME/.atuin/bin/env"
 command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow | awk '/output=\$\(/{system("cat ~/.config/atuin/tmux.'$SHELL_NAME'");next}1')" \
     && (pgrep -f "atuin daemon" &> /dev/null || atuin daemon &> $XDG_RUNTIME_DIR/atuin.log &)
-command -v direnv &> /dev/null && eval "$(direnv hook $SHELL_NAME)"
+command -v direnv &> /dev/null && export DIRENV_LOG_FORMAT=$'\033[95m󰓴 \033[94m%s\033[0m' && eval "$(direnv hook $SHELL_NAME)"
 
 _fzf_git_fzf() {
   fzft --min-height=20 --border \
