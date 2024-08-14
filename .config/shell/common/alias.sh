@@ -402,6 +402,18 @@ alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 alias tmuxconf='$EDITOR ~/.config/tmux/tmux.conf'
 
+function tss() {
+    tmux-sessionizer ${1:-${PWD}}
+}
+function tsl() {
+    if [[ $# -gt 0 ]]; then
+        SELECTED="$1"
+    else
+        SELECTED=$(tmuxp ls | fzft --preview "bat --color=always --style=plain ~/.config/tmuxp/{}.yaml")
+    fi
+    test -n "$SELECTED" && TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$(basename "$PWD" | tr . _) tmuxp load "$SELECTED" -y >/dev/null
+}
+
 function tu() {
     if [[ "$(uname -r)" == *"WSL"* ]]; then
         TS_COMMAND="tailscale.exe"

@@ -64,7 +64,7 @@
     grep-line-number-style = green
     whitespace-error-style = reverse purple
     minus-style = syntax 52
-    minus-non-emph-style = syntax
+    minus-non-emph-style = dim syntax
     minus-emph-style = syntax 52
     minus-empty-line-marker-style = normal 52
     zero-style = dim syntax

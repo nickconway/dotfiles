@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 if [[ "${1:-}" == "--all" ]]; then
     if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
@@ -6,9 +7,9 @@ if [[ "${1:-}" == "--all" ]]; then
     fi
 
     if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
-        tmux list-sessions -F "#S" | grep -v $(tmux display -p '#{client_last_session}') | grep -v $(tmux display-message -p '#S')
+        tmux list-sessions -F "#S" | grep -v $(tmux display -p '#{client_last_session}') | grep -v $(tmux display-message -p '#S') || true
     else
-        tmux list-sessions -F "#S" | grep -v $(tmux display-message -p '#S')
+        tmux list-sessions -F "#S" | grep -v $(tmux display-message -p '#S') || true
     fi
 
     tmux display-message -p '#S'
@@ -30,7 +31,7 @@ fi
 
 if [[ $# -eq 0 ]]; then
     RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux rename-session -t {1} "${name}"; '\'''
-    RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer --sessions)+change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )"
+    RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer --sessions)+change-border-label( Tmux Sessionizer (Sessions) )+change-prompt(ǂ > )"
 
     command() (
         [[ -n "$(tmux display -p '#{client_last_session}')" ]] && tmux display -p '#{client_last_session}'
@@ -50,13 +51,21 @@ if [[ $# -eq 0 ]]; then
         --prompt=" > " \
         --preview 'fzf-preview {}' \
         --header "ctrl-w   ctrl-s ǂ  ctrl-z   ctrl-a ∀  ctrl-t 󰐆  ctrl-r 󰑕  ctrl-u   crtl-d " \
-        --bind "ctrl-a:change-border-label(Tmux Sessionizer (All))+change-prompt( > )+reload(tmux-sessionizer --all)" \
-        --bind "ctrl-z:change-border-label(Tmux Sessionizer (Directories))+change-prompt( > )+reload(tmux-sessionizer --directories)" \
-        --bind "ctrl-w:change-border-label(Tmux Sessionizer (Windows))+change-prompt( > )+reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
+        --bind "ctrl-a:change-border-label( Tmux Sessionizer )+change-prompt( > )+reload(tmux-sessionizer --all)" \
+        --bind "ctrl-z:change-border-label( Tmux Sessionizer (Directories) )+change-prompt( > )+reload(tmux-sessionizer --directories)" \
+        --bind "ctrl-w:change-border-label( Tmux Sessionizer (Windows) )+change-prompt( > )+reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
         --bind "$RENAME_SESSION" \
-        --bind "ctrl-s:change-border-label(Tmux Sessionizer (Sessions))+change-prompt(ǂ > )+reload(tmux-sessionizer --sessions)")
+        --bind "ctrl-s:change-border-label( Tmux Sessionizer (Sessions) )+change-prompt(ǂ > )+reload(tmux-sessionizer --sessions)")
 else
-    export SELECTED="$1"
+    if command -v zoxide &>/dev/null; then
+        if [[ -e "$PWD/$1" ]] then
+            export SELECTED="$PWD/$1"
+        else
+            export SELECTED="$(zoxide query $1 2>/dev/null)"
+        fi
+    else
+        export SELECTED="$1"
+    fi
 fi
 
 if [[ -z $SELECTED ]]; then
@@ -64,14 +73,19 @@ if [[ -z $SELECTED ]]; then
 fi
 
 for TMUXP_START_DIR in $SELECTED; do
-    export SELECTED_FILE=$(basename "$TMUXP_START_DIR")
+    [[ ! -e "$TMUXP_START_DIR" ]] && break
+    export SELECTED_FILE=$(basename "$TMUXP_START_DIR" | tr . _)
     export TMUXP_START_DIR="$TMUXP_START_DIR"
     export TMUXP_SESSION_NAME=$(basename "$TMUXP_START_DIR" | tr . _)
 
     export TMUX_RUNNING=$(pgrep tmux)
 
+    cd "$TMUXP_START_DIR"
+
     if tmux has-session -t="$TMUXP_SESSION_NAME" 2>/dev/null; then
         tmux switch-client -t "$TMUXP_SESSION_NAME"
+    elif [[ -e "$TMUXP_START_DIR"/.tmuxp.yaml ]]; then
+        tmuxp load "$TMUXP_START_DIR" -y >/dev/null
     elif [[ -e ~/.config/tmuxp/"$SELECTED_FILE".yaml ]]; then
         tmuxp load ~/.config/tmuxp/"$SELECTED_FILE".yaml -y >/dev/null
     elif [[ -z $TMUX ]] && [[ -z $TMUX_RUNNING ]]; then
