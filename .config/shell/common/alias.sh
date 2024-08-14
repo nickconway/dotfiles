@@ -40,6 +40,7 @@ alias bat='bat --style=plain'
 
 alias c='clear'
 alias cat='bat --style=plain'
+alias cds=$'cd "$(tmux display-message -p \'#{session_path}\')"'
 
 alias clipqr='xclip -o | qrencode -t utf8'
 
@@ -398,7 +399,7 @@ alias ts='tmux new-session -s'
 alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
-alias tmuxconf='$EDITOR ~/.tmux.conf'
+alias tmuxconf='$EDITOR ~/.config/tmux/tmux.conf'
 
 function tu() {
     if [[ "$(uname -r)" == *"WSL"* ]]; then
