@@ -392,6 +392,7 @@ function toggleproxy() {
     }
 }
 
+command -v direnv &> /dev/null && alias tmux='direnv exec / tmux'
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias td='tmux detach'
