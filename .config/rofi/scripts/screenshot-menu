@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# Import Current Theme
+source "$HOME"/.config/rofi/applets/shared/theme.bash
+theme="$type/$style"
+
+# Theme Elements
+prompt='Screenshot'
+mesg=""
+
+if [[ ( "$theme" == *'type-1'* ) || ( "$theme" == *'type-3'* ) || ( "$theme" == *'type-5'* ) ]]; then
+	list_col='1'
+	list_row='3'
+elif [[ ( "$theme" == *'type-2'* ) || ( "$theme" == *'type-4'* ) ]]; then
+	list_col='3'
+	list_row='1'
+fi
+
+# Options
+layout=`cat ${theme} | grep 'USE_ICON' | cut -d'=' -f2`
+if [[ "$layout" == 'NO' ]]; then
+	option_1="󰩬 Region"
+	option_2="󰍹 Monitor"
+	option_3=" Window"
+else
+	option_1="󰩬"
+	option_2="󰍹"
+	option_3=""
+fi
+
+# Toggle Actions
+active=''
+urgent=''
+
+# Rofi CMD
+rofi_cmd() {
+	rofi -theme-str "listview {columns: $list_col; lines: $list_row;}" \
+		-theme-str 'textbox-prompt-colon {str: "󰹑";}' \
+		-dmenu \
+		-p "$prompt" \
+		${active} ${urgent} \
+		-markup-rows \
+		-theme ${theme} \
+        -kb-custom-1 "s" \
+        -kb-custom-2 "m" \
+        -kb-custom-3 "w"
+}
+
+# Pass variables to rofi dmenu
+run_rofi() {
+	echo -e "$option_1\n$option_2\n$option_3" | rofi_cmd
+}
+
+# Actions
+chosen="$(run_rofi)"
+code=$?
+
+case ${code} in
+    10) screenshot;;
+    11) screenshot monitor;;
+    12) screenshot window;;
+esac
+[[ $code == 0 ]] || exit
+
+case ${chosen} in
+    $option_1) screenshot;;
+    $option_2) screenshot monitor;;
+    $option_3) screenshot window;;
+esac

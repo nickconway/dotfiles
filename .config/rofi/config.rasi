@@ -75,7 +75,7 @@ configuration {
 
 	/*---------- Misc setting ----------*/
 	terminal: "kitty";
-	font: "Mono 12";
+	font: "JetBrainsMono 12";
 	sort: false;
 	threads: 0;
 	click-to-exit: true;
