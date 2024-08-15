@@ -4,30 +4,26 @@ return {
         { "onsails/lspkind-nvim" },
     },
     config = function()
-        local ds = vim.diagnostic.severity
-        local levels = {
-            [ds.ERROR] = "error",
-            [ds.WARN] = "warn",
-            [ds.INFO] = "info",
-            [ds.HINT] = "hint",
+        local text = {
+            [vim.diagnostic.severity.ERROR] = "✘",
+            [vim.diagnostic.severity.WARN] = "▲",
+            [vim.diagnostic.severity.HINT] = "⚑",
+            [vim.diagnostic.severity.INFO] = "»",
         }
-
-        local text = {}
-        local sign_opts = {
-            error = "✘",
-            warn = "▲",
-            hint = "⚑",
-            info = "»",
-        }
-
-        for i, l in pairs(levels) do
-            if type(sign_opts[l]) == "string" then
-                text[i] = sign_opts[l]
-            end
-        end
 
         vim.diagnostic.config({
-            virtual_text = { spacing = 4, source = "if_many", prefix = "●" },
+            virtual_text = {
+                spacing = 4,
+                source = "if_many",
+                prefix = function(diagnostic)
+                    if vim.fn.has("nvim-0.10") then
+                        return text[diagnostic.severity]
+                    else
+                        return "●"
+                    end
+                end
+            },
+            severity_sort = true,
             signs = { text = text },
         })
 
