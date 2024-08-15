@@ -21,6 +21,7 @@ fi
 if [[ -n "${REGION:-}" ]]; then
     grim -g "$REGION" -l 0 $IMG
 elif [[ -n "${OUTPUT:-}" ]]; then
+    sleep 0.5
     grim -o "$OUTPUT" -l 0 $IMG
 fi
 
