@@ -58,13 +58,13 @@ if [[ $# -eq 0 ]]; then
         --bind "ctrl-s:change-border-label( Tmux Sessionizer (Sessions) )+change-prompt(ǂ > )+reload(tmux-sessionizer --sessions)")
 else
     if command -v zoxide &>/dev/null; then
-        if [[ -e "$PWD/$1" ]] then
-            export SELECTED="$PWD/$1"
+        if [[ -e "$PWD/$@" ]] then
+            export SELECTED="$PWD/$@"
         else
-            export SELECTED="$(zoxide query $1 2>/dev/null)"
+            export SELECTED="$(zoxide query $1 2>/dev/null || echo "$@")"
         fi
     else
-        export SELECTED="$1"
+        export SELECTED="$@"
     fi
 fi
 
@@ -72,11 +72,16 @@ if [[ -z $SELECTED ]]; then
     exit 0
 fi
 
-for TMUXP_START_DIR in $SELECTED; do
-    [[ ! -e "$TMUXP_START_DIR" ]] && break
+for TMUXP_START_DIR in ${SELECTED[@]}; do
     export SELECTED_FILE=$(basename "$TMUXP_START_DIR" | tr . _)
     export TMUXP_START_DIR="$TMUXP_START_DIR"
     export TMUXP_SESSION_NAME=$(basename "$TMUXP_START_DIR" | tr . _)
+
+    if [[ ! -e "$TMUXP_START_DIR" ]]; then
+        tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$PWD"
+        tmux switch-client -t "$TMUXP_SESSION_NAME"
+        break
+    fi
 
     export TMUX_RUNNING=$(pgrep tmux)
 

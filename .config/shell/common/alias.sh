@@ -396,16 +396,15 @@ command -v direnv &> /dev/null && alias tmux='direnv exec / tmux'
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias td='tmux detach'
-alias ts='tmux new-session -s'
-alias tl='tmux list-sessions'
+alias tls='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 alias tmuxconf='$EDITOR ~/.config/tmux/tmux.conf'
 
-function tss() {
+function ts() {
     tmux-sessionizer ${1:-${PWD}}
 }
-function tsl() {
+function tl() {
     if [[ $# -gt 0 ]]; then
         SELECTED="$1"
     else

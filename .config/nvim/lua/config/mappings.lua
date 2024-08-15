@@ -178,6 +178,7 @@ map("n", "-", ":lua MiniFiles.open()<CR>")
 
 map("n", "<leader>fb", builtin.buffers, "Buffers")
 map("n", "<leader>ff", get_files, "Files")
+map("n", "<leader>fF", ":Telescope find_files<CR>", "All files")
 map("n", "<leader>fh", builtin.help_tags, "Help tags")
 map("n", "<leader>fl", builtin.live_grep, "Live grep")
 map("n", "<leader>fm", "<cmd>lua require('telescope.builtin').resume()<cr>", "Last")

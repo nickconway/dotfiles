@@ -86,11 +86,12 @@ return {
 
         dashboard.section.buttons.val = {
             dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
-            dashboard.button("<leader>ff", "  Find file", get_files),
+            dashboard.button("f", "  Find file", get_files),
+            dashboard.button("F", "  Find file (all)", ":Telescope find_files<CR>"),
             dashboard.button("s", "󰋃  Open last session", function()
                 require("persistence").load()
             end),
-            dashboard.button("g", " " .. " Find text", ":Telescope live_grep <CR>"),
+            dashboard.button("g", "  Find text", ":Telescope live_grep <CR>"),
             dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
             dashboard.button("u", "  Update plugins", ":Lazy sync<CR>"),
             dashboard.button("r", "  Recently opened files", "<cmd>Telescope oldfiles<CR>"),
@@ -116,6 +117,8 @@ return {
                 dashboard.section.footer.val = version
                     .. " 󱐌 Lazy-loaded "
                     .. stats.loaded
+                    .. " / "
+                    .. stats.count
                     .. " plugins in "
                     .. ms
                     .. "ms"
