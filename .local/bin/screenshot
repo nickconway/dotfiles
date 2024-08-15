@@ -27,6 +27,6 @@ fi
 
 wl-copy < $IMG
 (
-    ACTION=$(notify-send -i "$IMG" "Screenshot Saved and Copied to Clipboard: $IMG" --action "open=Open")
+    ACTION=$(notify-send -i "$IMG" "Screenshot Saved and Copied to Clipboard" --action "open=Open")
     [[ "$ACTION" == "open" ]] && xdg-open "$IMG"
 ) &
