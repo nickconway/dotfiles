@@ -42,6 +42,30 @@ return {
             end
         end)
 
+        on_attach = function(client, bufnr)
+            if client.server_capabilities.documentSymbolProvider then
+                require("nvim-navic").attach(client, bufnr)
+            end
+
+            local map = function(m, lhs, rhs, desc)
+                local key_opts = { buffer = bufnr, desc = desc, nowait = true }
+                vim.keymap.set(m, lhs, rhs, key_opts)
+            end
+
+            map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover Documentation")
+            map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to Definition")
+            map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to Declaration")
+            map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to Implementation")
+            map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to Type Definition")
+            map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to Reference")
+            map("n", "gS", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Show Function Signature")
+            map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol")
+            map("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format File")
+            map("x", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>",
+                "Format Selection")
+            map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action")
+        end
+
         require("mason-lspconfig").setup({
             ensure_installed = {
                 "tsserver",
@@ -56,11 +80,14 @@ return {
             automatic_installation = true,
             handlers = {
                 function(server_name)
-                    require("lspconfig")[server_name].setup({})
+                    require("lspconfig")[server_name].setup({
+                        on_attach = on_attach,
+                    })
                 end,
 
                 lua_ls = function()
                     require("lspconfig").lua_ls.setup({
+                        on_attach = on_attach,
                         on_init = function(client)
                             local path = client.workspace_folders[1].name
                             if
@@ -97,6 +124,7 @@ return {
 
                 clangd = function()
                     require("lspconfig").clangd.setup({
+                        on_attach = on_attach,
                         capabilities = {
                             offsetEncoding = "utf-16",
                         },
