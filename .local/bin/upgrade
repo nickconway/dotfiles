@@ -3,7 +3,7 @@
 if command -v apt &>/dev/null; then
     sudo apt update && sudo apt upgrade -y
 elif command -v pacman &>/dev/null; then
-    echo ":: Checking Arch Linux PGP Keyring..."
+    printf "\033[95m::\033[0m Checking Arch Linux PGP Keyring...\n"
     installedver="$(LANG= sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
     currentver="$(LANG= sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
     if [ $installedver != $currentver ]; then
