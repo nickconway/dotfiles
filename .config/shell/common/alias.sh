@@ -272,6 +272,8 @@ function lazynvm() {
     [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
 }
 
+alias mkdir='mkdir -p'
+
 function nvm() {
     lazynvm
     nvm $@
