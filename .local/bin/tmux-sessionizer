@@ -77,15 +77,9 @@ for TMUXP_START_DIR in ${SELECTED[@]}; do
     export TMUXP_START_DIR="$TMUXP_START_DIR"
     export TMUXP_SESSION_NAME=$(basename "$TMUXP_START_DIR" | tr . _)
 
-    if [[ ! -e "$TMUXP_START_DIR" ]]; then
-        tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$PWD"
-        tmux switch-client -t "$TMUXP_SESSION_NAME"
-        break
-    fi
-
     export TMUX_RUNNING=$(pgrep tmux)
 
-    cd "$TMUXP_START_DIR"
+    cd "$TMUXP_START_DIR" 2>/dev/null || true
 
     if tmux has-session -t="$TMUXP_SESSION_NAME" 2>/dev/null; then
         tmux switch-client -t "$TMUXP_SESSION_NAME"
@@ -100,10 +94,15 @@ for TMUXP_START_DIR in ${SELECTED[@]}; do
             F="$(basename "$F")"
             if [[ -e "$TMUXP_START_DIR/${F%.*}" || -e "$TMUXP_START_DIR/.${F%.*}" ]]; then
                 tmuxp load ~/.config/tmuxp/"$F" -y >/dev/null
-                exit
+                break
             fi
         done
-        tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
+
+        if [[ ! -e "$TMUXP_START_DIR" ]]; then
+            tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$PWD"
+        else
+            tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
+        fi
         tmux switch-client -t "$TMUXP_SESSION_NAME"
     fi
 done
