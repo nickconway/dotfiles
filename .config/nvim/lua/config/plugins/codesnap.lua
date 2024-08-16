@@ -14,7 +14,7 @@ return {
             "<esc><cmd>lua vim.fn.mkdir(\"" ..
             os.getenv("HOME") .. "/Pictures/CodeSnap\", \"p\")<cr>" .. "<cmd>CodeSnapSaveHighlight<cr>",
             mode = "x",
-            desc = "Save selected code snapshot into clipboard"
+            desc = "Save selected code snapshot into clipboard and highlight"
         },
     },
     opts = {
