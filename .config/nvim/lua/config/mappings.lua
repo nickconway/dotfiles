@@ -107,7 +107,9 @@ map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", "Escape and Clear hlsearch")
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Below")
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Above")
 
-map("x", "p", '"_dP')
+map("n", "p", 'p=`]')
+map("n", "P", 'P=`]')
+map("x", "p", '"_dP=`]')
 
 map("n", "<leader><CR>", ":so ~/.config/nvim/init.lua<CR>", "Reload config")
 
