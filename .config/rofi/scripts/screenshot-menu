@@ -29,8 +29,8 @@ else
 fi
 
 # Toggle Actions
-active=''
-urgent=''
+active='-a 1'
+urgent='-u 2'
 
 # Rofi CMD
 rofi_cmd() {
