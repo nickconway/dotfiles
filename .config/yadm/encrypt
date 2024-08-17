@@ -3,7 +3,6 @@
 .config/shell/common/encrypted.sh
 .config/rclone/rclone.conf
 .config/yadm/alt/**/*c.work
-.config/zmk/macros.dtsi
-.config/zmk/leader.dtsi
+.config/zmk/*
 .password-store/.gpg-id
 .password-store/python-keyring/**/*.*
