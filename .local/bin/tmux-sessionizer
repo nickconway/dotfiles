@@ -90,13 +90,16 @@ for TMUXP_START_DIR in ${SELECTED[@]}; do
     elif [[ -z $TMUX ]] && [[ -z $TMUX_RUNNING ]]; then
         tmux new-session -s "$TMUXP_SESSION_NAME" -c "$TMUXP_START_DIR"
     else
+        started=
         for F in ~/.config/tmuxp/*; do
             F="$(basename "$F")"
             if [[ -e "$TMUXP_START_DIR/${F%.*}" || -e "$TMUXP_START_DIR/.${F%.*}" ]]; then
+                started=true
                 tmuxp load ~/.config/tmuxp/"$F" -y >/dev/null
                 break
             fi
         done
+        [[ -n "$started" ]] && continue
 
         if [[ ! -e "$TMUXP_START_DIR" ]]; then
             tmux new-session -ds "$TMUXP_SESSION_NAME" -c "$PWD"
