@@ -71,6 +71,7 @@ return {
                 "tsserver",
                 "eslint",
                 "lua_ls",
+                "bashls",
                 "rust_analyzer",
                 "tailwindcss",
                 "svelte",
