@@ -30,7 +30,7 @@ vim.api.nvim_create_autocmd("FocusLost", {
 
 -- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ "FileType" }, {
-    group = vim.api.nvim_create_augroup("save-on-focus-lost", { clear = true }),
+    group = vim.api.nvim_create_augroup("json-conceal-level", { clear = true }),
     pattern = { "json", "jsonc", "json5" },
     callback = function()
         vim.opt_local.conceallevel = 0

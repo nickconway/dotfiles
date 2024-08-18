@@ -45,7 +45,7 @@ return {
                 end,
                 opts = { buffer = true, desc = "Toggle Checkbox" },
             },
-            ["<leader>o"] = {
+            ["<leader>oo"] = {
                 action = function()
                     return require("obsidian").util.smart_action()
                 end,

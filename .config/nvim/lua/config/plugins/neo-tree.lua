@@ -6,6 +6,10 @@ return {
         "MunifTanjim/nui.nvim",
         "3rd/image.nvim",
     },
+    cmd = "Neotree",
+    keys = {
+        { "<leader>a", "<cmd>Neotree<CR>", "NeoTree" },
+    },
     opts = {
         sources = { "filesystem", "buffers", "git_status" },
         open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline", "edgy" },
