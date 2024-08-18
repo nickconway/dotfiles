@@ -180,7 +180,7 @@ map("n", "-", function()
     local oil = require("oil")
     local util = require("oil.util")
 
-    oil.toggle_float()
+    oil.toggle_float(".")
 
     util.run_after_load(0, function()
         oil.open_preview()

@@ -10,6 +10,7 @@ return {
             ["<C-p>"] = "actions.preview",
             ["<C-c>"] = "actions.close",
             ["q"] = "actions.close",
+            ["<esc>"] = "actions.close",
             ["<C-l>"] = "actions.refresh",
             ["r"] = "actions.refresh",
             ["-"] = "actions.parent",
