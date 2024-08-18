@@ -4,13 +4,7 @@ return {
     config = function()
         require("mini.ai").setup()
         require("mini.jump").setup()
-        require("mini.files").setup({
-            mappings = {
-                go_out_plus = '<BS>',
-                go_in_plus = "<CR>",
-                reset = 'r',
-            }
-        })
+        require("mini.icons").setup()
         require("mini.surround").setup({
             mappings = {
                 add = 'gsa',            -- Add surrounding in Normal and Visual modes

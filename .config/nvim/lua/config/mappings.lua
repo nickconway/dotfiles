@@ -176,7 +176,16 @@ map("n", "<leader>X", "<cmd>!chmod +x %<CR>", "Make file executable")
 
 map("n", "<leader>u", vim.cmd.UndotreeToggle, "Toggle undotree")
 
-map("n", "-", ":lua MiniFiles.open()<CR>")
+map("n", "-", function()
+    local oil = require("oil")
+    local util = require("oil.util")
+
+    oil.toggle_float()
+
+    util.run_after_load(0, function()
+        oil.open_preview()
+    end)
+end, "Open directory")
 
 map("n", "<leader>fb", builtin.buffers, "Buffers")
 map("n", "<leader>ff", get_files, "Files")

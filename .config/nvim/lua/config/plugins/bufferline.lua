@@ -1,5 +1,8 @@
 return {
     "akinsho/bufferline.nvim",
+    dependencies = {
+        "nvim-tree/nvim-web-devicons"
+    },
     opts = function()
         ---@param buf number?
         local function bufremove(buf)
