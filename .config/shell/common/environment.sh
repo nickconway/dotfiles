@@ -30,7 +30,7 @@ KERNEL=$(uname -r)
 export GOROOT=~/.local/go/go
 export GOPATH=~/.local/go/packages
 
-export PATH=~/.local/bin:/opt/homebrew/bin:~/.local/podman/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$HOME/.cargo/bin:"$GOROOT"/bin:"$GOPATH"/bin:~/.config/fzf/bin:$PATH
+export PATH=~/.local/bin:/opt/homebrew/bin:~/.local/podman/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$HOME/.cargo/bin:"$GOROOT"/bin:"$GOPATH"/bin:~/.config/fzf/bin:~/.dotnet/tools:$PATH
 
 [[ -n "${TTY:-}" ]] && export GPG_TTY=$TTY
 
