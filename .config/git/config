@@ -28,8 +28,6 @@
     enabled = true
 [commit]
     gpgsign = true
-[include]
-    path = ~/.gitconfig.local
 [core]
     editor = nvim -c startinsert
     pager = delta
@@ -72,3 +70,5 @@
     plus-non-emph-style = syntax
     plus-emph-style = syntax 22
     plus-empty-line-marker-style = normal 22
+[include]
+    path = ~/.config/git/localconfig
