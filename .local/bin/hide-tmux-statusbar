@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 
 starting_pane=$(tmux display -p '#{pane_pid}')
 status=off

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 if [[ ! -e ~/.cache/unicode || "$1" == "download" ]]; then
     echo "Downloading emojis..."

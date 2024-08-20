@@ -78,6 +78,8 @@ export GITEA_USER=nick
 
 if [[ -e /run/docker.sock ]]; then
     export DOCKER_HOST=unix:///run/docker.sock
+elif [[ -e /var/run/docker.sock ]]; then
+    export DOCKER_HOST=unix:///var/run/docker.sock
 else
     export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
 fi

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 if [[ "${1:-}" == "--all" ]]; then
@@ -58,7 +58,7 @@ if [[ $# -eq 0 ]]; then
         --bind "ctrl-s:change-border-label( Tmux Sessionizer (Sessions) )+change-prompt(ǂ > )+reload(tmux-sessionizer --sessions)")
 else
     if command -v zoxide &>/dev/null; then
-        if [[ -e "$PWD/$@" ]] then
+        if [[ -e "$PWD/$@" ]]; then
             export SELECTED="$PWD/$@"
         else
             export SELECTED="$(zoxide query $1 2>/dev/null || echo "$@")"
