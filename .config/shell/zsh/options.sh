@@ -1,7 +1,7 @@
 if [[ -d ~/.config/zsh/zsh-completions ]]; then
-    command -v gh &> /dev/null && [[ -e ~/.config/zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.config/zsh/zsh-completions/src/_gh
-    command -v rg &> /dev/null && [[ -e ~/.config/zsh/zsh-completions/src/_rg ]] || rg --generate complete-zsh > ~/.config/zsh/zsh-completions/src/_rg
-    command -v fzf &> /dev/null && [[ -e ~/.config/zsh/zsh-completions/src/_fzf ]] || fzf --zsh > ~/.config/zsh/zsh-completions/src/_fzf
+    command -v gh &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.config/zsh/zsh-completions/src/_gh)
+    command -v rg &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_rg ]] || rg --generate complete-zsh > ~/.config/zsh/zsh-completions/src/_rg)
+    command -v fzf &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_fzf ]] || fzf --zsh > ~/.config/zsh/zsh-completions/src/_fzf)
     fpath=(~/.config/zsh/zsh-completions/src $fpath)
 fi
 
