@@ -71,4 +71,4 @@
     plus-emph-style = syntax 22
     plus-empty-line-marker-style = normal 22
 [include]
-    path = ~/.config/git/localconfig
+    path = ~/.config/git/local
