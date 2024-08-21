@@ -1,8 +1,14 @@
+local map = function(m, lhs, rhs, desc, bufnr)
+    local key_opts = { buffer = bufnr, desc = desc, nowait = true }
+    vim.keymap.set(m, lhs, rhs, key_opts)
+end
+
 return {
     "williamboman/mason.nvim",
     dependencies = {
         { "williamboman/mason-lspconfig.nvim" },
         { "simrat39/rust-tools.nvim" },
+        { "Hoffs/omnisharp-extended-lsp.nvim" },
     },
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
@@ -47,23 +53,18 @@ return {
                 require("nvim-navic").attach(client, bufnr)
             end
 
-            local map = function(m, lhs, rhs, desc)
-                local key_opts = { buffer = bufnr, desc = desc, nowait = true }
-                vim.keymap.set(m, lhs, rhs, key_opts)
-            end
-
-            map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover Documentation")
-            map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to Definition")
-            map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to Declaration")
-            map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to Implementation")
-            map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to Type Definition")
-            map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to Reference")
-            map("n", "gS", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Show Function Signature")
-            map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol")
-            map("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format File")
+            map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover Documentation", bufnr)
+            map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to Definition", bufnr)
+            map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to Declaration", bufnr)
+            map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to Implementation", bufnr)
+            map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to Type Definition", bufnr)
+            map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to Reference", bufnr)
+            map("n", "gS", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Show Function Signature", bufnr)
+            map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol", bufnr)
+            map("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format File", bufnr)
             map("x", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>",
-                "Format Selection")
-            map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action")
+                "Format Selection", bufnr)
+            map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action", bufnr)
         end
 
         require("mason-lspconfig").setup({
@@ -138,6 +139,33 @@ return {
                         end,
                     })
                 end,
+
+                omnisharp = function()
+                    require("lspconfig").omnisharp.setup({
+                        on_attach = function(client, bufnr)
+                            on_attach(client, bufnr)
+                            map("n", "gd", "<cmd>lua require('omnisharp_extended').telescope_lsp_definition()<cr>",
+                                "Go to Definition", bufnr)
+                            map("n", "gi", "<cmd>lua require('omnisharp_extended').telescope_lsp_implementation()<cr>",
+                                "Go to Implementation", bufnr)
+                            map("n", "go", "<cmd>lua require('omnisharp_extended').telescope_lsp_type_definition()<cr>",
+                                "Go to Type Definition", bufnr)
+                            map("n", "gr", "<cmd>lua require('omnisharp_extended').telescope_lsp_references()<cr>",
+                                "Go to Reference", bufnr)
+                        end,
+                        enable_roslyn_analyzers = true,
+                        organize_imports_on_format = true,
+                        enable_import_completion = true,
+                        settings = {
+                            FormattingOptions = {
+                                EnableEditorConfigSupport = false,
+                            },
+                            Sdk = {
+                                IncludePrereleases = true,
+                            },
+                        }
+                    })
+                end
             },
         })
     end,
