@@ -18,9 +18,8 @@ _dotnet_zsh_complete()
     _values = "${(ps:\n:)completions}"
 }
 
-command -v dotnet &>/dev/null && compdef _dotnet_zsh_complete dotnet
-
 autoload -Uz compinit && compinit
+command -v dotnet &>/dev/null && compdef _dotnet_zsh_complete dotnet
 
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
