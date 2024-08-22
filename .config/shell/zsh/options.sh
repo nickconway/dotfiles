@@ -5,6 +5,21 @@ if [[ -d ~/.config/zsh/zsh-completions ]]; then
     fpath=(~/.config/zsh/zsh-completions/src $fpath)
 fi
 
+_dotnet_zsh_complete()
+{
+    local completions=("$(dotnet complete "$words")")
+
+    if [ -z "$completions" ]
+    then
+        _arguments '*::arguments: _normal'
+        return
+    fi
+
+    _values = "${(ps:\n:)completions}"
+}
+
+command -v dotnet &>/dev/null && compdef _dotnet_zsh_complete dotnet
+
 autoload -Uz compinit && compinit
 
 setopt HIST_IGNORE_ALL_DUPS
