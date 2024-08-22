@@ -79,6 +79,18 @@ alias dcub="docker compose up --build"
 alias dcudb="docker compose up -d --build"
 alias dcupdate="docker compose up -d --pull=always"
 
+alias dnn='dotnet new'
+alias dnr='dotnet run'
+alias dnt='dotnet test'
+alias dnw='dotnet watch'
+alias dnwr='dotnet watch run'
+alias dnwt='dotnet watch test'
+alias dns='dotnet sln'
+alias dna='dotnet add'
+alias dnp='dotnet pack'
+alias dng='dotnet nuget'
+alias dnb='dotnet build'
+
 alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
 function fn() {
