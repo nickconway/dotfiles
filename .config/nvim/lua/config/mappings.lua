@@ -37,7 +37,7 @@ map("n", "<leader>cr", function()
         cmd = run_commands[vim.bo.filetype]()
     end
 
-    vim.cmd("!tmux-run '" .. cmd .. "'")
+    vim.cmd("silent !tmux-run '" .. cmd .. "'")
 end, "Run Code")
 
 map("n", "<Home>", "^")
