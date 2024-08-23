@@ -5,7 +5,7 @@ SHELL_NAME="$(basename "$SHELL")"
 PANE_ID="$(tmux list-panes -F '#{pane_id}' -f '#{==:#{pane_title},Runner}')"
 
 if [[ -z "$PANE_ID" ]]; then
-    PANE_ID="$(tmux split -d -p 25 -P -F "#{pane_id}")"
+    PANE_ID="$(tmux split -d -l 25% -P -F "#{pane_id}")"
     tmux select-pane -t "$PANE_ID" -T Runner
 fi
 
