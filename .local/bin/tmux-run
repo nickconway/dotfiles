@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+SHELL_NAME="$(basename "$SHELL")"
+PANE_ID="$(tmux list-panes -F '#{pane_id}' -f '#{==:#{pane_title},Runner}')"
+
+if [[ -z "$PANE_ID" ]]; then
+    PANE_ID="$(tmux split -d -p 25 -P -F "#{pane_id}")"
+    tmux select-pane -t "$PANE_ID" -T Runner
+fi
+
+PANE_COMMAND="$(tmux list-panes -F '#{pane_current_command}' -f '#{==:#{pane_title},Runner}')"
+[[ $PANE_COMMAND == "$SHELL_NAME" ]] && tmux send -t "$PANE_ID" Space "$@" Enter
