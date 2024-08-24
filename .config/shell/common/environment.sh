@@ -74,12 +74,14 @@ export FZF_DEFAULT_OPTS='-m --pointer=▶ --preview-window down,border-top --bin
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy
 export FZF_CTRL_R_OPTS="
-  --reverse
-  --preview 'echo {}' --preview-window up:3:hidden:wrap
-  --bind 'ctrl-/:toggle-preview'
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --tmux
+  --border-label ' Command History '
+  --preview 'echo {}' --preview-window 3:wrap
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
+command -v pbcopy &> /dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'"
+command -v wl-copy &> /dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'"
+
 
 export GITEA_USER=nick
 
