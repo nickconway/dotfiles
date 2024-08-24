@@ -29,8 +29,13 @@ KERNEL=$(uname -r)
 
 export GOROOT=~/.local/go/go
 export GOPATH=~/.local/go/packages
+export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
 
-export PATH=~/.local/bin:/opt/homebrew/bin:~/.local/podman/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$HOME/.cargo/bin:"$GOROOT"/bin:"$GOPATH"/bin:~/.config/fzf/bin:~/.dotnet/tools:$PATH
+export DOTNET_ROOT=~/.local/dotnet
+export PATH="$DOTNET_ROOT":"$DOTNET_ROOT"/tools:"$PATH"
+
+export PATH=/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$PATH
+export PATH=~/.local/podman/bin:~/.cargo/bin:~/.config/fzf/bin:$PATH
 
 [[ -n "${TTY:-}" ]] && export GPG_TTY=$TTY
 
