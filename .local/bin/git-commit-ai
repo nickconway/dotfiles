@@ -1,6 +1,5 @@
 #!/bin/bash
 set -euo pipefail
-set -x
 
 gum spin --title 'Getting Commit Message' -- get-commit-message
 GIT_EDITOR="$EDITOR" git commit -a -F .git/gcai -e
