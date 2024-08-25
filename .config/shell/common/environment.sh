@@ -27,6 +27,8 @@ else
 fi
 KERNEL=$(uname -r)
 
+export PATH=~/.local/bin:$PATH
+
 export GOROOT=~/.local/go/go
 export GOPATH=~/.local/go/packages
 export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
