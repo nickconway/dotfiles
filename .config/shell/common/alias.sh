@@ -105,6 +105,7 @@ alias gaa='git add --all'
 alias gb='git branch'
 alias gc='git commit -v'
 alias gca='git commit -av'
+alias gcai='git-commit-ai'
 alias gcam='git commit -a -m'
 alias gcamend='git commit --amend --no-edit'
 alias gce='git commit -e'
@@ -158,8 +159,6 @@ function gi() {
     unset GI_TYPE
 
 }
-
-alias gcai="git --no-pager diff | mods 'write a commit message for this patch. also write the long commit message. use semantic commits. break the lines at 80 chars' > .git/gcai; GIT_EDITOR='$EDITOR' git commit -a -F .git/gcai -e"
 
 GIT_LOG_FORMAT='%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset'
 alias gif='git update-index --assume-unchanged'

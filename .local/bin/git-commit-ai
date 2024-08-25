@@ -1,0 +1,8 @@
+
+#!/bin/bash
+set -euo pipefail
+
+[[ -n "$(git --no-pager diff)" ]]
+
+git --no-pager diff | mods 'write a commit message for this patch. also write the long commit message. use semantic commits. break the lines at 80 chars' > .git/gcai
+GIT_EDITOR="$EDITOR" git commit -a -F .git/gcai -e
