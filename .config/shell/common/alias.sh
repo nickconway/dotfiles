@@ -159,6 +159,8 @@ function gi() {
 
 }
 
+alias gcai="git --no-pager diff | mods 'write a commit message for this patch. also write the long commit message. use semantic commits. break the lines at 80 chars' > .git/gcai; GIT_EDITOR='$EDITOR' git commit -a -F .git/gcai -e"
+
 GIT_LOG_FORMAT='%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset'
 alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
