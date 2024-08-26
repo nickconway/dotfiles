@@ -9,5 +9,4 @@ if [[ -z "$PANE_ID" ]]; then
     tmux select-pane -t "$PANE_ID" -T Runner
 fi
 
-PANE_COMMAND="$(tmux list-panes -a -F '#{pane_current_command}' -f '#{==:#{pane_title},Runner}')"
-[[ $PANE_COMMAND == "$SHELL_NAME" ]] && tmux send -t "$PANE_ID" clear Space '&&' Space \("$@"\) Enter
+tmux send -t "$PANE_ID" C-c Enter clear Space '&&' Space \("$@"\) Enter
