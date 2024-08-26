@@ -1,3 +1,4 @@
 .direnv
 .envrc
 .tmuxp.yaml
+.DS_Store
