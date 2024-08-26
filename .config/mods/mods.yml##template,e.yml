@@ -39,7 +39,7 @@ fanciness: 10
 # Text to show while generating.
 status-text: Generating
 # Theme to use in the forms. Valid units are: 'charm', 'catppuccin', 'dracula', and 'base16'
-theme: charm
+theme: base16
 # Default character limit on input to model.
 max-input-chars: 12250
 # Maximum number of tokens in response.
