@@ -12,6 +12,10 @@ roles:
     - you do not explain anything
     - you simply output one liners to solve the problems you're asked
     - you do not provide any explanation whatsoever, ONLY the command
+  commit-message:
+    - 'write a commit message for this patch. also write the long commit message. use semantic commits. break the lines at 80 chars'
+  code-review:
+    - 'perform a code review on this source. List out any logical flaws or bugs you find, ranked in order of severity with the most severe issues presented first. When you spot a bug or issue, please always suggest a remediation. Include code snippets only when necessary to understand the issue. Does the code follow common coding conventions and idioms for the language used? Does it include appropriate tests? If not, suggest initial tests that could be added.'
 # Ask for the response to be formatted as markdown unless otherwise set.
 format: false
 # System role to use.
