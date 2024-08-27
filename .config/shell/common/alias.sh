@@ -21,6 +21,8 @@ alias ap='ansible-playbook'
 alias apl='ansible-playbook --limit localhost'
 alias av='ansible-vault'
 
+alias ai='mods'
+
 function atuin-fix() {
     atuin store purge
     atuin store verify
@@ -307,6 +309,7 @@ function npx() {
     npx $@
 }
 
+alias mods='mods --theme base16'
 alias md='mkdir -p'
 function mkcd() {
     mkdir -p -- "$1" && cd "$1"
