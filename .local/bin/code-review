@@ -1,5 +1,5 @@
 #!/bin/bash
 set -euo pipefail
 
-gum spin --title 'Getting Code Review' -- get-code-review
+gum spin --title 'Getting Code Review' --spinner.foreground 12 -- get-code-review
 glow -p .git/review
