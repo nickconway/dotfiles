@@ -9,9 +9,9 @@ if [[ -z "$PANE_ID" ]]; then
     [[ ${WINDOW:-} == "" ]] && PANE_ID="$(tmux split -d -l 25% -P -F "#{pane_id}")"
     [[ ${WINDOW:-} == true ]] && PANE_ID="$(tmux new-window -d -P -F "#{pane_id}")"
     tmux select-pane -t "$PANE_ID" -T Runner
-    tmux send -t "$PANE_ID" clear Space '&&' Space \("$@"\) Enter
+    tmux send -t "$PANE_ID" Space clear Space '&&' Space \("$@"\) Enter
 else
     tmux send -t "$PANE_ID" C-c
-    tmux send -t "$PANE_ID" Enter clear Space '&&' Space \("$@"\) Enter
+    tmux send -t "$PANE_ID" Enter Space clear Space '&&' Space \("$@"\) Enter
 fi
 
