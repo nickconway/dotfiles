@@ -1,12 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-SHELL_NAME="$(basename "$SHELL")"
+[[ "${1:-}" == "-w" ]] && WINDOW=true && shift
+
 PANE_ID="$(tmux list-panes -a -F '#{pane_id}' -f '#{==:#{pane_title},Runner}')"
 
 if [[ -z "$PANE_ID" ]]; then
-    PANE_ID="$(tmux split -d -l 25% -P -F "#{pane_id}")"
+    [[ ${WINDOW:-} == "" ]] && PANE_ID="$(tmux split -d -l 25% -P -F "#{pane_id}")"
+    [[ ${WINDOW:-} == true ]] && PANE_ID="$(tmux new-window -d -P -F "#{pane_id}")"
     tmux select-pane -t "$PANE_ID" -T Runner
+    tmux send -t "$PANE_ID" clear Space '&&' Space \("$@"\) Enter
+else
+    tmux send -t "$PANE_ID" C-c
+    tmux send -t "$PANE_ID" Enter clear Space '&&' Space \("$@"\) Enter
 fi
 
-tmux send -t "$PANE_ID" C-c Enter clear Space '&&' Space \("$@"\) Enter

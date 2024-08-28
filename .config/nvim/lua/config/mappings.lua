@@ -18,7 +18,10 @@ local function map(modes, lhs, rhs, desc, opts)
 end
 
 local run_commands = {
-    cs = "dotnet run",
+    cs = {
+        cmd = "dotnet run",
+        window = true
+    },
     sh = function()
         return "bash " .. vim.fn.expand("%")
     end,
@@ -26,6 +29,7 @@ local run_commands = {
 
 map("n", "<leader>cr", function()
     local cmd
+    local window
 
     if not run_commands[vim.bo.filetype] then
         return
@@ -33,11 +37,18 @@ map("n", "<leader>cr", function()
 
     if type(run_commands[vim.bo.filetype]) == "string" then
         cmd = run_commands[vim.bo.filetype]
-    else
+    elseif type(run_commands[vim.bo.filetype]) == "function" then
         cmd = run_commands[vim.bo.filetype]()
+    elseif type(run_commands[vim.bo.filetype]) == "table" then
+        cmd = run_commands[vim.bo.filetype]["cmd"]
+        window = run_commands[vim.bo.filetype]["window"]
     end
 
-    vim.cmd("silent !tmux-run '" .. cmd .. "'")
+    if window == true then
+        vim.cmd("silent !tmux-run -w '" .. cmd .. "'")
+    else
+        vim.cmd("silent !tmux-run '" .. cmd .. "'")
+    end
 end, "Run Code")
 
 map("n", "<Home>", "^")
