@@ -1,5 +1,8 @@
 return {
     "tpope/vim-fugitive",
+    dependencies = {
+        "tpope/vim-rhubarb"
+    },
     keys = {
         { "<leader>ga",  "<cmd>Git add %<CR>",          desc = "Git add current file" },
         { "<leader>gA",  "<cmd>Git add --all<CR>",      desc = "Git add all files" },
