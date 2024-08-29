@@ -427,7 +427,7 @@ alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 alias tmuxconf='$EDITOR ~/.config/tmux/tmux.conf'
 
-function ts() {
+function t() {
     tmux-sessionizer ${1:-${PWD}}
 }
 function tl() {
