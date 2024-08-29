@@ -231,6 +231,11 @@ function gwta() {
     [[ -n "$REF" ]] && git worktree add -b "$SUFFIX" "$WORKTREE_PATH" "$REF" && cd "$WORKTREE_PATH"
 }
 
+function grl() {
+    git reflog --format='%Cred%h -%C(auto)%d %C(yellow)%gd %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {1} | delta" "$@" \
+        | grep -o -e 'HEAD@{\d\+}' | head -n 1
+}
+
 function ghc() {
     mkdir -p $PROJECT_DIR
     (
