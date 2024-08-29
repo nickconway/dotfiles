@@ -258,6 +258,9 @@ function gpge() {
 
 alias internet-connection='ping -c 1 8.8.8.8 &> /dev/null'
 
+alias j='just'
+alias jc='just --choose'
+
 alias l='ls'
 alias la='ls -lA'
 alias ll='ls -l'
