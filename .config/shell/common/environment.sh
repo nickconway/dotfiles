@@ -106,3 +106,5 @@ export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/high
 export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc-2.0
 
 command -v dircolors &>/dev/null && eval "$(dircolors)"
+
+export JUST_CHOOSER='fzft --preview="just --color always --show {}"'
