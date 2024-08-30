@@ -232,8 +232,8 @@ function gwta() {
 }
 
 function grl() {
-    git reflog --format='%Cred%h -%C(auto)%d %C(yellow)%gd %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {1} | delta" "$@" \
-        | grep -o -e 'HEAD@{\d\+}' | head -n 1
+    git reflog --format='%Cred%h - %C(yellow)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" \
+        | awk '{print $3}'
 }
 
 function ghc() {
