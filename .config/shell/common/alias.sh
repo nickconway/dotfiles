@@ -232,7 +232,7 @@ function gwta() {
 }
 
 function grl() {
-    git reflog --format='%Cred%h - %C(yellow)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" \
+    git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" \
         | awk '{print $3}'
 }
 
