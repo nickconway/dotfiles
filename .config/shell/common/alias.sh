@@ -245,7 +245,11 @@ function ghc() {
 }
 
 function ghpr() {
-    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
+    if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+        echo "Not inside a git repository"
+        return
+    fi
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 4 | awk '{print $1}' | xargs gh pr checkout
 }
 
 function ghprm() {
