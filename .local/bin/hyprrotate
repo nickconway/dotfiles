@@ -15,10 +15,11 @@ function rotate() {
         OFFSET="1125x0"
     fi
 
-    hyprctl keyword monitor "eDP-1,2880x1800@120,0x0,1.6,transform,$TRANSFORM,bitdepth,10"
-    if [[ "$(hyprctl monitors all -j | jq '.[] | select(.name == "eDP-2") .disabled')" == "false" ]]; then
-        hyprctl keyword monitor "eDP-2,2880x1800@120,$OFFSET,1.6,transform,$TRANSFORM,bitdepth,10"
-    fi
+    for m in $(hyprctl monitors -j | jq -r ".[] | .name"); do
+        hyprctl keyword monitor "$m,transform,$TRANSFORM"
+        hyprctl keyword input:touchdevice:transform "$TRANSFORM"
+        hyprctl keyword input:tablet:transform "$TRANSFORM"
+    done
 }
 
 export -f rotate
