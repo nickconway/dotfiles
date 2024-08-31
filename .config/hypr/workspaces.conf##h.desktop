@@ -13,6 +13,6 @@ exec-once = [workspace 2] kitty
 exec-once = [workspace 2] rm /run/user/1000/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
 exec-once = [workspace 2] thunderbird-beta
 exec-once = [workspace 3] feishin --ozone-platform-hint=auto
-exec-once = [workspace 3] chromium --app=https://messages.google.com/web
+exec-once = [workspace 3] firefoxpwa site launch $(firefoxpwa profile list | grep '\- Messages ' | awk '{print $NF}' | tr -d '()')
 exec-once = [workspace 3] flatpak run app.bluebubbles.BlueBubbles
-exec-once = [workspace 3] chromium --app=https://x.com
+exec-once = [workspace 3] firefoxpwa site launch $(firefoxpwa profile list | grep '\- X ' | awk '{print $NF}' | tr -d '()')
