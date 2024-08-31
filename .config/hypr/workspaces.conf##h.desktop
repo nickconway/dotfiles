@@ -8,7 +8,7 @@ workspace = 1, monitor:DP-3, default:true
 workspace = 2, monitor:DP-1, default:true
 workspace = 3, monitor:DP-2, default:true
 
-exec-once = [workspace 1] chromium
+exec-once = [workspace 1] zen-browser
 exec-once = [workspace 2] kitty
 exec-once = [workspace 2] rm /run/user/1000/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
 exec-once = [workspace 2] thunderbird-beta
