@@ -1,0 +1,14 @@
+@import url("./colors-gtk.css");
+@import url("./notifications.css");
+
+.control-center {
+  background: transparent;
+}
+
+.control-center-list {
+  background: transparent;
+}
+
+.control-center-list-placeholder {
+  opacity: 0.1;
+}

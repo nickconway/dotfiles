@@ -39,7 +39,7 @@
 [delta]
     true-color = always
     navigate = true    # use n and N to move between diff sections
-    syntax-theme = OneHalfDark
+    syntax-theme = base16
     hyperlinks = true
     line-numbers = true
     line-numbers-minus-style = 52

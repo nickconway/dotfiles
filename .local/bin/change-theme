@@ -1,6 +1,11 @@
 #!/bin/bash
-
 set -euo pipefail
+
+if [[ ! -e ~/.venvs/wal ]]; then
+    python3 -m venv ~/.venvs/wal
+fi
+source ~/.venvs/wal/bin/activate
+pip install pywal16 colorthief colorz haishoku &> /dev/null
 
 random='false'
 
@@ -13,24 +18,36 @@ done
 echo "" > /tmp/wallpaper
 
 if [[ "$random" == "true" ]]; then
-    IMG="$(find /mnt/dropbox/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)"
+    IMG="$(find /mnt/dropbox/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)" || true
+    if [[ "$IMG" == "$(cat ~/.cache/wal/wal)" ]]; then
+        change-theme -r
+        exit 0
+    fi
 else
     IMG="$(cd /mnt/dropbox/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
-if [[ -e ~/.cache/wal/wal ]] && [[ -n "$IMG" ]] && [[ "$IMG" != "$(cat ~/.cache/wal/wal)" ]]; then
-    cp "$IMG" ~/.config/wallpaper
-    hyprctl hyprpaper unload all
-    echo
-    hyprctl hyprpaper preload "$IMG"
-    echo
-    hyprctl hyprpaper wallpaper ", $IMG"
-    echo
-    wal --cols16 -i "$IMG"
+cp "$IMG" ~/.config/wallpaper
+hyprctl hyprpaper unload all
+echo
+hyprctl hyprpaper preload "$IMG"
+echo
+hyprctl hyprpaper wallpaper ", $IMG"
+echo
+wal --cols16 -i "$IMG"
 
-    [[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
-    [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
+[[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
+[[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
 
-    killall -SIGUSR2 waybar || true
-    fastfetch
-fi
+(pidof waybar && killall -SIGUSR2 waybar) || true
+
+cp ~/.cache/wal/colors-gtk.css ~/.config/swaync
+swaync-client -rs
+
+magick ~/.config/wallpaper -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb
+magick ~/.config/wallpaper -strip -thumbnail 500x500^ -gravity center -extent 500x500 ~/.cache/wal/wal.sqre
+magick ~/.config/wallpaper -strip -scale 10% -blur 0x3 -resize 100% ~/.cache/wal/wal.blur
+magick ~/.cache/wal/wal.sqre \( -size 500x500 xc:white -fill "rgba(0,0,0,0.7)" -draw "polygon 400,500 500,500 500,0 450,0" -fill black -draw "polygon 500,500 500,0 450,500" \) -alpha Off -compose CopyOpacity -composite ~/.cache/wal/wal.png
+mv ~/.cache/wal/wal.png ~/.cache/wal/wal.quad
+
+fastfetch

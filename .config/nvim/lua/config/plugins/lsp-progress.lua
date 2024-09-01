@@ -9,13 +9,15 @@ return {
 
         return {
             client_format = function(client_name, spinner, series_messages)
-                if #series_messages == 0 then
-                    return nil
+                local active_clients = vim.tbl_map(function(client)
+                    return client.name
+                end, vim.lsp.get_active_clients({ bufnr = 0 }))
+                if #series_messages > 0 and vim.tbl_contains(active_clients, client_name) then
+                    return {
+                        name = client_name,
+                        body = spinner .. " " .. table.concat(series_messages, ", "),
+                    }
                 end
-                return {
-                    name = client_name,
-                    body = spinner .. " " .. table.concat(series_messages, ", "),
-                }
             end,
             format = function(client_messages)
                 --- @param name string
