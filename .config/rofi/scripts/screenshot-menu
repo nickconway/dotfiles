@@ -1,36 +1,23 @@
 #!/usr/bin/env bash
 
 # Import Current Theme
-source "$HOME"/.config/rofi/applets/shared/theme.bash
-theme="$type/$style"
+theme=~/.config/rofi/styles/applets.rasi
 
 # Theme Elements
 prompt='Screenshot'
 mesg=""
 
-if [[ ( "$theme" == *'type-1'* ) || ( "$theme" == *'type-3'* ) || ( "$theme" == *'type-5'* ) ]]; then
-	list_col='1'
-	list_row='3'
-elif [[ ( "$theme" == *'type-2'* ) || ( "$theme" == *'type-4'* ) ]]; then
-	list_col='3'
-	list_row='1'
-fi
+list_col='3'
+list_row='1'
 
 # Options
-layout=`cat ${theme} | grep 'USE_ICON' | cut -d'=' -f2`
-if [[ "$layout" == 'NO' ]]; then
-	option_1="󰩬 Region"
-	option_2="󰍹 Monitor"
-	option_3=" Window"
-else
-	option_1="󰩬"
-	option_2="󰍹"
-	option_3=""
-fi
+option_1="󰩬"
+option_2="󰍹"
+option_3=""
 
 # Toggle Actions
-active='-a 1'
-urgent='-u 2'
+# active='-a 1'
+# urgent='-u 2'
 
 # Rofi CMD
 rofi_cmd() {
