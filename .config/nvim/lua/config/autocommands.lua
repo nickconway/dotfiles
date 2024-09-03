@@ -28,12 +28,28 @@ vim.api.nvim_create_autocmd("FocusLost", {
     group = vim.api.nvim_create_augroup("save-on-focus-lost", { clear = true }),
 })
 
--- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ "FileType" }, {
-    group = vim.api.nvim_create_augroup("json-conceal-level", { clear = true }),
-    pattern = { "json", "jsonc", "json5" },
+    group = vim.api.nvim_create_augroup("conceal-level", { clear = true }),
+    pattern = { "json", "jsonc", "json5", "http" },
     callback = function()
         vim.opt_local.conceallevel = 0
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = vim.api.nvim_create_augroup("http-files", { clear = true }),
+    pattern = "*.http",
+    command = "set filetype=http",
+})
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+    group = vim.api.nvim_create_augroup("rest-nvim-format", { clear = true }),
+    pattern = { "json", "jsonc", "json5" },
+    callback = function(args)
+        local b = vim.api.nvim_buf_get_name(args.buf)
+        if b ~= "rest_nvim_result*" then
+            vim.api.nvim_set_option_value("formatprg", "jq", { scope = 'local' })
+        end
     end,
 })
 
