@@ -21,6 +21,7 @@
 [rebase]
     autoStash = true
     autoSquash = true
+    updateRefs = true
 [push]
     autoSetupRemote = true
     default = simple
