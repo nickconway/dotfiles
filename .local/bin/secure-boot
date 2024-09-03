@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
+set -x
 
 sudo sbctl create-keys
-sudo sbctl enroll-keys --microsoft
+read -p "Are you dual booting Windows? [y/N] " DB
+if [[ $DB == "y" || $DB == "Y" ]]; then
+    sudo sbctl enroll-keys --microsoft
+else
+    sudo sbctl enroll-keys
+fi
 sudo sbctl sign-all
