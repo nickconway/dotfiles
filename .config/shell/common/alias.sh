@@ -664,6 +664,7 @@ if command -v xdg-open &>/dev/null; then
     }
 fi
 
+alias yay='systemd-inhibit yay'
 alias yaconf='yay -Pg'
 alias yaclean='yay -Sc'
 alias yaclr='yay -Scc'

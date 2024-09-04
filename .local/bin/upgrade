@@ -15,14 +15,14 @@ elif command -v pacman &>/dev/null; then
         echo " Proceeding with full system upgrade."
     fi
     if command -v yay &>/dev/null; then
-        yay -Syu --noconfirm --color=always
+        systemd-inhibit yay -Syu --noconfirm --color=always
     elif command -v trizen &>/dev/null; then
-        trizen -Syu
+        systemd-inhibit trizen -Syu
     elif command -v pacaur &>/dev/null; then
-        pacaur -Syu
+        systemd-inhibit pacaur -Syu
     elif command -v aura &>/dev/null; then
-        sudo aura -Syu
+        systemd-inhibit sudo aura -Syu
     else
-        sudo pacman -Syu --noconfirm
+        systemd-inhibit sudo pacman -Syu --noconfirm
     fi
 fi
