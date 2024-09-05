@@ -4,4 +4,4 @@ set -euo pipefail
 sleep .05
 URL="$(playerctl metadata | rg Url | nth-to-end 3 | sed "s/size=300/size=80/")"
 curl -s "$URL" --output /tmp/feishin-cover.png
-notify-send "Now Playing" "$(playerctl metadata -f "{{title}}\n{{artist}}")" -i /tmp/feishin-cover.png -r 50000 -e
+notify-send "Now Playing" "$(playerctl metadata -f "{{title}}\n{{artist}}")" -i /tmp/feishin-cover.png -e -h string:synchronous:audio
