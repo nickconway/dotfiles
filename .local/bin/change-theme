@@ -41,7 +41,6 @@ wal -i "$IMG"
 
 (pidof waybar && killall -SIGUSR2 waybar) || true
 
-cp ~/.cache/wal/colors-swaync.css ~/.config/swaync
 swaync-client -rs
 
 magick ~/.config/wallpaper -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb
