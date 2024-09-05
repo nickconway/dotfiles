@@ -8,11 +8,11 @@ workspace = 1, monitor:DP-3, default:true
 workspace = 2, monitor:DP-1, default:true
 workspace = 3, monitor:DP-2, default:true
 
-exec-once = [workspace 1] zen-browser
-exec-once = [workspace 2] kitty
-exec-once = [workspace 2] rm /run/user/1000/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
-exec-once = [workspace 2] thunderbird-beta
-exec-once = [workspace 3] feishin --ozone-platform-hint=auto
-exec-once = [workspace 3] firefoxpwa site launch $(firefoxpwa profile list | grep '\- Messages ' | awk '{print $NF}' | tr -d '()')
-exec-once = [workspace 3] flatpak run app.bluebubbles.BlueBubbles
-exec-once = [workspace 3] firefoxpwa site launch $(firefoxpwa profile list | grep '\- X ' | awk '{print $NF}' | tr -d '()')
+exec-once = [workspace 1 silent] zen-browser
+exec-once = [workspace 2 silent] kitty
+exec-once = [workspace 2 silent] rm /run/user/1000/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
+exec-once = [workspace 2 silent] thunderbird-beta
+exec-once = [workspace 3 silent] feishin --ozone-platform-hint=auto
+exec-once = [workspace 3 silent] firefoxpwa site launch $(firefoxpwa profile list | grep '\- Messages ' | awk '{print $NF}' | tr -d '()')
+exec-once = [workspace 3 silent] flatpak run app.bluebubbles.BlueBubbles
+exec-once = [workspace 3 silent] firefoxpwa site launch $(firefoxpwa profile list | grep '\- X ' | awk '{print $NF}' | tr -d '()')
