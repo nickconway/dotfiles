@@ -2,7 +2,7 @@
 @import url("./notifications.css");
 
 .control-center {
-  background: alpha(@color8, 0.4);
+  background: alpha(@color0, 0.4);
 }
 
 .control-center-list {
