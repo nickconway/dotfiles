@@ -1,6 +1,5 @@
 #!/bin/bash
 set -euo pipefail
-set -x
 
 sudo sbctl create-keys
 read -p "Are you dual booting Windows? [y/N] " DB
