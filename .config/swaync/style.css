@@ -2,7 +2,7 @@
 @import url("./notifications.css");
 
 .control-center {
-  background: transparent;
+  background: alpha(@color8, 0.4);
 }
 
 .control-center-list {
@@ -10,5 +10,6 @@
 }
 
 .control-center-list-placeholder {
-  opacity: 0.1;
+  color: @color3;
+  opacity: 0.7;
 }
