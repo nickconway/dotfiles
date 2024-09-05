@@ -240,7 +240,7 @@ function ghc() {
     mkdir -p $PROJECT_DIR
     (
         cd $PROJECT_DIR
-        GH_FORCE_TTY=100% gh repo list | fzft --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh repo clone
+        GH_FORCE_TTY=100% gh repo list | fzft --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --border-label " Clone GitHub Repo " --preview-window down --header-lines 4 | awk '{print $1}' | xargs gh repo clone
     )
 }
 
@@ -249,11 +249,11 @@ function ghpr() {
         echo "Not inside a git repository"
         return
     fi
-    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 4 | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --border-label " Checkout PR " --preview-window down --header-lines 4 | awk '{print $1}' | xargs gh pr checkout
 }
 
 function ghprm() {
-    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window down --header-lines 3 | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | fzft --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --border-label " Merge PR " --preview-window down --header-lines 4 | awk '{print $1}' | xargs gh pr checkout
     gsw -
     gm -
 }
