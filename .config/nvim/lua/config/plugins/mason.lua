@@ -60,11 +60,11 @@ return {
             map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to Type Definition", bufnr)
             map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to Reference", bufnr)
             map("n", "gS", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Show Function Signature", bufnr)
-            map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol", bufnr)
-            map("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format File", bufnr)
-            map("x", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>",
+            map("n", "<leader>cn", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol", bufnr)
+            map("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format File", bufnr)
+            map("x", "<leader>cf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>",
                 "Format Selection", bufnr)
-            map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action", bufnr)
+            map("n", "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action", bufnr)
         end
 
         require("mason-lspconfig").setup({
