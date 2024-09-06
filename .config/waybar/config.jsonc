@@ -21,7 +21,7 @@
     "disk",
     "custom/updates",
   ],
-  "modules-center": ["wlr/taskbar", "custom/music"],
+  "modules-center": ["custom/music"],
   "modules-right": [
     "custom/clipboard",
     "network",
