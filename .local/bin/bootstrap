@@ -7,6 +7,24 @@ cd
 touch .hushlogin
 mkdir -p ~/.local/bin
 
+if command -v termux-reload-settings > /dev/null; then
+    apt update -y && apt upgrade -y
+    pkg install openssh starship termux-api gnupg fzf dnsutils zsh python3 binutils pass rip bat git-delta fd ripgrep zoxide gh -y
+    python3 -m pip install --user pipx
+    pipx install --include-deps ansible
+    mkdir -p ~/.zsh
+    cd ~/.zsh
+    [[ -e ~/.config/zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
+    [[ -e ~/.config/zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
+    [[ -e ~/.config/zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+    cd ~
+    GPG_TTY=$(tty)
+    export GPG_TTY
+    yadm decrypt
+    yadm alt
+    chsh -s zsh
+fi
+
 if ! [[ -e ~/.local/bin/yadm ]]; then
     curl -s https://raw.githubusercontent.com/nickconway/yadm/master/yadm -o ~/.local/bin/yadm
     chmod +x ~/.local/bin/yadm
@@ -24,21 +42,6 @@ if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
 fi
 
 if command -v termux-reload-settings > /dev/null; then
-    apt update -y && apt upgrade -y
-    pkg install openssh starship termux-api gnupg fzf dnsutils zsh python3 binutils pass rip bat git-delta fd ripgrep zoxide gh -y
-    python3 -m pip install --user pipx
-    pipx install --include-deps ansible
-    mkdir -p ~/.zsh
-    cd ~/.zsh
-    [[ -e ~/.config/zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
-    [[ -e ~/.config/zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
-    [[ -e ~/.config/zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-    cd ~
-    GPG_TTY=$(tty)
-    export GPG_TTY
-    yadm decrypt
-    yadm alt
-    chsh -s zsh
     exit
 fi
 
