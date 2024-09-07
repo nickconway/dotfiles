@@ -25,7 +25,7 @@ input-field {
     inner_color = rgba(0, 0, 0, 0.5)
     font_color = rgb(200, 200, 200)
     fade_on_empty = false
-    # font_family = JetBrains Mono Nerd Font Mono
+    font_family = NotoSans
     placeholder_text = <i><span foreground="##cccccc">Input Password...</span></i>
     hide_input = false
     position = 0, -120
@@ -44,7 +44,7 @@ label {
 {% if yadm.hostname == "laptop" %}
     font_size = 120
 {% endif %}
-    font_family = JetBrains Mono Nerd Font Mono ExtraBold
+    font_family = JetBrains Mono Nerd Font ExtraBold
     position = 0, -300
     halign = center
     valign = top
@@ -61,7 +61,7 @@ label {
 {% if yadm.hostname == "laptop" %}
     font_size = 25
 {% endif %}
-    font_family = JetBrains Mono Nerd Font Mono
+    font_family = NotoSans
     position = 0, -40
     halign = center
     valign = center
@@ -78,8 +78,8 @@ label {
 {% if yadm.hostname == "laptop" %}
     font_size = 18
 {% endif %}
-    font_family = JetBrainsMono, Font Awesome 6 Free Solid
-    position = 0, 0
+    font_family = NotoSans, Font Awesome 6 Free Solid
+    position = 0, 10
     halign = center
     valign = bottom
 }
