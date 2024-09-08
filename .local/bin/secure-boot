@@ -8,4 +8,5 @@ if [[ $DB == "y" || $DB == "Y" ]]; then
 else
     sudo sbctl enroll-keys
 fi
+sudo sbctl verify 2>&1 | tail -n +2 | awk '{print $2}' | while read LINE; do sudo sbctl sign $LINE; done
 sudo sbctl sign-all
