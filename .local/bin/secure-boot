@@ -5,6 +5,7 @@ sudo sbctl create-keys
 read -p "Are you dual booting Windows? [y/N] " DB
 if [[ $DB == "y" || $DB == "Y" ]]; then
     echo "Also enrolling microsoft keys..."
+    sudo grub-install --target=x86_64-efi --efi-directory /boot --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
     sudo sbctl enroll-keys --microsoft
 else
     sudo sbctl enroll-keys
