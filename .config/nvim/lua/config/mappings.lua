@@ -93,6 +93,10 @@ map("v", "<C-Up>", ":m '<-2<cr>gv=gv", "Move Up")
 
 map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", "Escape and Clear hlsearch")
 
+map("n", "<leader>ch", function()
+    vim.cmd("set cursorline!")
+    vim.cmd("set cursorcolumn!")
+end, "Toggle Crosshair")
 -- commenting
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Below")
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Above")
