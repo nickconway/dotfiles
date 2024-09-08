@@ -4,6 +4,7 @@ set -euo pipefail
 sudo sbctl create-keys
 read -p "Are you dual booting Windows? [y/N] " DB
 if [[ $DB == "y" || $DB == "Y" ]]; then
+    echo "Also enrolling microsoft keys..."
     sudo sbctl enroll-keys --microsoft
 else
     sudo sbctl enroll-keys
