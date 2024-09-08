@@ -1,4 +1,4 @@
-bind = $mainMod, B, focuswindow, chromium
+bind = $mainMod, B, focuswindow, zen-browser
 bind = $mainMod, T, focuswindow, kitty
 bind = $mainMod, D, focuswindow, discord
 bind = $mainMod, M, focuswindow, thunderbird
