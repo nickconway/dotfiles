@@ -8,11 +8,11 @@ workspace = 1, monitor:DP-3, default:true
 workspace = 2, monitor:DP-1, default:true
 workspace = 3, monitor:DP-2, default:true
 
-exec-once = [workspace 1 silent] brave-beta
+exec-once = [workspace 1 silent] chromium
 exec-once = [workspace 2 silent] kitty
 exec-once = [workspace 2 silent] rm $XDG_RUNTIME_DIR/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
 exec-once = [workspace 2 silent] thunderbird-beta
 exec-once = [workspace 3 silent] feishin --ozone-platform-hint=auto
-exec-once = [workspace 3 silent] brave-beta --app='https://messages.google.com/web'
+exec-once = [workspace 3 silent] chromium --app='https://messages.google.com/web'
 exec-once = [workspace 3 silent] flatpak run app.bluebubbles.BlueBubbles
-exec-once = [workspace 3 silent] brave-beta --app='https://x.com'
+exec-once = [workspace 3 silent] chromium --app='https://x.com'
