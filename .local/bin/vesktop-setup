@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+mkdir -p $XDG_RUNTIME_DIR/app/com.discordapp.Discord
 ln -sf $XDG_RUNTIME_DIR/{.flatpak/dev.vencord.Vesktop/xdg-run,}/discord-ipc-0
 ln -sf $XDG_RUNTIME_DIR/.flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0 $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0
 

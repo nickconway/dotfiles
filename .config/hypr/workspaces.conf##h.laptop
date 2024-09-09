@@ -5,9 +5,9 @@ bind = $mainMod, X, exec, hyprland-workspace 4
 bind = $mainMod, M, exec, hyprland-workspace 5
 bind = $mainMod, F, exec, hyprland-workspace 6
 
-workspace = 1, on-created-empty: zen-browser
+workspace = 1, on-created-empty: brave-beta
 workspace = 2, on-created-empty: kitty
-workspace = 3, on-created-empty: rm /run/user/1000/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
-workspace = 4, on-created-empty: firefoxpwa site launch $(firefoxpwa profile list | grep '\- Messages: ' | awk '{print $NF}' | tr -d '()') & flatpak run app.bluebubbles.BlueBubbles
+workspace = 3, on-created-empty: rm $XDG_RUNTIME_DIR/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
+workspace = 4, on-created-empty: brave-beta --app='https://messages.google.com/web' & flatpak run app.bluebubbles.BlueBubbles
 workspace = 5, on-created-empty: thunderbird-beta
 workspace = 6, on-created-empty: feishin --ozone-platform-hint=auto
