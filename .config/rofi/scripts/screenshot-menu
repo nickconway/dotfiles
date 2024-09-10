@@ -7,13 +7,15 @@ theme=~/.config/rofi/styles/applets.rasi
 prompt='Screenshot'
 mesg=""
 
-list_col='3'
+list_col='5'
 list_row='1'
 
 # Options
 option_1="󰩬"
 option_2="󰍹"
 option_3=""
+option_4="󰈚"
+option_5="󰕧"
 
 # Toggle Actions
 # active='-a 1'
@@ -30,12 +32,14 @@ rofi_cmd() {
 		-theme ${theme} \
         -kb-custom-1 "s" \
         -kb-custom-2 "m" \
-        -kb-custom-3 "w"
+        -kb-custom-3 "w" \
+        -kb-custom-4 "o" \
+        -kb-custom-5 "r"
 }
 
 # Pass variables to rofi dmenu
 run_rofi() {
-	echo -e "$option_1\n$option_2\n$option_3" | rofi_cmd
+	echo -e "$option_1\n$option_2\n$option_3\n$option_4\n$option_5" | rofi_cmd
 }
 
 # Actions
@@ -46,6 +50,8 @@ case ${code} in
     10) screenshot;;
     11) screenshot monitor;;
     12) screenshot window;;
+    13) screenshot ocr;;
+    14) screenshot record;;
 esac
 [[ $code == 0 ]] || exit
 
@@ -53,4 +59,6 @@ case ${chosen} in
     $option_1) screenshot;;
     $option_2) screenshot monitor;;
     $option_3) screenshot window;;
+    $option_4) screenshot ocr;;
+    $option_5) screenshot record;;
 esac

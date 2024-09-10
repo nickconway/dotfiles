@@ -1,7 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
+error() {
+    notify-send "Screenshot" "An error occurred"
+}
+trap error ERR
+
+mkdir -p "$(xdg-user-dir PICTURES)/Screenshots"
+mkdir -p "$(xdg-user-dir DOCUMENTS)/OCR"
+mkdir -p "$(xdg-user-dir VIDEOS)/Screen Recordings"
+
+DATE="$(date +%Y-%m-%d_%H-%M-%S)"
 IMG=$(xdg-user-dir PICTURES)/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png
+TEXT="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.txt"
+OCR_IMG="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.png"
+VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mkv"
 if [[ $# -eq 0 ]]; then
     REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
 elif [[ "$1" == "window" ]]; then
@@ -14,19 +27,41 @@ elif [[ "$1" == "monitor" ]]; then
     else
         REGION="$(slurp -o -c cba67f88 -b 00000099 -w 0 -B 00000099)"
     fi
+elif [[ "$1" == "ocr" ]]; then
+    REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
+elif [[ "$1" == "record" ]]; then
+    if pidof wf-recorder &> /dev/null; then
+        kill $(pidof wf-recorder)
+        notify-send "Screen Recording" "Screen recording stopped"
+    else
+        wf-recorder --file="$VIDEO"
+        notify-send "Screen Recording" "Screen recording started"
+    fi
 else
     exit
 fi
 
-if [[ -n "${REGION:-}" ]]; then
+if [[ "${1:-}" == "ocr" ]]; then
+    grim -g "$REGION" -l 0 $OCR_IMG
+elif [[ -n "${REGION:-}" ]]; then
     grim -g "$REGION" -l 0 $IMG
 elif [[ -n "${OUTPUT:-}" ]]; then
     sleep 0.5
     grim -o "$OUTPUT" -l 0 $IMG
 fi
 
-wl-copy < $IMG
-(
-    ACTION=$(notify-send -i "$IMG" "Screenshot Saved and Copied to Clipboard" --action "open=Open")
-    [[ "$ACTION" == "open" ]] && xdg-open "$IMG"
-) &
+if [[ "$1" == "ocr" ]]; then
+    tesseract "$IMG" - > "$TEXT"
+    (
+        ACTION=$(notify-send "Screenshot" "Text Saved and Copied to Clipboard" --action "open=Open")
+        [[ "$ACTION" == "open" ]] && xdg-open "$TEXT"
+    ) &
+fi
+
+if [[ -e $IMG ]]; then
+    wl-copy < $IMG
+    (
+        ACTION=$(notify-send -i "$IMG" "Screenshot" "Screenshot Saved and Copied to Clipboard" --action "open=Open")
+        [[ "$ACTION" == "open" ]] && xdg-open "$IMG"
+    ) &
+fi
