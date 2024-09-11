@@ -34,7 +34,7 @@ elif [[ "$1" == "record" ]]; then
         kill $(pidof wf-recorder)
         notify-send "Screen Recording" "Screen recording stopped"
     else
-        wf-recorder --file="$VIDEO"
+        wf-recorder --file="$VIDEO" &
         notify-send "Screen Recording" "Screen recording started"
     fi
 else
