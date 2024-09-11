@@ -40,14 +40,9 @@ case ${1:-} in
     ;;
 
     'monitor')
-        if [[ "$(hyprctl monitors -j | jq -r '.[] | .name' | wc -l)" == "1" ]]; then
-            OUTPUT="$(hyprctl monitors -j | jq -r '.[] | .name')"
-            sleep 0.5
-            grim -o "$OUTPUT" -l 0 $IMG
-        else
-            REGION="$(slurp -o -c cba67f88 -b 00000099 -w 0 -B 00000099)"
-            grim -g "$REGION" -l 0 $IMG
-        fi
+        OUTPUT="$(hyprctl monitors -j | jq -r ".[] | select(.focused == true) | .name")"
+        sleep 0.5
+        grim -o "$OUTPUT" -l 0 $IMG
     ;;
 
     'record')
