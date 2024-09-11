@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+if [[ -e $XDG_RUNTIME_DIR/discord-ipc-0 ]]; then
+    rm $XDG_RUNTIME_DIR/discord-ipc-0;
+fi
+
+flatpak run dev.vencord.Vesktop &> /dev/null &
+
 mkdir -p $XDG_RUNTIME_DIR/app/com.discordapp.Discord
 while [[ ! -e $XDG_RUNTIME_DIR/.flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0 ]]; do
     sleep 1
