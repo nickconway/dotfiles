@@ -27,8 +27,6 @@ else
 fi
 KERNEL=$(uname -r)
 
-export PATH=~/.local/bin:$PATH
-
 export GOROOT=~/.local/go/go
 export GOPATH=~/.local/go/packages
 export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
@@ -38,6 +36,8 @@ export PATH="$DOTNET_ROOT":"$DOTNET_ROOT"/tools:"$PATH"
 
 export PATH=/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$PATH
 export PATH=~/.local/podman/bin:~/.cargo/bin:~/.config/fzf/bin:$PATH
+
+export PATH=~/.local/bin:$PATH
 
 [[ -n "${TTY:-}" ]] && export GPG_TTY=$TTY
 
