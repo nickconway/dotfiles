@@ -41,29 +41,36 @@ case ${1:-} in
     'monitor')
         if [[ "$(hyprctl monitors -j | jq -r '.[] | .name' | wc -l)" == "1" ]]; then
             OUTPUT="$(hyprctl monitors -j | jq -r '.[] | .name')"
+            sleep 0.5
+            grim -o "$OUTPUT" -l 0 $IMG
         else
             REGION="$(slurp -o -c cba67f88 -b 00000099 -w 0 -B 00000099)"
+            grim -g "$REGION" -l 0 $IMG
         fi
-        sleep 0.5
-        grim -o "$OUTPUT" -l 0 $IMG
     ;;
 
     'record')
         if pidof wf-recorder &> /dev/null; then
             kill $(pidof wf-recorder)
-            notify-send "Screen Recording" "Screen recording stopped" -e
+            (
+                ACTION=$(notify-send "Screen Recording" "Screen recording saved" -e --action "open=Open" -e)
+                [[ "$ACTION" == "open" ]] && xdg-open "$(cat /tmp/wf-recorder-path)"
+            ) &
             exit
         fi
 
         case ${2:-} in
             '')
-                wf-recorder --file="$VIDEO" &
+                OUTPUT="$(hyprctl monitors -j | jq -r ".[] | select(.focused == true) | .name")"
+                wf-recorder -a -f "$VIDEO" -o "$OUTPUT" &
+                echo $VIDEO > /tmp/wf-recorder-path
                 notify-send "Screen Recording" "Screen recording started" -e
             ;;
 
             'region')
                 REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
-                wf-recorder -g "$REGION" --file="$VIDEO" &
+                wf-recorder -g "$REGION" -a -f "$VIDEO" &
+                echo $VIDEO > /tmp/wf-recorder-path
                 notify-send "Screen Recording" "Screen recording started" -e
             ;;
         esac
