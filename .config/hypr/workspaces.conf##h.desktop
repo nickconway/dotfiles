@@ -1,6 +1,6 @@
-bind = $mainMod, B, focuswindow, zen-browser
+bind = $mainMod, B, focuswindow, chromium
 bind = $mainMod, T, focuswindow, kitty
-bind = $mainMod, D, focuswindow, discord
+bind = $mainMod, D, focuswindow, vesktop
 bind = $mainMod, M, focuswindow, thunderbird
 bind = $mainMod, F, focuswindow, feishin
 
