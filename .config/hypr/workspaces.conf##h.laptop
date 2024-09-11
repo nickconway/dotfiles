@@ -7,7 +7,7 @@ bind = $mainMod, F, exec, hyprland-workspace 6
 
 workspace = 1, on-created-empty: chromium
 workspace = 2, on-created-empty: kitty
-workspace = 3, on-created-empty: rm $XDG_RUNTIME_DIR/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! sleep 1 && vesktop-setup
+workspace = 3, on-created-empty: rm $XDG_RUNTIME_DIR/discord-ipc-0; flatpak run dev.vencord.Vesktop &> /dev/null &! vesktop-setup
 workspace = 4, on-created-empty: chromium --app='https://messages.google.com/web' & flatpak run app.bluebubbles.BlueBubbles
 workspace = 5, on-created-empty: thunderbird-beta
 workspace = 6, on-created-empty: feishin --ozone-platform-hint=auto
