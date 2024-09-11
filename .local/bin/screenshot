@@ -24,10 +24,11 @@ case ${1:-} in
     'ocr')
         REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
         grim -g "$REGION" -l 0 $OCR_IMG
-        tesseract "$IMG" - > "$TEXT"
+        tesseract "$OCR_IMG" - > "$TEXT"
+        cat "$TEXT" | head -c -1 | wl-copy
         (
-            ACTION=$(notify-send "Screenshot" "Text Saved and Copied to Clipboard" --action "open=Open" -e)
-            [[ "$ACTION" == "open" ]] && xdg-open "$TEXT"
+            ACTION=$(notify-send -i "$OCR_IMG" "Screenshot" "Text Saved and Copied to Clipboard: $(cat "$TEXT")" --action "open=Open" -e)
+            [[ "$ACTION" == "open" ]] && kitty xdg-open "$TEXT"
         ) &
     ;;
 
