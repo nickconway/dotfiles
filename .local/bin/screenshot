@@ -11,7 +11,8 @@ mkdir -p "$(xdg-user-dir DOCUMENTS)/OCR"
 mkdir -p "$(xdg-user-dir VIDEOS)/Screen Recordings"
 
 DATE="$(date +%Y-%m-%d_%H-%M-%S)"
-IMG=$(xdg-user-dir PICTURES)/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png
+IMG="$(xdg-user-dir PICTURES)/Screenshots/$DATE.png"
+IMG_EDIT="$(xdg-user-dir PICTURES)/Screenshots/$DATE-edit.png"
 TEXT="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.txt"
 OCR_IMG="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.png"
 VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mkv"
@@ -77,7 +78,8 @@ esac
 if [[ -e $IMG ]]; then
     wl-copy < $IMG
     (
-        ACTION=$(notify-send -i "$IMG" "Screenshot" "Screenshot Saved and Copied to Clipboard" --action "open=Open" -e)
+        ACTION=$(notify-send -i "$IMG" "Screenshot" "Screenshot Saved and Copied to Clipboard" --action "open=Open" --action "edit=Edit" -e)
         [[ "$ACTION" == "open" ]] && xdg-open "$IMG"
+        [[ "$ACTION" == "edit" ]] && satty -f "$IMG" -o "$IMG_EDIT"
     ) &
 fi
