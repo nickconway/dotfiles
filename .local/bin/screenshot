@@ -80,6 +80,6 @@ if [[ -e $IMG ]]; then
     (
         ACTION=$(notify-send -i "$IMG" "Screenshot" "Screenshot Saved and Copied to Clipboard" --action "open=Open" --action "edit=Edit" -e)
         [[ "$ACTION" == "open" ]] && xdg-open "$IMG"
-        [[ "$ACTION" == "edit" ]] && satty -f "$IMG" -o "$IMG_EDIT"
+        [[ "$ACTION" == "edit" ]] && satty -f "$IMG" -o "$IMG_EDIT" --initial-tool brush --save-after-copy --disable-notifications --annotation-size-factor 0.5
     ) &
 fi
