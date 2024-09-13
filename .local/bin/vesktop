@@ -1,9 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-if [[ -e $XDG_RUNTIME_DIR/discord-ipc-0 ]]; then
-    rm $XDG_RUNTIME_DIR/discord-ipc-0;
-fi
+[[ -e $XDG_RUNTIME_DIR/discord-ipc-0 ]] && rm $XDG_RUNTIME_DIR/discord-ipc-0
+[[ -e $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0 ]] && rm $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0
 
 flatpak run dev.vencord.Vesktop &> /dev/null &
 
