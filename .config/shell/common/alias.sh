@@ -47,7 +47,7 @@ alias c='clear'
 alias cat='bat --style=plain'
 alias cds=$'cd "$(tmux display-message -p \'#{session_path}\')"'
 
-alias clipqr='xclip -o | qrencode -t utf8'
+alias clipqr='wl-paste | qrencode -t utf8'
 
 alias common='grep -xf'
 
