@@ -34,7 +34,7 @@ window {
     border-radius:               12px;
     border-color:                @selected-normal-background;
     cursor:                      "default";
-    background-color:            @background;
+    background-color:            @background-transparent;
 }
 
 /*****----- Main Box -----*****/
@@ -121,7 +121,7 @@ element {
     cursor:                      pointer;
 }
 element-text {
-    font:                        "feather 28";
+    font:                        "JetBrainsMono Nerd Font Propo 28";
     background-color:            transparent;
     text-color:                  inherit;
     cursor:                      inherit;

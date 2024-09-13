@@ -2,13 +2,13 @@
 configuration {
     modi:                        "drun,filebrowser,window,run";
     show-icons:                  true;
-    display-drun:                " ";
-    display-run:                 " ";
-    display-filebrowser:         " ";
-    display-window:              " ";
+    display-drun:                "";
+    display-run:                 "";
+    display-filebrowser:         "";
+    display-window:              "";
     drun-display-format:         "{name}";
     window-format:               "{w}{t}";
-    font:                        "JetBrainsMono Nerd Font 10";
+    font:                        "JetBrainsMono Nerd Font Propo 10";
     icon-theme:                  "Tela-circle-dracula";
 }
 
@@ -27,6 +27,7 @@ window {
     padding:                     0em;
     border-color:                @border-color;
     background-color:            @normal-background;
+    border-radius:               1em;
 }
 mainbox {
     enabled:                     true;
@@ -44,17 +45,23 @@ inputbar {
     enabled:                     true;
     spacing:                     0em;
     padding:                     5em;
-    children:                    [ "entry" ];
+    children:                    [ "prompt", "entry" ];
     background-color:            transparent;
     background-image:            url("~/.cache/wal/wal.thmb", width);
 }
-entry {
-    border-radius:               2em;
-    enabled:                     true;
-    spacing:                     1em;
+prompt {
+    border-radius:               2em 0 0 2em;
     padding:                     1em;
     text-color:                  @normal-foreground;
-    background-color:            @normal-background;
+    background-color:            @background-transparent;
+}
+entry {
+    border-radius:               0 2em 2em 0;
+    enabled:                     true;
+    spacing:                     1em;
+    padding:                     1em 0em;
+    text-color:                  @normal-foreground;
+    background-color:            @background-transparent;
 }
 
 
@@ -64,7 +71,7 @@ listbox {
     spacing:                     0em;
     orientation:                 horizontal;
     children:                    [ "listview" , "mode-switcher" ];
-    background-color:            @normal-background;
+    background-color:            @background-transparent;
 }
 listview {
     padding:                     1.5em;
@@ -97,7 +104,7 @@ mode-switcher {
 button {
     cursor:                      pointer;
     border-radius:               2em;
-    background-color:            @normal-background;
+    background-color:            @background-transparent;
     text-color:                  @normal-foreground;
 }
 button selected {
@@ -136,7 +143,7 @@ element-text {
 // Error message //
 error-message {
     text-color:                  @normal-foreground;
-    background-color:            @normal-background;
+    background-color:            @background-transparent;
     text-transform:              capitalize;
     children:                    [ "textbox" ];
 }

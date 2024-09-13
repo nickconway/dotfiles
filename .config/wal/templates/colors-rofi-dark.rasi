@@ -21,14 +21,15 @@
     selected-urgent-foreground: @foreground;
 
     background-color: transparent;
-    background: {background}99;
+    background: {background};
+    background-transparent: {background}99;
     foreground: {foreground};
     border-color: transparent;
     spacing: 2;
 }}
 
 #window {{
-    background-color: @background;
+    background-color: @background-transparent;
     border: 0;
     padding: 2.5ch;
 }}
