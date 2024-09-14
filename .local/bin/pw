@@ -5,7 +5,7 @@ if [[ -z "$@" ]]; then
     LIST=$(rbw list --fields name,user,id | sed "s/\t/ /g")
 
     if [[ -n "$DISPLAY" ]] && command -v rofi &> /dev/null; then
-        SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | rofi -dmenu -p 󱉼 -i -config ~/.config/rofi/styles/style_2.rasi)
+        SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | rofi -dmenu -p 󱉼 -i -config ~/.config/rofi/styles/style_2.rasi -theme-str 'listview { columns: 1; } mode-switcher { enabled: false; }' )
     else
 	SELECTED=$(echo "$LIST" | awk 'NF{NF-=1};1' | fzft)
     fi
