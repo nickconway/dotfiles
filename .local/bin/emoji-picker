@@ -7,4 +7,4 @@ if [[ ! -e ~/.cache/emojis || "$1" == "download" ]]; then
       > ~/.cache/emojis
 fi
 
-cat ~/.cache/emojis | rofi -display-columns 1 -display-column-separator ' ' -dmenu -p 󰞅 -config ~/.config/rofi/styles/style_2.rasi --placeholder-text='...' -i -theme-str 'listview { columns: 6; } mode-switcher { enabled: false; }' | cut -d ' ' -f 1 | tr -d '\n' | wl-copy && paste-keys
+cat ~/.cache/emojis | rofi -display-columns 1 -display-column-separator ' ' -dmenu -p 󰞅 -config ~/.config/rofi/styles/style_2.rasi --placeholder-text='...' -i -theme-str 'listview { columns: 6; } mode-switcher { enabled: false; } element-text { font: "NotoSans Nerd Font Propo 20"; }' | cut -d ' ' -f 1 | tr -d '\n' | wl-copy && paste-keys
