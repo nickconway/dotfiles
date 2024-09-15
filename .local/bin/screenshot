@@ -29,7 +29,9 @@ case ${1:-} in
         cat "$TEXT" | head -c -1 | wl-copy
         (
             ACTION=$(notify-send -i "$OCR_IMG" "Screenshot" "Text Saved and Copied to Clipboard: $(cat "$TEXT")" --action "open=Open" -e)
-            [[ "$ACTION" == "open" ]] && kitty xdg-open "$TEXT"
+            case $ACTION in
+                'open') kitty xdg-open "$TEXT";;
+            esac
         ) &
     ;;
 
@@ -48,25 +50,36 @@ case ${1:-} in
 
     'record')
         if pidof wf-recorder &> /dev/null; then
-            kill $(pidof wf-recorder)
+            killall wf-recorder --signal SIGINT
             (
                 ACTION=$(notify-send "Screen Recording" "Screen recording saved" -e --action "open=Open" -e)
-                [[ "$ACTION" == "open" ]] && xdg-open "$(cat /tmp/wf-recorder-path)"
+                case $ACTION in
+                    'open') xdg-open "$(cat /tmp/wf-recorder-path)";;
+                esac
             ) &
+
+            pactl unload-module module-loopback
+            pactl unload-module module-null-sink
             exit
         fi
+
+        pactl load-module module-null-sink sink_name=Combined
+        pactl load-module module-loopback sink=Combined source=$(pactl get-default-sink).monitor
+        pactl load-module module-loopback sink=Combined source=$(pactl get-default-source)
+
+        WF_FLAGS='-c hevc_nvenc -C aac -p tier=high -p spatial-aq=1 -p multipass=fullres -p rc=vbr -p cq=16 -p qmin=24 -p qmax=24 -p profile:v=main10 -p preset:v=p5 -r 60 --audio="Combined.monitor"'
 
         case ${2:-} in
             '')
                 OUTPUT="$(hyprctl monitors -j | jq -r ".[] | select(.focused == true) | .name")"
-                wf-recorder -a -f "$VIDEO" -o "$OUTPUT" &
+                wf-recorder -f "$VIDEO" -o "$OUTPUT" $WF_FLAGS &
                 echo $VIDEO > /tmp/wf-recorder-path
                 notify-send "Screen Recording" "Screen recording started" -e
             ;;
 
             'region')
                 REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
-                wf-recorder -g "$REGION" -a -f "$VIDEO" &
+                wf-recorder -g "$REGION" -f "$VIDEO" $WF_FLAGS &
                 echo $VIDEO > /tmp/wf-recorder-path
                 notify-send "Screen Recording" "Screen recording started" -e
             ;;
@@ -79,7 +92,9 @@ if [[ -e $IMG ]]; then
     wl-copy < $IMG
     (
         ACTION=$(notify-send -i "$IMG" "Screenshot" "Screenshot Saved and Copied to Clipboard" --action "open=Open" --action "edit=Edit" -e)
-        [[ "$ACTION" == "open" ]] && xdg-open "$IMG"
-        [[ "$ACTION" == "edit" ]] && satty -f "$IMG" -o "$IMG_EDIT" --initial-tool brush --save-after-copy --disable-notifications --annotation-size-factor 0.5
+        case $ACTION in
+            "open") xdg-open "$IMG";;
+            "edit") satty -f "$IMG" -o "$IMG_EDIT" --initial-tool brush --save-after-copy --disable-notifications --annotation-size-factor 0.5;;
+        esac
     ) &
 fi
