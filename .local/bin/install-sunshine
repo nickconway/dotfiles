@@ -2,13 +2,7 @@
 set -eou pipefail
 set -x
 
-# wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine.pkg.tar.zst") | .browser_download_url')"
-wget "$(curl -s https://api.github.com/repos/LizardByte/Sunshine/releases | jq -r 'first | .assets | .[] | select(.name == "sunshine_x86_64.flatpak") | .browser_download_url')"
-# sudo pacman -U --noconfirm sunshine.pkg.tar.zst
-sudo flatpak install --reinstall --or-update -y --system sunshine_x86_64.flatpak || echo "Already installed?"
-sudo -i flatpak run --command=additional-install.sh dev.lizardbyte.app.Sunshine
-# rm sunshine.pkg.tar.zst
-rm sunshine_x86_64.flatpak
+yay -S --needed --noconfirm sunshine-git
 
 echo 'KERNEL=="uinput", SUBSYSTEM=="misc", OPTIONS+="static_node=uinput", TAG+="uaccess"' | \
 sudo tee /etc/udev/rules.d/60-sunshine.rules
@@ -16,24 +10,17 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger
 sudo modprobe uinput
 
-sudo chmod u+s /usr/bin/bwrap
+sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
 
-# sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
-
-# ExecStart=/usr/bin/sunshine
 sudo bash -c "cat << EOF > /etc/systemd/system/sunshine.service
 [Unit]
 Description=Sunshine self-hosted game stream host for Moonlight.
-StartLimitIntervalSec=500
-StartLimitBurst=5
 
 [Service]
 Environment=PULSE_SERVER=unix:$(pactl info | awk '/Server String/{print$3}')
-ExecStart=flatpak run dev.lizardbyte.app.Sunshine
+ExecStart=$(which sunshine)
 Restart=on-failure
 RestartSec=5s
-#Flatpak Only
-ExecStop=flatpak kill dev.lizardbyte.app.Sunshine
 
 [Install]
 WantedBy=graphical.target
