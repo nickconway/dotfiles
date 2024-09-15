@@ -1,8 +1,15 @@
 #!/bin/bash
 
-if command -v apt &>/dev/null; then
-    sudo apt update && sudo apt upgrade -y
-elif command -v pacman &>/dev/null; then
+if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+    if [[ "$(ssh-add -l 2>&1)" == *"Error"* ]]; then
+        rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+    fi
+else
+    eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+fi
+
+if command -v pacman &>/dev/null; then
     printf "\033[95m::\033[0m Checking Arch Linux PGP Keyring...\n"
     installedver="$(LANG= sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
     currentver="$(LANG= sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
@@ -14,15 +21,5 @@ elif command -v pacman &>/dev/null; then
         echo " Arch Linux PGP Keyring is up to date."
         echo " Proceeding with full system upgrade."
     fi
-    if command -v yay &>/dev/null; then
-        systemd-inhibit yay -Syu --noconfirm --color=always
-    elif command -v trizen &>/dev/null; then
-        systemd-inhibit trizen -Syu
-    elif command -v pacaur &>/dev/null; then
-        systemd-inhibit pacaur -Syu
-    elif command -v aura &>/dev/null; then
-        systemd-inhibit sudo aura -Syu
-    else
-        systemd-inhibit sudo pacman -Syu --noconfirm
-    fi
 fi
+topgrade
