@@ -63,9 +63,16 @@ case ${1:-} in
             exit
         fi
 
+        case ${2:-} in
+            'region') REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)";;
+        esac
+
+        pactl load-module module-null-sink sink_name=Virtual-Speakers
         pactl load-module module-null-sink sink_name=Combined
-        pactl load-module module-loopback sink=Combined source=$(pactl get-default-sink).monitor
-        pactl load-module module-loopback sink=Combined source=$(pactl get-default-source)
+        pactl load-module module-loopback sink=Virtual-Speakers source=$(pactl get-default-source).monitor
+        pactl set-source-volume Virtual-Speakers.monitor 50%
+        pactl load-module module-loopback sink=Combined source=Virtual-Speakers.monitor
+        pactl load-module module-loopback sink=Combined source=$(pactl get-default-sink)
 
         WF_FLAGS='-C aac -r 60 --audio=Combined.monitor'
         if [[ -e /proc/driver/nvidia ]]; then
@@ -83,7 +90,6 @@ case ${1:-} in
             ;;
 
             'region')
-                REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
                 wf-recorder -g "$REGION" -f "$VIDEO" $WF_FLAGS &
                 echo $VIDEO > /tmp/wf-recorder-path
                 notify-send "Screen Recording" "Screen recording started" -e
