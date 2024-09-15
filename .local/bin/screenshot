@@ -67,7 +67,12 @@ case ${1:-} in
         pactl load-module module-loopback sink=Combined source=$(pactl get-default-sink).monitor
         pactl load-module module-loopback sink=Combined source=$(pactl get-default-source)
 
-        WF_FLAGS='-c hevc_nvenc -C aac -p tier=high -p spatial-aq=1 -p multipass=fullres -p rc=vbr -p cq=16 -p qmin=24 -p qmax=24 -p profile:v=main10 -p preset:v=p5 -r 60 --audio="Combined.monitor"'
+        WF_FLAGS='-C aac -r 60 --audio=Combined.monitor'
+        if [[ -e /proc/driver/nvidia ]]; then
+            WF_FLAGS+=' -c hevc_nvenc -p tier=high -p spatial-aq=1 -p multipass=fullres -p rc=vbr -p cq=16 -p qmin=24 -p qmax=24 -p profile:v=main10 -p preset:v=p5'
+        else
+            WF_FLAGS+=' '
+        fi
 
         case ${2:-} in
             '')
