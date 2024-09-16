@@ -4,3 +4,4 @@
 [submodule "fzf-tab"]
 	path = fzf-tab
 	url = https://github.com/nickconway/fzf-tab
+	branch = feat/tmux-popup-follow-cursor
