@@ -68,23 +68,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
         local save_cursor = vim.fn.getpos(".")
         vim.cmd([[%s/\s\+$//e]])
         vim.fn.setpos(".", save_cursor)
-
-        local null_ls_sources = require("null-ls.sources")
-        local ft = vim.bo.filetype
-        local has_null_ls = #null_ls_sources.get_available(ft, "NULL_LS_FORMATTING") > 0
-
-        vim.lsp.buf.format({
-            filter = function(client)
-                if has_null_ls then
-                    return client.name == "null-ls"
-                else
-                    return true
-                end
-            end,
-            async = false,
-        })
-    end,
-    group = vim.api.nvim_create_augroup("autosave", { clear = true }),
+    end
 })
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, {
