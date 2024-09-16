@@ -139,8 +139,8 @@ function gco() {
 }
 alias gcom='git checkout main && git pull origin main'
 alias gcp='git cherry-pick'
-alias gd='git diff -w'
-alias gds='git diff --staged -w'
+alias gd='git diff --cached'
+alias gds='git diff --staged'
 
 function ggp() {
     if [[ -n $1 ]]; then
@@ -512,8 +512,8 @@ alias ycl="yadm config --get-all local.class"
 alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
 alias yconfig='yadm gitconfig user.name $GIT_NAME && yadm gitconfig user.email $GIT_EMAIL && yadm gitconfig user.signingkey $GIT_GPG_KEY'
-alias yd="yadm diff -w"
-alias yds="yadm diff --staged -w"
+alias yd="yadm diff --cached"
+alias yds="yadm diff --staged"
 alias ydec="yadm decrypt"
 alias ye="(cd; n)"
 alias yenc="yadm encrypt"
