@@ -12,7 +12,7 @@ sudo modprobe uinput
 
 sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
 
-sudo bash -c "cat << EOF > /etc/systemd/system/sunshine.service
+sudo bash -c "cat << EOF > /etc/systemd/user/sunshine.service
 [Unit]
 Description=Sunshine self-hosted game stream host for Moonlight.
 
@@ -23,9 +23,8 @@ Restart=on-failure
 RestartSec=5s
 
 [Install]
-WantedBy=graphical.target
+WantedBy=graphical-session.target
 EOF"
 
-sudo systemctl daemon-reload
-
-sudo systemctl enable --now sunshine
+systemctl --user daemon-reload
+systemctl --user enable --now sunshine
