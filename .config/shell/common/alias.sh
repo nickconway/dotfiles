@@ -139,13 +139,13 @@ function gco() {
     if [[ $# -gt 0 ]]; then
         git checkout "$1"
     else
-        HASH=$(_fzf_git_stashes)
-        [[ -n "$HASH" ]] && git checkout "$(_fzf_git_hashes)"
+        HASH=$(_fzf_git_hashes)
+        [[ -n "$HASH" ]] && git checkout "$HASH"
     fi
 }
 alias gcom='git checkout main && git pull origin main'
 alias gcp='git cherry-pick'
-alias gd='git diff --cached'
+alias gd='git diff'
 alias gds='git diff --staged'
 
 function ggp() {
@@ -518,7 +518,7 @@ alias ycl="yadm config --get-all local.class"
 alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
 alias yconfig='yadm gitconfig user.name $GIT_NAME && yadm gitconfig user.email $GIT_EMAIL && yadm gitconfig user.signingkey $GIT_GPG_KEY'
-alias yd="yadm diff --cached"
+alias yd="yadm diff"
 alias yds="yadm diff --staged"
 alias ydec="yadm decrypt"
 alias ye="(cd; n)"
