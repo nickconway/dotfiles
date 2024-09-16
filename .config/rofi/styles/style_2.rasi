@@ -36,7 +36,7 @@ mainbox {
     orientation:                 vertical;
     children:                    [ "inputbar" , "listbox" ];
     background-color:            transparent;
-    background-image:            url("~/.cache/wal/wal.blur", width);
+    background-image:            url("~/.cache/wal/wal.blur", height);
 }
 
 
