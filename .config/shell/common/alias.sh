@@ -105,9 +105,15 @@ function fn() {
 }
 
 alias g='git status'
-alias ga='git add'
+function ga() {
+    if [[ $# -gt 0 ]]; then
+        git add $@
+    else
+        git add .
+    fi
+}
 alias gaa='git add --all'
-alias gb='git branch'
+alias gb='git branch -vv'
 alias gc='git commit -v'
 alias gca='git commit -av'
 alias gcai='git-commit-ai'
