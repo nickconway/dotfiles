@@ -1,0 +1,3 @@
+[submodule ".config/fzf-git"]
+	path = .config/fzf-git
+	url = git@github.com:nickconway/fzf-git.sh
