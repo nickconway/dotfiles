@@ -12,12 +12,11 @@ sudo modprobe uinput
 
 sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
 
-sudo bash -c "cat << EOF > /etc/systemd/user/sunshine.service
+bash -c "cat << EOF > ~/.config/systemd/user/sunshine.service
 [Unit]
 Description=Sunshine self-hosted game stream host for Moonlight.
 
 [Service]
-Environment=PULSE_SERVER=unix:$(pactl info | awk '/Server String/{print$3}')
 ExecStart=$(which sunshine)
 Restart=on-failure
 RestartSec=5s
