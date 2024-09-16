@@ -40,12 +40,14 @@ if [[ -e ~/.config/zsh/fzf-tab/fzf-tab.zsh ]]; then
     zstyle ':completion:*:descriptions' format '[%d]'
     zstyle ':completion:*' menu no
 
-    zstyle ':fzf-tab:complete:cd:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
-    zstyle ':fzf-tab:complete:ls:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
-    zstyle ':fzf-tab:complete:eza:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
-    zstyle ':fzf-tab:complete:mv:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
-    zstyle ':fzf-tab:complete:cp:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
-    zstyle ':fzf-tab:complete:rm:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always $realpath || bat --color=always --style=plain $realpath'
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:ls:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:eza:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:mv:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:cp:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:rm:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:cat:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:bat:*' fzf-preview 'fzf-preview $realpath'
 
     zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
     zstyle ':fzf-tab:*' popup-follow-cursor false
