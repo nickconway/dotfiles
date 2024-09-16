@@ -1,3 +1,6 @@
 [submodule ".config/fzf-git"]
 	path = .config/fzf-git
 	url = git@github.com:nickconway/fzf-git.sh
+[submodule ".config/zsh/fzf-tab"]
+	path = .config/zsh/fzf-tab
+	url = https://github.com/nickconway/fzf-tab
