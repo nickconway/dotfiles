@@ -37,7 +37,7 @@ export PATH="$DOTNET_ROOT":"$DOTNET_ROOT"/tools:"$PATH"
 export PATH=/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$PATH
 export PATH=~/.local/podman/bin:~/.cargo/bin:~/.config/fzf/bin:$PATH
 
-export PNPM_HOME="~/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 export PATH=~/.local/bin:$PATH
 
