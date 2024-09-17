@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PATH=~/.local/share/pnpm:$PATH
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
     if [[ "$(ssh-add -l 2>&1)" == *"Error"* ]]; then
