@@ -59,6 +59,10 @@
   background: alpha(@background, 0.7);
 }
 
+.low, .normal, .notification.critical {
+  border-color: alpha(@color3, 0.5);
+}
+
 .low {
 }
 .normal {

@@ -1,8 +1,21 @@
 @import url("../../.cache/wal/colors-waybar.css");
 @import url("./notifications.css");
 
+* {
+  color: @foreground;
+  font-family: "NotoSans Nerd Font Propo 10";
+  font-weight: 400;
+  transition: 200ms;
+}
+
+.blank-window {
+  background: transparent;
+}
+
 .control-center {
   background: alpha(@color0, 0.4);
+  border: 1px solid @color3;
+  padding: 12px;
 }
 
 .control-center-list {
@@ -12,4 +25,20 @@
 .control-center-list-placeholder {
   color: @color3;
   opacity: 0.7;
+}
+
+.widget-buttons-grid {
+  background: transparent;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  background: transparent;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
+  background: @color5;
+}
+
+.widget-volume {
+  background: transparent;
 }

@@ -31,47 +31,13 @@
   "timeout-low": 5,
   "transition-time": 100,
   "widget-config": {
-    "buttons-grid": {
-      "actions": [
-        {
-          "active": false,
-          "command": "swaync-client -d",
-          "label": "󰤄",
-          "type": "toggle"
-        },
-        {
-          "active": false,
-          "command": "swaync-client -d",
-          "label": "󰤄",
-          "type": "toggle"
-        },
-        {
-          "active": false,
-          "command": "obs",
-          "label": "󰄀",
-          "type": "button"
-        },
-        {
-          "active": false,
-          "command": "obs",
-          "label": "󰕧",
-          "type": "button"
-        },
-        {
-          "active": false,
-          "command": "swaync-client -t",
-          "label": "",
-          "type": "toggle"
-        }
-      ]
-    },
     "mpris": {
       "image-radius": 12,
       "image-size": 96
     },
     "title": {
       "text": "Notifications",
-      "button-text": "󰎟 Clear",
+      "button-text": " 󰎟 ",
       "clear-all-button": true
     },
     "volume": {
@@ -82,16 +48,51 @@
     },
     "backlight": {
       "label": ""
+    },
+    "buttons-grid": {
+      "actions": [
+        {
+          "type": "toggle",
+          "label": "󰤄",
+          "command": "swaync-client -d",
+          "update-command": "swaync-client -D"
+        },
+        {
+          "type": "toggle",
+          "label": "",
+          "command": "pamixer -t",
+          "update-command": "sh -c '[[ $(pamixer --get-mute) == false ]] && echo true || echo false'"
+        },
+        {
+          "type": "toggle",
+          "label": "",
+          "command": "pamixer --default-source -t",
+          "update-command": "sh -c '[[ $(pamixer --default-source --get-mute) == false ]] && echo true || echo false'"
+        },
+        {
+          "type": "toggle",
+          "label": "󰂯",
+          "command": "rfkill toggle bluetooth",
+          "update-command": "sh -c 'rfkill | grep 'bluetooth.*unblocked' && echo true || echo false'"
+        },
+        {
+          "type": "toggle",
+          "label": "",
+          "command": "sh -c '[[ $(nmcli radio wifi) == enabled ]] && nmcli radio wifi off || nmcli radio wifi on'",
+          "update-command": "sh -c '[[ $(nmcli radio wifi) == enabled ]] && echo true || echo false'"
+        }
+      ]
     }
   },
 
   "widgets": [
     "title",
-    "notifications",
+    "dnd",
     "buttons-grid",
-    "mpris",
+    "notifications",
     "volume",
     "backlight",
-    "inhibitors"
+    "inhibitors",
+    "mpris"
   ]
 }
