@@ -27,6 +27,41 @@
   opacity: 0.7;
 }
 
+.widget-title button {
+  background: transparent;
+  border: 1px solid @color3;
+}
+
+.widget-dnd {
+  margin: 6px;
+  font-size: 1.2rem;
+}
+
+.widget-dnd > switch {
+  background: @background;
+  border-radius: 8px;
+  border: 1px solid @color3;
+  box-shadow: none;
+  padding: 2px;
+}
+
+.widget-dnd > switch:hover {
+  background: @color3;
+}
+
+.widget-dnd > switch:checked {
+  background: alpha(@color3, 0.5);
+}
+
+.widget-dnd > switch:checked:hover {
+  background: @color3;
+}
+
+.widget-dnd > switch slider {
+  background: alpha(@color3, 0.4);
+  border-radius: 6px;
+}
+
 .widget-buttons-grid {
   background: transparent;
 }
@@ -36,9 +71,28 @@
 }
 
 .widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
-  background: @color5;
+  background: alpha(@color3, 0.5);
+}
+
+.widget-backlight {
+  background: transparent;
 }
 
 .widget-volume {
   background: transparent;
+}
+
+trough {
+  background: alpha(@color3, 0.2);
+  border-radius: 20px;
+}
+
+trough highlight {
+  background: @color3;
+  border-radius: 20px;
+}
+
+trough slider {
+  padding: 3px;
+  background: @color3;
 }
