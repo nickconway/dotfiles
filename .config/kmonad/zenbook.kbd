@@ -39,7 +39,7 @@
     _   _      _    _    _     _ _ _ _ _ _ _ _ _
     _   _      _    _    _     _ _ _ _ _ _ _ _ _
     _   pgup   home up   end   _ _ _ _ _ _ _ _ _
-    _   pgdn   left down right _ _ _ _ _ _ _ _
+    _   pgdn   left down right _ _ rctl rsft ralt rmet _ _
     C-z C-x    C-c  C-v  _ _ _ _ _ _ _ _ _
     _ _ _ _           _         _ _ _ _ _
 )
