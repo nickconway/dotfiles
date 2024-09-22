@@ -280,8 +280,9 @@ alias j='just'
 alias jc='just --choose'
 
 alias l='ls'
-alias la='ls -lA'
+alias la='ls -A'
 alias ll='ls -l'
+alias lla='ls -lA'
 function ls() {
     if command -v eza &>/dev/null; then
         eza --icons=always --color $@
