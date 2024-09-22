@@ -4,6 +4,7 @@ if [[ -d ~/.config/zsh/zsh-completions ]]; then
     command -v fzf &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_fzf ]] || fzf --zsh > ~/.config/zsh/zsh-completions/src/_fzf)
     command -v pnpm &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_pnpm ]] || pnpm completion zsh > ~/.config/zsh/zsh-completions/src/_pnpm)
     command -v kubectl &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_kubectl ]] || kubectl completion zsh > ~/.config/zsh/zsh-completions/src/_kubectl)
+    command -v minikube &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_minikube ]] || minikube completion zsh > ~/.config/zsh/zsh-completions/src/_minikube)
     fpath=(~/.config/zsh/zsh-completions/src $fpath)
 fi
 
