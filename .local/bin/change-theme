@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+if [[ $(uname) == Darwin ]]; then
+    wal -i ~/wallpaper.png -n
+    [[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
+    exit
+fi
+
 if [[ ! -e ~/.venvs/wal ]]; then
     python3 -m venv ~/.venvs/wal
 fi
