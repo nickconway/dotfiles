@@ -6,6 +6,7 @@ if [[ -d ~/.config/zsh/zsh-completions ]]; then
     command -v kubectl &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_kubectl ]] || kubectl completion zsh > ~/.config/zsh/zsh-completions/src/_kubectl)
     command -v minikube &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_minikube ]] || minikube completion zsh > ~/.config/zsh/zsh-completions/src/_minikube)
     fpath=(~/.config/zsh/zsh-completions/src $fpath)
+    [[ -e /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 fi
 
 _dotnet_zsh_complete()
