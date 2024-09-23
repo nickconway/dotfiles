@@ -1,6 +1,6 @@
 foreground: &foreground "{foreground}"
 background: &background "{background}"
-current_line: &current_line "{foreground}"
+current_line: &current_line "{color3}"
 selection: &selection "{foreground}"
 comment: &comment "{color8}"
 
