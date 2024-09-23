@@ -1,0 +1,111 @@
+foreground: &foreground "{foreground}"
+background: &background "{background}"
+current_line: &current_line "{foreground}"
+selection: &selection "{foreground}"
+comment: &comment "{color8}"
+
+color4: &color4 "{color4}"
+color2: &color2 "{color2}"
+color5: &color5 "{color5}"
+color6: &color6 "{color6}"
+color7: &color7 "{color7}"
+color1: &color1 "{color1}"
+color3: &color3 "{color3}"
+
+# Skin...
+k9s:
+  # General K9s styles
+  body:
+    fgColor: *foreground
+    bgColor: *background
+    logoColor: *color7
+  # Command prompt styles
+  prompt:
+    fgColor: *foreground
+    bgColor: *background
+    suggestColor: *color7
+  # ClusterInfoView styles.
+  info:
+    fgColor: *color6
+    sectionColor: *foreground
+  # Dialog styles.
+  dialog:
+    fgColor: *foreground
+    bgColor: *background
+    buttonFgColor: *foreground
+    buttonBgColor: *color7
+    buttonFocusFgColor: *color3
+    buttonFocusBgColor: *color6
+    labelFgColor: *color5
+    fieldFgColor: *foreground
+  frame:
+    # Borders styles.
+    border:
+      fgColor: *selection
+      focusColor: *current_line
+    menu:
+      fgColor: *foreground
+      keyColor: *color6
+      # Used for favorite namespaces
+      numKeyColor: *color6
+    # CrumbView attributes for history navigation.
+    crumbs:
+      fgColor: *foreground
+      bgColor: *current_line
+      activeColor: *current_line
+    # Resource status and update styles
+    status:
+      newColor: *color4
+      modifyColor: *color7
+      addColor: *color2
+      errorColor: *color1
+      highlightColor: *color5
+      killColor: *comment
+      completedColor: *comment
+    # Border title styles.
+    title:
+      fgColor: *foreground
+      bgColor: *current_line
+      highlightColor: *color5
+      counterColor: *color7
+      filterColor: *color6
+  views:
+    # Charts skins...
+    charts:
+      bgColor: default
+      defaultDialColors:
+        - *color7
+        - *color1
+      defaultChartColors:
+        - *color7
+        - *color1
+    # TableView attributes.
+    table:
+      fgColor: *foreground
+      bgColor: *background
+      # Header row styles.
+      header:
+        fgColor: *foreground
+        bgColor: *background
+        sorterColor: *color4
+    # Xray view attributes.
+    xray:
+      fgColor: *foreground
+      bgColor: *background
+      cursorColor: *current_line
+      graphicColor: *color7
+      showIcons: false
+    # YAML info styles.
+    yaml:
+      keyColor: *color6
+      colonColor: *color7
+      valueColor: *foreground
+    # Logs styles.
+    logs:
+      fgColor: *foreground
+      bgColor: *background
+      indicator:
+        fgColor: *foreground
+        bgColor: *color7
+        toggleOnColor: *color2
+        toggleOffColor: *color4

@@ -36,6 +36,7 @@ hyprctl hyprpaper wallpaper ", $IMG"
 echo
 wal -i "$IMG"
 
+[[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
 [[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
 [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
 
