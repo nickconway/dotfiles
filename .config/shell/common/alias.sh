@@ -469,8 +469,6 @@ function lazynvm() {
     [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
 }
 
-alias mkdir='mkdir -p'
-
 function nvm() {
     lazynvm
     nvm $@
@@ -491,8 +489,10 @@ function npx() {
     npx $@
 }
 
+alias monitor-mic='pactl list | grep -q module-loopback && pactl unload-module module-loopback || pactl load-module module-loopback source=$(pactl get-default-sink)'
 alias mods='mods --theme base16'
 alias md='mkdir -p'
+alias mkdir='mkdir -p'
 function mkcd() {
     mkdir -p -- "$1" && cd "$1"
 }
