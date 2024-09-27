@@ -91,7 +91,18 @@ map("i", "<C-Up>", "<esc><cmd>m .-2<cr>==gi", "Move Up")
 map("v", "<C-Down>", ":m '>+1<cr>gv=gv", "Move Down")
 map("v", "<C-Up>", ":m '<-2<cr>gv=gv", "Move Up")
 
-map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", "Escape and Clear hlsearch")
+map("i", "<esc>", "<cmd>noh<cr><esc>")
+map("n", "<esc>", function()
+    vim.cmd("noh")
+    local mc = require("multicursor-nvim")
+    if not mc.cursorsEnabled() then
+        mc.enableCursors()
+    elseif mc.hasCursors() then
+        mc.clearCursors()
+    else
+        -- Default <esc> handler.
+    end
+end)
 
 map("n", "<leader>ch", function()
     vim.cmd("set cursorline!")
