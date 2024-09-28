@@ -441,8 +441,9 @@ alias kdelj='kubectl delete job'
 
 alias l='ls'
 alias la='ls -A'
-alias ll='ls -l'
-alias lla='ls -lA'
+alias ll='ls -lg'
+alias lla='ls -lAg'
+alias tree='ls --tree'
 function ls() {
     if command -v eza &>/dev/null; then
         eza --icons=always --color $@
