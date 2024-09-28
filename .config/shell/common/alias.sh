@@ -506,15 +506,14 @@ function np() {
 
 function npa() {
     ARGS="$@"
-    eval $@ &&
-        (
-            curl -d "$ARGS finished successfully" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
-            command -v notify-send &>/dev/null && notify-send "$ARGS finished successfully"
-        ) ||
-        (
-            curl -d "$ARGS failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
-            command -v notify-send &>/dev/null && notify-send "$ARGS failed"
-        )
+    eval $@
+    if [[ $? -eq 0 ]]; then
+        curl -d "$ARGS finished successfully" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+        command -v notify-send &>/dev/null && notify-send "$ARGS finished successfully"
+    else
+        curl -d "$ARGS failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+        command -v notify-send &>/dev/null && notify-send "$ARGS failed"
+    fi
 }
 
 alias pls='sudo $(fc -ln -1)'
