@@ -19,7 +19,7 @@ function fail(){
 
 function clean(){
     if [[ $RESTART == 'true' ]]; then
-        sudo systemctl start docker
+        sudo systemctl start docker.socket docker.service
     fi
 }
 
@@ -39,7 +39,7 @@ CONTAINERS_RUNNING="$(docker ps -q)"
 
 dump-containers
 
-sudo systemctl stop docker
+sudo systemctl stop docker.socket docker.service
 
 mkdir -p $BASE_DIR
 if [[ ! -e "$BORG_REPO" ]]; then
