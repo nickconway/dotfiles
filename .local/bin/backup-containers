@@ -46,8 +46,8 @@ if [[ ! -e "$BORG_REPO" ]]; then
     sudo -E $(which borg) init $BORG_REPO -e repokey
 fi
 sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc \
-    --exclude='docker/data/media/movies' \
-    --exclude='docker/data/media/tv' \
+    --exclude='docker/data/media/media/movies' \
+    --exclude='docker/data/media/media/tv' \
     --exclude="docker/kasm-workspaces/data/kasm/*/certs" \
     --exclude='docker/kasm-workspaces/data/kasm/*/conf/database' \
     --exclude-caches ::"$DATE" docker || [[ $? == 100 ]]
