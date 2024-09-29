@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd
+if sudo systemctl is-active --quiet docker; then export RESTART=true; else export RESTART=false; fi
 
 if [[ ! -e ~/docker ]]; then
     echo Docker directory does not exist
@@ -17,7 +18,9 @@ function fail(){
 }
 
 function clean(){
-    start-containers "$CONTAINERS_RUNNING"
+    if [[ $RESTART == 'true' ]]; then
+        sudo systemctl start docker
+    fi
 }
 
 trap fail ERR
@@ -36,7 +39,7 @@ CONTAINERS_RUNNING="$(docker ps -q)"
 
 dump-containers
 
-stop-containers
+sudo systemctl stop docker
 
 mkdir -p $BASE_DIR
 if [[ ! -e "$BORG_REPO" ]]; then
