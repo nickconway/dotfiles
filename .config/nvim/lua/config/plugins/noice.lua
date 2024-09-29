@@ -13,6 +13,17 @@ return {
         local noice = require("noice")
 
         noice.setup({
+            cmdline = {
+                format = {
+                    cmdline = { title = '' },
+                    search_down = { title = '' },
+                    search_up = { title = '' },
+                    filter = { title = '' },
+                    lua = { title = '' },
+                    help = { title = '' },
+                    input = { title = '' },
+                },
+            },
             lsp = {
                 -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
                 override = {
