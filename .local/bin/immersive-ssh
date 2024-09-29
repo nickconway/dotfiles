@@ -37,17 +37,9 @@ if command -v ss &> /dev/null; then
         (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> "$S_FILE")
     fi
 
-    if [[ -n "$KITTY_WINDOW_ID" ]]; then
-        kitten ssh $SELECTED -R $PORT:localhost:$PORT
-    else
-        ssh $SELECTED -R $PORT:localhost:$PORT
-    fi
+    ssh $SELECTED -R $PORT:localhost:$PORT
 else
-    if [[ -n "$KITTY_WINDOW_ID" ]]; then
-        kitten ssh $SELECTED
-    else
-        ssh $SELECTED
-    fi
+    ssh $SELECTED
 fi
 
 if [[ -n $TMUX ]]; then
