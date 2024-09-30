@@ -37,7 +37,7 @@ if command -v ss &> /dev/null; then
         (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> "$S_FILE")
     fi
 
-    ssh $SELECTED -R $PORT:localhost:$PORT
+    ssh -R $PORT:localhost:$PORT $SELECTED
 else
     ssh $SELECTED
 fi

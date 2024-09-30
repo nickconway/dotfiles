@@ -1,6 +1,7 @@
 .aws/**/*
 .config/gpg/*
 .config/shell/common/encrypted.sh
+.config/ssh/*
 .config/rclone/rclone.conf
 .config/yadm/alt/**/*c.work
 .config/zmk/*

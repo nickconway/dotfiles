@@ -655,7 +655,7 @@ function venv() {
 }
 alias vm='s alma'
 
-alias work='s alma'
+alias work='s work'
 
 function x() {
     if command -v termux-reload-settings >/dev/null; then
