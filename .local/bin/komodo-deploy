@@ -14,14 +14,16 @@ for d in *; do
     [[ -e "$d/compose.yml" ]]
     JSON=$(jq '{ type: "CreateStack", params: { name: $name, config: {
             server_id: $server_id,
+            project_name: $project_name,
             files_on_host: true,
             run_directory: $run_directory,
             file_paths: [
                 "compose.yml"
             ]
         } } }' -n \
-        --arg name "$d($(uname -n))" \
+        --arg name ""$d"_$(uname -n)" \
         --arg server_id $SERVER_ID \
+        --arg project_name $d \
         --arg run_directory "/etc/komodo/stacks/$d"
     )
 
