@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+set -x
+
+SERVER_ID=$(curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
+    -H "X-API-SECRET: $KOMODO_API_SECRET" \
+    -H "Content-Type: application/json" -X POST https://deploy.conway.dev/read \
+    -d "$(jq '{ type: "GetServer", params: { server: $server } }' -n --arg server $(uname -n))" | jq -r '._id."$oid"' \
+)
+
+[[ $SERVER_ID != null ]]
+
+for d in ~/docker/*; do
+    JSON=$(jq '{ type: "CreateStack", params: { name: $name, config: {
+            server_id: $server_id,
+            run_diectory: $run_diectory
+        } } }' -n \
+        --arg name "test($(uname -n))" \
+        --arg server_id $SERVER_ID \
+        --arg run_directory "/etc/komodo/stacks/$d"
+    )
+
+    curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
+        -H "X-API-SECRET: $KOMODO_API_SECRET" \
+        -H "Content-Type: application/json" \
+        -X POST https://deploy.conway.dev/write \
+        -d "$JSON"
+    exit
+done
