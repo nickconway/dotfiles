@@ -670,7 +670,7 @@ function x() {
         fi
     fi
 }
-alias xc='x && clear'
+alias xc='tmux detach && clear'
 alias xd='tmux detach -E false'
 alias xx='tmux switch-client -l && tmux kill-session'
 
