@@ -6,5 +6,6 @@ map kitty_mod+c send_key ctrl+c
 map kitty_mod+f send_key ctrl+f
 map kitty_mod+p send_key ctrl+p
 map kitty_mod+r send_key ctrl+r
+map kitty_mod+s send_key ctrl+s
 map kitty_mod+v send_key ctrl+v
 map kitty_mod+shift+v paste_from_clipboard
