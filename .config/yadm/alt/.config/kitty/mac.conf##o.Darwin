@@ -2,10 +2,16 @@ font_size 11.0
 kitty_mod cmd
 
 map kitty_mod+space send_key ctrl+space
+map kitty_mod+up send_key ctrl+up
+map kitty_mod+down send_key ctrl+down
+map kitty_mod+left send_key ctrl+left
+map kitty_mod+right send_key ctrl+right
+
 map kitty_mod+c send_key ctrl+c
 map kitty_mod+f send_key ctrl+f
 map kitty_mod+p send_key ctrl+p
 map kitty_mod+r send_key ctrl+r
 map kitty_mod+s send_key ctrl+s
 map kitty_mod+v send_key ctrl+v
+
 map kitty_mod+shift+v paste_from_clipboard
