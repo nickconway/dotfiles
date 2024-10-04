@@ -110,7 +110,7 @@ function ga() {
     if [[ $# -gt 0 ]]; then
         git add $@
     else
-        git add .
+        git add "$(git rev-parse --show-toplevel)"
     fi
 }
 alias gaa='git add --all'
