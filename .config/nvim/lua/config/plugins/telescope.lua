@@ -62,8 +62,10 @@ return {
                         if vim.bo[event.buf].filetype == "TelescopePrompt" then
                             local f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "w+")
                             if f then
-                                f:write(vim.g.colors_name)
-                                f:close()
+                                vim.defer_fn(function()
+                                    f:write(vim.g.colors_name)
+                                    f:close()
+                                end, 100)
                             end
                         end
                     end

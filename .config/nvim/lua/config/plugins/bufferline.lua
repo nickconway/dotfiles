@@ -71,6 +71,7 @@ return {
                 bg = "none",
             },
             tab_selected = {
+                bold = false,
                 bg = "none",
             },
             tab_close = {
@@ -83,6 +84,7 @@ return {
                 bg = "none",
             },
             close_button_selected = {
+                bold = false,
                 bg = "none",
             },
             background = {
@@ -95,12 +97,14 @@ return {
                 bg = "none",
             },
             buffer_selected = {
+                bold = false,
                 bg = "none",
             },
             numbers = {
                 bg = "none",
             },
             numbers_selected = {
+                bold = false,
                 bg = "none",
             },
             numbers_visible = {
@@ -113,6 +117,7 @@ return {
                 bg = "none",
             },
             diagnostic_selected = {
+                bold = false,
                 bg = "none",
             },
             hint = {
@@ -122,6 +127,7 @@ return {
                 bg = "none",
             },
             hint_selected = {
+                bold = false,
                 bg = "none",
             },
             hint_diagnostic = {
@@ -131,6 +137,7 @@ return {
                 bg = "none",
             },
             hint_diagnostic_selected = {
+                bold = false,
                 bg = "none",
             },
             info = {
@@ -140,6 +147,7 @@ return {
                 bg = "none",
             },
             info_selected = {
+                bold = false,
                 bg = "none",
             },
             info_diagnostic = {
@@ -149,6 +157,7 @@ return {
                 bg = "none",
             },
             info_diagnostic_selected = {
+                bold = false,
                 bg = "none",
             },
             warning = {
@@ -158,6 +167,7 @@ return {
                 bg = "none",
             },
             warning_selected = {
+                bold = false,
                 bg = "none",
             },
             warning_diagnostic = {
@@ -167,6 +177,7 @@ return {
                 bg = "none",
             },
             warning_diagnostic_selected = {
+                bold = false,
                 bg = "none",
             },
             error = {
@@ -176,6 +187,7 @@ return {
                 bg = "none",
             },
             error_selected = {
+                bold = false,
                 bg = "none",
             },
             error_diagnostic = {
@@ -185,6 +197,7 @@ return {
                 bg = "none",
             },
             error_diagnostic_selected = {
+                bold = false,
                 bg = "none",
             },
             modified = {
@@ -194,9 +207,11 @@ return {
                 bg = "none",
             },
             modified_selected = {
+                bold = false,
                 bg = "none",
             },
             duplicate_selected = {
+                bold = false,
                 bg = "none",
             },
             duplicate_visible = {
@@ -206,6 +221,7 @@ return {
                 bg = "none",
             },
             separator_selected = {
+                bold = false,
                 bg = "none",
             },
             separator_visible = {
@@ -218,15 +234,18 @@ return {
                 bg = "none",
             },
             tab_separator_selected = {
+                bold = false,
                 bg = "none",
             },
             indicator_selected = {
+                bold = false,
                 bg = "none",
             },
             indicator_visible = {
                 bg = "none",
             },
             pick_selected = {
+                bold = false,
                 bg = "none",
             },
             pick_visible = {
