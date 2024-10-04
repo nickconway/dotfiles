@@ -57,7 +57,7 @@ vim.o.sessionoptions = "buffers,curdir,folds,globals,help,tabpages,winsize,winpo
 
 vim.opt.smoothscroll = true
 
-vim.cmd.colorscheme("onedark")
+vim.cmd.colorscheme("neopywal")
 vim.cmd("highlight Normal ctermbg=none guibg=none")
 vim.cmd("highlight NormalFloat ctermbg=none guibg=none")
 vim.cmd("highlight FloatBorder ctermbg=none guibg=none")
