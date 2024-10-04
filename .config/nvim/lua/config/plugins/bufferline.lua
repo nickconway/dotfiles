@@ -54,193 +54,204 @@ return {
             Info  = " ",
         }
 
+        local highlights = {
+            trunc_marker = {
+                bg = "none",
+            },
+            fill = {
+                bg = "none",
+            },
+            group_separator = {
+                bg = "none",
+            },
+            group_label = {
+                bg = "none",
+            },
+            tab = {
+                bg = "none",
+            },
+            tab_selected = {
+                bg = "none",
+            },
+            tab_close = {
+                bg = "none",
+            },
+            close_button = {
+                bg = "none",
+            },
+            close_button_visible = {
+                bg = "none",
+            },
+            close_button_selected = {
+                bg = "none",
+            },
+            background = {
+                bg = "none",
+            },
+            buffer = {
+                bg = "none",
+            },
+            buffer_visible = {
+                bg = "none",
+            },
+            buffer_selected = {
+                bg = "none",
+            },
+            numbers = {
+                bg = "none",
+            },
+            numbers_selected = {
+                bg = "none",
+            },
+            numbers_visible = {
+                bg = "none",
+            },
+            diagnostic = {
+                bg = "none",
+            },
+            diagnostic_visible = {
+                bg = "none",
+            },
+            diagnostic_selected = {
+                bg = "none",
+            },
+            hint = {
+                bg = "none",
+            },
+            hint_visible = {
+                bg = "none",
+            },
+            hint_selected = {
+                bg = "none",
+            },
+            hint_diagnostic = {
+                bg = "none",
+            },
+            hint_diagnostic_visible = {
+                bg = "none",
+            },
+            hint_diagnostic_selected = {
+                bg = "none",
+            },
+            info = {
+                bg = "none",
+            },
+            info_visible = {
+                bg = "none",
+            },
+            info_selected = {
+                bg = "none",
+            },
+            info_diagnostic = {
+                bg = "none",
+            },
+            info_diagnostic_visible = {
+                bg = "none",
+            },
+            info_diagnostic_selected = {
+                bg = "none",
+            },
+            warning = {
+                bg = "none",
+            },
+            warning_visible = {
+                bg = "none",
+            },
+            warning_selected = {
+                bg = "none",
+            },
+            warning_diagnostic = {
+                bg = "none",
+            },
+            warning_diagnostic_visible = {
+                bg = "none",
+            },
+            warning_diagnostic_selected = {
+                bg = "none",
+            },
+            error = {
+                bg = "none",
+            },
+            error_visible = {
+                bg = "none",
+            },
+            error_selected = {
+                bg = "none",
+            },
+            error_diagnostic = {
+                bg = "none",
+            },
+            error_diagnostic_visible = {
+                bg = "none",
+            },
+            error_diagnostic_selected = {
+                bg = "none",
+            },
+            modified = {
+                bg = "none",
+            },
+            modified_visible = {
+                bg = "none",
+            },
+            modified_selected = {
+                bg = "none",
+            },
+            duplicate_selected = {
+                bg = "none",
+            },
+            duplicate_visible = {
+                bg = "none",
+            },
+            duplicate = {
+                bg = "none",
+            },
+            separator_selected = {
+                bg = "none",
+            },
+            separator_visible = {
+                bg = "none",
+            },
+            separator = {
+                bg = "none",
+            },
+            tab_separator = {
+                bg = "none",
+            },
+            tab_separator_selected = {
+                bg = "none",
+            },
+            indicator_selected = {
+                bg = "none",
+            },
+            indicator_visible = {
+                bg = "none",
+            },
+            pick_selected = {
+                bg = "none",
+            },
+            pick_visible = {
+                bg = "none",
+            },
+            pick = {
+                bg = "none",
+            },
+            offset_separator = {
+                bg = "none",
+            },
+        }
+
+        local f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "r+")
+        if f then
+            local colorscheme = f:read()
+            if colorscheme ~= nil and colorscheme:find("neopywal") then
+                highlights = require("neopywal.theme.plugins.bufferline").setup(highlights)
+            end
+            f:close()
+        end
+
         vim.opt.mousemoveevent = true
         local o = {
-            highlights = {
-                trunc_marker = {
-                    bg = "none",
-                },
-                fill = {
-                    bg = "none",
-                },
-                group_separator = {
-                    bg = "none",
-                },
-                group_label = {
-                    bg = "none",
-                },
-                tab = {
-                    bg = "none",
-                },
-                tab_selected = {
-                    bg = "none",
-                },
-                tab_close = {
-                    bg = "none",
-                },
-                close_button = {
-                    bg = "none",
-                },
-                close_button_visible = {
-                    bg = "none",
-                },
-                close_button_selected = {
-                    bg = "none",
-                },
-                background = {
-                    bg = "none",
-                },
-                buffer = {
-                    bg = "none",
-                },
-                buffer_visible = {
-                    bg = "none",
-                },
-                buffer_selected = {
-                    bg = "none",
-                },
-                numbers = {
-                    bg = "none",
-                },
-                numbers_selected = {
-                    bg = "none",
-                },
-                numbers_visible = {
-                    bg = "none",
-                },
-                diagnostic = {
-                    bg = "none",
-                },
-                diagnostic_visible = {
-                    bg = "none",
-                },
-                diagnostic_selected = {
-                    bg = "none",
-                },
-                hint = {
-                    bg = "none",
-                },
-                hint_visible = {
-                    bg = "none",
-                },
-                hint_selected = {
-                    bg = "none",
-                },
-                hint_diagnostic = {
-                    bg = "none",
-                },
-                hint_diagnostic_visible = {
-                    bg = "none",
-                },
-                hint_diagnostic_selected = {
-                    bg = "none",
-                },
-                info = {
-                    bg = "none",
-                },
-                info_visible = {
-                    bg = "none",
-                },
-                info_selected = {
-                    bg = "none",
-                },
-                info_diagnostic = {
-                    bg = "none",
-                },
-                info_diagnostic_visible = {
-                    bg = "none",
-                },
-                info_diagnostic_selected = {
-                    bg = "none",
-                },
-                warning = {
-                    bg = "none",
-                },
-                warning_visible = {
-                    bg = "none",
-                },
-                warning_selected = {
-                    bg = "none",
-                },
-                warning_diagnostic = {
-                    bg = "none",
-                },
-                warning_diagnostic_visible = {
-                    bg = "none",
-                },
-                warning_diagnostic_selected = {
-                    bg = "none",
-                },
-                error = {
-                    bg = "none",
-                },
-                error_visible = {
-                    bg = "none",
-                },
-                error_selected = {
-                    bg = "none",
-                },
-                error_diagnostic = {
-                    bg = "none",
-                },
-                error_diagnostic_visible = {
-                    bg = "none",
-                },
-                error_diagnostic_selected = {
-                    bg = "none",
-                },
-                modified = {
-                    bg = "none",
-                },
-                modified_visible = {
-                    bg = "none",
-                },
-                modified_selected = {
-                    bg = "none",
-                },
-                duplicate_selected = {
-                    bg = "none",
-                },
-                duplicate_visible = {
-                    bg = "none",
-                },
-                duplicate = {
-                    bg = "none",
-                },
-                separator_selected = {
-                    bg = "none",
-                },
-                separator_visible = {
-                    bg = "none",
-                },
-                separator = {
-                    bg = "none",
-                },
-                tab_separator = {
-                    bg = "none",
-                },
-                tab_separator_selected = {
-                    bg = "none",
-                },
-                indicator_selected = {
-                    bg = "none",
-                },
-                indicator_visible = {
-                    bg = "none",
-                },
-                pick_selected = {
-                    bg = "none",
-                },
-                pick_visible = {
-                    bg = "none",
-                },
-                pick = {
-                    bg = "none",
-                },
-                offset_separator = {
-                    bg = "none",
-                },
-            },
+            highlights = highlights,
             options = {
                 style_preset = require("bufferline").style_preset.minimal,
                 show_close_icon = true,

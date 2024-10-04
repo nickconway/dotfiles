@@ -57,7 +57,30 @@ vim.o.sessionoptions = "buffers,curdir,folds,globals,help,tabpages,winsize,winpo
 
 vim.opt.smoothscroll = true
 
-vim.cmd.colorscheme("neopywal")
+local f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "r")
+if f then
+    local colorscheme = f:read()
+    if colorscheme:find("neopywal") then
+        vim.cmd.colorscheme("neopywal")
+    else
+        vim.cmd.colorscheme(colorscheme)
+    end
+    f:close()
+else
+    f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "w+")
+    if f then
+        local walExists = io.open(os.getenv("HOME") .. "/.cache/wal/colors", "r")
+        if walExists then
+            f:write("neopywal")
+            vim.cmd.colorscheme("neopywal")
+        else
+            f:write("onedark")
+            vim.cmd.colorscheme("onedark")
+        end
+    end
+end
+
+
 vim.cmd("highlight Normal ctermbg=none guibg=none")
 vim.cmd("highlight NormalFloat ctermbg=none guibg=none")
 vim.cmd("highlight FloatBorder ctermbg=none guibg=none")

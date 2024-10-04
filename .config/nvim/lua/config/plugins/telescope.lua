@@ -53,6 +53,24 @@ return {
     cmd = "Telescope",
     keys = {
         { "<leader>fb", "<cmd>Telescope buffers<cr>",                         desc = "Buffers" },
+        {
+            "<leader>fc",
+            function()
+                vim.cmd("Telescope colorscheme")
+                vim.api.nvim_create_autocmd({ "BufLeave", "BufWinLeave" }, {
+                    callback = function(event)
+                        if vim.bo[event.buf].filetype == "TelescopePrompt" then
+                            local f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "w+")
+                            if f then
+                                f:write(vim.g.colors_name)
+                                f:close()
+                            end
+                        end
+                    end
+                })
+            end,
+            desc = "Colorschemes"
+        },
         { "<leader>ff", get_files,                                            desc = "Files" },
         { "<leader>fF", "<cmd>Telescope find_files<CR>",                      desc = "All files" },
         { "<leader>fh", "<cmd>Telescope help_tags<cr>",                       desc = "Help tags" },
@@ -103,6 +121,9 @@ return {
             pickers = {
                 find_files = {
                     hidden = true,
+                },
+                colorscheme = {
+                    enable_preview = true
                 },
             },
         })
