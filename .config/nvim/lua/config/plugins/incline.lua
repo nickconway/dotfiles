@@ -9,11 +9,7 @@ return {
                 margin = { horizontal = 1, vertical = 0 },
             },
             render = function(props)
-                local res = {
-                    -- { " ", filename, gui = modified and "bold" or "" },
-                    -- " ",
-                    -- ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
-                }
+                local res = {}
                 if props.focused then
                     local crumbs = {}
                     for idx, item in ipairs(navic.get_data() or {}) do
@@ -30,9 +26,6 @@ return {
                             })
                         end
                     end
-                    -- if #crumbs > 0 then
-                    --     table.insert(res, 1, " |")
-                    -- end
                     for idx, item in ipairs(crumbs) do
                         if idx > 5 then
                             table.insert(res, 1, {
