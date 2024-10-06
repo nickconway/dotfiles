@@ -28,4 +28,4 @@ if command -v pacman &>/dev/null; then
         echo " Proceeding with full system upgrade."
     fi
 fi
-topgrade -y
+topgrade -y --disable poetry
