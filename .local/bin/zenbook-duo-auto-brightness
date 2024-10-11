@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+
+while true; do
+    BRIGHTNESS=$(cat /sys/bus/iio/devices/iio:device0/in_illuminance_raw)
+    if [[ $BRIGHTNESS -gt 2000 ]]; then
+        sudo ~/.local/bin/keyboard_backlight off
+    else
+        sudo ~/.local/bin/keyboard_backlight high
+    fi
+    sleep 5
+done
