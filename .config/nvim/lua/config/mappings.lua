@@ -184,3 +184,6 @@ map("x", "<lt>", "<lt>gv")
 map("x", ">", ">gv")
 map("x", "<S-Tab>", "<lt>gv")
 map("x", "<Tab>", ">gv")
+
+map("n", "<leader>p", ":r!", "Paste Command Output", { silent = false })
+map("x", "<leader>p", ":.!", "Paste Command Output", { silent = false })
