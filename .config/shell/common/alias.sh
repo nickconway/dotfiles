@@ -119,7 +119,8 @@ alias gc='git commit -v'
 alias gca='git commit -av'
 alias gcai='git-commit-ai'
 alias gcam='git commit -a -m'
-alias gcamend='git commit --amend --no-edit'
+alias gcamend='git commit --amend'
+alias gcamendn='git commit --amend --no-edit'
 alias gce='git commit -e'
 
 function gcf() {
