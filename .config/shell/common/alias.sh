@@ -130,9 +130,12 @@ function gcf() {
         COMMIT_HASH=$(glogv)
     fi
 
-    if [[ -n $COMMIT_HASH ]]; then
-        git commit --fixup $COMMIT_HASH
+    if [[ -z $COMMIT_HASH ]]; then
+        return
     fi
+
+    git commit --fixup $COMMIT_HASH
+    GIT_SEQUENCE_EDITOR=: git rebase -i "$COMMIT_HASH"~
 }
 
 alias gcm='git commit -m'
