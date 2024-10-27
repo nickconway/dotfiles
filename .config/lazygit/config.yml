@@ -9,6 +9,7 @@ git:
 
   paging:
     pager: delta --paging=never
+    externalDiffCommand: difft --color=always --display inline
   parseEmoji: true
 
 gui:

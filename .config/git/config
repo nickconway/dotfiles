@@ -3,6 +3,9 @@
     email = nick@conway.dev
 [init]
     defaultBranch = main
+[diff]
+    external = difft --display inline --color always
+    tool = difftastic
 [merge]
     tool = "nvim"
     conflictstyle = diff3
@@ -33,6 +36,10 @@
     editor = nvim -c startinsert
     pager = delta
     excludesfile = ~/.config/git/ignore
+[pager]
+    difftool = true
+[difftool]
+    prompt = false
 [sequence]
     editor = nvim
 [interactive]

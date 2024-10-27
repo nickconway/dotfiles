@@ -246,7 +246,8 @@ function gwta() {
 }
 
 function grl() {
-    git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" \
+    # git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" \
+    git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} --ext-diff" "$@" \
         | awk '{print $3}'
 }
 
@@ -737,7 +738,8 @@ function ysp() {
         if [[ "$(yadm stash list | wc -l)" == "1" ]]; then
             yadm stash pop
         else
-            yadm stash pop "$(yadm stash list | fzft --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+            # yadm stash pop "$(yadm stash list | fzft --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
+            yadm stash pop "$(yadm stash list | fzft --preview 'yadm stash show --color -p $(echo {1} | tr -d :) --ext-diff' | awk '{print $1}' | tr -d :)"
         fi
     else
         yadm stash pop $@
