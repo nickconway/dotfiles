@@ -122,45 +122,39 @@ else
     eval "$(ssh-agent)"
 fi
 
-(
-    mkdir -p ~/Git
+mkdir -p ~/Git
 
-    cd ~/Git
-    if ! [[ -e ~/Git/ansible ]]; then
-        git clone https://github.com/nickconway/ansible &> /dev/null
-    fi
-    cd ~/Git/ansible
-    git remote set-url origin https://github.com/nickconway/ansible
-    git pull &> /dev/null
-    git remote set-url origin git@github.com:nickconway/ansible
-    if [[ $(git remote) != *"https"* ]]; then
-        git remote add https https://github.com/nickconway/ansible
-    fi
+if ! [[ -e ~/Git/ansible ]]; then
+    git clone https://github.com/nickconway/ansible ~/Git/ansible &> /dev/null
+fi
+cd ~/Git/ansible
+git remote set-url origin https://github.com/nickconway/ansible
+git pull &> /dev/null
+git remote set-url origin git@github.com:nickconway/ansible
+if [[ $(git remote) != *"https"* ]]; then
+    git remote add https https://github.com/nickconway/ansible
+fi
 
-    cd ~/Git/ansible/bootstrap
+cd ~/Git/ansible/bootstrap
 
-    if ! [[ -e ~/.local/bin/vault-keyring-client ]]; then
-        curl https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/vault/vault-keyring-client.py -o ~/.local/bin/vault-keyring-client &> /dev/null
-        chmod +x ~/.local/bin/vault-keyring-client
-    fi
+if ! [[ -e ~/.local/bin/vault-keyring-client ]]; then
+    curl https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/vault/vault-keyring-client.py -o ~/.local/bin/vault-keyring-client &> /dev/null
+    chmod +x ~/.local/bin/vault-keyring-client
+fi
 
-    if ansible-vault-password &> /dev/null; then
-        ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
-    else
-        ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
-    fi
-    if [[ $? -ne 0 ]]; then
-        exit 1
-    fi
-)
-
-if [[ $? -eq 0 ]]; then
-    if [[ -n $NTFY_TOKEN ]]; then
-        curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
-    fi
+if ansible-vault-password &> /dev/null; then
+    ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@ || FAILED=true
 else
+    ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@ || FAILED=true
+fi
+
+if [[ ${FAILED:-} == "true" ]]; then
     if [[ -n $NTFY_TOKEN ]]; then
         curl -d "Bootstrapping failed on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
     fi
     exit 1
+fi
+
+if [[ -n $NTFY_TOKEN ]]; then
+    curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 fi
