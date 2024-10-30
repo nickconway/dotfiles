@@ -187,3 +187,7 @@ map("x", "<Tab>", ">gv")
 
 map("n", "<leader>p", ":r!", "Paste Command Output", { silent = false })
 map("x", "<leader>p", ":.!", "Paste Command Output", { silent = false })
+
+map("n", "<leader>ld", function()
+    vim.fn.system("tmux display-popup -w 90% -h 80% -B -E lazydocker")
+end, "Lazy Docker")
