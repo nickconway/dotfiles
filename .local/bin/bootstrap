@@ -33,6 +33,7 @@ fi
 
 if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
     yadm clone https://github.com/nickconway/dotfiles
+    yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
     yadm decrypt
     yadm alt
 
@@ -126,11 +127,11 @@ mkdir -p ~/Git
 
 if ! [[ -e ~/Git/ansible ]]; then
     git clone https://github.com/nickconway/ansible ~/Git/ansible &> /dev/null
+    git remote set-url origin git@github.com:nickconway/ansible --push
 fi
 cd ~/Git/ansible
 git remote set-url origin https://github.com/nickconway/ansible
 git pull &> /dev/null
-git remote set-url origin git@github.com:nickconway/ansible
 if [[ $(git remote) != *"https"* ]]; then
     git remote add https https://github.com/nickconway/ansible
 fi
