@@ -46,6 +46,15 @@ wal -i "$IMG"
 [[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
 [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
 
+if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
+    cp ~/.config/vesktop/pywal.theme.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes
+    sed -i "s/\(background-image:\).*/\1 $(grep color0 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(background-color:\).*/\1 $(grep color0 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(gradient-primary:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(gradient-secondary:\).*/\1 $(sed -n '4p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(link-colour:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+fi
+
 (pidof waybar && killall -SIGUSR2 waybar) || true
 
 swaync-client -rs

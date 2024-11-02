@@ -1,0 +1,46 @@
+@import url('https://discordstyles.github.io/FrostedGlass/dist/FrostedGlass.css');
+
+:root {
+    --background-image: #070415;
+    --background-image-blur: 0px;
+    --background-image-size: cover;
+    --background-image-position: center;
+    --popout-image: var(--background-image);
+    --popout-image-blur: 5px;
+    --popout-image-size: cover;
+    --popout-image-position: center;
+    --overlay-image: var(--background-image);
+    --overlay-image-blur: 5px;
+    --overlay-image-size: cover;
+    --overlay-image-position: center;
+    --home-button-image: url('https://gibbu.github.io/BetterDiscord-Themes/FrostedGlass/assets/discord.svg');
+    --home-button-size: cover;
+    --home-button-position: center;
+    --serverlist-brightness: 0;
+    --left-brightness: 0;
+    --middle-brightness: 0;
+    --right-brightness: 0;
+    --overlay-brightness: 0.25;
+    --gradient-primary: 150,54,120;
+    --gradient-secondary: 238,137,121;
+    --link-colour: 150,54,120;
+    --scrollbar-colour: rgba(255,255,255,0.05);
+    --gradient-direction: 320deg;
+    --tint-colour: 255,51,159;
+    --tint-brightness: 0;
+    --font: gg sans;
+    --window-padding: 0px;
+    --window-roundness: 0px;
+    --update-notice-1: none;
+}
+
+.theme-dark .wrapper_cd82a7 {
+    background-color: #070415;
+    border-radius: 8px;
+}
+
+#app-mount .inset_c0f6a6,
+#app-mount .bg_d4b6c5 {
+    opacity: 0.1;
+    background-color: #070415;
+}
