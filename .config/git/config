@@ -5,7 +5,7 @@
     defaultBranch = main
 [merge]
     tool = "nvim"
-    conflictstyle = diff3
+    conflictstyle = zdiff3
     ff = no
 [mergetool]
     keepBackup = false
@@ -43,13 +43,13 @@
     syntax-theme = base16
     hyperlinks = true
     line-numbers = true
-    line-numbers-minus-style = 52
-    line-numbers-plus-style = 22
-    line-numbers-zero-style = 7
+    line-numbers-minus-style = 9
+    line-numbers-plus-style = 10
+    line-numbers-zero-style = dim 7
     commit-style = red
     commit-decoration-style = blue box
-    file-style = white
-    file-decoration-style = 7 ol
+    file-style = dim 7
+    file-decoration-style = dim 7 ol
     hunk-header-style = file line-number syntax
     hunk-header-file-style = red
     hunk-header-line-number-style = green
@@ -62,14 +62,14 @@
     grep-file-style = purple
     grep-line-number-style = green
     whitespace-error-style = reverse purple
-    minus-style = syntax 52
+    minus-style = syntax 1
     minus-non-emph-style = dim syntax
-    minus-emph-style = syntax 52
-    minus-empty-line-marker-style = normal 52
+    minus-emph-style = syntax 9
+    minus-empty-line-marker-style = normal 9
     zero-style = dim syntax
-    plus-style = syntax 22
+    plus-style = syntax 2
     plus-non-emph-style = syntax
-    plus-emph-style = syntax 22
-    plus-empty-line-marker-style = normal 22
+    plus-emph-style = syntax 10
+    plus-empty-line-marker-style = normal 10
 [include]
     path = ~/.config/git/local
