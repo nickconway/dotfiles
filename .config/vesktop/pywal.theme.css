@@ -1,10 +1,14 @@
 @import url('https://discordstyles.github.io/FrostedGlass/dist/FrostedGlass.css');
 
 :root {
+    --activity-card-background: transparent;
+    --background-color: #070415;
     --background-image: #070415;
     --background-image-blur: 0px;
     --background-image-size: cover;
     --background-image-position: center;
+    --background-secondary: #070415;
+    --background-modifier-hover: rgba(255,255,255,0.05);
     --popout-image: var(--background-image);
     --popout-image-blur: 5px;
     --popout-image-size: cover;
@@ -32,15 +36,4 @@
     --window-padding: 0px;
     --window-roundness: 0px;
     --update-notice-1: none;
-}
-
-.theme-dark .wrapper_cd82a7 {
-    background-color: #070415;
-    border-radius: 8px;
-}
-
-#app-mount .inset_c0f6a6,
-#app-mount .bg_d4b6c5 {
-    opacity: 0.1;
-    background-color: #070415;
 }
