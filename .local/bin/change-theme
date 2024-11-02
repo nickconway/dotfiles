@@ -48,11 +48,12 @@ wal -i "$IMG"
 
 if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
     cp ~/.config/vesktop/pywal.theme.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes
-    sed -i "s/\(background-image:\).*/\1 $(grep color0 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(background-color:\).*/\1 $(grep color0 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(link-colour:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}');/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(gradient-primary:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(gradient-secondary:\).*/\1 $(sed -n '4p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--background-color:\).*/\1 $(grep color0 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--background-image:\).*/\1 $(grep color0 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--background-secondary:\).*/\1 $(grep color0 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--link-colour:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--gradient-primary:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--gradient-secondary:\).*/\1 $(sed -n '4p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 fi
 
 (pidof waybar && killall -SIGUSR2 waybar) || true
