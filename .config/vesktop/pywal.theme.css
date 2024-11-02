@@ -2,12 +2,8 @@
 
 :root {
     --activity-card-background: transparent;
-    --background-color: #070415;
-    --background-image: #070415;
-    --background-image-blur: 0px;
-    --background-image-size: cover;
-    --background-image-position: center;
-    --background-secondary: #070415;
+    --background-color: transparent;
+    --background-secondary: rgba(0,0,0,0.15);
     --background-modifier-hover: rgba(255,255,255,0.05);
     --popout-image: var(--background-image);
     --popout-image-blur: 5px;
@@ -24,7 +20,7 @@
     --left-brightness: 0;
     --middle-brightness: 0;
     --right-brightness: 0;
-    --overlay-brightness: 0.25;
+    --overlay-brightness: 0.85;
     --gradient-primary: 150,54,120;
     --gradient-secondary: 238,137,121;
     --link-colour: blue;
