@@ -67,7 +67,7 @@
     minus-emph-style = syntax 9
     minus-empty-line-marker-style = normal 9
     zero-style = dim syntax
-    plus-style = syntax 2
+    plus-style = syntax 10
     plus-non-emph-style = syntax
     plus-emph-style = syntax 10
     plus-empty-line-marker-style = normal 10
