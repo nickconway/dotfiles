@@ -23,7 +23,7 @@
     --overlay-brightness: 0.25;
     --gradient-primary: 150,54,120;
     --gradient-secondary: 238,137,121;
-    --link-colour: 150,54,120;
+    --link-colour: blue;
     --scrollbar-colour: rgba(255,255,255,0.05);
     --gradient-direction: 320deg;
     --tint-colour: 255,51,159;
