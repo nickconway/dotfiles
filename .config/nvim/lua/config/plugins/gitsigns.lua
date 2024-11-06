@@ -2,7 +2,7 @@ return {
     'lewis6991/gitsigns.nvim',
     dependencies = {
         "nvim-lua/plenary.nvim",
-        "seanbreckenridge/gitsigns-yadm.nvim",
+        "purarue/gitsigns-yadm.nvim",
     },
     event = "BufEnter",
     keys = {
