@@ -219,7 +219,7 @@ function gsw() {
     if [[ "$@" == "-" ]]; then
         git switch -
     elif [[ -z "$@" ]]; then
-        BRANCH=$(_fzf_git_all_branches)
+        BRANCH=$(_fzf_git_branches)
         [[ -n "$BRANCH" ]] && git switch "$(echo "$BRANCH" | cut -d '/' -f 2-)"
     else
         git switch $@ 2>/dev/null || git switch -c $@
