@@ -1,7 +1,7 @@
 #!/bin/bash
 
 [[ -n $NTFY_TOKEN ]]
-UPDATES="$(dockcheck -n | awk "x==1 {print} /Containers with updates available:/,EOF {x=1}" | grep -v "nextcloud-" | grep -v "No updates installed" | awk NF)"
+UPDATES="$(dockcheck -n | awk "x==1 {print} /Containers with updates available:/,EOF {x=1}" | grep -v 'nextcloud-aio' | grep -v "No updates installed" | awk NF)"
 UPDATES="${UPDATES//$'\n'/ }"
 UPDATES="$(echo "$UPDATES" | sed 's/ /, /g')"
 if [[ -n "$UPDATES" ]]; then
