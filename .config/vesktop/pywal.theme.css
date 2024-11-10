@@ -32,4 +32,6 @@
     --window-padding: 0px;
     --window-roundness: 0px;
     --update-notice-1: none;
+    --mention-background: rgba(255,255,255,0.05);
+    --mention-foreground: rgba(255,255,255,0.05);
 }

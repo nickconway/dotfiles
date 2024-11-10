@@ -51,6 +51,8 @@ if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
     sed -i "s/\(--link-colour:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
     sed -i "s/\(--gradient-primary:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
     sed -i "s/\(--gradient-secondary:\).*/\1 $(sed -n '4p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--mention-background:\).*/\1 rgba($(sed -n '3p' ~/.cache/wal/colors-rgb), 0.5);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--mention-foreground:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}');/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 fi
 
 (pidof waybar && killall -SIGUSR2 waybar) || true
