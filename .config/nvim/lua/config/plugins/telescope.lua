@@ -64,6 +64,11 @@ return {
                             if f then
                                 vim.defer_fn(function()
                                     f:write(vim.g.colors_name)
+                                    if vim.g.colors_name:find("noctu") then
+                                        vim.opt.termguicolors = false
+                                    else
+                                        vim.opt.termguicolors = true
+                                    end
                                     f:close()
                                 end, 100)
                             end

@@ -60,11 +60,12 @@ vim.opt.smoothscroll = true
 local f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "r")
 if f then
     local colorscheme = f:read()
-    if colorscheme:find("neopywal") then
-        vim.cmd.colorscheme("neopywal")
+    if colorscheme:find("noctu") then
+        vim.opt.termguicolors = false
     else
-        vim.cmd.colorscheme(colorscheme)
+        vim.opt.termguicolors = true
     end
+    vim.cmd.colorscheme(colorscheme)
     f:close()
 else
     f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "w+")

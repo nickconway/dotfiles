@@ -9,7 +9,6 @@ return {
         "rcarriga/nvim-notify",
     },
     config = function()
-        vim.opt.termguicolors = true
         local noice = require("noice")
 
         noice.setup({
