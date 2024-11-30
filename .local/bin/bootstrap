@@ -128,13 +128,9 @@ mkdir -p ~/Git
 if ! [[ -e ~/Git/ansible ]]; then
     git clone https://github.com/nickconway/ansible ~/Git/ansible &> /dev/null
 fi
-git remote set-url origin git@github.com:nickconway/ansible --push
 cd ~/Git/ansible
-git remote set-url origin https://github.com/nickconway/ansible
+git remote set-url origin git@github.com:nickconway/ansible --push
 git pull &> /dev/null
-if [[ $(git remote) != *"https"* ]]; then
-    git remote add https https://github.com/nickconway/ansible
-fi
 
 cd ~/Git/ansible/bootstrap
 
