@@ -5,8 +5,8 @@ if [[ ! -e /etc/pve/lxc ]]; then
     exit 1
 fi
 
-if [[ ! -e /mnt/dropbox ]] || [[ -z "$(ls -A /mnt/dropbox)" ]]; then
-    echo Dropbox directory does not exist or is empty
+if [[ ! -e /mnt/nas ]] || [[ -z "$(ls -A /mnt/nas)" ]]; then
+    echo NAS directory does not exist or is empty
     exit 1
 fi
 
@@ -21,7 +21,7 @@ set -euo pipefail
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
 export BORG_PASSPHRASE=$BORG_PASSPHRASE
-export BASE_DIR="/mnt/dropbox/Documents/Backups/lxc"
+export BASE_DIR="/mnt/nas/Documents/Backups/lxc"
 export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 
 if [[ ! -e "$BORG_REPO" ]]; then

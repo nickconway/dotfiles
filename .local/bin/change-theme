@@ -24,13 +24,13 @@ done
 echo "" > /tmp/wallpaper
 
 if [[ "$random" == "true" ]]; then
-    IMG="$(find /mnt/dropbox/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)" || true
+    IMG="$(find /mnt/nas/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)" || true
     if [[ "$IMG" == "$(cat ~/.cache/wal/wal)" ]]; then
         change-theme -r
         exit 0
     fi
 else
-    IMG="$(cd /mnt/dropbox/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
+    IMG="$(cd /mnt/nas/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
 cp "$IMG" ~/.config/wallpaper

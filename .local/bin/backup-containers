@@ -8,8 +8,8 @@ if [[ ! -e ~/docker ]]; then
     exit 1
 fi
 
-if [[ ! -e /mnt/dropbox ]] || [[ -z "$(ls -A /mnt/dropbox)" ]]; then
-    echo Dropbox directory does not exist or is empty
+if [[ ! -e /mnt/nas ]] || [[ -z "$(ls -A /mnt/nas)" ]]; then
+    echo NAS directory does not exist or is empty
     exit 1
 fi
 
@@ -30,7 +30,7 @@ set -euo pipefail
 
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
-export BASE_DIR="/mnt/dropbox/Documents/Backups/docker"
+export BASE_DIR="/mnt/nas/Documents/Backups/docker"
 export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 export BORG_EXIT_CODES=modern
 CONTAINER_COUNT=$(docker ps -q | wc -l)
