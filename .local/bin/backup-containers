@@ -30,7 +30,7 @@ set -euo pipefail
 
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
-export BASE_DIR="/mnt/nas/Documents/Backups/docker"
+export BASE_DIR="/mnt/nas/backups/docker"
 export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 export BORG_EXIT_CODES=modern
 CONTAINER_COUNT=$(docker ps -q | wc -l)

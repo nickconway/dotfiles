@@ -21,7 +21,7 @@ set -euo pipefail
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
 export BORG_PASSPHRASE=$BORG_PASSPHRASE
-export BASE_DIR="/mnt/nas/Documents/Backups/lxc"
+export BASE_DIR="/mnt/nas/backups/lxc"
 export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 
 if [[ ! -e "$BORG_REPO" ]]; then

@@ -4,11 +4,7 @@ set -euo pipefail
 cd
 
 export BORG_PASSPHRASE=$BORG_PASSPHRASE
-if [[ -e /mnt/nas/Documents/Backups ]]; then
-    export BASE_DIR="/mnt/nas/Documents/Backups/docker"
-else
-    export BASE_DIR="nas/Documents/Backups/docker"
-fi
+export BASE_DIR="/mnt/nas/backups/docker"
 export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 
 [[ -e "$BORG_REPO" ]]
