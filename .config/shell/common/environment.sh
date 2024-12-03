@@ -89,7 +89,9 @@ command -v wl-copy &> /dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bi
 
 export GITEA_USER=nick
 
-if [[ -e /run/docker.sock ]]; then
+if [[ -e "$HOME/.config/colima/default/docker.sock" ]]; then
+    export DOCKER_HOST=unix://$HOME/.config/colima/default/docker.sock
+elif [[ -e /run/docker.sock ]]; then
     export DOCKER_HOST=unix:///run/docker.sock
 elif [[ -e /var/run/docker.sock ]]; then
     export DOCKER_HOST=unix:///var/run/docker.sock
