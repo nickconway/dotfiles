@@ -91,6 +91,8 @@ export GITEA_USER=nick
 
 if [[ -e "$HOME/.config/colima/default/docker.sock" ]]; then
     export DOCKER_HOST=unix://$HOME/.config/colima/default/docker.sock
+elif [[ -e ~/.docker/run/docker.sock ]]; then
+    export DOCKER_HOST=unix://$HOME/.docker/run/docker.sock
 elif [[ -e /run/docker.sock ]]; then
     export DOCKER_HOST=unix:///run/docker.sock
 elif [[ -e /var/run/docker.sock ]]; then
