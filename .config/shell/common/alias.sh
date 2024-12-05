@@ -504,7 +504,7 @@ function mkcd() {
 }
 
 alias n='$EDITOR'
-alias notes='(cd ~/Documents/Notes && n)'
+alias notes='(cd /mnt/nas/home/Documents/Notes && n)'
 
 function np() {
     curl -d "$@" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
@@ -526,7 +526,7 @@ alias pls='sudo $(fc -ln -1)'
 
 alias r='rip'
 function reload() {
-    exec $(ps -p $$ | tail -n -1 | awk '{print $4}')
+    exec "$SHELL_NAME"
 }
 
 function rgn() {

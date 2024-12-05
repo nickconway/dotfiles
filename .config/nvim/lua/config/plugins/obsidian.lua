@@ -7,6 +7,8 @@ return {
         -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
         "BufReadPre " .. vim.fn.expand "~" .. "/Documents/Notes/**.md",
         "BufNewFile " .. vim.fn.expand "~" .. "/Documents/Notes/**.md",
+        "BufReadPre /mnt/nas/home/Documents/Notes/**.md",
+        "BufNewFile /mnt/nas/home/Documents/Notes/**.md",
     },
     dependencies = {
         "nvim-lua/plenary.nvim",
@@ -17,8 +19,12 @@ return {
     opts = {
         workspaces = {
             {
-                name = "Notes",
+                name = "Local Notes",
                 path = "~/Documents/Notes",
+            },
+            {
+                name = "Local Notes",
+                path = "/mnt/nas/home/Documents/Notes",
             },
         },
         daily_notes = {
