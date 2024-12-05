@@ -30,7 +30,7 @@ if [[ "$random" == "true" ]]; then
         exit 0
     fi
 else
-    IMG="$(cd /mnt/nas/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
+    IMG="$(cd /mnt/nas/home/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
 cp "$IMG" ~/.config/wallpaper
