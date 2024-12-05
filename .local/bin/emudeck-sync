@@ -3,11 +3,11 @@ set -euo pipefail
 
 function pull-saves() {
     echo "Pulling Saves"
-    rclone copy dropbox:Documents/Emulation/Saves/ "$(xdg-user-dir DOCUMENTS)"/Emulation/saves -PLMuv
+    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/Saves/ "$(xdg-user-dir DOCUMENTS)"/Emulation/saves
 }
 function push-saves() {
     echo "Pushing Saves"
-    rclone copy "$(xdg-user-dir DOCUMENTS)"/Emulation/saves/ dropbox:Documents/Emulation/Saves -PLMuv
+    rsync -Lauvz --progress --info=progress2 "$(xdg-user-dir DOCUMENTS)"/Emulation/saves/ /mnt/nas/home/Documents/Emulation/Saves
 }
 
 function sync-saves() {
@@ -18,12 +18,12 @@ function sync-saves() {
 
 function pull-games() {
     echo "Pulling Games"
-    rclone copy dropbox:Documents/Emulation/Games/ "$(xdg-user-dir DOCUMENTS)"/Emulation/roms -PLMuv
+    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/Games/ "$(xdg-user-dir DOCUMENTS)"/Emulation/roms
 }
 
 function push-games() {
     echo "Pushing Games"
-    rclone copy "$(xdg-user-dir DOCUMENTS)"/Emulation/roms/ dropbox:Documents/Emulation/Games -PLMuv
+    rsync -Lauvz --progress --info=progress2 "$(xdg-user-dir DOCUMENTS)"/Emulation/roms/ /mnt/nas/home/Documents/Emulation/Games
 }
 
 function sync-games() {
@@ -34,12 +34,12 @@ function sync-games() {
 
 function pull-bios() {
     echo "Pulling BIOS"
-    rclone copy dropbox:Documents/Emulation/BIOS/ "$(xdg-user-dir DOCUMENTS)"/Emulation/bios -PLMuv
+    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/BIOS/ "$(xdg-user-dir DOCUMENTS)"/Emulation/bios
 }
 
 function push-bios() {
     echo "Pushing BIOS"
-    rclone copy "$(xdg-user-dir DOCUMENTS)"/Emulation/bios/ dropbox:Documents/Emulation/BIOS -PLMuv
+    rsync -Lauvz --progress --info=progress2 "$(xdg-user-dir DOCUMENTS)"/Emulation/bios/ /mnt/nas/home/Documents/Emulation/BIOS
 }
 
 function sync-bios() {
