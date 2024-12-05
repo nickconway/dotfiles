@@ -68,18 +68,18 @@ elif [[ $# -eq 1 && "${1:-}" == "push" ]]; then
     push-bios
 else
     if [[ "${1:-}" == "pull" ]]; then
-        for arg in ${@:2}; do
-            pull-$arg
+        for arg in "${@:2}"; do
+            pull-"$arg"
             echo
         done
     elif [[ "${1:-}" == "push" ]]; then
-        for arg in ${@:2}; do
-            push-$arg
+        for arg in "${@:2}"; do
+            push-"$arg"
             echo
         done
     else
-        for arg in $@; do
-            sync-$arg
+        for arg in "$@"; do
+            sync-"$arg"
             echo
         done
     fi
