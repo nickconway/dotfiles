@@ -32,8 +32,8 @@ function atuin-fix() {
     atuin sync
 }
 
-alias bootstrap='command -v systemd-inhibit &>/dev/null && systemd-inhibit -- bootstrap || bootstrap'
-alias all-bootstrap='command -v systemd-inhibit &>/dev/null && systemd-inhibit -- all-bootstrap || all-bootstrap'
+alias bootstrap=$'bash -c \'if command -v systemd-inhibit &>/dev/null; then systemd-inhibit -- bootstrap; else bootstrap; fi\''
+alias all-bootstrap=$'bash -c \'if command -v systemd-inhibit &>/dev/null; then systemd-inhibit -- all-bootstrap; else all-bootstrap; fi\''
 
 alias nf='fastfetch'
 alias pf='fastfetch'
