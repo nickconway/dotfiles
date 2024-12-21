@@ -624,6 +624,10 @@ alias tmuxconf='$EDITOR ~/.config/tmux/tmux.conf'
 function t() {
     tmux-sessionizer ${1:-${PWD}}
 }
+
+alias tt='tmux switch-client -l'
+alias ttc='tmux switch-client -l && clear'
+
 function tl() {
     if [[ $# -gt 0 ]]; then
         SELECTED="$1"
