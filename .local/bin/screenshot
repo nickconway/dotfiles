@@ -15,7 +15,7 @@ IMG="$(xdg-user-dir PICTURES)/Screenshots/$DATE.png"
 IMG_EDIT="$(xdg-user-dir PICTURES)/Screenshots/$DATE-edit.png"
 TEXT="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.txt"
 OCR_IMG="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.png"
-VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mkv"
+VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mp4"
 case ${1:-} in
     '')
         REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
