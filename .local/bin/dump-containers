@@ -4,6 +4,11 @@ set -euo pipefail
 
 for d in ~/docker/*; do
     cd $d
+
+    if [[ $# -ne 0 && "$1" != "$(basename "$(pwd)")" ]]; then
+        continue
+    fi
+
     if [[ -e compose.yml ]] && grep -q -e "container_name:.*postgres" compose.yml; then
         CONTAINER_NAME="$(grep -e 'container_name:.*postgres' compose.yml | awk '{print $2}')"
         DATABASE="$(docker exec $CONTAINER_NAME bash -c 'echo $POSTGRES_DB')"
