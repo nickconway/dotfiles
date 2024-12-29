@@ -470,7 +470,7 @@ function ls() {
     fi
 }
 
-alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -B -E lazydocker || lazydocker'
+alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -B -E "cd \"$(pwd)\" && lazydocker" || lazydocker'
 
 function lg() {
     if git rev-parse --is-inside-work-tree &>/dev/null; then
