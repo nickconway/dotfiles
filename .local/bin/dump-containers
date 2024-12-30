@@ -25,6 +25,14 @@ for d in ~/docker/*; do
         [[ -n "$CONTAINER_NAME" ]] && [[ -n "$DATABASE" ]] && [[ -n "$USERNAME" ]] && [[ -n "$PASSWORD" ]]
         echo "Dumping $d"
         docker exec "$CONTAINER_NAME" /usr/bin/mysqldump -u "$USERNAME" --password="$PASSWORD" "$DATABASE" --no-tablespaces > dump.sql
+    elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mariadb" compose.yml; then
+        CONTAINER_NAME="$(grep -e 'container_name:.*mariadb' compose.yml | awk '{print $2}')"
+        DATABASE="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_DATABASE')"
+        USERNAME="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_USER')"
+        PASSWORD="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_PASSWORD')"
+        [[ -n "$CONTAINER_NAME" ]] && [[ -n "$DATABASE" ]] && [[ -n "$USERNAME" ]] && [[ -n "$PASSWORD" ]]
+        echo "Dumping $d"
+        docker exec "$CONTAINER_NAME" mariadb-dump -u"$USERNAME" -p"$PASSWORD" --all-databases > dump.sql
     elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mongo" compose.yml; then
         CONTAINER_NAME="$(grep -e 'container_name:.*mongo' compose.yml | awk '{print $2}')"
         [[ -n "$CONTAINER_NAME" ]]
