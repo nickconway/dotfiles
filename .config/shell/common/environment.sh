@@ -57,8 +57,8 @@ export XDG_DATA_HOME="$HOME/.local/share"
 
 command -v brew > /dev/null && export HOMEBREW_PREFIX="$(brew --prefix)" && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
 
-export VISUAL=nvim
-export EDITOR=nvim
+export VISUAL="$(which nvim)"
+export EDITOR="$(which nvim)"
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 
