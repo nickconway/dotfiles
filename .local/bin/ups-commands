@@ -1,0 +1,14 @@
+#!/bin/bash
+journalctl -t upssched-cmd -f | while read -r line; do
+    echo "$line"
+    case "$line" in
+        *ONBATT)
+            (
+                ACTION=$(timeout 11s notify-send "UPS Status" "UPS Switched to Battery Power" --action "keep-awake=Keep Awake" -e)
+                case $ACTION in
+                    '') hyprsleep &>/dev/null;;
+                esac
+            ) &
+            ;;
+    esac
+done
