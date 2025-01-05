@@ -15,7 +15,11 @@ _fzf_git_fzf() {
     "$@"
 }
 
-if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
+if command -v bitwarden &>/dev/null; then
+    export BITWARDEN_SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/bitwarden.sock"
+    touch "$BITWARDEN_SSH_AUTH_SOCK" && chmod 770 "$BITWARDEN_SSH_AUTH_SOCK"
+    export SSH_AUTH_SOCK="$BITWARDEN_SSH_AUTH_SOCK"
+elif [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
     if [[ "$(ssh-add -l 2>&1)" == *"Error"* ]]; then
         rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
