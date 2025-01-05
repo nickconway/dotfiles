@@ -4,13 +4,14 @@ echo "Monitoring UPS Status..."
 
 while true; do
     FILE="$(ls /tmp/ups-status-*)"
+    [[ -z "$FILE" ]] && continue
     case "$FILE" in
         *ONLINE)
-            notify-send "UPS Status" "UPS Switched to Main Power" -e
+            notify-send "UPS Status" "UPS Switched to Main Power" -h string:synchronous:ups -e
         ;;
         *ONBATT)
             (
-                ACTION=$(timeout 11s notify-send "UPS Status" "UPS Switched to Battery Power" --action "keep-awake=Keep Awake" -e)
+                ACTION=$(timeout 11s notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e --action "keep-awake=Keep Awake")
                 case $ACTION in
                     '') [[ -e /tmp/ups-status-ONLINE ]] || shutdown -h now &>/dev/null;;
                 esac
