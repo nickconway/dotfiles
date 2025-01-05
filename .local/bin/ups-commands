@@ -1,4 +1,7 @@
 #!/bin/bash
+
+echo "Monitoring UPS Status..."
+
 while true; do
     FILE="$(ls /tmp/ups-status-*)"
     case "$FILE" in
