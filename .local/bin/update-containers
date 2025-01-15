@@ -8,9 +8,9 @@ if [[ -e ~/docker ]]; then
             if [[ -z "$@" ]] || grep -q $@ compose.yml; then
                 if [[ -e /usr/bin/docker-compose ]]; then
                     docker-compose pull
-                    docker-compose up -d
+                    docker-compose up -d --build
                 else
-                    docker compose up -d --pull=always
+                    docker compose up -d --build --pull=always
                 fi
             fi
         fi
