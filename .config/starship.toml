@@ -5,10 +5,13 @@ add_newline = false
 
 continuation_prompt = "[▶▶](bold purple)"
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+[character]
+success_symbol = "[➜](bold green)"
 error_symbol = "[➜](bold red)"
+vimcmd_symbol = "[➜](bold purple)"
+vimcmd_replace_one_symbol = "[](bold yellow)"
+vimcmd_replace_symbol = "[](bold yellow)"
+vimcmd_visual_symbol = "[󰒅](bold red)"
 
 [direnv]
 disabled = false
