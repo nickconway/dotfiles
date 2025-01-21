@@ -33,6 +33,7 @@ return {
                         command = 'netcoredbg',
                         args = { '--interpreter=vscode' }
                     }
+                    require("mason-nvim-dap").default_setup(config) -- don't forget this!
                 end,
                 cs = function(config)
                     config.configurations = {
