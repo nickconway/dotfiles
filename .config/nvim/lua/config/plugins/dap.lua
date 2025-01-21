@@ -27,6 +27,24 @@ return {
                     }
                     require("mason-nvim-dap").default_setup(config) -- don't forget this!
                 end,
+                coreclr = function(config)
+                    config.adapters = {
+                        type = 'executable',
+                        command = 'netcoredbg',
+                        args = { '--interpreter=vscode' }
+                    }
+                end,
+                cs = function(config)
+                    config.adapters = {
+                        type = "coreclr",
+                        name = "launch - netcoredbg",
+                        request = "launch",
+                        program = function()
+                            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/',
+                                'file')
+                        end
+                    }
+                end
             },
         })
 
@@ -99,8 +117,8 @@ return {
                 },
             },
             floating = {
-                max_height = nil,  -- These can be integers or a float between 0 and 1.
-                max_width = nil,   -- Floats will be treated as percentage of your screen.
+                max_height = nil,   -- These can be integers or a float between 0 and 1.
+                max_width = nil,    -- Floats will be treated as percentage of your screen.
                 border = "rounded", -- Border style. Can be "single", "double" or "rounded"
                 mappings = {
                     close = { "q", "<Esc>" },
