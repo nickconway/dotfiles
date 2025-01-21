@@ -8,9 +8,10 @@ return {
     dependencies = {
         { "williamboman/mason-lspconfig.nvim" },
         { "simrat39/rust-tools.nvim" },
+        "jay-babu/mason-nvim-dap.nvim",
         { "Hoffs/omnisharp-extended-lsp.nvim" },
     },
-    cmd = "Mason",
+    cmd = { "Mason", "DapInstall", "DapUninstall" },
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
     opts_extend = { "ensure_installed" },
@@ -193,6 +194,37 @@ return {
                         }
                     })
                 end
+            },
+        })
+
+        require("mason-nvim-dap").setup({
+            ensure_installed = {
+                "python"
+            },
+            automatic_installation = true,
+            handlers = {
+                function(config)
+                    require("mason-nvim-dap").default_setup(config)
+                end,
+                python = function(config)
+                    config.adapters = {
+                        type = "executable",
+                        command = "python",
+                        args = {
+                            "-m",
+                            "debugpy.adapter",
+                        },
+                    }
+                    require("mason-nvim-dap").default_setup(config) -- don't forget this!
+                end,
+                coreclr = function(config)
+                    config.adapters = {
+                        type = 'executable',
+                        command = 'netcoredbg',
+                        args = { '--interpreter=vscode' }
+                    }
+                    require("mason-nvim-dap").default_setup(config) -- don't forget this!
+                end,
             },
         })
     end,

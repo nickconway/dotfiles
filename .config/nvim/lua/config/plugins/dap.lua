@@ -2,54 +2,10 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
         "rcarriga/nvim-dap-ui",
-        "jay-babu/mason-nvim-dap.nvim",
         "nvim-neotest/nvim-nio",
         "theHamsta/nvim-dap-virtual-text",
     },
     config = function()
-        require("mason-nvim-dap").setup({
-            ensure_installed = {
-                "python"
-            },
-            automatic_installation = true,
-            handlers = {
-                function(config)
-                    require("mason-nvim-dap").default_setup(config)
-                end,
-                python = function(config)
-                    config.adapters = {
-                        type = "executable",
-                        command = "python",
-                        args = {
-                            "-m",
-                            "debugpy.adapter",
-                        },
-                    }
-                    require("mason-nvim-dap").default_setup(config) -- don't forget this!
-                end,
-                coreclr = function(config)
-                    config.adapters = {
-                        type = 'executable',
-                        command = 'netcoredbg',
-                        args = { '--interpreter=vscode' }
-                    }
-                    require("mason-nvim-dap").default_setup(config) -- don't forget this!
-                end,
-                cs = function(config)
-                    config.configurations = {
-                        type = "coreclr",
-                        name = "launch - netcoredbg",
-                        request = "launch",
-                        program = function()
-                            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/',
-                                'file')
-                        end
-                    }
-                    require("mason-nvim-dap").default_setup(config) -- don't forget this!
-                end
-            },
-        })
-
         vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
         require("dapui").setup({
