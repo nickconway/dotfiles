@@ -22,7 +22,7 @@ return {
                     vim.env.GIT_WORK_TREE = vim.fn.expand("~")
                 end
                 local neogit = require("neogit")
-                neogit.open({ kind = "replace" })
+                neogit.open()
             end,
             desc = "NeoGit"
         },
@@ -33,7 +33,18 @@ return {
 
         -- Only one of these is needed, not both.
         "nvim-telescope/telescope.nvim", -- optional
-        "ibhagwan/fzf-lua",              -- optional
+        -- "ibhagwan/fzf-lua",              -- optional
     },
-    config = true
+    config = function()
+        require("neogit").setup({
+            kind = "floating", -- opens neogit in a split
+            signs = {
+                -- { CLOSED, OPENED }
+                section = { "", "" },
+                item = { "", "" },
+                hunk = { "", "" },
+            },
+            integrations = { diffview = true }
+        })
+    end
 }

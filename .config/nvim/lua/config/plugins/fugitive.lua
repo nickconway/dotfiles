@@ -11,7 +11,7 @@ return {
         { "<leader>gca", "<cmd>Git commit -a -v<CR>",   desc = "Git commit --all" },
         { "<leader>gcm", [[:Git commit -a m ""<Left>]], desc = "Git commit -m",       silent = false },
         { "<leader>gcM", [[:Git commit -a m ""<Left>]], desc = "Git commit -a -m",    silent = false },
-        { "<leader>g",   "<cmd>Git<CR>",                desc = "Git Status" },
+        { "<leader>gG",  "<cmd>Git<CR>",                desc = "Git Status" },
         { "<leader>gB",  "<cmd>GBrowse<CR>",            desc = "Git Browse",          mode = "n" },
         { "<leader>gB",  "<ESC><cmd>'<,'>GBrowse<CR>",  desc = "Git Browse",          mode = "x" },
     },
