@@ -35,7 +35,7 @@ return {
                     }
                 end,
                 cs = function(config)
-                    config.adapters = {
+                    config.configurations = {
                         type = "coreclr",
                         name = "launch - netcoredbg",
                         request = "launch",
@@ -44,6 +44,7 @@ return {
                                 'file')
                         end
                     }
+                    require("mason-nvim-dap").default_setup(config) -- don't forget this!
                 end
             },
         })
@@ -51,6 +52,7 @@ return {
         vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
         require("dapui").setup({
+            force_buffers = false,
             icons = { expanded = "", collapsed = "", current_frame = "" },
             mappings = {
                 -- Use a table to apply multiple mappings
