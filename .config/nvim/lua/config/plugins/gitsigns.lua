@@ -13,6 +13,8 @@ return {
     config = function()
         require("gitsigns").setup {
             current_line_blame = true,
+            attach_to_untracked = true,
+            numhl = true,
             _on_attach_pre = function(_, callback)
                 if vim.fn.executable("yadm") == 1 then
                     require("gitsigns-yadm").yadm_signs(callback)
