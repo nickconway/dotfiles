@@ -176,3 +176,10 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
         end
     end,
 })
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+    pattern = "*.md",
+    callback = function()
+        vim.wo.conceallevel = 2
+    end
+})
