@@ -54,3 +54,7 @@ format='([$symbol($output)]($style) )'
 
 [username]
 detect_env_vars = ['SSH_CONNECTION']
+
+[kubernetes]
+disabled = false
+detect_files = ['.k8s']
