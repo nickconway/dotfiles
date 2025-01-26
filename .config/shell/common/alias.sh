@@ -667,6 +667,10 @@ function tu() {
     eval "$TS_COMMAND set --auto-update"
 }
 
+function talos-batch() {
+    kubectl get nodes -o wide | awk '{print $6}' | tail -n +2 | xargs | sed 's/ /,/g' | xargs talosctl "$1" -n
+}
+
 alias v='$EDITOR'
 function venv() {
     if [[ ! -e .venv ]]; then
