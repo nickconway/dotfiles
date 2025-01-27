@@ -6,6 +6,8 @@ if [[ -d ~/.config/zsh/zsh-completions ]]; then
     command -v kubectl &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_kubectl ]] || kubectl completion zsh > ~/.config/zsh/zsh-completions/src/_kubectl)
     command -v minikube &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_minikube ]] || minikube completion zsh > ~/.config/zsh/zsh-completions/src/_minikube)
     command -v helm &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_helm ]] || helm completion zsh > ~/.config/zsh/zsh-completions/src/_helm)
+    command -v talosctl &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_talosctl ]] || talosctl completion zsh > ~/.config/zsh/zsh-completions/src/_talosctl)
+
     fpath=(~/.config/zsh/zsh-completions/src $fpath)
     [[ -e /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 fi
