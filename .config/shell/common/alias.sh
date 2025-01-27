@@ -457,6 +457,9 @@ alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
 
+alias kctx='kubectl config use-context'
+alias kns='kubectl config set-context --current --namespace'
+
 alias l='ls'
 alias la='ls -A'
 alias ll='ls -lg'
