@@ -670,7 +670,7 @@ function tu() {
     eval "$TS_COMMAND set --auto-update"
 }
 
-alias talos-batch="kubectl get nodes -o wide | awk '{print \$6}' | tail -n +2 | xargs | sed 's/ /,/g' | xargs -I % talosctl -n %"
+alias talos-batch="kubectl get nodes -o wide | grep ' Ready' | awk '{print \$6}' | tail -n +2 | xargs | sed 's/ /,/g' | xargs -I % talosctl -n %"
 
 alias v='$EDITOR'
 function venv() {
