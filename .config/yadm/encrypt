@@ -7,3 +7,4 @@
 .config/zmk/*
 .password-store/.gpg-id
 .password-store/python-keyring/**/*.*
+.talos/config
