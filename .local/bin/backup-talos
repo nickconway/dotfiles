@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+mkdir -p /mnt/nas/backups/talos
+cd /mnt/nas/backups/talos
+
+talosctl etcd snapshot etcd.snapshot.$(date +%Y%m%d)
+find /mnt/nas/backups/talos -mtime +30 -type f -delete
