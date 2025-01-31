@@ -1,0 +1,9 @@
+#!/bin/bash
+set -eou pipefail
+
+IDS=(300 301 302 350 351 352)
+
+for ID in "${IDS[@]}"; do
+    echo "Starting ${ID}..."
+    ssh pve sudo qm start ${ID}
+done
