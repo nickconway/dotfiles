@@ -1,42 +1,29 @@
 #!/bin/bash
-
 set -euo pipefail
+set -x
 
-for d in ~/Docker/*; do
-    cd $d
+docker ps --format {{.Names}} | grep "${1:-}" | grep -v nextcloud-aio | while read c; do
+    if docker exec "$c" bash -c 'which psql && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
+        echo "Dumping postgres container $c" \
+            && docker exec "$c" bash -c 'pg_dump -c --if-exists --username "$POSTGRES_USER" -d "$POSTGRES_DB"' \
+            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/dump.sql"
+        fi
 
-    if [[ $# -ne 0 && "$1" != "$(basename "$(pwd)")" ]]; then
-        continue
+    if docker exec "$c" bash -c '[[ -e /usr/bin/mysqldump ]] && [[ -n $MYSQL_USER ]]' &>/dev/null; then
+        echo "Dumping mysql container $c" \
+            && docker exec "$c" bash -c '/usr/bin/mysqldump -u "$MYSQL_USER" --password="$MYSQL_PASSWORD" "$MYSQL_DATABASE" --no-tablespaces' \
+            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/dump.sql"
     fi
 
-    if [[ -e compose.yml ]] && grep -q -e "container_name:.*postgres" compose.yml; then
-        CONTAINER_NAME="$(grep -e 'container_name:.*postgres' compose.yml | awk '{print $2}')"
-        DATABASE="$(docker exec $CONTAINER_NAME bash -c 'echo $POSTGRES_DB')"
-        USERNAME="$(docker exec $CONTAINER_NAME bash -c 'echo $POSTGRES_USER')"
-        PASSWORD="$(docker exec $CONTAINER_NAME bash -c 'echo $POSTGRES_PASSWORD')"
-        [[ -n "$CONTAINER_NAME" ]] && [[ -n "$DATABASE" ]] && [[ -n "$USERNAME" ]] && [[ -n "$PASSWORD" ]]
-        echo "Dumping $d"
-        docker exec "$CONTAINER_NAME" pg_dump -c --if-exists --username "$USERNAME" -d "$DATABASE" > dump.sql
-    elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mysql" compose.yml; then
-        CONTAINER_NAME="$(grep -e 'container_name:.*mysql' compose.yml | awk '{print $2}')"
-        DATABASE="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_DATABASE')"
-        USERNAME="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_USER')"
-        PASSWORD="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_PASSWORD')"
-        [[ -n "$CONTAINER_NAME" ]] && [[ -n "$DATABASE" ]] && [[ -n "$USERNAME" ]] && [[ -n "$PASSWORD" ]]
-        echo "Dumping $d"
-        docker exec "$CONTAINER_NAME" /usr/bin/mysqldump -u "$USERNAME" --password="$PASSWORD" "$DATABASE" --no-tablespaces > dump.sql
-    elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mariadb" compose.yml; then
-        CONTAINER_NAME="$(grep -e 'container_name:.*mariadb' compose.yml | awk '{print $2}')"
-        DATABASE="$(docker exec $CONTAINER_NAME bash -c 'echo $MARIADB_DATABASE')"
-        USERNAME="$(docker exec $CONTAINER_NAME bash -c 'echo $MARIADB_USER')"
-        PASSWORD="$(docker exec $CONTAINER_NAME bash -c 'echo $MARIADB_PASSWORD')"
-        [[ -n "$CONTAINER_NAME" ]] && [[ -n "$DATABASE" ]] && [[ -n "$USERNAME" ]] && [[ -n "$PASSWORD" ]]
-        echo "Dumping $d"
-        docker exec "$CONTAINER_NAME" mariadb-dump -u"$USERNAME" -p"$PASSWORD" --all-databases > dump.sql
-    elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mongo" compose.yml; then
-        CONTAINER_NAME="$(grep -e 'container_name:.*mongo' compose.yml | awk '{print $2}')"
-        [[ -n "$CONTAINER_NAME" ]]
-        echo "Dumping $d"
-        docker exec "$CONTAINER_NAME" mongodump --archive > mongo.dump
+    if docker exec "$c" bash -c 'which mariadb-dump && [[ -n $MARIADB_USER ]]' &>/dev/null; then
+        echo "Dumping mariadb container $c" \
+            && docker exec "$c" bash -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --all-databases' \
+            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/dump.sql"
+    fi
+
+    if docker exec "$c" bash -c 'which mongodump' &>/dev/null; then
+        echo "Dumping mongo container $c" \
+            && docker exec "$c" mongodump --archive \
+            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/mongo.dumb"
     fi
 done
