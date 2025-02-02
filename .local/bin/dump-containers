@@ -1,6 +1,5 @@
 #!/bin/bash
 set -euo pipefail
-set -x
 
 docker ps --format {{.Names}} | grep "${1:-}" | grep -v nextcloud-aio | while read c; do
     if docker exec "$c" bash -c 'which psql && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
