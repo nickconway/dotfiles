@@ -13,11 +13,11 @@ if [[ ! -e /mnt/nas ]] || [[ -z "$(ls -A /mnt/nas)" ]]; then
     exit 1
 fi
 
-function fail(){
+function fail() {
     curl -f -s -d "Docker backup on $(uname -n) failed" https://ntfy.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
 }
 
-function clean(){
+function clean() {
     if [[ $RESTART == 'true' ]]; then
         sudo systemctl start docker.socket docker.service
     fi
@@ -46,6 +46,6 @@ if [[ ! -e "$BORG_REPO" ]]; then
     sudo -E $(which borg) init $BORG_REPO -e repokey
 fi
 sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc \
-    --exclude-caches ::"$DATE" docker || [[ $? == 100 ]]
+    --exclude-caches ::"$DATE" Docker || [[ $? == 100 ]]
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
 sudo -E $(which borg) compact -v --progress
