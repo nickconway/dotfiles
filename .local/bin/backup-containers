@@ -3,7 +3,7 @@
 cd
 if sudo systemctl is-active --quiet docker; then export RESTART=true; else export RESTART=false; fi
 
-if [[ ! -e ~/docker ]]; then
+if [[ ! -e ~/Docker ]]; then
     echo Docker directory does not exist
     exit 1
 fi
@@ -46,8 +46,6 @@ if [[ ! -e "$BORG_REPO" ]]; then
     sudo -E $(which borg) init $BORG_REPO -e repokey
 fi
 sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc \
-    --exclude="docker/kasm-workspaces/data/kasm/*/certs" \
-    --exclude='docker/kasm-workspaces/data/kasm/*/conf/database' \
     --exclude-caches ::"$DATE" docker || [[ $? == 100 ]]
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
 sudo -E $(which borg) compact -v --progress

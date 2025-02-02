@@ -13,9 +13,9 @@ ARCHIVE="$(borg list | tail -n 1 | awk '{print $1}')"
 echo Restoring $ARCHIVE
 borg extract --verbose --progress ::"$ARCHIVE"
 
-if [[ -e ~/docker/invoice-ninja/app ]]; then
-    sudo chmod 755 ~/docker/invoice-ninja/app
-    sudo chown -R 1500:1500 ~/docker/invoice-ninja/app
+if [[ -e ~/Docker/invoice-ninja/app ]]; then
+    sudo chmod 755 ~/Docker/invoice-ninja/app
+    sudo chown -R 1500:1500 ~/Docker/invoice-ninja/app
 fi
 
 restore-container-dumps

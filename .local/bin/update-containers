@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [[ -e ~/docker ]]; then
-    for d in ~/docker/*; do
+if [[ -e ~/Docker ]]; then
+    for d in ~/Docker/*; do
         cd $d
         echo $d
         if [[ -e docker-compose.yaml ]] || [[ -e docker-compose.yml ]] || [[ -e compose.yaml ]] || [[ -e compose.yml ]]; then

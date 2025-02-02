@@ -9,7 +9,7 @@ SERVER_ID=$(curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
 
 [[ $SERVER_ID != null ]]
 
-cd ~/docker
+cd ~/Docker
 for d in *; do
     [[ -e "$d/compose.yml" ]] || continue
     JSON=$(jq '{ type: "CreateStack", params: { name: $name, config: {

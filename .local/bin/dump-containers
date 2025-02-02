@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-for d in ~/docker/*; do
+for d in ~/Docker/*; do
     cd $d
 
     if [[ $# -ne 0 && "$1" != "$(basename "$(pwd)")" ]]; then
