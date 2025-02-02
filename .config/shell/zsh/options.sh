@@ -7,6 +7,7 @@ if [[ -d ~/.config/zsh/zsh-completions ]]; then
     command -v minikube &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_minikube ]] || minikube completion zsh > ~/.config/zsh/zsh-completions/src/_minikube)
     command -v helm &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_helm ]] || helm completion zsh > ~/.config/zsh/zsh-completions/src/_helm)
     command -v talosctl &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_talosctl ]] || talosctl completion zsh > ~/.config/zsh/zsh-completions/src/_talosctl)
+    command -v gitleaks &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_gitleaks ]] || gitleaks completion zsh > ~/.config/zsh/zsh-completions/src/_gitleaks)
 
     fpath=(~/.config/zsh/zsh-completions/src $fpath)
     [[ -e /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
