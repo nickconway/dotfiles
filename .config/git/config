@@ -73,3 +73,5 @@
     plus-empty-line-marker-style = normal 10
 [include]
     path = ~/.config/git/local
+[submodule]
+	recurse = true
