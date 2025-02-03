@@ -12,7 +12,7 @@ find ~/Git/homelab/docker/compose/*/*compose*.yml >/dev/null
 echo "Updating DNS..."
 
 CHANGED=0
-IP="$(ip addr | sed -nr 's/inet (\S*) .*/\1/p' | grep 10.0.10 | cut -d '/' -f 1 | xargs)"
+IP="$(ip addr show "${LAN_NETWORK_INTERFACE:-eth0}" | sed -nr 's/inet (\S*) .*/\1/p' | cut -d '/' -f 1 | xargs)"
 
 for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Git/homelab/docker/compose/*/*compose*.yml "$TRAEFIK_CONFIG" 2>/dev/null | grep -v "^*$" | sort | uniq); do
     if ! grep -qF " $d" "$LIST"; then
