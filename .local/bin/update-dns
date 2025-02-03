@@ -2,11 +2,11 @@
 set -euo pipefail
 
 LIST="/mnt/nas/internal/apps/pihole/data/custom.list"
-TRAEFIK_CONFIG="$HOME/Git/homelab/docker/compose/traefik/config.yml"
+TRAEFIK_CONFIG="$HOME/Git/homelab/docker/compose/traefik/data/config.yml"
 
 cd
 [[ -e "$LIST" ]]
-[[ -e "$TRAEFIK_CONFIG" ]]
+if [[ ! -e "$TRAEFIK_CONFIG" ]]; then TRAEFIK_CONFIG=""; fi
 find ~/Git/homelab/docker/compose/*/*compose*.yml >/dev/null
 
 echo "Updating DNS..."
