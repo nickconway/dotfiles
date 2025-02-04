@@ -11,17 +11,17 @@ if [[ ! -e ~/.venvs/wal ]]; then
     python3 -m venv ~/.venvs/wal
 fi
 source ~/.venvs/wal/bin/activate
-pip install pywal16 colorthief colorz haishoku &> /dev/null
+pip install pywal16 colorthief colorz haishoku &>/dev/null
 
 random='false'
 
 while getopts 'r' flag; do
-  case "${flag}" in
+    case "${flag}" in
     r) random='true' ;;
-  esac
+    esac
 done
 
-echo "" > /tmp/wallpaper
+echo "" >/tmp/wallpaper
 
 if [[ "$random" == "true" ]]; then
     IMG="$(find /mnt/nas/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)" || true
@@ -48,11 +48,11 @@ wal -i "$IMG"
 
 if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
     cp ~/.config/vesktop/pywal.theme.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes
-    sed -i "s/\(--link-colour:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}')/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--gradient-primary:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--gradient-secondary:\).*/\1 $(sed -n '4p' ~/.cache/wal/colors-rgb);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--mention-background:\).*/\1 rgba($(sed -n '3p' ~/.cache/wal/colors-rgb), 0.5);/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--mention-foreground:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}');/" .var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--link-colour:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}')/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--gradient-primary:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--gradient-secondary:\).*/\1 $(sed -n '4p' ~/.cache/wal/colors-rgb);/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--mention-background:\).*/\1 rgba($(sed -n '3p' ~/.cache/wal/colors-rgb), 0.5);/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+    sed -i "s/\(--mention-foreground:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}');/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 fi
 
 (pidof waybar && killall -SIGUSR2 waybar) || true
