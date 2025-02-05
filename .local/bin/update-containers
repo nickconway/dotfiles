@@ -1,7 +1,8 @@
 #!/bin/bash
+set -uo pipefail
 
-if [[ -e ~/Docker ]]; then
-    for d in ~/Docker/*; do
+if [[ -e "$DOCKER_STACK_DIR" ]]; then
+    for d in "$DOCKER_STACK_DIR"/*; do
         cd $d
         echo $d
         if [[ -e docker-compose.yaml ]] || [[ -e docker-compose.yml ]] || [[ -e compose.yaml ]] || [[ -e compose.yml ]]; then
