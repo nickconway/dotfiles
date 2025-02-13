@@ -104,7 +104,7 @@ map("n", "<esc>", function()
     end
 end)
 
-map("n", "<leader>ch", function()
+map("n", "<leader>uH", function()
     vim.cmd("set cursorline!")
     vim.cmd("set cursorcolumn!")
 end, "Toggle Crosshair")
@@ -118,7 +118,6 @@ map("x", "p", '"_dP=`]')
 
 map("n", "<leader><CR>", ":so ~/.config/nvim/init.lua<CR>", "Reload config")
 
-map("n", "<leader>bd", ":bp|bd #<CR>", "Delete buffer")
 map("n", "<leader>bn", ":bn<CR>", "Next buffer")
 map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 

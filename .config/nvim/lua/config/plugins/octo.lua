@@ -9,7 +9,6 @@ return {
         picker = "telescope",
     },
     keys = {
-        { "<leader>o",  desc = "+Octo" },
         { "<leader>oi", "<cmd>Octo issue list<CR>",   desc = "List Issues (Octo)" },
         { "<leader>oI", "<cmd>Octo issue search<CR>", desc = "Search Issues (Octo)" },
         { "<leader>op", "<cmd>Octo pr list<CR>",      desc = "List PRs (Octo)" },

@@ -10,6 +10,8 @@ return {
             { "<leader>h", group = "Harpoon" },
             { "<leader>l", group = "Lazy" },
             { "<leader>s", group = "Search" },
+            { "<leader>o", group = "Octo" },
+            { "<leader>u", group = "Toggles" },
             { "<leader>x", group = "Diagnostics / Quickfix", icon = { icon = "󱖫 ", color = "green" } },
             { "[", group = "prev" },
             { "]", group = "next" },

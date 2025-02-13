@@ -7,12 +7,12 @@ vim.api.nvim_create_autocmd(
     }
 )
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-    callback = function()
-        require("vim.hl").on_yank({ timeout = 50 })
-    end,
-    group = vim.api.nvim_create_augroup("highlight-on-yank", { clear = true }),
-})
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+--     callback = function()
+--         require("vim.hl").on_yank({ timeout = 50 })
+--     end,
+--     group = vim.api.nvim_create_augroup("highlight-on-yank", { clear = true }),
+-- })
 
 vim.api.nvim_create_autocmd("VimResized", {
     group = vim.api.nvim_create_augroup("equal-windows", { clear = true }),
@@ -181,5 +181,12 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = "*.md",
     callback = function()
         vim.wo.conceallevel = 2
+    end
+})
+
+-- Remove auto-commenting
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        vim.opt.formatoptions:remove({ "o", "r" })
     end
 })
