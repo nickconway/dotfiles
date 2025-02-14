@@ -2,13 +2,7 @@ return {
     'saghen/blink.cmp',
     -- optional: provides snippets for the snippet source
     dependencies = 'rafamadriz/friendly-snippets',
-
-    -- use a release tag to download pre-built binaries
     version = '*',
-    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-    -- build = 'cargo build --release',
-    -- If you use nix, you can build from source using latest nightly rust with:
-    -- build = 'nix run .#build-plugin',
 
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
@@ -71,14 +65,21 @@ return {
         sources = {
             default = function()
                 local success, node = pcall(vim.treesitter.get_node)
-                if vim.bo.filetype == 'lua' then
-                    return { 'lsp', 'path' }
-                elseif success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+                if success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
                     return { 'buffer' }
                 else
                     return { 'lsp', 'path', 'snippets', 'buffer' }
                 end
-            end
+            end,
+
+            cmdline = function()
+                local type = vim.fn.getcmdtype()
+                -- Search forward and backward
+                if type == '/' or type == '?' then return { 'buffer' } end
+                -- Commands
+                if type == ':' or type == '@' then return { 'cmdline', 'buffer' } end
+                return {}
+            end,
         },
 
         completion = {
