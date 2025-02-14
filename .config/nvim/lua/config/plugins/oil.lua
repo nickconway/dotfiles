@@ -17,11 +17,21 @@ return {
         },
     },
     opts = {
+        columns = {
+            "icon",
+            -- "permissions",
+            -- "size",
+            -- "mtime",
+        },
+        skip_confirm_for_simple_edits = true,
+        watch_for_changes = true,
+        use_default_keymaps = false,
+
         keymaps = {
             ["g?"] = "actions.show_help",
             ["<CR>"] = "actions.select",
-            ["<C-s>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
-            ["<C-h>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
+            ["<leader>wv"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
+            ["<leader>ws"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
             ["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
             ["<C-p>"] = "actions.preview",
             ["<C-c>"] = "actions.close",
