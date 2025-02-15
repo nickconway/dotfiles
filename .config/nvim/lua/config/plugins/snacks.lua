@@ -179,11 +179,31 @@ return {
         { "<leader>ff", function() Snacks.picker.smart() end,                                   desc = "Find Files" },
         { "<leader>fl", function() Snacks.picker.grep() end,                                    desc = "Grep" },
         { "<leader>fh", function() Snacks.picker.help() end,                                    desc = "Help" },
-        { "<leader>fg", function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
-        { "<leader>fp", function() Snacks.picker.projects() end,                                desc = "Projects" },
-        { "<leader>fr", function() Snacks.picker.recent() end,                                  desc = "Recent" },
-        { "<leader>fn", function() Snacks.picker.notifications() end,                           desc = "Notification History" },
-        { "<leader>f:", function() Snacks.picker.command_history() end,                         desc = "Command History" },
+        {
+            "<leader>fg",
+            function()
+                if Snacks.git.get_root() ~= nil then
+                    Snacks.picker.git_files()
+                    return
+                end
+
+                require("snacks").picker({
+                    finder = "proc",
+                    cmd = "yadm",
+                    args = { "ls-files" },
+                    cwd = "~",
+                    title = "YADM Files",
+                    transform = function(item)
+                        item.file = '~/' .. item.text
+                    end,
+                })
+            end,
+            desc = "Find Git Files"
+        },
+        { "<leader>fp", function() Snacks.picker.projects() end,        desc = "Projects" },
+        { "<leader>fr", function() Snacks.picker.recent() end,          desc = "Recent" },
+        { "<leader>fn", function() Snacks.picker.notifications() end,   desc = "Notification History" },
+        { "<leader>f:", function() Snacks.picker.command_history() end, desc = "Command History" },
 
         {
             "<leader>fC",
