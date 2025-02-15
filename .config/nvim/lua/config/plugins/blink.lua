@@ -60,6 +60,17 @@ return {
             nerd_font_variant = 'mono'
         },
 
+        cmdline = {
+            sources = function()
+                local type = vim.fn.getcmdtype()
+                -- Search forward and backward
+                if type == '/' or type == '?' then return { 'buffer' } end
+                -- Commands
+                if type == ':' or type == '@' then return { 'cmdline', 'buffer' } end
+                return {}
+            end
+        },
+
         -- Default list of enabled providers defined so that you can extend it
         -- elsewhere in your config, without redefining it, due to `opts_extend`
         sources = {
@@ -70,16 +81,7 @@ return {
                 else
                     return { 'lsp', 'path', 'snippets', 'buffer' }
                 end
-            end,
-
-            cmdline = function()
-                local type = vim.fn.getcmdtype()
-                -- Search forward and backward
-                if type == '/' or type == '?' then return { 'buffer' } end
-                -- Commands
-                if type == ':' or type == '@' then return { 'cmdline', 'buffer' } end
-                return {}
-            end,
+            end
         },
 
         completion = {
