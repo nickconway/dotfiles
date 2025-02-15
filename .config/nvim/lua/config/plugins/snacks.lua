@@ -189,8 +189,7 @@ return {
 
                 require("snacks").picker({
                     finder = "proc",
-                    cmd = "yadm",
-                    args = { "ls-files" },
+                    cmd = "get-yadm-files",
                     cwd = "~",
                     title = "YADM Files",
                     transform = function(item)
