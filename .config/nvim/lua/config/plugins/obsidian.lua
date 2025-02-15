@@ -7,8 +7,12 @@ return {
         -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
         "BufReadPre " .. vim.fn.expand "~" .. "/Documents/Notes/**.md",
         "BufNewFile " .. vim.fn.expand "~" .. "/Documents/Notes/**.md",
+
         "BufReadPre /mnt/nas/home/Documents/Notes/**.md",
         "BufNewFile /mnt/nas/home/Documents/Notes/**.md",
+
+        "BufReadPre " .. vim.fn.expand "~" .. "/Git/blog/**.md",
+        "BufNewFile " .. vim.fn.expand "~" .. "/Git/blog/**.md",
     },
     dependencies = {
         "nvim-lua/plenary.nvim",
