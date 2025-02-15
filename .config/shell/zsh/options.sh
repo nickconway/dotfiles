@@ -1,20 +1,29 @@
-if [[ -d ~/.config/zsh/zsh-completions ]]; then
-    command -v gh &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_gh ]] || gh completion --shell zsh > ~/.config/zsh/zsh-completions/src/_gh)
-    command -v rg &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_rg ]] || rg --generate complete-zsh > ~/.config/zsh/zsh-completions/src/_rg)
-    command -v fzf &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_fzf ]] || fzf --zsh > ~/.config/zsh/zsh-completions/src/_fzf)
-    command -v pnpm &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_pnpm ]] || pnpm completion zsh > ~/.config/zsh/zsh-completions/src/_pnpm)
-    command -v kubectl &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_kubectl ]] || kubectl completion zsh > ~/.config/zsh/zsh-completions/src/_kubectl)
-    command -v minikube &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_minikube ]] || minikube completion zsh > ~/.config/zsh/zsh-completions/src/_minikube)
-    command -v helm &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_helm ]] || helm completion zsh > ~/.config/zsh/zsh-completions/src/_helm)
-    command -v talosctl &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_talosctl ]] || talosctl completion zsh > ~/.config/zsh/zsh-completions/src/_talosctl)
-    command -v gitleaks &> /dev/null && ([[ -e ~/.config/zsh/zsh-completions/src/_gitleaks ]] || gitleaks completion zsh > ~/.config/zsh/zsh-completions/src/_gitleaks)
+function _gen_completions() {
+    if command -v $1 &> /dev/null && [[ ! -e ~/.config/zsh/completions/_"$1" ]]; then
+        $* > ~/.config/zsh/completions/_"$1"
+    fi
+}
 
-    fpath=(~/.config/zsh/zsh-completions/src $fpath)
-    [[ -e /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
-fi
+[[ -d ~/.config/zsh/zsh-completions ]] && fpath=(~/.config/zsh/zsh-completions/src $fpath)
+[[ -d /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 
-_dotnet_zsh_complete()
-{
+mkdir -p ~/.config/zsh/completions
+fpath=(~/.config/zsh/completions $fpath)
+
+_gen_completions gh completion --shell zsh
+_gen_completions rg --generate complete-zsh
+_gen_completions fzf --zsh
+_gen_completions pnpm completion zsh
+_gen_completions kubectl completion zsh
+_gen_completions minikube completion zsh
+_gen_completions helm completion zsh
+_gen_completions talosctl completion zsh
+_gen_completions gitleaks completion zsh
+_gen_completions fd --gen-completions zsh
+
+[[ ! -e ~/.config/zsh/completions/_yadm ]] && curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm -o ~/.config/zsh/completions/_yadm
+
+_dotnet_zsh_complete() {
     local completions=("$(dotnet complete "$words")")
 
     if [ -z "$completions" ]
