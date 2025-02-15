@@ -27,8 +27,12 @@ return {
                 path = "~/Documents/Notes",
             },
             {
-                name = "Local Notes",
+                name = "Notes",
                 path = "/mnt/nas/home/Documents/Notes",
+            },
+            {
+                name = "Blog",
+                path = "~/Git/blog",
             },
         },
         daily_notes = {
