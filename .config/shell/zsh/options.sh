@@ -65,6 +65,7 @@ if [[ -e ~/.config/zsh/fzf-tab/fzf-tab.zsh ]]; then
     zstyle ':fzf-tab:complete:rm:*' fzf-preview 'fzf-preview $realpath'
     zstyle ':fzf-tab:complete:cat:*' fzf-preview 'fzf-preview $realpath'
     zstyle ':fzf-tab:complete:bat:*' fzf-preview 'fzf-preview $realpath'
+    zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'fzf-preview $realpath'
 
     zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
     zstyle ':fzf-tab:*' popup-follow-cursor false

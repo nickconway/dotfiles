@@ -519,7 +519,7 @@ function mkcd() {
     mkdir -p -- "$1" && cd "$1"
 }
 
-alias n='$EDITOR'
+alias n="$EDITOR"
 alias notes='(cd /mnt/nas/home/Documents/Notes && n)'
 
 function np() {
@@ -672,7 +672,8 @@ function tu() {
 
 alias talos-batch="kubectl get nodes -o wide | grep ' Ready' | awk '{print \$6}' | grep -v 'INTERNAL-IP' | xargs | sed 's/ /,/g' | xargs -I % talosctl -n %"
 
-alias v='$EDITOR'
+alias v="$EDITOR"
+
 function venv() {
     if [[ ! -e .venv ]]; then
         python -m venv .venv
