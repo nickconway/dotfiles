@@ -54,23 +54,30 @@
     hunk-header-file-style = red
     hunk-header-line-number-style = green
     hunk-header-decoration-style = blue box
+
     map-styles = bold purple => syntax magenta, bold cyan => syntax blue
+
     merge-conflict-ours-diff-header-style = bold red
     merge-conflict-ours-diff-header-decoration-style = red box
     merge-conflict-theirs-diff-header-style = bold blue
     merge-conflict-theirs-diff-header-decoration-style = blue box
+
     grep-file-style = purple
     grep-line-number-style = green
+
     whitespace-error-style = reverse purple
-    minus-style = syntax 1
-    minus-non-emph-style = dim syntax
-    minus-emph-style = syntax 9
-    minus-empty-line-marker-style = normal 9
+
     zero-style = dim syntax
-    plus-style = syntax 10
-    plus-non-emph-style = syntax
-    plus-emph-style = syntax 10
-    plus-empty-line-marker-style = normal 10
+
+    minus-style = syntax
+    minus-non-emph-style = syntax
+    minus-emph-style = syntax red
+    minus-empty-line-marker-style = syntax
+
+    plus-style = syntax green
+    plus-non-emph-style = dim syntax
+    plus-emph-style = syntax green
+    plus-empty-line-marker-style = syntax
 [include]
     path = ~/.config/git/local
 [submodule]
