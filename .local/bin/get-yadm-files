@@ -2,7 +2,7 @@
 
 function get-files() {
     shopt -s dotglob globstar
-    yadm -C $HOME ls-files
+    yadm ls-files
 
     for line in $(cat $HOME/.config/yadm/encrypt); do
         for pattern in $line; do

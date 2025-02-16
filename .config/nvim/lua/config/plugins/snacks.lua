@@ -50,16 +50,18 @@ return {
                 ]],
 
                 keys = {
-                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('smart')" },
+                    { icon = " ", key = "f", desc = "Find File", action = "<leader>ff" },
                     { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-                    { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-                    { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-                    { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+                    { icon = " ", key = "g", desc = "Find Git Files", action = '<leader>fg' },
+                    { icon = " ", key = "l", desc = "Find Text", action = "<leader>fl" },
+                    { icon = " ", key = "r", desc = "Recent Files", action = "<leader>fr" },
+                    { icon = " ", key = "c", desc = "Config", action = "<leader>fc" },
                     { icon = " ", key = "s", desc = "Restore Session", section = "session" },
                     { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
                 },
             },
+
             sections = {
                 { section = "header" },
                 { section = "keys",         gap = 1,                padding = 1 },
@@ -183,17 +185,17 @@ return {
             "<leader>fg",
             function()
                 if Snacks.git.get_root() ~= nil then
-                    Snacks.picker.git_files()
+                    Snacks.picker.git_files({ cwd = vim.fn.getcwd() })
                     return
                 end
 
                 require("snacks").picker({
                     finder = "proc",
                     cmd = "get-yadm-files",
-                    cwd = "~",
+                    cwd = vim.fn.getcwd(),
                     title = "YADM Files",
                     transform = function(item)
-                        item.file = '~/' .. item.text
+                        item.file = item.text
                     end,
                 })
             end,
