@@ -37,7 +37,9 @@ return {
                         return cmp.select_prev()
                     end
                 end,
-                'snippet_backward', 'fallback' },
+                'snippet_backward',
+                'fallback'
+            },
 
             ['<Up>'] = { 'select_prev', 'fallback' },
             ['<Down>'] = { 'select_next', 'fallback' },
@@ -94,6 +96,11 @@ return {
             },
             ghost_text = {
                 enabled = true,
+            },
+            list = {
+                selection = {
+                    preselect = false,
+                }
             },
             menu = {
                 border = 'rounded'
