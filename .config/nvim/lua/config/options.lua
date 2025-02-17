@@ -31,8 +31,31 @@ vim.opt.splitbelow = true
 vim.opt.scrolloff = 8
 vim.opt.clipboard:append({ "unnamedplus", "unnamed" })
 
-vim.opt.foldmethod = "indent"
+-- from lazyvim
+function Foldexpr()
+    local buf = vim.api.nvim_get_current_buf()
+    if vim.b[buf].ts_folds == nil then
+        -- as long as we don't have a filetype, don't bother
+        -- checking if treesitter is available (it won't)
+        if vim.bo[buf].filetype == "" then
+            return "0"
+        end
+        if vim.bo[buf].filetype:find("dashboard") then
+            vim.b[buf].ts_folds = false
+        else
+            vim.b[buf].ts_folds = pcall(vim.treesitter.get_parser, buf)
+        end
+    end
+    return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or "0"
+end
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.Foldexpr()"
+vim.opt.foldtext = ""
 vim.opt.foldenable = false
+
+vim.g.markdown_recommended_style = 0
+
 vim.opt.fillchars = {
     foldopen = "",
     foldclose = "",
@@ -41,6 +64,7 @@ vim.opt.fillchars = {
     diff = "╱",
     eob = " ",
 }
+
 vim.opt.laststatus = 3
 
 vim.opt.updatetime = 50

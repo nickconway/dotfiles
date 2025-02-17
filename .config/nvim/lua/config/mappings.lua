@@ -190,3 +190,35 @@ map("x", "<leader>p", ":.!", "Paste Command Output", { silent = false })
 map("n", "<leader>ld", function()
     vim.fn.system("tmux display-popup -w 90% -h 80% -B -E lazydocker")
 end, "Lazy Docker")
+
+-- From linkarzu
+local function fold_markdown_headings(level)
+    vim.opt.foldmethod = "expr"
+    vim.opt.foldexpr = "v:lua.Foldexpr()"
+    vim.opt.foldtext = ""
+    vim.opt.foldenable = false
+
+    vim.opt.foldlevel = 99
+
+    local saved_view = vim.fn.winsaveview()
+
+    vim.cmd("normal! zR")
+    vim.cmd("normal! gg")
+
+    local lines = vim.fn.line("$")
+    for line = 1, lines do
+        local content = vim.fn.getline(line)
+        if content:match("^" .. string.rep("#", level) .. "%s") then
+            vim.fn.cursor(line, 1)
+            vim.cmd("normal! za")
+        end
+    end
+
+    vim.fn.winrestview(saved_view)
+end
+
+for i = 1, 6, 1 do
+    map("n", "z" .. i, function()
+        fold_markdown_headings(i)
+    end, "Fold Markdown Headings of Level " .. i)
+end
