@@ -69,8 +69,8 @@
 
     zero-style = dim syntax
 
-    minus-style = syntax
-    minus-non-emph-style = syntax
+    minus-style = syntax red
+    minus-non-emph-style = dim syntax
     minus-emph-style = syntax red
     minus-empty-line-marker-style = syntax
 
