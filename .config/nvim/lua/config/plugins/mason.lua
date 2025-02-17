@@ -55,18 +55,13 @@ return {
             end
 
             map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover Documentation", bufnr)
-            map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to Definition", bufnr)
-            map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to Declaration", bufnr)
-            map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to Implementation", bufnr)
-            map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to Type Definition", bufnr)
-            map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to Reference", bufnr)
             map("n", "gS", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Show Function Signature", bufnr)
+
             vim.keymap.set("n", "<leader>cn", function()
                 return ":IncRename " .. vim.fn.expand("<cword>")
             end, { desc = "Rename Symbol", expr = true, buffer = bufnr })
-            map("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format File", bufnr)
-            map("x", "<leader>cf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>",
-                "Format Selection", bufnr)
+
+            map("x", "<leader>F", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format Selection", bufnr)
             map("n", "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action", bufnr)
 
             vim.api.nvim_create_autocmd({ "BufWritePre" }, {
