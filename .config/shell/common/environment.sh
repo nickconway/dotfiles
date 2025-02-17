@@ -116,3 +116,5 @@ command -v dircolors &>/dev/null && eval "$(dircolors)"
 export JUST_CHOOSER='fzft --preview="just --color always --show {}"'
 
 export TESSDATA_PREFIX=~/.local/share/tessdata
+
+export TEXMFHOME="$HOME/.local/share/texmf"
