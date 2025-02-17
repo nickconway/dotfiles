@@ -104,10 +104,18 @@ return {
             enabled = true,
             formats = { "png", "jpg", "jpeg", "gif", "bmp", "webp", "tiff", "heic", "avif", "mp4", "mov", "avi", "mkv", "webm" },
             force = false, -- try displaying the image, even if the terminal does not support it
-            markdown = {
-                -- enable image viewer for markdown files
-                -- if your env doesn't support unicode placeholders, this will be disabled
+            doc = {
+                -- enable image viewer for documents
+                -- a treesitter parser must be available for the enabled languages.
+                -- supported language injections: markdown, html
                 enabled = true,
+                -- render the image inline in the buffer
+                -- if your env doesn't support unicode placeholders, this will be disabled
+                -- takes precedence over `opts.float` on supported terminals
+                inline = true,
+                -- render the image in a floating window
+                -- only used if `opts.inline` is disabled
+                float = true,
                 max_width = 80,
                 max_height = 40,
             },
