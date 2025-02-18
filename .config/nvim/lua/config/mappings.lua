@@ -219,6 +219,7 @@ end
 
 for i = 1, 6, 1 do
     map("n", "z" .. i, function()
+        vim.cmd("w")
         fold_markdown_headings(i)
     end, "Fold Markdown Headings of Level " .. i)
 end
