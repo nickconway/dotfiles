@@ -62,7 +62,7 @@ return {
             end, { desc = "Rename Symbol", expr = true, buffer = bufnr })
 
             map("x", "<leader>F", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format Selection", bufnr)
-            map("n", "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action", bufnr)
+            map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute Code Action", bufnr)
 
             vim.api.nvim_create_autocmd({ "BufWritePre" }, {
                 callback = function()
