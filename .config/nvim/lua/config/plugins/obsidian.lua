@@ -65,6 +65,12 @@ return {
                 end,
                 opts = { buffer = true, expr = true, desc = "Obsidian Smart Action" },
             },
+            ["<leader>od"] = {
+                action = function()
+                    vim.cmd("ObsidianToday")
+                end,
+                opts = { buffer = true, expr = true, desc = "Obsidian Daily Note" },
+            }
         }
     },
 }
