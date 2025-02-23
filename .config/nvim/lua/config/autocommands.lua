@@ -14,14 +14,14 @@ vim.api.nvim_create_autocmd(
 --     group = vim.api.nvim_create_augroup("highlight-on-yank", { clear = true }),
 -- })
 
-vim.api.nvim_create_autocmd("VimResized", {
-    group = vim.api.nvim_create_augroup("equal-windows", { clear = true }),
-    callback = function()
-        local current_tab = vim.fn.tabpagenr()
-        vim.cmd("tabdo wincmd =")
-        vim.cmd("tabnext " .. current_tab)
-    end,
-})
+-- vim.api.nvim_create_autocmd("VimResized", {
+--     group = vim.api.nvim_create_augroup("equal-windows", { clear = true }),
+--     callback = function()
+--         local current_tab = vim.fn.tabpagenr()
+--         vim.cmd("tabdo wincmd =")
+--         vim.cmd("tabnext " .. current_tab)
+--     end,
+-- })
 
 vim.api.nvim_create_autocmd("FocusLost", {
     command = "silent! update",
