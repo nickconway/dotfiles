@@ -1,23 +1,17 @@
-disableStartupPopups: false
-
+disableStartupPopups: true
 git:
   allBranchesLogCmd: git log --graph --color=always --abbrev-commit --date=short --pretty=format:'%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset' --all
   branchLogCmd: git log --graph --color=always --abbrev-commit --date=short --pretty=format:'%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset' {{branchName}}
   commitPrefix:
-    pattern: "^(\\S+)\\/(\\S+).*"
-    replace: '$1: '
-
+    - pattern: "^(\\S+)\\/(\\S+).*"
+      replace: "$1: "
   paging:
     pager: delta --paging=never
   parseEmoji: true
-
 gui:
   nerdFontsVersion: 3
   statusPanelView: allBranchesLog
-
-notARepository: 'quit'
-
+notARepository: "quit"
 os:
-  editPreset: 'nvim-remote'
-
+  editPreset: "nvim-remote"
 promptToReturnFromSubprocess: false
