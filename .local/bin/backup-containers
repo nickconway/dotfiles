@@ -45,7 +45,9 @@ mkdir -p $BASE_DIR
 if [[ ! -e "$BORG_REPO" ]]; then
     sudo -E $(which borg) init $BORG_REPO -e repokey
 fi
-sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc \
-    --exclude-caches ::"$DATE" Docker || [[ $? == 100 ]]
+
+sudo $(which fd) . Docker -L | sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc \
+    --exclude-caches ::"$DATE" --paths-from-stdin || [[ $? == 100 ]]
+
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
 sudo -E $(which borg) compact -v --progress
