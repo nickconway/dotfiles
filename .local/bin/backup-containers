@@ -47,7 +47,8 @@ if [[ ! -e "$BORG_REPO" ]]; then
 fi
 
 sudo $(which fd) . Docker -L | sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc \
-    --exclude-caches ::"$DATE" --paths-from-stdin || [[ $? == 100 ]]
+    --exclude-caches ::"$DATE" --paths-from-stdin || true
 
+sudo -E $(which borg) list "$BORG_REPO" | grep "$DATE"
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
 sudo -E $(which borg) compact -v --progress
