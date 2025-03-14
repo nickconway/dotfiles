@@ -1,33 +1,32 @@
 #!/bin/bash
-set -euo pipefail
+# set -euo pipefail
 
-LIST="/mnt/nas/internal/apps/pihole/data/custom.list"
 TRAEFIK_CONFIG="$HOME/Git/homelab/docker/compose/traefik/data/config.yml"
 
-cd
-[[ -e "$LIST" ]]
 if [[ ! -e "$TRAEFIK_CONFIG" ]]; then TRAEFIK_CONFIG=""; fi
-find ~/Git/homelab/docker/compose/*/*compose*.yml >/dev/null
+find ~/Docker/*/*compose*.yml >/dev/null
 
 echo "Updating DNS..."
 
-CHANGED=0
 IP="$(ip addr show "${LAN_NETWORK_INTERFACE:-eth0}" | sed -nr 's/inet (\S*) .*/\1/p' | cut -d '/' -f 1 | xargs)"
+SID="$(curl -s -X POST https://dns.conway.dev/api/auth --data "{\"password\": \"$PIHOLE_APP_PASSWORD\"}" | jq -r '.session.sid')"
+LIST="$(curl -s 'https://dns.conway.dev/api/config/dns/hosts' -H "sid: $SID" | jq -r '.config.dns.hosts')"
 
 for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Git/homelab/docker/compose/*/*compose*.yml "$TRAEFIK_CONFIG" 2>/dev/null | grep -v "^*$" | sort | uniq); do
-    if ! grep -qF " $d" "$LIST"; then
-        echo "Adding: $IP $d"
-        echo "$IP $d" >>"$LIST"
-        CHANGED=1
-    elif ! grep -qF "$IP $d" "$LIST"; then
-        LINE="$(grep "$d" "$LIST")"
-        echo "Updating: $d from $(echo "$LINE" | awk '{print $1}') to $IP"
-        sed -i "s/$(echo "$LINE" | awk '{print $1}') $d/$IP $d/g" "$LIST"
-        CHANGED=1
+    DOMAIN="$(echo "$d" | envsubst)"
+
+    IDX="$(echo "$LIST" | jq "map(test(\".* $DOMAIN\")) | index(true)")"
+
+    if [[ "$IDX" == "null" ]]; then
+        echo "Adding: $IP $DOMAIN"
+        LIST="$(echo "$LIST" | jq -r ". += [\"$IP $DOMAIN\"] | sort")"
+    elif [[ "$IDX" != "null" ]]; then
+        LINE="$(echo "$LIST" | jq -r ".[$IDX]")"
+        echo "Updating: $DOMAIN from $(echo "$LINE" | awk '{print $1}') to $IP"
+        LIST="$(echo "$LIST" | jq -r ".[$IDX] = \"$IP $DOMAIN\" | sort")"
     fi
 done
 
-if [[ $CHANGED -eq 1 ]]; then
-    sort -o "$LIST" "$LIST"
-    ssh nas sudo docker exec -it pihole service pihole-FTL restart
-fi
+jq --null-input --argjson list "$LIST" '{"config": { "dns": { "hosts": $list } } }'
+
+curl -s -X DELETE 'https://dns.conway.dev/api/auth' -H "sid: $SID"
