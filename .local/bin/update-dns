@@ -1,7 +1,7 @@
 #!/bin/bash
-# set -euo pipefail
+set -euo pipefail
 
-TRAEFIK_CONFIG="$HOME/Git/homelab/docker/compose/traefik/data/config.yml"
+TRAEFIK_CONFIG="$HOME/Docker/traefik/data/config.yml"
 
 if [[ ! -e "$TRAEFIK_CONFIG" ]]; then TRAEFIK_CONFIG=""; fi
 find ~/Docker/*/*compose*.yml >/dev/null
@@ -11,8 +11,9 @@ echo "Updating DNS..."
 IP="$(ip addr show "${LAN_NETWORK_INTERFACE:-eth0}" | sed -nr 's/inet (\S*) .*/\1/p' | cut -d '/' -f 1 | xargs)"
 SID="$(curl -s -X POST https://dns.conway.dev/api/auth --data "{\"password\": \"$PIHOLE_APP_PASSWORD\"}" | jq -r '.session.sid')"
 LIST="$(curl -s 'https://dns.conway.dev/api/config/dns/hosts' -H "sid: $SID" | jq -r '.config.dns.hosts')"
+CHANGED=false
 
-for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Git/homelab/docker/compose/*/*compose*.yml "$TRAEFIK_CONFIG" 2>/dev/null | grep -v "^*$" | sort | uniq); do
+for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Docker/*/*compose*.yml "$TRAEFIK_CONFIG" 2>/dev/null | grep -v "^*$" | sort | uniq); do
     DOMAIN="$(echo "$d" | envsubst)"
 
     IDX="$(echo "$LIST" | jq "map(test(\".* $DOMAIN\")) | index(true)")"
@@ -20,13 +21,20 @@ for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Git/homelab/docker/compo
     if [[ "$IDX" == "null" ]]; then
         echo "Adding: $IP $DOMAIN"
         LIST="$(echo "$LIST" | jq -r ". += [\"$IP $DOMAIN\"] | sort")"
+        CHANGED=true
     elif [[ "$IDX" != "null" ]]; then
         LINE="$(echo "$LIST" | jq -r ".[$IDX]")"
-        echo "Updating: $DOMAIN from $(echo "$LINE" | awk '{print $1}') to $IP"
-        LIST="$(echo "$LIST" | jq -r ".[$IDX] = \"$IP $DOMAIN\" | sort")"
+        LINE_IP="$(echo "$LINE" | awk '{print $1}')"
+        if [[ "$LINE_IP" != "$IP" ]]; then
+            echo "Updating: $DOMAIN from  to $IP"
+            LIST="$(echo "$LIST" | jq -r ".[$IDX] = \"$IP $DOMAIN\" | sort")"
+        fi
+        CHANGED=true
     fi
 done
 
-jq --null-input --argjson list "$LIST" '{"config": { "dns": { "hosts": $list } } }'
+if [[ CHANGED == true ]]; then
+    curl -s -X PATCH "https://dns.conway.dev/api/config" -H "sid: $SID" --data-raw "$(jq --null-input --argjson list "$LIST" '{"config": { "dns": { "hosts": $list } } }')"
+fi
 
 curl -s -X DELETE 'https://dns.conway.dev/api/auth' -H "sid: $SID"

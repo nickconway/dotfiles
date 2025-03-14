@@ -15,3 +15,9 @@ done
 if [[ -n "$DEBUGRC" ]]; then
   zprof
 fi
+
+export GPG_EMAIL="nick@conway.dev"
+
+export DOCKER_STACK_DIR="/home/nick/Docker"
+
+export SERVICES_BASE_DOMAIN="conway.dev"
