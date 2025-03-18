@@ -68,7 +68,10 @@ map("n", "<C-u>", "<C-u>zz")
 map("i", "<C-h>", "<Esc>cvb")
 
 -- change word
-map("n", "<CR>", '"_ciw')
+map("n", "<CR>", function()
+    return vim.opt.modifiable._value and '"_ciw' or "<CR>"
+end, nil, { expr = true })
+
 map("n", "<S-CR>", '"_ciW')
 
 -- cursor stays on yank
