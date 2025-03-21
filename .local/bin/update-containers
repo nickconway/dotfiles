@@ -17,3 +17,5 @@ if [[ -e "$DOCKER_STACK_DIR" ]]; then
         fi
     done
 fi
+
+docker image prune -af
