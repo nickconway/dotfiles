@@ -69,7 +69,7 @@ vim.opt.laststatus = 3
 
 vim.opt.updatetime = 50
 
-vim.opt.virtualedit = "block"
+vim.opt.virtualedit = "all"
 
 vim.opt.signcolumn = "yes"
 
@@ -106,7 +106,6 @@ else
         end
     end
 end
-
 
 vim.cmd("highlight Normal ctermbg=none guibg=none")
 vim.cmd("highlight NormalFloat ctermbg=none guibg=none")
