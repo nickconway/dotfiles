@@ -4,7 +4,7 @@ return {
         { "onsails/lspkind-nvim" },
         { 'saghen/blink.cmp' },
     },
-    config = function(_, opts)
+    config = function(_, _)
         local text = {
             [vim.diagnostic.severity.ERROR] = "✘",
             [vim.diagnostic.severity.WARN] = "▲",
