@@ -81,6 +81,8 @@ vim.o.sessionoptions = "buffers,curdir,folds,globals,help,tabpages,winsize,winpo
 
 vim.opt.smoothscroll = true
 
+vim.opt.winborder = "rounded"
+
 local f = io.open(os.getenv("HOME") .. "/.cache/nvim/colorscheme", "r")
 if f then
     local colorscheme = f:read()
