@@ -226,3 +226,8 @@ for i = 1, 6, 1 do
         fold_markdown_headings(i)
     end, "Fold Markdown Headings of Level " .. i)
 end
+
+map('n', '<leader>uv', function()
+    local new_config = not vim.diagnostic.config().virtual_lines
+    vim.diagnostic.config({ virtual_lines = new_config })
+end, 'Toggle diagnostic virtual_lines')
