@@ -120,3 +120,7 @@ export TESSDATA_PREFIX=~/.local/share/tessdata
 export TEXMFHOME="$HOME/.local/share/texmf"
 
 [ -s ~/.bun/_bun ] && source ~/.bun/_bun
+
+export GPG_EMAIL="nick@conway.dev"
+export DOCKER_STACK_DIR="$HOME/Docker"
+export SERVICES_BASE_DOMAIN="conway.dev"
