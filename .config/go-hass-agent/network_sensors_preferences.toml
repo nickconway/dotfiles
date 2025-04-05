@@ -1,0 +1,4 @@
+# List of prefixes to match for devices to ignore, for e.g., 'eth' will ignore all devices starting with eth.
+ignored_devices = [br-,veth]
+# Set this to true to disable all these sensors.
+disabled = false
