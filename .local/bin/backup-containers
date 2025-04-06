@@ -43,7 +43,7 @@ if [[ ! -e "$BORG_REPO" ]]; then
     sudo -E $(which borg) init $BORG_REPO -e repokey
 fi
 
-sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE"
+sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE" Docker
 
 sudo -E $(which borg) list "$BORG_REPO" | grep "$DATE"
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
