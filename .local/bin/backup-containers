@@ -33,9 +33,6 @@ DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 export BASE_DIR="/mnt/nas/backups/docker"
 export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 export BORG_EXIT_CODES=modern
-CONTAINER_COUNT=$(docker ps -q | wc -l)
-CONTAINER_NAMES="$(docker ps --format \"{{.Names}}\")"
-CONTAINERS_RUNNING="$(docker ps -q)"
 
 dump-containers
 
@@ -46,8 +43,7 @@ if [[ ! -e "$BORG_REPO" ]]; then
     sudo -E $(which borg) init $BORG_REPO -e repokey
 fi
 
-sudo $(which fd) . Docker -L | sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc \
-    --exclude-caches ::"$DATE" --paths-from-stdin || true
+sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE"
 
 sudo -E $(which borg) list "$BORG_REPO" | grep "$DATE"
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
