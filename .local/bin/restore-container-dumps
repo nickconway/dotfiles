@@ -21,7 +21,7 @@ for d in ~/Docker/*; do
         docker compose create
         docker start "$CONTAINER_NAME"
         sleep 5
-        cat dump.sql | docker exec -i "$CONTAINER_NAME" psql -U "$USERNAME" -d "$DATABASE" > /dev/null
+        cat data/dump.sql | docker exec -i "$CONTAINER_NAME" psql -U "$USERNAME" -d "$DATABASE" > /dev/null
     elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mysql" compose.yml; then
         CONTAINER_NAME="$(grep -e 'container_name:.*mysql' compose.yml | awk '{print $2}')"
         docker start "$CONTAINER_NAME"
@@ -34,7 +34,7 @@ for d in ~/Docker/*; do
         docker compose create
         docker start "$CONTAINER_NAME"
         sleep 5
-        cat dump.sql | docker exec -i "$CONTAINER_NAME" /usr/bin/mysql -u "$USERNAME" --password="$PASSWORD" "$DATABASE" > /dev/null
+        cat data/dump.sql | docker exec -i "$CONTAINER_NAME" /usr/bin/mysql -u "$USERNAME" --password="$PASSWORD" "$DATABASE" > /dev/null
     elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mongo" compose.yml; then
         CONTAINER_NAME="$(grep -e 'container_name:.*mongo' compose.yml | awk '{print $2}')"
         [[ -n "$CONTAINER_NAME" ]]
