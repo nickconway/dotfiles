@@ -17,7 +17,7 @@ CHANGED=false
 for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Docker/*/*compose*.yml "$TRAEFIK_CONFIG" 2>/dev/null | grep -v "^*$" | sort | uniq); do
     DOMAIN="$(echo "$d" | envsubst)"
 
-    IDX="$(echo "$LIST" | jq "map(test(\".*$DOMAIN.*\")) | index(true)")"
+    IDX="$(echo "$LIST" | jq "map(test(\"^$DOMAIN.*\")) | index(true)")"
 
     if [[ "$IDX" == "null" ]]; then
         echo "Adding $DOMAIN"
