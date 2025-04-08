@@ -14,7 +14,7 @@ if [[ ! -e /mnt/nas ]] || [[ -z "$(ls -A /mnt/nas)" ]]; then
 fi
 
 function fail() {
-    curl -f -s -d "Docker backup on $(uname -n) failed" https://ntfy.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
+    curl -f -s -d "Docker backup on $(uname -n) failed" https://notifications.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
 }
 
 function clean() {

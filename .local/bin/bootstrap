@@ -147,11 +147,11 @@ fi
 
 if [[ ${FAILED:-} == "true" ]]; then
     if [[ -n $NTFY_TOKEN ]]; then
-        curl -d "Bootstrapping failed on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+        curl -d "Bootstrapping failed on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
     fi
     exit 1
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then
-    curl -d "Bootstrapping complete on $(uname -n)" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+    curl -d "Bootstrapping complete on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 fi

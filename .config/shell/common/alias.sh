@@ -523,17 +523,17 @@ alias n="$EDITOR"
 alias notes='(cd /mnt/nas/home/Documents/Notes && n)'
 
 function np() {
-    curl -d "$@" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+    curl -d "$@" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 }
 
 function npa() {
     ARGS="$@"
     eval $@
     if [[ $? -eq 0 ]]; then
-        curl -d "$ARGS finished successfully" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+        curl -d "$ARGS finished successfully" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
         command -v notify-send &>/dev/null && notify-send "$ARGS finished successfully"
     else
-        curl -d "$ARGS failed" https://ntfy.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+        curl -d "$ARGS failed" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
         command -v notify-send &>/dev/null && notify-send "$ARGS failed"
     fi
 }

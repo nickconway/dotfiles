@@ -8,7 +8,7 @@ if [[ -n "$UPDATES" ]]; then
     echo "$UPDATES"
     curl -sSL https://run.conway.dev/api/GetDashboardComponents
     curl -H "Title: Docker updates available on $(uname -n)" \
-        https://ntfy.conway.dev/docker \
+        https://notifications.conway.dev/docker \
         -H "Authorization: Bearer ${NTFY_TOKEN}" \
         -d "The following have updates available: $UPDATES" \
         -H "Actions: http, Update Now, https://run.conway.dev/api/StartAction, method=POST, clear=true, body='{ \"actionId\": \"updateContainers\", \"arguments\": [{ \"name\": \"hostname\", \"value\": \"$(uname -n)\" }] }'"
