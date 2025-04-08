@@ -69,7 +69,7 @@ vim.opt.laststatus = 3
 
 vim.opt.updatetime = 50
 
-vim.opt.virtualedit = "all"
+vim.opt.virtualedit = "block"
 
 vim.opt.signcolumn = "yes"
 
