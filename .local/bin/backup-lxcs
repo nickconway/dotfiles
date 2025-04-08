@@ -10,12 +10,6 @@ if [[ ! -e /mnt/nas ]] || [[ -z "$(ls -A /mnt/nas)" ]]; then
     exit 1
 fi
 
-function fail(){
-    curl -f -s -d "LXC backup on $(uname -n) failed" https://notifications.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
-}
-
-trap fail ERR
-
 set -euo pipefail
 
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
@@ -30,3 +24,5 @@ fi
 sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE" /etc/pve/nodes/pve/lxc
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
 sudo -E $(which borg) compact -v --progress
+
+curl "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/backup-lxcs-$(uname -n)?create=1"

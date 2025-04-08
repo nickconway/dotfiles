@@ -13,17 +13,12 @@ if [[ ! -e /mnt/nas ]] || [[ -z "$(ls -A /mnt/nas)" ]]; then
     exit 1
 fi
 
-function fail() {
-    curl -f -s -d "Docker backup on $(uname -n) failed" https://notifications.conway.dev/backups -H "Authorization: Bearer ${NTFY_TOKEN}"
-}
-
 function clean() {
     if [[ $RESTART == 'true' ]]; then
         sudo systemctl start docker.socket docker.service
     fi
 }
 
-trap fail ERR
 trap clean EXIT
 
 set -euo pipefail
@@ -48,3 +43,5 @@ sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc --ex
 sudo -E $(which borg) list "$BORG_REPO" | grep "$DATE"
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
 sudo -E $(which borg) compact -v --progress
+
+curl "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/backups-containers-$(uname -n)?create=1"
