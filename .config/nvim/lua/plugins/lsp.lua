@@ -14,8 +14,20 @@ return {
 
         vim.diagnostic.config({
             virtual_lines = {
+                current_line = true,
                 format = function(d)
                     return text[d.severity] .. " " .. d.message
+                end
+            },
+            virtual_text = {
+                spacing = 4,
+                source = "if_many",
+                prefix = function(diagnostic)
+                    if vim.fn.has("nvim-0.10") then
+                        return text[diagnostic.severity]
+                    else
+                        return "●"
+                    end
                 end
             },
             severity_sort = true,
