@@ -40,9 +40,10 @@ fi
 
 sudo -E $(which borg) create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE" Docker
 
-sudo -E $(which borg) list "$BORG_REPO" | grep "$DATE"
 sudo -E $(which borg) prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly -1
 sudo -E $(which borg) compact -v --progress
+
+clean
 
 until curl -f "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/backup-containers-$(uname -n)?create=1"; do
     sleep 5
