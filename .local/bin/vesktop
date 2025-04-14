@@ -15,8 +15,8 @@ mkdir -p ~/.config/user-tmpfiles.d
 echo 'L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0' > ~/.config/user-tmpfiles.d/discord-rpc.conf
 systemctl --user enable --now systemd-tmpfiles-setup.service
 
-sudo flatpak override --filesystem=home dev.vencord.Vesktop
-sudo flatpak override --filesystem=xdg-run/.flatpak/dev.vencord.Vesktop:create --filesystem=xdg-run/discord-ipc-0
-
 ln -sf $XDG_RUNTIME_DIR/.flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0 $XDG_RUNTIME_DIR/discord-ipc-0
 ln -sf $XDG_RUNTIME_DIR/.flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0 $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0
+
+sudo flatpak override --filesystem=home dev.vencord.Vesktop
+sudo flatpak override --filesystem=xdg-run/.flatpak/dev.vencord.Vesktop:create --filesystem=xdg-run/discord-ipc-0 --filesystem=xdg-run/app/com.discordapp.Discord/discord-ipc-0
