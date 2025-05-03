@@ -1,23 +1,22 @@
 #!/bin/bash
 set -euo pipefail
 
+uv venv &> /dev/null
+uv tool install pywal16 &> /dev/null
+uv pip install colorthief colorz haishoku &>/dev/null
+
 if [[ $(uname) == Darwin ]]; then
     wal -i ~/wallpaper.png -n
     [[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
     exit
 fi
 
-if [[ ! -e ~/.venvs/wal ]]; then
-    python3 -m venv ~/.venvs/wal
-fi
-source ~/.venvs/wal/bin/activate
-pip install pywal16 colorthief colorz haishoku &>/dev/null
-
 random='false'
 
 while getopts 'r' flag; do
     case "${flag}" in
-    r) random='true' ;;
+        r) random='true';;
+        *) ;;
     esac
 done
 
@@ -32,6 +31,8 @@ if [[ "$random" == "true" ]]; then
 else
     IMG="$(cd /mnt/nas/home/Pictures/Wallpapers/PC && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
+
+if [[ -z "$IMG" ]]; then exit 1; fi
 
 cp "$IMG" ~/.config/wallpaper
 hyprctl hyprpaper unload all
