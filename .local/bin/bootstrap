@@ -1,6 +1,15 @@
 #!/bin/bash
 set -eou pipefail
 
+function err() {
+    if [[ -n $NTFY_TOKEN ]]; then
+        curl -d "Bootstrapping failed on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+    fi
+    exit 1
+}
+
+trap err ERR
+
 export PATH=~/bin:~/.local/bin:$PATH
 cd
 
@@ -140,16 +149,9 @@ if ! [[ -e ~/.local/bin/vault-keyring-client ]]; then
 fi
 
 if ansible-vault-password &> /dev/null; then
-    ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@ || FAILED=true
+    ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
 else
-    ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@ || FAILED=true
-fi
-
-if [[ ${FAILED:-} == "true" ]]; then
-    if [[ -n $NTFY_TOKEN ]]; then
-        curl -d "Bootstrapping failed on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
-    fi
-    exit 1
+    ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then
