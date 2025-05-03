@@ -56,12 +56,6 @@ if command -v termux-reload-settings > /dev/null; then
     exit
 fi
 
-if ! command -v pip > /dev/null || ! command -v python3 > /dev/null || ! command -v ansible > /dev/null; then
-    if command -v apt > /dev/null; then
-        sudo apt update -y && sudo apt upgrade -y
-    fi
-fi
-
 if [[ $(yadm config --get-all local.class) == "" ]]; then
     YADM_CLASS=
     while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
@@ -98,29 +92,17 @@ if ! command -v python > /dev/null && command -v python3 > /dev/null; then
     ln -s "$(which python3)" ~/.local/bin/python
 fi
 
-if ! command -v pip > /dev/null; then
-    if command -v apt > /dev/null; then
-        sudo apt install python3-pip pipx -y
-    else
-        if command -v yum > /dev/null; then
-            python3 -m ensurepip --upgrade
-            sudo yum install pipx -y
-        elif command -v apt > /dev/null; then
-            python3 -m ensurepip --upgrade
-            sudo apt install pipx -y
-        elif command -v pacman > /dev/null; then
-            sudo pacman -S python-pip python-pipx
-        else
-            python3 -m ensurepip --upgrade
-
-        fi
-    fi
+if ! command -v uv > /dev/null; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
-if ! command -v ansible > /dev/null; then
-    pipx install --include-deps ansible
-    pipx inject ansible netaddr
-fi
+for TOOL in "ansible" "ansible-core" "netaddr"; do
+    if ! uv tool list | grep -q "^$TOOL "; then uv tool install "$TOOL"; fi
+done
+
+for C in "community.general" "ansible.posix"; do
+    ansible-galaxy collection install "$C" > /dev/null
+done
 
 if [[ -e "$XDG_RUNTIME_DIR" ]]; then
     if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
