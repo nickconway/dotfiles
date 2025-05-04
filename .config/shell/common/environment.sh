@@ -86,9 +86,6 @@ export FZF_CTRL_R_OPTS="
 command -v pbcopy &> /dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'"
 command -v wl-copy &> /dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'"
 
-
-export GITEA_USER=nick
-
 if [[ -e "$HOME/.config/colima/default/docker.sock" ]]; then
     export DOCKER_HOST=unix://$HOME/.config/colima/default/docker.sock
 elif [[ -e ~/.docker/run/docker.sock ]]; then
@@ -124,3 +121,4 @@ export TEXMFHOME="$HOME/.local/share/texmf"
 export GPG_EMAIL="nick@conway.dev"
 export DOCKER_STACK_DIR="$HOME/Docker"
 export SERVICES_BASE_DOMAIN="conway.dev"
+export GITEA_USER=nick

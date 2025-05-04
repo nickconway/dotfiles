@@ -20,6 +20,8 @@ _gen_completions helm completion zsh
 _gen_completions talosctl completion zsh
 _gen_completions gitleaks completion zsh
 _gen_completions fd --gen-completions zsh
+_gen_completions uv generate-shell-completion zsh
+_gen_completions uvx --generate-shell-completion zsh
 
 [[ ! -e ~/.config/zsh/completions/_yadm ]] && curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm -o ~/.config/zsh/completions/_yadm
 
