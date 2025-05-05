@@ -21,15 +21,14 @@ return {
                 "diff",
                 "diagnostics",
                 {
-                    require("noice").api.statusline.mode.get,
-                    cond = require("noice").api.statusline.mode.has,
-                    fmt = function(name, _)
-                        name = name:gsub("INSERT", "")
-                        name = name:gsub("VISUAL", "")
-                        name = name:gsub(" LINE", "")
-                        name = name:gsub("-- --", "")
-                        return name
-                    end,
+                    function()
+                        local recording_register = vim.fn.reg_recording()
+                        if recording_register == '' then
+                            return ''
+                        else
+                            return ' ' .. recording_register
+                        end
+                    end
                 },
             },
             lualine_x = {
