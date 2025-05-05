@@ -58,9 +58,9 @@ if [[ -n "$(ls)" ]]; then
                     eval 'echo "$VAR_NAME=$VALUE"'
                 done
 
-                sops encrypt --pgp "$GPG_KEY" <(envsubst <secrets.template) >secrets.encrypted
+                sops encrypt --pgp "$GPG_KEY" <(envsubst < secrets.template) > secrets.encrypted
             fi
-            SECRETS="$(sops decrypt --input-type yaml --output-type yaml secrets.encrypted)"
+            SECRETS="$(sops decrypt --input-type yaml --output-type yaml secrets.encrypted --extract '["data"]')"
             kubectl apply -f <(echo "$SECRETS") -f .
         else
             kubectl apply -f .
