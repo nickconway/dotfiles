@@ -4,9 +4,9 @@ local map = function(m, lhs, rhs, desc, bufnr)
 end
 
 return {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     dependencies = {
-        { "williamboman/mason-lspconfig.nvim" },
+        { "mason-org/mason-lspconfig.nvim" },
         { "simrat39/rust-tools.nvim" },
         "jay-babu/mason-nvim-dap.nvim",
         { "Hoffs/omnisharp-extended-lsp.nvim" },
