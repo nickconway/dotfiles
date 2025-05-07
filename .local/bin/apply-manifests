@@ -13,6 +13,29 @@ cd "$K8S_MANIFEST_DIR"
 if [[ -n "$(ls)" ]]; then
     for APP in *; do
         cd "$K8S_MANIFEST_DIR/$APP"
+        if [[ -e .env ]]; then source .env; fi
+
+        if [[ -e secrets.template ]]; then
+            if [[ ! -e secrets.encrypted ]]; then
+                if [[ -z "${GPG_KEY:-}" ]]; then
+                    GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"
+                    export GPG_KEY
+                fi
+
+                sed -nr 's/.*\$\{(.*)\}/\1/p' secrets.template | while read -r VAR_NAME; do
+                    while [[ -z "${VALUE:-}" ]]; do
+                        VALUE="$(gum input --header "Enter the value for $VAR_NAME:" --placeholder "${!VAR_NAME}")"
+                        VALUE="${VALUE:-"${!VAR_NAME}"}"
+                    done
+                    eval 'echo "$VAR_NAME=$VALUE"'
+                done
+
+                sops encrypt --pgp "$GPG_KEY" <(envsubst < secrets.template) > secrets.encrypted
+            fi
+            SECRETS="$(sops decrypt --input-type yaml --output-type yaml secrets.encrypted --extract '["data"]')"
+            kubectl apply -f <(echo "$SECRETS")
+        fi
+
         if [[ "$APP" == "cert-manager" ]]; then
             if ! command -v helm &>/dev/null; then
                 if [[ -n "${INSTALL_DEPENDENCIES:-}" ]] || gum confirm "Helm is not installed, would you like to install it?"; then
@@ -43,27 +66,8 @@ if [[ -n "$(ls)" ]]; then
             kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/"$LATEST_METALLB"/config/manifests/metallb-native.yaml
         fi
 
-        if [[ -e secrets.template ]]; then
-            if [[ ! -e secrets.encrypted ]]; then
-                if [[ -z "${GPG_KEY:-}" ]]; then
-                    GPG_KEY="$(gpg --with-colons --list-keys "$GPG_EMAIL" | awk -F: '/^pub:.*/ { getline; print $10}')"
-                    export GPG_KEY
-                fi
-
-                sed -nr 's/.*\$\{(.*)\}/\1/p' secrets.template | while read -r VAR_NAME; do
-                    while [[ -z "${VALUE:-}" ]]; do
-                        VALUE="$(gum input --header "Enter the value for $VAR_NAME:" --placeholder "${!VAR_NAME}")"
-                        VALUE="${VALUE:-"${!VAR_NAME}"}"
-                    done
-                    eval 'echo "$VAR_NAME=$VALUE"'
-                done
-
-                sops encrypt --pgp "$GPG_KEY" <(envsubst < secrets.template) > secrets.encrypted
-            fi
-            SECRETS="$(sops decrypt --input-type yaml --output-type yaml secrets.encrypted --extract '["data"]')"
-            kubectl apply -f <(echo "$SECRETS") -f .
-        else
-            kubectl apply -f .
-        fi
+        for f in *.yml; do
+            envsubst < "$f" | kubectl apply -f -
+        done
     done
 fi
