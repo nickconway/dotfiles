@@ -38,7 +38,6 @@ else
         if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
             if [[ -z "$SSH_CONNECTION" ]]; then
                 if [[ -n "$TMUX_AUTO_SESSION" ]]; then
-                    echo "$TMUX_AUTO_SESSION"
                     command -v tmux > /dev/null && tmux -u new "$TMUX_SHELL" &> /dev/null && exit 0
                 else
                     command -v tmux > /dev/null && tmux -u new -As "${TMUX_SESSION_NAME:-Main}" "$TMUX_SHELL" &> /dev/null && exit 0
