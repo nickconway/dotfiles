@@ -687,7 +687,7 @@ alias work='s work'
 function x() {
     if command -v termux-reload-settings >/dev/null; then
         exit 0
-    elif [[ -z $TMUX ]]; then
+    elif [[ -z $TMUX ]] || [[ -n "$TMUX_AUTO_SESSION" ]]; then
         exit 0
     else
         if [[ $(tmux list-panes | wc -l) -gt 1 || $(tmux list-windows | wc -l) -gt 1 ]]; then
@@ -697,6 +697,7 @@ function x() {
         fi
     fi
 }
+
 alias xc='tmux detach && clear'
 alias xd='tmux detach -E false'
 alias xx='tmux switch-client -l && tmux kill-session'
