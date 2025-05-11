@@ -1,8 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
-if [[ $# -gt 0 ]]; then
+if [[ "${1:-}" == "next" ]]; then
+    if [[ $(hyprctl monitors -j | jq -r ".[].id" | wc -l) -eq 1 ]]; then
+        hyprctl dispatch focusworkspaceoncurrentmonitor e+1
+    else
+        hyprctl dispatch swapactiveworkspaces, current ~1
+    fi
+elif [[ "${1:-}" == "prev" ]]; then
+    if [[ $(hyprctl monitors -j | jq -r ".[].id" | wc -l) -eq 1 ]]; then
+        hyprctl dispatch focusworkspaceoncurrentmonitor e-1
+    else
+        hyprctl dispatch swapactiveworkspaces, current -1
+    fi
+else
     hyprctl keyword misc:initial_workspace_tracking 0
-    hyprctl dispatch focusworkspaceoncurrentmonitor $1
+    hyprctl dispatch focusworkspaceoncurrentmonitor "$1"
     hyprctl keyword misc:initial_workspace_tracking 1
 fi
