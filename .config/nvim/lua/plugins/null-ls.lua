@@ -9,7 +9,7 @@ return {
         local null_ls = require("null-ls")
         require("mason-null-ls").setup({
             ensure_installed = {
-                "black",
+                "ruff",
                 "prettierd",
                 "stylua",
                 "shellcheck",
