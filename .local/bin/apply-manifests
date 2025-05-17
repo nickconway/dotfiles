@@ -65,7 +65,10 @@ if [[ -n "$(ls)" ]]; then
             LATEST_METALLB="$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r '.tag_name')"
             kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/"$LATEST_METALLB"/config/manifests/metallb-native.yaml
         elif [[ "$APP" == "traefik" ]]; then
-            helm install traefik traefik/traefik
+            if ! helm list | grep traefik; then
+                gum spin --title "Installing traefik" -- helm install traefik traefik/traefik
+                echo "traefik helm chart installed"
+            fi
         fi
 
         for f in *.yml; do
