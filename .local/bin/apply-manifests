@@ -53,7 +53,7 @@ if [[ -n "$(ls)" ]]; then
                     --namespace cert-manager \
                     --create-namespace \
                     --set crds.enabled=true \
-                    --set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}'
+                    --set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=1.1.1.1:53\,1.0.0.1:53}'
                 echo "cert-manager helm chart installed"
             fi
 
@@ -64,6 +64,8 @@ if [[ -n "$(ls)" ]]; then
         elif [[ "$APP" == "metallb" ]]; then
             LATEST_METALLB="$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r '.tag_name')"
             kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/"$LATEST_METALLB"/config/manifests/metallb-native.yaml
+        elif [[ "$APP" == "traefik" ]]; then
+            helm install traefik traefik/traefik
         fi
 
         for f in *.yml; do
