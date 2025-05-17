@@ -5,6 +5,7 @@
 .config/rclone/rclone.conf
 .config/yadm/alt/**/*c.work
 .config/zmk/*
+.kube/config
 .password-store/.gpg-id
 .password-store/python-keyring/**/*.*
 .talos/config
