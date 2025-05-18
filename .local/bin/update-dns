@@ -4,35 +4,63 @@ set -euo pipefail
 TRAEFIK_CONFIG="$HOME/Docker/traefik/data/config.yml"
 
 if [[ ! -e "$TRAEFIK_CONFIG" ]]; then TRAEFIK_CONFIG=""; fi
-find ~/Docker/*/*compose*.yml >/dev/null
 
 echo "Updating DNS..."
 
 BASE_URL="https://dns.conway.dev"
-CNAME="server.conway.dev"
 SID="$(curl -s -X POST $BASE_URL/api/auth --data "{\"password\": \"$PIHOLE_APP_PASSWORD\"}" | jq -r '.session.sid')"
 LIST="$(curl -s "$BASE_URL/api/config/dns/cnameRecords" -H "sid: $SID" | jq -r '.config.dns.cnameRecords')"
 CHANGED=false
 
-for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Docker/*/*compose*.yml "$TRAEFIK_CONFIG" 2>/dev/null | grep -v "^*$" | sort | uniq); do
-    DOMAIN="$(echo "$d" | envsubst)"
 
-    IDX="$(echo "$LIST" | jq "map(test(\"^$DOMAIN.*\")) | index(true)")"
+if [[ -n "$(ls ~/Docker/*/*compose*.yml 2>/dev/null)" ]]; then
+    CNAME="server.conway.dev"
+    for d in $(sed -nr 's/.*HostS?N?I?\(`(\S*)`\).*/\1/p' ~/Docker/*/*compose*.yml "$TRAEFIK_CONFIG" 2>/dev/null | grep -v "^*$" | sort | uniq); do
+        DOMAIN="$(echo "$d" | envsubst)"
+        IDX="$(echo "$LIST" | jq "map(test(\"^$DOMAIN.*\")) | index(true)")"
 
-    if [[ "$IDX" == "null" ]]; then
-        echo "Adding $DOMAIN"
-        LIST="$(echo "$LIST" | jq -r ". += [\"$DOMAIN,$CNAME,0\"] | sort")"
-        CHANGED=true
-    elif [[ "$IDX" != "null" ]]; then
-        LINE="$(echo "$LIST" | jq -r ".[$IDX]")"
-        LINE_TARGET="$(echo "$LINE" | cut -d ',' -f 2)"
-        if [[ "$LINE_TARGET" != "$CNAME" ]]; then
-            echo "Updating: $LINE_TARGET from to $CNAME"
-            LIST="$(echo "$LIST" | jq -r ".[$IDX] = \"$DOMAIN,$CNAME,0\" | sort")"
+        if [[ "$IDX" == "null" ]]; then
+            echo "Adding $DOMAIN"
+            LIST="$(echo "$LIST" | jq -r ". += [\"$DOMAIN,$CNAME,0\"] | sort")"
             CHANGED=true
+        elif [[ "$IDX" != "null" ]]; then
+            LINE="$(echo "$LIST" | jq -r ".[$IDX]")"
+            LINE_TARGET="$(echo "$LINE" | cut -d ',' -f 2)"
+            if [[ "$LINE_TARGET" != "$CNAME" ]]; then
+                echo "Updating: $LINE_TARGET from to $CNAME"
+                LIST="$(echo "$LIST" | jq -r ".[$IDX] = \"$DOMAIN,$CNAME,0\" | sort")"
+                CHANGED=true
+            fi
         fi
-    fi
-done
+    done
+fi
+
+if [[ -n "$(ls ~/Kubernetes/*/ingress.yml 2>/dev/null)" ]]; then
+    CNAME="load-balancer.k8s.conway.dev"
+
+    for f in ~/Kubernetes/*/.env; do
+        source "$f"
+    done
+
+    for d in $(sed -nr 's/\s*\- host: (.*)/\1/p' ~/Kubernetes/*/ingress.yml | sort | uniq); do
+        DOMAIN="$(echo "$d" | envsubst)"
+        IDX="$(echo "$LIST" | jq "map(test(\"^$DOMAIN.*\")) | index(true)")"
+
+        if [[ "$IDX" == "null" ]]; then
+            echo "Adding $DOMAIN"
+            LIST="$(echo "$LIST" | jq -r ". += [\"$DOMAIN,$CNAME,0\"] | sort")"
+            CHANGED=true
+        elif [[ "$IDX" != "null" ]]; then
+            LINE="$(echo "$LIST" | jq -r ".[$IDX]")"
+            LINE_TARGET="$(echo "$LINE" | cut -d ',' -f 2)"
+            if [[ "$LINE_TARGET" != "$CNAME" ]]; then
+                echo "Updating: $DOMAIN from $LINE_TARGET to $CNAME"
+                LIST="$(echo "$LIST" | jq -r ".[$IDX] = \"$DOMAIN,$CNAME,0\" | sort")"
+                CHANGED=true
+            fi
+        fi
+    done
+fi
 
 if [[ "$CHANGED" == "true" ]]; then
     DATA="$(jq --null-input --argjson list "$LIST" '{"config": { "dns": { "cnameRecords": $list } } }')"
