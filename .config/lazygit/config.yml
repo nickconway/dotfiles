@@ -1,6 +1,5 @@
 disableStartupPopups: true
 git:
-  allBranchesLogCmd: git log --graph --color=always --abbrev-commit --date=short --pretty=format:'%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset' --all
   branchLogCmd: git log --graph --color=always --abbrev-commit --date=short --pretty=format:'%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset' {{branchName}}
   commitPrefix:
     - pattern: "^(\\S+)\\/(\\S+).*"
@@ -8,6 +7,8 @@ git:
   paging:
     pager: delta --paging=never
   parseEmoji: true
+  allBranchesLogCmds:
+    - git log --graph --color=always --abbrev-commit --date=short --pretty=format:'%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset' --all
 gui:
   nerdFontsVersion: 3
   statusPanelView: allBranchesLog

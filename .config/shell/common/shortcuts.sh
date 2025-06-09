@@ -676,10 +676,11 @@ alias v="$EDITOR"
 
 function venv() {
     if [[ ! -e .venv ]]; then
-        python -m venv .venv
+        uv venv
     fi
-    . .venv/bin/activate
+    source .venv/bin/activate
 }
+
 alias vm='s alma'
 
 alias work='s work'
