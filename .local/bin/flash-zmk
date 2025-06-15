@@ -1,0 +1,42 @@
+#!/bin/env bash
+set -euo pipefail
+
+function clean() {
+    if [[ -e tmp ]]; then
+        sudo umount tmp
+        rmdir tmp
+    fi
+}
+trap clean ERR EXIT
+
+enable_logging=false
+
+while getopts 'fls:u' flag; do
+    case "${flag}" in
+        l) enable_logging=true;;
+        s) log_search="$OPTARG";;
+        *) continue;;
+    esac
+done
+shift $((OPTIND-1))
+
+mkdir -p tmp
+
+echo "Set keyboard to flashing mode..."
+while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+    true
+done
+echo "Flashing..."
+sudo mount /dev/disk/by-label/NICENANO tmp
+sudo cp "$1.uf2" tmp
+echo "Flashing complete"
+
+clean
+
+if [[ $enable_logging == true ]]; then
+    if [[ -n ${log_search:-} ]]; then
+        sudo tio /dev/ttyACM0 < /dev/tty | rg -i "$log_search"
+    else
+        sudo tio /dev/ttyACM0 < /dev/tty
+    fi
+fi
