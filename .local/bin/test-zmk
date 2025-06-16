@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+verbose=false
+
+while getopts 'v' flag; do
+    case "${flag}" in
+        v) verbose=true;;
+        *) continue;;
+    esac
+done
+shift $((OPTIND-1))
+
+ARGS=""
+
+if [[ $verbose ==  true ]]; then
+    ARGS="ZMK_TESTS_VERBOSE=y"
+fi
+
+docker run \
+    -v ~/Git/zmk:/workspace \
+    -v ~/Git/zmk/zephyr:/workspace/zephyr \
+    -v ~/Git/zmk/modules:/workspace/modules \
+    -v ~/Git/zmk/tools:/workspace/tools \
+    -w /workspace/app \
+    --rm \
+    zmk bash -c 'rm -rf ../.west && west init -l . &>/dev/null'
+
+docker run \
+    -v ~/Git/zmk:/workspace \
+    -v ~/Git/zmk/zephyr:/workspace/zephyr \
+    -v ~/Git/zmk/modules:/workspace/modules \
+    -v ~/Git/zmk/tools:/workspace/tools \
+    -w /workspace/app \
+    --rm \
+    zmk bash -c "$ARGS west test tests/${1:-}"
