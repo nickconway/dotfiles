@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 TRAEFIK_CONFIG="$HOME/Docker/traefik/data/config.yml"

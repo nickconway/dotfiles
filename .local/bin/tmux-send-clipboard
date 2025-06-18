@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if command -v ss &> /dev/null; then
     ports=('5556' '5557' '5558' '5559' '5560')

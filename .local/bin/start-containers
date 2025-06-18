@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if rg -q '\- proxy$' ~/Docker; then
     docker network inspect proxy &> /dev/null || docker network create proxy

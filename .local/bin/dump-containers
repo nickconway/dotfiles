@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 docker ps --format {{.Names}} | grep "${1:-}" | grep -v nextcloud-aio | while read c; do

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if docker ps | grep -q nextcloud-aio-mastercontainer; then
     docker exec -it nextcloud-aio-mastercontainer sudo -u www-data php /var/www/docker-aio/php/src/Cron/StopContainers.php

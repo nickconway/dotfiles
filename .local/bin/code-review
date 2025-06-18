@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 gum spin --title 'Getting Code Review' --spinner.foreground 12 -- get-code-review

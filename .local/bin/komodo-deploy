@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 SERVER_ID=$(curl -s -H "X-API-KEY: $KOMODO_API_KEY" \

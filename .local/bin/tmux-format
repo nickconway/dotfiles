@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # From https://github.com/janoamaral/tokyo-night-tmux/blob/master/tokyo-night.tmux
 
 format_hide=""

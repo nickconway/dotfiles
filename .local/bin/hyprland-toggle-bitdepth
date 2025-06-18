@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 hyprctl monitors -j | jq -r ".[] | .name, .currentFormat" | xargs -n2 echo | while read -r LINE; do

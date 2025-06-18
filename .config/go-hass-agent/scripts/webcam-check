@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 STATE="$([[ "$(fuser /dev/video*)" -gt 0 ]] && echo true || echo false)"
 echo "{\"schedule\":\"@every 5s\",\"sensors\":[{\"sensor_name\":\"Webcam Status\",\"sensor_type\":\"binary\",\"sensor_icon\":\"mdi:dice-5\",\"sensor_state\":$STATE}]}"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ "$(hyprctl activewindow)" == *"class: kitty"* ]]; then
     wtype -M ctrl -M shift v -m ctrl -m shift

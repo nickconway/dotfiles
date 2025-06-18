@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 export GUM_INPUT_HEADER_FOREGROUND=${GUM_INPUT_HEADER_FOREGROUND:-9}

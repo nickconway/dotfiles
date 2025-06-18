@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 if [[ -n "$DISPLAY" ]] && command -v rofi &> /dev/null; then

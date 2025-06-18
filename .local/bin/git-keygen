@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 GITHUB_FILE=~/.ssh/github_ed25519
 GITEA_FILE=~/.ssh/gitea_ed25519

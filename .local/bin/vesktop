@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 [[ -e $XDG_RUNTIME_DIR/discord-ipc-0 ]] && rm $XDG_RUNTIME_DIR/discord-ipc-0

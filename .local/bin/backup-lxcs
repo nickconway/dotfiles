@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ ! -e /etc/pve/lxc ]]; then
     echo LXC directory does not exist

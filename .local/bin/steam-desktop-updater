@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 if [[ ! -e ~/.local/bin/steam_desktop_updater.py ]]; then

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Nuke all internal spawns when script dies
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM

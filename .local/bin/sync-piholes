@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 diff <(ssh server cat docker/pihole/data/custom.list) <(ssh pihole cat docker/pihole/data/custom.list) || scp server:docker/pihole/data/custom.list pihole:docker/pihole/data/custom.list
 diff <(ssh server cat docker/pihole/data/gravity.db) <(ssh pihole cat docker/pihole/data/gravity.db) || scp server:docker/pihole/data/gravity.db pihole:docker/pihole/data/gravity.db
 diff <(ssh server cat docker/pihole/data-dnsmasq/04-pihole-static-dhcp.conf) <(ssh pihole cat docker/pihole/data-dnsmasq/04-pihole-static-dhcp.conf) || scp server:docker/pihole/data-dnsmasq/04-pihole-static-dhcp.conf pihole:docker/pihole/data-dnsmasq/04-pihole-static-dhcp.conf

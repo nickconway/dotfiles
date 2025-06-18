@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/usr/bin/env bash
 fzf --height 75% --tmux center "$@"

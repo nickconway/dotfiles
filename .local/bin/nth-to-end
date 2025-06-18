@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/usr/bin/env bash
 awk -v n=$1 '{ for (i=n; i<=NF; i++) printf "%s%s", $i, (i<NF ? OFS : ORS)}'
