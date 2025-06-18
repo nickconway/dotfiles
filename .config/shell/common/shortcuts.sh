@@ -136,6 +136,12 @@ alias gcamend='git commit --amend'
 alias gcamendn='git commit --amend --no-edit'
 alias gce='git commit -e'
 
+function gcd() {
+    GCD="$(date '+%m-%d-%Y %H:%M:%S' | gum input --header "Enter a date:")"
+    GCD="${GCD:-$(date)}"
+    GIT_COMMITER_DATE="$GCD" git commit --date "$GCD" -a
+}
+
 function gcf() {
     if [[ -n $1 ]]; then
         COMMIT_HASH=$1
