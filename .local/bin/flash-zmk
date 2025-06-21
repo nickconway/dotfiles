@@ -62,7 +62,7 @@ fi
 
 if [[ $enable_logging == true ]]; then
     if [[ -n ${log_search:-} ]]; then
-        sudo tio /dev/ttyACM0 < /dev/tty | rg -i "$log_search"
+        sudo tio /dev/ttyACM0 < /dev/tty | rg -i "$log_search|$"
     else
         sudo tio /dev/ttyACM0 < /dev/tty
     fi
