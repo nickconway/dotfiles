@@ -22,16 +22,43 @@ shift $((OPTIND-1))
 
 mkdir -p tmp
 
-echo "Set keyboard to flashing mode..."
-while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
-    true
-done
-echo "Flashing..."
-sudo mount /dev/disk/by-label/NICENANO tmp
-sudo cp "$1.uf2" tmp
-echo "Flashing complete"
 
-clean
+if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ] || [ $(find ~/Git/zmk-config -name $1_left.conf | wc -l) -gt 0 ]; then
+    echo "Set right keyboard to flashing mode..."
+    while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
+    echo "Flashing..."
+    sudo mount /dev/disk/by-label/NICENANO tmp
+    sudo cp "$1_right.uf2" tmp
+    echo "Flashing complete"
+
+    clean
+    mkdir -p tmp
+
+    echo "Set left keyboard to flashing mode..."
+    while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
+    echo "Flashing..."
+    sudo mount /dev/disk/by-label/NICENANO tmp
+    sudo cp "$1_left.uf2" tmp
+    echo "Flashing complete"
+
+    clean
+else
+    echo "Set keyboard to flashing mode..."
+    while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
+    echo "Flashing..."
+    sudo mount /dev/disk/by-label/NICENANO tmp
+    sudo cp "$1.uf2" tmp
+    echo "Flashing complete"
+
+    clean
+fi
+
 
 if [[ $enable_logging == true ]]; then
     if [[ -n ${log_search:-} ]]; then

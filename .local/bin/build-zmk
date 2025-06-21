@@ -86,8 +86,7 @@ if [[ $enable_logging == true ]]; then
     FLAGS="-S zmk-usb-logging"
 fi
 
-if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ]; then
-
+if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ] || [ $(find ~/Git/zmk-config -name $1_left.conf | wc -l) -gt 0 ]; then
     if [ "${2:-}" = "nv" ]; then
         zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"$1_left nice_view_adapter nice_view\""
         zmkrun west build $FLAGS -p -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="$1_left nice_view_adapter nice_view"
