@@ -29,6 +29,7 @@ x-scheme-handler/webcal=userapp-Thunderbird Beta-OLYMT2.desktop
 text/calendar=userapp-Thunderbird Beta-OLYMT2.desktop
 application/x-extension-ics=userapp-Thunderbird Beta-OLYMT2.desktop
 x-scheme-handler/webcals=userapp-Thunderbird Beta-OLYMT2.desktop
+audio/vnd.wave=mpv.desktop
 
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird Beta-LQLHT2.desktop;
@@ -41,3 +42,4 @@ application/rss+xml=userapp-Thunderbird Beta-M33KT2.desktop;
 application/x-extension-rss=userapp-Thunderbird Beta-M33KT2.desktop;
 x-scheme-handler/webcal=userapp-Thunderbird Beta-OLYMT2.desktop;
 x-scheme-handler/webcals=userapp-Thunderbird Beta-OLYMT2.desktop;
+audio/vnd.wave=mpv.desktop;
