@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+config_file="$HOME/.config/hypr/monitors.conf"
+
+primay_monitor=$(sed -n '1p' "$config_file")
+
+if [[ "$primay_monitor" == "#"* ]]; then
+    primay_monitor=$(echo "$primay_monitor" | awk '{print $2, $3, $4}')
+else
+    primay_monitor=$(echo "$primay_monitor" | awk '{print $1, $2, $3}')
+fi
+
+new_config="$(sed "s/^$primay_monitor/TEMP $primay_monitor/" "$config_file")"
+new_config="$(echo "$new_config" | sed "s/^# $primay_monitor/$primay_monitor/")"
+new_config="$(echo "$new_config" | sed "s/^TEMP $primay_monitor/# $primay_monitor/")"
+
+echo "$new_config" > "$config_file"
