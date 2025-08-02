@@ -4,11 +4,12 @@ config_file="$HOME/.config/hypr/monitors.conf"
 
 monitor_config=$(sed -n '1p' "$config_file" | cut -d ' ' -f 3-  )
 primay_monitor=$(echo "$monitor_config" | awk '{print $1}' | tr -d ",")
+config_scale=$(echo "$monitor_config" | awk '{print $4}' | tr -d ",")
 
 scale="$(hyprctl monitors -j | jq -r ".[] | select(.name == \"$primay_monitor\") | .scale")"
 
 if [[ "$scale" == "1.00" ]]; then
-    scale=1.25
+    scale=$config_scale
 else
     scale=1
 fi
