@@ -2,16 +2,16 @@
 
 config_file="$HOME/.config/hypr/monitors.conf"
 
-primay_monitor=$(sed -n '1p' "$config_file")
+monitor_config=$(sed -n '1p' "$config_file" | cut -d ' ' -f 3-  )
+primay_monitor=$(echo "$monitor_config" | awk '{print $1}' | tr -d ",")
 
-if [[ "$primay_monitor" == "#"* ]]; then
-    primay_monitor=$(echo "$primay_monitor" | awk '{print $2, $3, $4}')
+scale="$(hyprctl monitors -j | jq -r ".[] | select(.name == \"$primay_monitor\") | .scale")"
+
+if [[ "$scale" == "1.00" ]]; then
+    scale=1.25
 else
-    primay_monitor=$(echo "$primay_monitor" | awk '{print $1, $2, $3}')
+    scale=1
 fi
 
-new_config="$(sed "s/^$primay_monitor/TEMP $primay_monitor/" "$config_file")"
-new_config="$(echo "$new_config" | sed "s/^# $primay_monitor/$primay_monitor/")"
-new_config="$(echo "$new_config" | sed "s/^TEMP $primay_monitor/# $primay_monitor/")"
-
-echo "$new_config" > "$config_file"
+new_config="$(echo "$monitor_config" | sed "s/\S\+,/$scale,/4")"
+hyprctl keyword monitor "$new_config"
