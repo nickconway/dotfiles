@@ -4,8 +4,8 @@ bind = $mainMod, D, focuswindow, vesktop
 bind = $mainMod, M, focuswindow, thunderbird
 bind = $mainMod, F, focuswindow, feishin
 
-workspace = 1, monitor:DP-3, default:true
-workspace = 2, monitor:DP-1, default:true
+workspace = 1, monitor:DP-1, default:true
+workspace = 2, monitor:DP-3, default:true
 workspace = 3, monitor:DP-2, default:true
 
 exec-once = [workspace 1 silent] chromium
