@@ -4,7 +4,7 @@ set -euo pipefail
 [[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
 if [[ ! -e "$1" ]]; then
-    npm create svelte@latest "$1"
+    pnpx sv create "$1"
 fi
 
 cd "$1"
@@ -12,32 +12,10 @@ FOLDER=${PWD##*/}
 FOLDER=${FOLDER:-/}
 session_name="$(echo "$FOLDER" | tr . _)"
 
-npm install
 if [[ ! -e .git ]]; then
     git init
     git add -A
     git commit -m "Initial commit"
-
-    npx svelte-add@latest tailwindcss --tailwindcss-typography true drizzle --drizzle-database postgresql --drizzle-postgresql postgres.js --drizzle-docker true prettier eslint
-    sed -i $'/schema:/a out: \'./src/lib/server/db/migrations\',' drizzle.config.ts
-    npx prettier --write drizzle.config.ts
-    npm install --save-dev @types/node
-    npm install --save-dev typescript-svelte-plugin
-    git add -A && git commit -m "Add tooling"
-
-    cp ~/.config/docker-compose/svelte-kit.yml docker-compose.yml
-    cp ~/.config/dockerfiles/svelte-kit.Dockerfile Dockerfile
-    cp ~/.config/docker-compose/svelte-kit.env .env
-    cp ~/.config/dockerfiles/dockerignore .dockerignore
-
-    sed -i "s/REPLACE-ME/$FOLDER/g" docker-compose.yml Dockerfile .env
-    sed -i "s/REPLACE-UID/$(id -u)/g" docker-compose.yml Dockerfile .env
-    sed -i "s/REPLACE-GID/$(id -g)/g" docker-compose.yml Dockerfile .env
-
-    PW="$(pwgen)"
-    sed -i "s/REPLACE-PASSWORD/$PW/g" docker-compose.yml Dockerfile .env
-
-    git add -A && git commit -m "Initialize docker files"
 fi
 
 TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$session_name tmuxp load ~/.config/tmuxp/svelte-kit.yaml -y >/dev/null
