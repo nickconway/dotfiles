@@ -7,5 +7,6 @@ windows:
     options:
       main-pane-height: 60%
     panes:
-      - pnpm run dev
-      - docker compose up
+      - pnpm run dev -- --host
+      - if grep -q "${TMUXP_SESSION_NAME}-db" ./{docker-,}compose.y{a,}ml &>/dev/null; then docker compose up ${TMUXP_SESSION_NAME}-db; else exit; fi
+      - if test -e drizzle.config.ts; then npx drizzle-kit studio --verbose; else exit; fi
