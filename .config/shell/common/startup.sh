@@ -25,7 +25,9 @@ if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
         rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
     fi
 else
-    eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+    if ! [[ -f ~/.work ]]; then
+        eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+    fi
 fi
 
 if command -v steamos-update > /dev/null; then
