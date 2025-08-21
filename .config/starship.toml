@@ -58,3 +58,6 @@ detect_env_vars = ['SSH_CONNECTION']
 [kubernetes]
 disabled = false
 detect_env_vars = ['KUBECONFIG']
+
+[aws]
+symbol = '☁️ '
