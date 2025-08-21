@@ -55,6 +55,8 @@ fi
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
+
 command -v brew > /dev/null && export HOMEBREW_PREFIX="$(brew --prefix)" && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
 
 export VISUAL="$(which nvim)"
@@ -103,8 +105,6 @@ export GIT_EMAIL="nick@conway.dev"
 export GIT_GPG_KEY="AA850592E4C1D453"
 
 export ATUIN_USER=nick
-
-export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
 
 export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc-2.0
 
