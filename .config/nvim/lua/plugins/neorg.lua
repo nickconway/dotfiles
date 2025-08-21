@@ -1,5 +1,13 @@
 return {
     "nvim-neorg/neorg",
+    enabled = function()
+        local f = io.open(os.getenv("HOME") .. "/.work", "r")
+        if f ~= nil then
+            f:close()
+            return false
+        end
+        return true
+    end,
     dependencies = { "luarocks.nvim" },
     config = function()
         require('neorg').setup {
