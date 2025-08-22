@@ -109,6 +109,7 @@ end
 
 vim.cmd("highlight Normal ctermbg=none guibg=none")
 vim.cmd("highlight NormalFloat ctermbg=none guibg=none")
+vim.cmd("highlight StatusLine ctermbg=none guibg=none")
 vim.cmd("highlight CursorLine ctermbg=none guibg=none")
 vim.cmd("highlight FloatBorder ctermbg=none guibg=none")
 vim.cmd("highlight SignColumn ctermbg=none guibg=none")
