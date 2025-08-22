@@ -230,3 +230,28 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end
     end,
 })
+
+local f = io.open(os.getenv("HOME") .. "/.blbg", "r")
+local color = nil
+
+if f then
+    color = f:read()
+end
+
+local function bufferline_set_hls()
+    if color == nil then
+        return
+    end
+
+    local hl_groups = vim.api.nvim_get_hl(0, {})
+
+    for g, _ in pairs(hl_groups) do
+        if g:find("BufferLine") then
+            vim.cmd("highlight " .. g .. " guibg=" .. color)
+        end
+    end
+end
+
+vim.api.nvim_create_autocmd({"FileType", "BufEnter"}, {
+    callback = bufferline_set_hls
+})
