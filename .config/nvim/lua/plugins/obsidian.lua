@@ -21,6 +21,7 @@ return {
         "nvim-treesitter/nvim-treesitter"
     },
     opts = {
+        legacy_commands = false,
         workspaces = {
             {
                 name = "Local Notes",
@@ -46,31 +47,10 @@ return {
             -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
             template = nil
         },
-        mappings = {
-            ["gf"] = {
-                action = function()
-                    return require("obsidian").util.gf_passthrough()
-                end,
-                opts = { noremap = false, expr = true, buffer = true, desc = "Obsidian Edit File" },
-            },
-            ["<leader>ch"] = {
-                action = function()
-                    return require("obsidian").util.toggle_checkbox()
-                end,
-                opts = { buffer = true, desc = "Toggle Checkbox" },
-            },
-            ["<leader>oo"] = {
-                action = function()
-                    return require("obsidian").util.smart_action()
-                end,
-                opts = { buffer = true, expr = true, desc = "Obsidian Smart Action" },
-            },
-            ["<leader>od"] = {
-                action = function()
-                    vim.cmd("ObsidianToday")
-                end,
-                opts = { buffer = true, expr = true, desc = "Obsidian Daily Note" },
-            }
+        callbacks = {
+            enter_note = function(_, note)
+                vim.keymap.set("n", "<leader>od", "<cmd>Obsidian today<cr>", { buffer = note.bufnr, desc = "Obsidian Daily Note" })
+            end
         }
     },
 }
