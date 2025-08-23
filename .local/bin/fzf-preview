@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-file=${1/#\~\//$HOME/}
+file=${*/#\~\//$HOME/}
 type=$(file --dereference --mime -- "$file")
 
-if tmux has-session -t "$@" 2> /dev/null; then
-    tmux capture-pane -ep -t "$@"
+if tmux has-session -t "$file" 2> /dev/null; then
+    tmux capture-pane -ep -t "$file"
     exit
-elif [[ -d "$@" ]]; then
-    eza "$@" -1 --icons --color=always
+elif [[ -d "$file" ]]; then
+    eza "$file" -1 --icons --color=always
     exit
 elif [[ ! $type =~ image/ ]]; then
   if [[ $type =~ =binary ]]; then
@@ -29,7 +29,7 @@ cells_width=$(echo $dim | cut -d x -f 1)
 cells_height=$(echo $dim | cut -d x -f 2)
 
 if [[ $KITTY_WINDOW_ID ]]; then
-  kitty icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" --use-window-size="$cells_width,$cells_height,$(($cells_width * 8)),$(($cells_height * 8))" "$@" | sed '$d' | sed $'$s/$/\e[m/'
+  kitty icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" --use-window-size="$cells_width,$cells_height,$(($cells_width * 8)),$(($cells_height * 8))" "$file" | sed '$d' | sed $'$s/$/\e[m/'
 elif command -v chafa > /dev/null; then
   chafa -s "$dim" "$file"
   echo

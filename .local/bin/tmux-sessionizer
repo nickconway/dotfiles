@@ -47,7 +47,7 @@ if [[ $# -eq 0 ]]; then
         zoxide query -l
     )
 
-    export SELECTED=$(command | fzft --border-label=" Tmux Sessionizer " \
+    export SELECTED=$(command | sed "s|^$HOME|~|g" | fzft --border-label=" Tmux Sessionizer " \
         --prompt=" > " \
         --preview 'fzf-preview {}' \
         --header "ctrl-w   ctrl-s ǂ  ctrl-z   ctrl-a ∀  ctrl-t 󰐆  ctrl-r 󰑕  ctrl-u   crtl-d " \
@@ -55,7 +55,7 @@ if [[ $# -eq 0 ]]; then
         --bind "ctrl-z:change-border-label( Tmux Sessionizer (Directories) )+change-prompt( > )+reload(tmux-sessionizer --directories)" \
         --bind "ctrl-w:change-border-label( Tmux Sessionizer (Windows) )+change-prompt( > )+reload(tmux list-windows -a -F '#{session_name}:#{window_name}')" \
         --bind "$RENAME_SESSION" \
-        --bind "ctrl-s:change-border-label( Tmux Sessionizer (Sessions) )+change-prompt(ǂ > )+reload(tmux-sessionizer --sessions)")
+        --bind "ctrl-s:change-border-label( Tmux Sessionizer (Sessions) )+change-prompt(ǂ > )+reload(tmux-sessionizer --sessions)" | sed "s|^~|$HOME|g")
 else
     if command -v zoxide &>/dev/null; then
         if [[ -e "$PWD/$@" ]]; then
