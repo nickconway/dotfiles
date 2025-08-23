@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ "${1:-}" == "--all" ]]; then
-    if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
-        tmux display -p '#{client_last_session}'
-    fi
+command() (
+    [[ -n "$(tmux display -p '#{client_last_session}')" ]] && tmux display -p '#{client_last_session}'
 
     if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
-        tmux list-sessions -F "#S" | grep -v "^$(tmux display -p '#{client_last_session}')$" | grep -v "^$(tmux display-message -p '#S')$" || true
+        tmux list-sessions -F "#S" | grep -v "^$(tmux display -p '#{client_last_session}')$" | grep -v "^$(tmux display-message -p '#S')$"
     else
-        tmux list-sessions -F "#S" | grep -v "^$(tmux display-message -p '#S')$" || true
+        tmux list-sessions -F "#S" | grep -v "^$(tmux display-message -p '#S')$"
     fi
 
     tmux display-message -p '#S'
     find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
     zoxide query -l
+)
+
+if [[ "${1:-}" == "--all" ]]; then
+    command | sed "s|^$HOME|~|g"
     exit
 elif [[ "${1:-}" == "--sessions" ]]; then
     tmux list-sessions -F "#S"
@@ -32,20 +34,6 @@ fi
 if [[ $# -eq 0 ]]; then
     RENAME_SESSION_EXEC='bash -c '\'' printf >&2 "New name: "; read name; tmux rename-session -t {1} "${name}"; '\'''
     RENAME_SESSION="ctrl-r:execute($RENAME_SESSION_EXEC)+reload(tmux-sessionizer --sessions)+change-border-label( Tmux Sessionizer (Sessions) )+change-prompt(ǂ > )"
-
-    command() (
-        [[ -n "$(tmux display -p '#{client_last_session}')" ]] && tmux display -p '#{client_last_session}'
-
-        if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
-            tmux list-sessions -F "#S" | grep -v "^$(tmux display -p '#{client_last_session}')$" | grep -v "^$(tmux display-message -p '#S')$"
-        else
-            tmux list-sessions -F "#S" | grep -v "^$(tmux display-message -p '#S')$"
-        fi
-
-        tmux display-message -p '#S'
-        find "$([[ -e "$PROJECT_DIR" ]] && echo "$PROJECT_DIR")" -mindepth 1 -maxdepth 1 -type d
-        zoxide query -l
-    )
 
     export SELECTED=$(command | sed "s|^$HOME|~|g" | fzft --border-label=" Tmux Sessionizer " \
         --prompt=" > " \
