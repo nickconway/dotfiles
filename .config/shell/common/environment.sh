@@ -55,14 +55,16 @@ fi
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
-export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
+command -v brew > /dev/null && export HOMEBREW_PREFIX="$(brew --prefix)"
 
-command -v brew > /dev/null && export HOMEBREW_PREFIX="$(brew --prefix)" && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
+[[ -n $HOMEBREW_PREFIX ]] && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
 
 export VISUAL="$(which nvim)"
 export EDITOR="$(which nvim)"
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[[ -n $HOMEBREW_PREFIX ]] && [[ -e "$HOMEBREW_PREFIX/opt/nvm" ]] && export NVM_DIR=$HOMEBREW_PREFIX/opt/nvm
 
 export PROJECT_DIR=~/Git
 
