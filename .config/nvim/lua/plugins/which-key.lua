@@ -2,6 +2,9 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
+        win = {
+            no_overlap = false
+        },
         spec = {
             { "<leader>c", group = "Code" },
             { "<leader>d", group = "DAP" },
