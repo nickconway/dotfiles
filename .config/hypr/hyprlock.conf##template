@@ -85,21 +85,6 @@ label {
 }
 
 label {
-    text = <span> 󰒲 </span>
-    halign = left
-    valign = bottom
-    {% if yadm.hostname == "desktop" %}
-    font_size = 14
-    {% endif %}
-    {% if yadm.hostname == "laptop" %}
-    font_size = 18
-    {% endif %}
-    position = 1%, 10
-    onclick = systemctl suspend
-    color = rgba(255, 255, 255, 0.6)
-}
-
-label {
     text = <span>  </span>
     halign = left
     valign = bottom
@@ -109,7 +94,22 @@ label {
     {% if yadm.hostname == "laptop" %}
     font_size = 18
     {% endif %}
-    position = 2%, 10
+    position = 1%, 10
     onclick = systemctl poweroff
+    color = rgba(255, 255, 255, 0.6)
+}
+
+label {
+    text = <span> 󰒲 </span>
+    halign = left
+    valign = bottom
+    {% if yadm.hostname == "desktop" %}
+    font_size = 14
+    {% endif %}
+    {% if yadm.hostname == "laptop" %}
+    font_size = 18
+    {% endif %}
+    position = 2%, 10
+    onclick = systemctl suspend
     color = rgba(255, 255, 255, 0.6)
 }
