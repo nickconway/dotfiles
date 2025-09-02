@@ -21,7 +21,9 @@
     "disk",
     "custom/updates",
   ],
-  "modules-center": ["custom/music"],
+  "modules-center": [
+    "custom/music",
+  ],
   "modules-right": [
     "custom/clipboard",
     "network",
@@ -109,11 +111,11 @@
     // "exec-tooltip": "~/.locla/bin/updates tooltip"
   },
   "custom/music": {
-    "format": "{icon}{}",
+    "format": "{icon} {text}",
     "format-icons": {
-      // "Playing": " ", // Uncomment if not using the dynamic script
-      "Paused": "󰏥 ",
-      "Stopped": "&#x202d;ﭥ ", // This stop symbol is RTL. So &#x202d; is left-to-right override.
+      "Playing": "", // Uncomment if not using the dynamic script
+      "Paused": "󰏥",
+      "Stopped": "&#x202d;ﭥ", // This stop symbol is RTL. So &#x202d; is left-to-right override.
     },
     "escape": true,
     "tooltip": true,
@@ -123,7 +125,7 @@
     "on-scroll-up": "playerctl previous",
     "on-scroll-down": "playerctl next",
     "on-click-right": "amberol",
-    "max-length": 35,
+    "max-length": 100,
   },
   "hyprland/window": {
     "format": "{}",
