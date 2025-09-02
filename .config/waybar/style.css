@@ -283,7 +283,7 @@
     @color13 100%
   );
   background-size: 400% 400%;
-  animation: gradient_f 9s cubic-bezier(0.72, 0.39, 0.21, 1) infinite;
+  animation: gradient_f 45s cubic-bezier(0.72, 0.39, 0.21, 1) infinite;
   text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.377);
   font-weight: bold;
 }
