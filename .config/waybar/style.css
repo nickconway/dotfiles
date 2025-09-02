@@ -50,7 +50,7 @@
 #custom-clipboard,
 #custom-ss,
 #custom-weather {
-  background: @background;
+  background: alpha(@background, 0.75);
   color: @foreground;
   border-radius: 16px;
   padding: 0.5rem 1rem;
@@ -81,7 +81,7 @@
 }
 
 #workspaces button {
-  background-color: @bg;
+  background-color: @background;
   color: @foreground;
   border-radius: 100%;
   min-height: 14px;
