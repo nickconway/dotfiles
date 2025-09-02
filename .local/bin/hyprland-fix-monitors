@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+hyprctl keyword monitor "$(grep 'DP-1' .config/hypr/monitors.conf | sed 's/monitor = //g' | sed 's/preferred/1920x1080/g')"
+sleep 3
+hyprctl reload
