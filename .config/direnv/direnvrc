@@ -73,6 +73,14 @@ use_rbw() {
 	export $1="$RESULT"
 }
 
+use_nvm() {
+  NODE_VERSION=$1
+
+  [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
+
+  nvm use
+}
+
 export_function() {
   local name=$1
   local alias_dir=$PWD/.direnv/aliases
