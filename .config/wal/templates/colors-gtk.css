@@ -36,7 +36,7 @@
 @define-color borders alpha(red, 0.15);
 
 .placessidebar {
-    background-color: blue;
+    background-color: alpha(@color0, 0.3);
     backdrop-filter: blur(100px);
 }
 .navigation-sidebar {
