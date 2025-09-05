@@ -35,3 +35,7 @@
     --mention-background: rgba(255,255,255,0.05);
     --mention-foreground: rgba(255,255,255,0.05);
 }
+
+body, .bg__960e4, .layers__960e4, .appMount__51fd7, .app__160d8, .tabBody__133bf {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
