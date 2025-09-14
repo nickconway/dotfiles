@@ -24,9 +24,6 @@ fi
 if command -v termux-reload-settings > /dev/null; then
     apt update -y && apt upgrade -y
     pkg install openssh starship rust termux-api gnupg fzf dnsutils zsh python3 yq imagemagick binutils pass rip bat git-delta fd ripgrep zoxide gh -y
-    python3 -m pip install --user pipx
-    pipx install --include-deps ansible
-    pipx install pywal16
     mkdir -p ~/.zsh
     cd ~/.config/zsh
     [[ -e ~/.config/zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
