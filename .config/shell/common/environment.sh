@@ -27,9 +27,11 @@ else
 fi
 KERNEL=$(uname -r)
 
-export GOROOT=~/.local/go/go
-export GOPATH=~/.local/go/packages
-export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
+if [[ -e ~/.local/go ]]; then
+    export GOROOT=~/.local/go/go
+    export GOPATH=~/.local/go/packages
+    export PATH="$GOROOT"/bin:"$GOPATH"/bin:$PATH
+fi
 
 export DOTNET_ROOT=~/.local/dotnet
 export PATH="$DOTNET_ROOT":"$DOTNET_ROOT"/tools:"$PATH"
