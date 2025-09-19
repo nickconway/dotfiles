@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 if [[ $# -gt 0 ]]; then
     SELECTED=$@
 else
@@ -16,13 +18,14 @@ fi
 
 if [[ -n $TMUX ]]; then
     PANE_PID="$(tmux display -p '#{pane_pid}')"
-    S_FILE="$PREFIX/tmp/tmux-$PANE_PID"
+    S_FILE="${PREFIX:-}/tmp/tmux-$PANE_PID"
     (&>/dev/null hide-tmux-statusbar $PANE_PID & echo -n $! > "$S_FILE")
     tmux set prefix C-h
     tmux bind C-h send-prefix
 fi
 
 if command -v ss &> /dev/null; then
+    PORT=
     ports=('5556' '5557' '5558' '5559' '5560')
     for p in "${ports[@]}"; do
         if [[ "$(ss -n -4 state listening "( sport = $p )" 2>/dev/null | tail -n +2 | wc -l)" -eq 0 ]]; then
@@ -31,13 +34,17 @@ if command -v ss &> /dev/null; then
         fi
     done
 
-    if [[ -n $TMUX ]]; then
+    if [[ -n ${TMUX:-} ]] && [[ -n $PORT ]]; then
         (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> "$S_FILE")
     fi
 
-    ssh -R $PORT:localhost:$PORT $SELECTED
+    if [[ -n $PORT ]]; then
+        ssh -R $PORT:localhost:$PORT $SELECTED || true
+    else
+        ssh $SELECTED || true
+    fi
 else
-    ssh $SELECTED
+    ssh $SELECTED || true
 fi
 
 if [[ -n $TMUX ]]; then
@@ -46,7 +53,7 @@ if [[ -n $TMUX ]]; then
     fi
 fi
 
-if pgrep "nc -l -p $PORT" -f &> /dev/null; then
+if [[ -n $PORT ]] && pgrep "nc -l -p $PORT" -f &> /dev/null; then
     kill $(pgrep "nc -l -p $PORT" -f)
 fi
 
