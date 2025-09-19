@@ -22,5 +22,6 @@ else
 fi
 
 if command -v termux-reload-settings > /dev/null; then
-	.local/bin/immersive-ssh && exit || return
+	export PATH="$PATH:$HOME/.local/bin"
+	immersive-ssh && exit || return
 fi
