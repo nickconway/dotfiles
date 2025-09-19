@@ -15,17 +15,17 @@ if [[ -z "$@" ]]; then
         if command -v clip.exe > /dev/null; then
             echo -n $(rbw get $ID) | clip.exe
         elif [[ -n "$DISPLAY" ]] && command -v wl-copy > /dev/null; then
-            echo -n $(rbw get $ID) | wl-copy && paste-keys
+            rbw get $ID | wl-copy -n && paste-keys
         else
-            echo $(rbw get $ID)
+            rbw get $ID
         fi
     fi
 else
     if command -v clip.exe > /dev/null; then
         echo -n $(rbw get "$@") | clip.exe
     elif [[ -n "$DISPLAY" ]] && command -v wl-copy > /dev/null; then
-        echo -n $(rbw get "$@") | wl-copy && paste-keys
+        rbw get "$@" | wl-copy -n && paste-keys
     else
-        echo $(rbw get "$@")
+        rbw get "$@"
     fi
 fi

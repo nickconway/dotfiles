@@ -11,4 +11,4 @@ for set in "${sets[@]}"; do
 done
 
 SYMBOL=$(cat i_{all,cod,dev,fae,fa,iec,logos,oct,ple,pom,seti,weather,md}.sh | grep '^i=' | sed "s/=\$i//g" | fzft --border-label " Nerd Font Icons " | sed -n "s/i='\(\S\)' .*/\1/p")
-echo -ne $SYMBOL | wl-copy && paste-keys
+echo -e $SYMBOL | wl-copy -n && paste-keys

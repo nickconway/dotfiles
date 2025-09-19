@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ -n "$DISPLAY" ]] && command -v rofi &> /dev/null; then
-    cliphist list | rofi -dmenu -display-columns 2 -p  -i -config ~/.config/rofi/styles/style_2.rasi -theme-str 'listview { columns: 1; } mode-switcher { enabled: false; }' | cliphist decode | wl-copy && paste-keys
+    cliphist list | rofi -dmenu -display-columns 2 -p  -i -config ~/.config/rofi/styles/style_2.rasi -theme-str 'listview { columns: 1; } mode-switcher { enabled: false; }' | cliphist decode | wl-copy -n && paste-keys
 else
     SELECTED=$(cliphist list | fzft --preview="cliphist decode {}" -- -d $'\t' --with-nth 2)
     [[ -n $SELECTED ]] && echo $(echo "$SELECTED" | cliphist decode)
