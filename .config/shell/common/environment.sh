@@ -124,3 +124,35 @@ export GPG_EMAIL="nick@conway.dev"
 export DOCKER_STACK_DIR="$HOME/Docker"
 export SERVICES_BASE_DOMAIN="conway.dev"
 export GITEA_USER=nick
+
+command -v brew > /dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
+command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
+command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
+command -v fzf > /dev/null && eval "$(fzf --$SHELL_NAME)"
+command -v fzf > /dev/null && [[ -e ~/.config/fzf-git/fzf-git.sh ]] && source ~/.config/fzf-git/fzf-git.sh
+[[ -e $HOME/.atuin/bin/env ]] && . "$HOME/.atuin/bin/env"
+command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow | awk '/output=\$\(/{system("cat ~/.config/atuin/tmux.'$SHELL_NAME'");next}1')" \
+    && (pgrep -f "atuin daemon" &> /dev/null || atuin daemon &> $XDG_RUNTIME_DIR/atuin.log &)
+command -v direnv &> /dev/null && export DIRENV_LOG_FORMAT=$'\033[95m󰓴 \033[94m%s\033[0m' && eval "$(direnv hook $SHELL_NAME)"
+
+_fzf_git_fzf() {
+    fzft --min-height=20 --border \
+        --tmux center,80% \
+        --preview-window='right,50%,border-left' \
+        "$@"
+}
+
+# if command -v bitwarden &>/dev/null; then
+#     export BITWARDEN_SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/bitwarden.sock"
+#     touch "$BITWARDEN_SSH_AUTH_SOCK" && chmod 770 "$BITWARDEN_SSH_AUTH_SOCK"
+#     export SSH_AUTH_SOCK="$BITWARDEN_SSH_AUTH_SOCK"
+if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
+    if [[ "$(ssh-add -l 2>&1)" == *"Error"* ]]; then
+        rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+    fi
+else
+    if ! [[ -f ~/.work ]]; then
+        eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+    fi
+fi

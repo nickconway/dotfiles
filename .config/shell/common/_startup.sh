@@ -20,3 +20,7 @@ else
 		fi
 	fi
 fi
+
+if command -v termux-reload-settings > /dev/null; then
+	s && exit || return
+fi
