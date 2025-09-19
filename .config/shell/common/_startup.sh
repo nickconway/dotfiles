@@ -22,5 +22,5 @@ else
 fi
 
 if command -v termux-reload-settings > /dev/null; then
-	immersive-ssh && exit || return
+	.local/bin/immersive-ssh && exit || return
 fi
