@@ -6,4 +6,20 @@ yay -S --needed --noconfirm sunshine
 
 sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
 
+cat  <<- EOF > ~/.config/systemd/user/sunshine.service
+    [Unit]
+    Description=Sunshine is a self-hosted game stream host.
+    StartLimitIntervalSec=500
+    StartLimitBurst=5
+
+    [Service]
+    ExecStartPre=hyprctl output create headless sunshine
+    ExecStart=/usr/bin/sunshine
+    Restart=on-failure
+    RestartSec=5s
+
+    [Install]
+    WantedBy=graphical-session.target
+EOF
+
 systemctl --user enable --now sunshine
