@@ -2,28 +2,8 @@
 set -eou pipefail
 set -x
 
-yay -S --needed --noconfirm sunshine-git
-
-echo 'KERNEL=="uinput", SUBSYSTEM=="misc", OPTIONS+="static_node=uinput", TAG+="uaccess"' | \
-sudo tee /etc/udev/rules.d/60-sunshine.rules
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-sudo modprobe uinput
+yay -S --needed --noconfirm sunshine
 
 sudo setcap cap_sys_admin+p $(readlink -f $(which sunshine))
 
-bash -c "cat << EOF > ~/.config/systemd/user/sunshine.service
-[Unit]
-Description=Sunshine self-hosted game stream host for Moonlight.
-
-[Service]
-ExecStart=$(which sunshine)
-Restart=on-failure
-RestartSec=5s
-
-[Install]
-WantedBy=graphical-session.target
-EOF"
-
-systemctl --user daemon-reload
 systemctl --user enable --now sunshine
