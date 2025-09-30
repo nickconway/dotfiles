@@ -27,7 +27,7 @@ else
 fi
 KERNEL=$(uname -r)
 
-if [[ -e ~/.local/go ]]; then
+if [[ -e ~/.local/go/go ]]; then
     export GOROOT=~/.local/go/go
     export PATH="$GOROOT"/bin:$PATH
 fi
