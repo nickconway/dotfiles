@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+set -x
+
+if [[ "$1" == "disable" ]]; then
+    hyprctl reload
+    hyprctl keyword monitor "sunshine,disabled"
+elif [[ "$1" == "enable" ]]; then
+    for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v sunshine); do
+        hyprctl keyword monitor "$m,disabled"
+    done
+    hyprctl keyword monitor sunshine,3840x2160@120,auto,1
+fi
