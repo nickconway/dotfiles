@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euo pipefail
+set -x
 
 config_file="$HOME/.config/hypr/monitors.conf"
 
@@ -6,13 +8,19 @@ monitor_config=$(sed -n '1p' "$config_file" | cut -d ' ' -f 3-  )
 primay_monitor=$(echo "$monitor_config" | awk '{print $1}' | tr -d ",")
 config_scale=$(echo "$monitor_config" | awk '{print $4}' | tr -d ",")
 
-scale="$(hyprctl monitors -j | jq -r ".[] | select(.name == \"$primay_monitor\") | .scale")"
+old_scale="$(hyprctl monitors -j | jq -r ".[] | select(.name == \"$primay_monitor\") | .scale")"
 
-if [[ "$scale" == "1.00" ]]; then
-    scale=$config_scale
+if [[ -z "${1:-}" ]] && [[ "$old_scale" == "1.00" ]]; then
+    new_scale=$config_scale
+elif [[ "${1:-}" == "config" ]]; then
+    new_scale=$config_scale
+elif [[ "${1:-}" == "1" ]]; then
+    new_scale=1.00
 else
-    scale=1
+    new_scale=1.00
 fi
 
-new_config="$(echo "$monitor_config" | sed "s/\S\+,/$scale,/4")"
-hyprctl keyword monitor "$new_config"
+if [[ "$new_scale" != "$old_scale" ]]; then
+    new_config="$(echo "$monitor_config" | sed "s/\S\+,/$new_scale,/4")"
+    hyprctl keyword monitor "$new_config"
+fi
