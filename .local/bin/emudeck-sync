@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
+
 function pull-saves() {
     echo "Pulling Saves"
-    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/Saves/ "$(xdg-user-dir DOCUMENTS)"/Emulation/saves
+    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/Saves/ "$EMUDECK_DIR/saves"
 }
 function push-saves() {
     echo "Pushing Saves"
-    rsync -Lauvz --progress --info=progress2 "$(xdg-user-dir DOCUMENTS)"/Emulation/saves/ /mnt/nas/home/Documents/Emulation/Saves
+    rsync -Lauvz --progress --info=progress2 "$EMUDECK_DIR/saves" /mnt/nas/home/Documents/Emulation/Saves
 }
 
 function sync-saves() {
@@ -18,12 +20,12 @@ function sync-saves() {
 
 function pull-games() {
     echo "Pulling Games"
-    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/Games/ "$(xdg-user-dir DOCUMENTS)"/Emulation/roms
+    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/Games/ "$EMUDECK_DIR/roms"
 }
 
 function push-games() {
     echo "Pushing Games"
-    rsync -Lauvz --progress --info=progress2 "$(xdg-user-dir DOCUMENTS)"/Emulation/roms/ /mnt/nas/home/Documents/Emulation/Games
+    rsync -Lauvz --progress --info=progress2 "$EMUDECK_DIR/roms/" /mnt/nas/home/Documents/Emulation/Games
 }
 
 function sync-games() {
@@ -34,12 +36,12 @@ function sync-games() {
 
 function pull-bios() {
     echo "Pulling BIOS"
-    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/BIOS/ "$(xdg-user-dir DOCUMENTS)"/Emulation/bios
+    rsync -Lauvz --progress --info=progress2 /mnt/nas/home/Documents/Emulation/BIOS/ "$EMUDECK_DIR/bios"
 }
 
 function push-bios() {
     echo "Pushing BIOS"
-    rsync -Lauvz --progress --info=progress2 "$(xdg-user-dir DOCUMENTS)"/Emulation/bios/ /mnt/nas/home/Documents/Emulation/BIOS
+    rsync -Lauvz --progress --info=progress2 "$EMUDECK_DIR/bios/" /mnt/nas/home/Documents/Emulation/BIOS
 }
 
 function sync-bios() {
