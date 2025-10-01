@@ -65,23 +65,17 @@ function sync-bios() {
 }
 
 if [[ $# == 0 ]]; then
-    sync-games
-    echo
     sync-saves
     echo
     sync-bios
-elif [[ $# -eq 1 && "${1:-}" == "pull" ]]; then
-    pull-games
     echo
-    pull-saves
+    sync-games
+elif [[ $# -eq 1 ]]; then
+    "$1"-saves
     echo
-    pull-bios
-elif [[ $# -eq 1 && "${1:-}" == "push" ]]; then
-    push-games
+    "$1"-bios
     echo
-    push-saves
-    echo
-    push-bios
+    "$1"-games
 else
     for arg in "${@:2}"; do
         "$1"-"$arg"
