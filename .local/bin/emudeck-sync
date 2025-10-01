@@ -9,7 +9,7 @@ function pull-saves() {
 }
 function push-saves() {
     echo "Pushing Saves"
-    rsync -Lauvz --progress --info=progress2 "$EMUDECK_DIR/saves" /mnt/nas/home/Documents/Emulation/Saves
+    rsync -Lauvz --progress --info=progress2 "$EMUDECK_DIR/saves/" /mnt/nas/home/Documents/Emulation/Saves
 }
 
 function sync-saves() {
