@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+YEETMOUSE_DIR="$HOME/.local/source/YeetMouse"
+
+[[ -e ~/.config/yeetmouse/config.h ]]
+
+if [[ ! -e "$YEETMOUSE_DIR" ]]; then
+    git clone https://github.com/AndyFilter/YeetMouse "$YEETMOUSE_DIR"
+fi
+
+cd "$YEETMOUSE_DIR"
+git pull
+cp ~/.config/yeetmouse/config.h "$YEETMOUSE_DIR/driver"
+./uninstall.sh
+./install.sh
