@@ -3,9 +3,9 @@
 echo "Monitoring UPS Status..."
 
 while true; do
-    FILE="$(ls /tmp/ups-status-*)"
-    [[ -z "$FILE" ]] && continue
-    case "$FILE" in
+    COMMAND="$(ls /tmp/ups-status-*)"
+    [[ -z "$COMMAND" ]] && continue
+    case "$COMMAND" in
         *ONLINE)
             notify-send "UPS Status" "UPS Switched to Main Power" -h string:synchronous:ups -e
         ;;
