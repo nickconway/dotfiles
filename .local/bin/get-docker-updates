@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
 [[ -n $NTFY_TOKEN ]]
+
 UPDATES="$(dockcheck -n | awk "x==1 {print} /Containers with updates available:/,EOF {x=1}" | grep -v 'nextcloud-aio' | grep -v "No updates installed" | awk NF)"
 UPDATES="${UPDATES//$'\n'/ }"
-UPDATES="$(echo "$UPDATES" | sed 's/ /, /g')"
+UPDATES="${UPDATES/ /, /}"
+
 if [[ -n "$UPDATES" ]]; then
     echo "$UPDATES"
     curl -sSL https://run.conway.dev/api/GetDashboardComponents
