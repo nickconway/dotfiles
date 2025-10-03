@@ -16,9 +16,17 @@ cd
 touch .hushlogin
 mkdir -p ~/.local/bin
 
-if ! [[ -e ~/.local/bin/yadm ]]; then
-    curl -s https://raw.githubusercontent.com/nickconway/yadm/master/yadm -o ~/.local/bin/yadm
-    chmod +x ~/.local/bin/yadm
+if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
+    yay -S --noconfirm --needed yadm
+    yadm clone https://github.com/nickconway/dotfiles
+    yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
+    yadm decrypt
+    yadm alt
+
+    [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
+    [[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
+
+    eval $(grep yconfig ~/.config/shell/common/alias.sh | cut -d "=" -f 2 | cut -c 2- | rev | cut -c 2- | rev)
 fi
 
 if command -v termux-reload-settings > /dev/null; then
@@ -35,18 +43,6 @@ if command -v termux-reload-settings > /dev/null; then
     yadm decrypt
     yadm alt
     chsh -s zsh
-fi
-
-if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
-    yadm clone https://github.com/nickconway/dotfiles
-    yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
-    yadm decrypt
-    yadm alt
-
-    [[ -e .config/shell/common/encrypted.sh ]] && . ~/.config/shell/common/encrypted.sh
-    [[ -e .config/shell/common/environment.sh ]] && . ~/.config/shell/common/environment.sh
-
-    eval $(grep yconfig ~/.config/shell/common/alias.sh | cut -d "=" -f 2 | cut -c 2- | rev | cut -c 2- | rev)
 fi
 
 if command -v termux-reload-settings > /dev/null; then
