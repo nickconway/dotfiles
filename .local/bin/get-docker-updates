@@ -15,5 +15,3 @@ if [[ -n "$UPDATES" ]]; then
         -d "The following have updates available: $UPDATES" \
         -H "Actions: http, Update Now, https://run.conway.dev/api/StartAction, method=POST, clear=true, body='{ \"actionId\": \"updateContainers\", \"arguments\": [{ \"name\": \"hostname\", \"value\": \"$(uname -n)\" }] }'"
 fi
-
-echo "$UPDATES"
