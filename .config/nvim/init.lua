@@ -25,7 +25,10 @@ require("lazy").setup({
     ui = {
         border = "rounded",
     },
-    install = { colorscheme = { "habamax" } },
+    install = {
+        colorscheme = { "habamax" },
+        missing = false,
+    },
     checker = { enabled = true },
 })
 
