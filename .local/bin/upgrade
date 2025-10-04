@@ -18,4 +18,4 @@ if command -v pacman &>/dev/null; then
     fi
 fi
 
-systemd-inhibit topgrade -y --disable poetry
+systemd-inhibit --why "Upgrading" topgrade -y

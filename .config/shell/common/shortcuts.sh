@@ -34,7 +34,7 @@ function atuin-fix() {
 
 function bootstrap() {
     if command -v systemd-inhibit &>/dev/null; then
-        systemd-inhibit -- bootstrap $@
+        systemd-inhibit --why "Bootstrapping" -- bootstrap $@
     else
         bootstrap $@
     fi
@@ -42,7 +42,7 @@ function bootstrap() {
 
 function all-bootstrap() {
     if command -v systemd-inhibit &>/dev/null; then
-        systemd-inhibit -- all-bootstrap $@
+        systemd-inhibit --why "Bootstrapping" -- all-bootstrap $@
     else
         all-bootstrap $@
     fi
@@ -872,7 +872,7 @@ if command -v xdg-open &>/dev/null; then
     }
 fi
 
-alias yay='systemd-inhibit yay'
+alias yay='systemd-inhibit --why Yay yay'
 alias yaconf='yay -Pg'
 alias yaclean='yay -Sc'
 alias yaclr='yay -Scc'
