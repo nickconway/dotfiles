@@ -1,4 +1,5 @@
 .aws/**/*
+.config/ansible/hosts
 .config/gpg/*
 .config/shell/common/encrypted.sh
 .config/rclone/rclone.conf
