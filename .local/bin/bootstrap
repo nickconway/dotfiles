@@ -115,9 +115,9 @@ git pull &> /dev/null
 cd ~/Git/ansible/bootstrap
 
 if ansible-vault-password &> /dev/null; then
-    uvx --with ansible --with netaddr --from ansible-core --with keyring ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
+    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
 else
-    uvx --with ansible --with netaddr --from ansible-core --with keyring ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
+    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then

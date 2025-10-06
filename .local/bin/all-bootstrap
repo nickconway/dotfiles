@@ -16,11 +16,11 @@ git pull &> /dev/null
 cd ~/Git/ansible/bootstrap
 
 if command -v termux-reload-settings > /dev/null; then
-    uvx --with ansible --with netaddr --from ansible-core ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
+    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
 elif ansible-vault-password &> /dev/null; then
-    uvx --with ansible --with netaddr --from ansible-core ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password $@
+    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password $@
 else
-    uvx --with ansible --with netaddr --from ansible-core ansible-playbook main.yml --ask-vault-pass $@
+    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --ask-vault-pass $@
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then
