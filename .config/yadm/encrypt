@@ -8,5 +8,5 @@
 .config/zmk/*
 .kube/config
 .password-store/.gpg-id
-.password-store/python-keyring/**/*.*
+.password-store/ansible/**/*.*
 .talos/config
