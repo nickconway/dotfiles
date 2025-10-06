@@ -7,6 +7,15 @@ vim.api.nvim_create_autocmd(
     }
 )
 
+vim.api.nvim_create_autocmd(
+    { "BufNewFile", "BufRead" },
+    {
+        group = vim.api.nvim_create_augroup("bogiefile", { clear = true }),
+        pattern = "Bogiefile",
+        command = "set filetype=yaml",
+    }
+)
+
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
         require("vim.hl").on_yank({ timeout = 50 })
