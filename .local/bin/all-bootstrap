@@ -12,20 +12,15 @@ trap fail ERR
 ssh-add -L | grep -q "$(cat ~/.ssh/id_ed25519.pub)" || ssh-add ~/.ssh/id_ed25519
 
 cd ~/Git/ansible
-
 git pull &> /dev/null
 cd ~/Git/ansible/bootstrap
 
-uv venv &> /dev/null
-source .venv/bin/activate &> /dev/null
-uv pip install ansible ansible-core &> /dev/null
-
 if command -v termux-reload-settings > /dev/null; then
-    ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
+    uvx --with ansible --with netaddr --from ansible-core ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
 elif ansible-vault-password &> /dev/null; then
-    ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password $@
+    uvx --with ansible --with netaddr --from ansible-core ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password $@
 else
-    ansible-playbook main.yml --ask-vault-pass $@
+    uvx --with ansible --with netaddr --from ansible-core ansible-playbook main.yml --ask-vault-pass $@
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then

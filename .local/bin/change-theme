@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-uv venv &> /dev/null
-uv tool install pywal16 &> /dev/null
-uv pip install colorthief colorz haishoku &>/dev/null
-
 if [[ $(uname) == Darwin ]]; then
-    wal -i ~/wallpaper.png -n
+    uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i ~/wallpaper.png -n
     [[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
     exit
 fi
@@ -43,7 +39,7 @@ echo
 hyprctl hyprpaper wallpaper ", ~/.config/wallpaper"
 echo
 
-wal -i ~/.config/wallpaper
+uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i ~/.config/wallpaper
 
 [[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
 [[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png

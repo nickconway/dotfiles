@@ -89,12 +89,8 @@ if ! command -v uv > /dev/null; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
-for TOOL in "ansible" "ansible-core" "netaddr"; do
-    if ! uv tool list | grep -q "^$TOOL "; then uv tool install "$TOOL"; fi
-done
-
 for C in "community.general" "ansible.posix"; do
-    ansible-galaxy collection install "$C" > /dev/null
+    uvx --from ansible-core ansible-galaxy collection install "$C" > /dev/null
 done
 
 if [[ -e "$XDG_RUNTIME_DIR" ]]; then
@@ -118,19 +114,10 @@ git pull &> /dev/null
 
 cd ~/Git/ansible/bootstrap
 
-if ! [[ -e ~/.local/bin/vault-keyring-client ]]; then
-    curl https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/vault/vault-keyring-client.py -o ~/.local/bin/vault-keyring-client &> /dev/null
-    chmod +x ~/.local/bin/vault-keyring-client
-fi
-
-uv venv &> /dev/null
-source .venv/bin/activate &> /dev/null
-uv pip install ansible ansible-core &> /dev/null
-
 if ansible-vault-password &> /dev/null; then
-    ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
+    uvx --with ansible --with netaddr --from ansible-core --with keyring ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
 else
-    ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
+    uvx --with ansible --with netaddr --from ansible-core --with keyring ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then

@@ -14,12 +14,10 @@ shift $((OPTIND-1))
 
 [[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-uv tool install asciinema
-
 command -v svg-term &> /dev/null || npm install -g svg-term-cli
 command -v svgembed &> /dev/null || npm install -g git+https://github.com/miraclx/svgembed
 
-asciinema rec "$1.cast" --overwrite
+uvx asciinema rec "$1.cast" --overwrite
 
 # Remove weird percent signs
 sed -i '/"\\u001b\[1m\\u001b\[3m\%\\u001b\[23m\\u001b\[1m\\u001b\[0m/d' "$1.cast"
