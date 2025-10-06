@@ -1,18 +1,33 @@
 #!/usr/bin/env bash
-set -uo pipefail
+set -euo pipefail
 
 if [[ -e "$DOCKER_STACK_DIR" ]]; then
     for d in "$DOCKER_STACK_DIR"/*; do
         cd $d
         echo $d
-        if [[ -e docker-compose.yaml ]] || [[ -e docker-compose.yml ]] || [[ -e compose.yaml ]] || [[ -e compose.yml ]]; then
-            if [[ -z "$@" ]] || grep -q $@ compose.yml; then
-                if [[ -e /usr/bin/docker-compose ]]; then
-                    docker-compose pull
-                    docker-compose up -d --build
-                else
-                    docker compose up -d --build --pull=always
-                fi
+        if [[ -n *compose.y*ml ]]; then
+            if [[ -n "$@" ]]; then
+                UPDATE=
+                for NAME in $@; do
+                    for FILE in *compose.y*ml; do
+                        if grep -q "$NAME" "$FILE"; then
+                            UPDATE=true
+                        fi
+                    done
+                done
+            else
+                UPDATE=true
+            fi
+
+            if [[ -z $UPDATE ]]; then
+                continue
+            fi
+
+            if [[ -e /usr/bin/docker-compose ]]; then
+                docker-compose pull
+                docker-compose up -d --build
+            else
+                docker compose up -d --build --pull=always
             fi
         fi
     done
