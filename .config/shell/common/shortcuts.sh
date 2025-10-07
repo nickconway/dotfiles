@@ -526,7 +526,15 @@ function mkcd() {
 }
 
 alias n="$EDITOR"
-alias notes='(cd /mnt/nas/home/Documents/Notes && n)'
+
+function notes() {
+    NOTES_DIR=~/Documents/Notes
+    mkdir -p $NOTES_DIR
+
+    [[ -e /mnt/nas/home/Documents/Notes ]] && NOTES_DIR=/mnt/nas/home/Documents/Notes
+
+    (cd $NOTES_DIR && n)
+}
 
 function np() {
     curl -d "$@" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
