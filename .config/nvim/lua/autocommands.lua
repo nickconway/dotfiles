@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.api.nvim_create_autocmd("FocusLost", {
-    command = "silent! update",
+    command = "silent! wall",
     group = vim.api.nvim_create_augroup("save-on-focus-lost", { clear = true }),
 })
 
