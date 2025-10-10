@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-if [[ ! -e ~/.cache/emojis || "$1" == "download" ]]; then
+if [[ ! -e ~/.cache/emojis || "${1:-}" == "download" ]]; then
     echo "Downloading emojis..."
     curl -s https://raw.githubusercontent.com/muan/emojilib/main/dist/emoji-en-US.json \
       | jq --raw-output '. | to_entries | .[] | .key + " " + (.value | join(" ") | sub("_"; " "; "g"))' \
       > ~/.cache/emojis
 fi
 
-cat ~/.cache/emojis | rofi -display-columns 1 -display-column-separator ' ' -dmenu -p 󰞅 -config ~/.config/rofi/styles/style_2.rasi --placeholder-text='...' -i -theme-str 'listview { columns: 6; } mode-switcher { enabled: false; } element-text { font: "NotoSans Nerd Font Propo 20"; }' | cut -d ' ' -f 1 | tr -d '\n' | wl-copy && paste-keys
+if [[ -t 0 ]]; then
+    SELECTED=$(fzft < ~/.cache/emojis)
+    [[ -n $SELECTED ]] && echo "$SELECTED" | awk '{print $1}' | wl-copy -n && paste-keys
+else
+    rofi -display-columns 1 -display-column-separator ' ' -dmenu -p 󰞅 -config ~/.config/rofi/styles/style_2.rasi --placeholder-text='...' -i -theme-str 'listview { columns: 6; } mode-switcher { enabled: false; } element-text { font: "NotoSans Nerd Font Propo 20"; }' < ~/.cache/emojis | cut -d ' ' -f 1 | tr -d '\n' | wl-copy && paste-keys
+fi
