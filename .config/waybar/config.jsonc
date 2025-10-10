@@ -28,6 +28,7 @@
     "custom/clipboard",
     "network",
     "pulseaudio",
+    "custom/microphone",
     "backlight",
     //"backlight/slider",
     "battery",
@@ -60,6 +61,12 @@
     "return-type": "json",
     "on-click": "tofi-drun --drun-launch=true --prompt-text='Run: ' --placeholder-text=Application",
     "on-click-right": "$(tofi-run --prompt-text='Run: ' --placeholder-text=Application)",
+  },
+  "custom/microphone": {
+    "format": "{}",
+    "exec": "pactl get-source-mute $(pactl get-default-source) | grep -q no && echo 󰍬 || echo 󰍭",
+    "on-click": "pactl set-source-mute $(pactl get-default-source) toggle",
+    "interval": 1,
   },
   "hyprland/workspaces": {
     //"format": "{icon} {name}",
