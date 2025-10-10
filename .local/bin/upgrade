@@ -6,9 +6,9 @@ command -v pnpm &> /dev/null && export PATH="$(pnpm root -g)":$PATH
 
 if command -v pacman &>/dev/null; then
     printf "\033[95m::\033[0m Checking Arch Linux PGP Keyring...\n"
-    installedver="$(LANG= sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
-    currentver="$(LANG= sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
-    if [ $installedver != $currentver ]; then
+    installedver="$(sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+    currentver="$(sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+    if [ "$installedver" != "$currentver" ]; then
         echo " Arch Linux PGP Keyring is out of date."
         echo " Updating before full system upgrade."
         sudo pacman -Sy --needed --noconfirm archlinux-keyring
@@ -18,4 +18,25 @@ if command -v pacman &>/dev/null; then
     fi
 fi
 
-systemd-inhibit --why "Upgrading" topgrade -y
+systemd-inhibit --why "Upgrading" topgrade -y --no-retry
+
+REBOOT=
+if [[ -e /var/run/reboot-required ]]; then
+    if [[ -t 0 ]]; then
+        echo -n "A reboot is required. Would you like to reboot now? [Y/n] "
+        REBOOT="$(read -r)"
+    else
+        REBOOT="$(timeout 11s notify-send Upgrade "A reboot is required" --action "reboot=Reboot" -e)"
+    fi
+elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( (uname -r | grep -q zen && pacman -Q linux-zen || pacman -Q linux) | awk '{print $2}' | sed 's/\./-/g')"* ]]; then
+    if [[ -t 0 ]]; then
+        echo -n "The kernel was updated. Would you like to reboot now? [Y/n] "
+        REBOOT="$(read -r)"
+    else
+        REBOOT="$(timeout 11s notify-send Upgrade "The kernel was updated" --action "reboot=Reboot" -e)"
+    fi
+fi
+
+if [[ "${REBOOT}" == "y" ]]; then
+    systemctl reboot -h now
+fi
