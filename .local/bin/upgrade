@@ -20,23 +20,24 @@ fi
 
 systemd-inhibit --why "Upgrading" topgrade -y --no-retry
 
-REBOOT=
 if [[ -e /var/run/reboot-required ]]; then
     if [[ -t 0 ]]; then
         echo -n "A reboot is required. Would you like to reboot now? [Y/n] "
-        REBOOT="$(read -r)"
+        read -r REBOOT
+        REBOOT="${REBOOT:-y}"
     else
         REBOOT="$(timeout 11s notify-send Upgrade "A reboot is required" --action "reboot=Reboot" -e)"
     fi
 elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( (uname -r | grep -q zen && pacman -Q linux-zen || pacman -Q linux) | awk '{print $2}' | sed 's/\./-/g')"* ]]; then
     if [[ -t 0 ]]; then
         echo -n "The kernel was updated. Would you like to reboot now? [Y/n] "
-        REBOOT="$(read -r)"
+        read -r REBOOT
+        REBOOT="${REBOOT:-y}"
     else
         REBOOT="$(timeout 11s notify-send Upgrade "The kernel was updated" --action "reboot=Reboot" -e)"
     fi
 fi
 
-if [[ "${REBOOT}" == "y" ]]; then
-    systemctl reboot -h now
+if [[ "${REBOOT:-}" == "y" ]]; then
+    sudo reboot -h now
 fi
