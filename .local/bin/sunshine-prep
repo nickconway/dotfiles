@@ -2,11 +2,17 @@
 set -euo pipefail
 
 if [[ $1 == "do" ]]; then
-    pidof hyprlock && touch /tmp/.sunshine-locked && pkill -USR1 hyprlock
+    if pidof hyprlock; then
+        touch /tmp/.sunshine-locked
+        pkill -USR1 hyprlock
+    fi
     swaync-client -dn
     sunshine-headless enable
 elif [[ $1 == "undo" ]]; then
     sunshine-headless disable
     swaync-client -df
-    [[ -e /tmp/.sunshine-locked ]] && rm /tmp/.sunshine-locked && hyprlock
+    if [[ -e /tmp/.sunshine-locked ]]; then
+        rm /tmp/.sunshine-locked
+        hyprlock
+    fi
 fi
