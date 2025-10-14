@@ -177,6 +177,7 @@
   border-bottom-right-radius: 0;
   margin-right: 0px;
   padding-right: 5px;
+  /* color: @color2; */
 }
 
 #memory {
@@ -184,6 +185,7 @@
   margin-right: 0px;
   padding-left: 5px;
   padding-right: 5px;
+  /* color: @color3; */
 }
 
 #temperature {
@@ -191,14 +193,7 @@
   margin-right: 0px;
   padding-left: 5px;
   padding-right: 5px;
-}
-
-#custom-microphone {
-  font-size: 16px;
-  border-radius: 0px;
-  margin-right: 0px;
-  padding-left: 5px;
-  padding-right: 5px;
+  /* color: @color4; */
 }
 
 #disk {
@@ -206,17 +201,12 @@
   border-bottom-left-radius: 0;
   padding-left: 5px;
   padding-right: 1rem;
+  /* color: @color5; */
 }
 
-/* #custom-updates { */
-/*   color: @sky; */
-/* } */
-
-/* #clock { */
-/*   color: @flamingo; */
-/* } */
-
-/* =============================== */
+#custom-updates {
+  /* color: @color6; */
+}
 
 #custom-music.low {
   background: rgb(148, 226, 213);
@@ -300,17 +290,24 @@
   border-bottom-right-radius: 0;
   margin-right: 0px;
   padding-right: 5px;
+  /* color: @color6; */
 }
 
-/* =============================== */
-
-/* =============================== */
-/* PulseAudio Module */
 #pulseaudio {
   border-radius: 0;
   margin-right: 0px;
   padding-left: 5px;
   padding-right: 5px;
+  /* color: @color9; */
+}
+
+#custom-microphone {
+  font-size: 16px;
+  border-radius: 0px;
+  margin-right: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  /* color: @color10; */
 }
 
 #backlight {
@@ -355,6 +352,7 @@
   border-bottom-left-radius: 0;
   padding-left: 5px;
   padding-right: 1.25rem;
+  /* color: @color11; */
 }
 
 #tray {
@@ -393,4 +391,5 @@
 }
 
 #custom-power {
+  /* color: @color12; */
 }
