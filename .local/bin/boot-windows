@@ -3,4 +3,4 @@ set -euo pipefail
 
 WIN="$(grep -i windows /boot/grub/grub.cfg | cut -d "'" -f 2)"
 sudo grub-reboot "$WIN"
-sudo reboot
+systemctl reboot

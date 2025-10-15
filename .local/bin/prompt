@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TEXT="$1"
+TERM_PROMPTS="$2"
+NOTIFICATION_TITLE="$3"
+NOTIFICATION_PROMPTS="$4"
+DEFAULT_ACTION="$5"
+
+IFS="," read -ra TERM_PROMPTS_ARR <<< "$2"
+IFS="," read -ra NOTIFICATION_PROMPTS_ARR <<< "$NOTIFICATION_PROMPTS"
+
+if [[ -t 0 ]]; then
+    while  [[ -z "${EXIT:-}" ]]; do
+        echo -n "$TEXT [${TERM_PROMPTS}] "
+        read -r INPUT
+
+        if [[ -z "$INPUT" ]]; then
+            EXIT="$DEFAULT_ACTION"
+        else
+            for ((i = 0 ; i < ${#TERM_PROMPTS_ARR[@]}; i++)); do
+                if [[ "$(echo "${TERM_PROMPTS_ARR[$i]}" | tr '[:upper:]' '[:lower:]')" == "$(echo "$INPUT" | tr '[:upper:]' '[:lower:]')" ]]; then
+                    EXIT="$i"
+                    break
+                fi
+            done
+        fi
+    done
+else
+    declare -a NOTIFICATION_PROMPTS_FLAGS=()
+    for A in "${NOTIFICATION_PROMPTS_ARR[@]}"; do
+        NOTIFICATION_PROMPTS_FLAGS+=("--action")
+        NOTIFICATION_PROMPTS_FLAGS+=("$A")
+    done
+
+    echo "${NOTIFICATION_PROMPTS_FLAGS[@]}"
+    EXIT="$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical)"
+fi
+
+exit "$EXIT"

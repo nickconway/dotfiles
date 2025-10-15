@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$HOME"/.local/share/pnpm:$PATH
@@ -18,26 +19,23 @@ if command -v pacman &>/dev/null; then
     fi
 fi
 
-systemd-inhibit --why "Upgrading" topgrade -y --no-retry
+systemd-inhibit --why "Upgrading" topgrade -y --no-retry || true
+
+TERM_PROMPTS="Y,n"
+NOTIFICATION_TITLE="Upgrade"
+NOTIFICATION_PROMPTS="Yes,No"
+DEFAULT_ACTION=0
 
 if [[ -e /var/run/reboot-required ]]; then
-    if [[ -t 0 ]]; then
-        echo -n "A reboot is required. Would you like to reboot now? [Y/n] "
-        read -r REBOOT
-        REBOOT="${REBOOT:-y}"
-    else
-        REBOOT="$(timeout 11s notify-send Upgrade "A reboot is required" --action "reboot=Reboot" -e)"
-    fi
+    TEXT="A reboot is required. Would you like to reboot now?"
+
+    prompt "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_TITLE" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
 elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( (uname -r | grep -q zen && pacman -Q linux-zen || pacman -Q linux) | awk '{print $2}' | sed 's/\./-/g')"* ]]; then
-    if [[ -t 0 ]]; then
-        echo -n "The kernel was updated. Would you like to reboot now? [Y/n] "
-        read -r REBOOT
-        REBOOT="${REBOOT:-y}"
-    else
-        REBOOT="$(timeout 11s notify-send Upgrade "The kernel was updated" --action "reboot=Reboot" -e)"
-    fi
+    TEXT="The kernel was updated. Would you like to reboot now?"
+
+    prompt "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_TITLE" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
 fi
 
-if [[ "${REBOOT:-}" == "y" ]]; then
-    sudo reboot -h now
+if [[ "${REBOOT:-}" == "0" ]]; then
+    systemctl reboot
 fi
