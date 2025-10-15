@@ -3,10 +3,11 @@ set -euo pipefail
 set -x
 
 if [[ "$1" == "disable" ]]; then
+    hyprctl reload
     hyprctl keyword monitor Sunshine,disable
 elif [[ "$1" == "enable" ]]; then
-    # for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v sunshine); do
-    #     hyprctl keyword monitor "$m,disabled"
-    # done
+    for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v sunshine); do
+        hyprctl keyword monitor "$m,disabled"
+    done
     hyprctl keyword monitor Sunshine,3840x2160@60,auto,1
 fi
