@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+FORCE=false
+if [[ "${1:-}" == "--force" ]]; then
+    FORCE=true
+fi
+
 YEETMOUSE_DIR="$HOME/.local/source/YeetMouse"
 
 [[ -e ~/.config/yeetmouse/config.h ]]
@@ -12,5 +17,11 @@ fi
 cd "$YEETMOUSE_DIR"
 git pull
 cp ~/.config/yeetmouse/config.h "$YEETMOUSE_DIR/driver"
-./uninstall.sh
-./install.sh
+
+if [[ "$FORCE" == true ]]; then
+    ./uninstall.sh
+fi
+
+if ! grep -q yeetmouse <(lsmod) || [[ "$FORCE" == "true" ]]; then
+    ./install.sh
+fi
