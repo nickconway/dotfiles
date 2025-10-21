@@ -33,8 +33,8 @@ function atuin-fix() {
 }
 
 alias awsp='
-    AWS_PROFILE=$(grep "\[" ~/.aws/credentials | cut -c 2- | rev | cut -c 2- | rev | fzft)
-    aws --profile "$AWS_PROFILE"'
+    _AWS_PROFILE=$(grep "\[" ~/.aws/credentials | cut -c 2- | rev | cut -c 2- | rev | fzft)
+    aws --profile "$_AWS_PROFILE"'
 
 function bootstrap() {
     if command -v systemd-inhibit &>/dev/null; then
