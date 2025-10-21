@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+while true; do
+    if pactl -f json list source-outputs | jq -r '.[].properties["media.name"]' | grep -q RecordStream; then
+        systemd-inhibit --what sleep:idle --why "Microphone in use" sleep 1
+    else
+        sleep 1
+    fi
+done
