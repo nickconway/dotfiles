@@ -11,6 +11,11 @@ if [[ -e ~/Docker ]]; then
             (
                 cd "$d"
                 echo "$d"
+
+                if [[ -e setup ]]; then
+                    ./setup
+                fi
+
                 if [[ -e docker-compose.yaml ]] || [[ -e docker-compose.yml ]] || [[ -e compose.yaml ]] || [[ -e compose.yml ]]; then
                     docker compose up -d --build
                 fi
