@@ -180,6 +180,7 @@ map("n", "<leader>X", "<cmd>!chmod +x %<CR>", "Make file executable")
 map("n", "<leader>z", ":ZenMode<CR>", "Zen mode")
 
 map("n", "<leader>lu", ":Lazy update<CR>", "Lazy update")
+map("n", "<leader>li", ":Lazy install<CR>", "Lazy install")
 map("n", "<leader>ll", ":Lazy<CR>", "Lazy")
 
 map("x", "<lt>", "<lt>gv")
