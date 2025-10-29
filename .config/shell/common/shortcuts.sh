@@ -32,10 +32,7 @@ function atuin-fix() {
     atuin sync
 }
 
-alias awsp='
-    _AWS_PROFILE=$(grep "\[" ~/.aws/credentials | cut -c 2- | rev | cut -c 2- | rev | fzft)
-    aws --profile "$_AWS_PROFILE"'
-
+alias awsp='export AWS_PROFILE="$(grep "\[" ~/.aws/credentials | cut -c 2- | rev | cut -c 2- | rev | fzft)"'
 function bootstrap() {
     if command -v systemd-inhibit &>/dev/null; then
         systemd-inhibit --why "Bootstrapping" -- bootstrap $@
