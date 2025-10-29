@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+sudo flatpak override --nosocket=x11 dev.vencord.Vesktop
+
 [[ -e $XDG_RUNTIME_DIR/discord-ipc-0 ]] && rm $XDG_RUNTIME_DIR/discord-ipc-0
 [[ -e $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0 ]] && rm $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0
 
