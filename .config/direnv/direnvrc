@@ -81,7 +81,7 @@ use_nvm() {
   nvm use
 }
 
-export_function() {
+export-function() {
   local name=$1
   local alias_dir=$PWD/.direnv/aliases
   mkdir -p "$alias_dir"
@@ -95,7 +95,7 @@ export_function() {
   fi
 }
 
-export_alias() {
+export-alias() {
   local name=$1
   shift
   local alias_dir=$PWD/.direnv/aliases
