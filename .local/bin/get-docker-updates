@@ -12,11 +12,5 @@ if [[ -n "$UPDATES" ]]; then
         https://notifications.conway.dev/docker \
         -H "Authorization: Bearer ${NTFY_TOKEN}" \
         -d "The following have updates available: $UPDATES" \
-        -H "Actions: http,
-            Update Now,
-            https://run.conway.dev/api/StartActionAndWait,
-            method=POST,
-            clear=true,
-            headers.Content-Type=application/json,
-            body='{ \"actionId\": \"updateContainers\", \"arguments\": [{ \"name\": \"hostname\", \"value\": \"$(uname -n)\" }] }'"
+        -H "Actions: http, Update Now, https://run.conway.dev/api/StartActionAndWait, method=POST, clear=true, headers.Content-Type=application/json, body='{ \"actionId\": \"updateContainers\", \"arguments\": [{ \"name\": \"hostname\", \"value\": \"$(uname -n)\" }] }'"
 fi
