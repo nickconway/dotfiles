@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd ~/Git/homelab
+OLD_HASH="$(git rev-parse HEAD)"
+git pull
+NEW_HASH="$(git rev-parse HEAD)"
+
+if [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
+    exit
+fi
+
+for d in $(find ~/Git/homelab/docker/compose -maxdepth 1 -type d); do
+    if [[ -e "$DOCKER_STACK_DIR/$(basename "$d")" ]]; then
+        echo $d
+        rsync -abhruvz "$d/" "$DOCKER_STACK_DIR/$(basename "$d")"
+        cd "$DOCKER_STACK_DIR/$(basename "$d")"
+        docker compose up -d
+        echo
+    fi
+done
