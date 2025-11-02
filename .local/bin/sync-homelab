@@ -2,6 +2,10 @@
 set -euo pipefail
 
 cd ~/Git/homelab
+
+git remote set-url origin https://github.com/nickconway/homelab
+git remote set-url origin git@github.com:nickconway/homelab --push
+
 OLD_HASH="$(git rev-parse HEAD)"
 git pull
 NEW_HASH="$(git rev-parse HEAD)"
@@ -18,4 +22,8 @@ for d in $(find ~/Git/homelab/docker/compose -maxdepth 1 -type d); do
         docker compose up -d
         echo
     fi
+done
+
+until curl -f "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/sync-homelab-$(uname -n)?create=1"; do
+    sleep 5
 done
