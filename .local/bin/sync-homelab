@@ -20,14 +20,19 @@ if [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
     exit
 fi
 
-for d in $(find ~/Git/homelab/docker/compose -maxdepth 1 -type d); do
-    if [[ -e "$DOCKER_STACK_DIR/$(basename "$d")" ]]; then
-        echo $d
-        rsync -abhruvz "$d/" "$DOCKER_STACK_DIR/$(basename "$d")"
-        cd "$DOCKER_STACK_DIR/$(basename "$d")"
-        docker compose up -d
+echo
+
+while read -r FILE; do
+    APP="$(basename "$(dirname "$FILE")")"
+    echo "$FILE -> $APP"
+    if [[ -e "$DOCKER_STACK_DIR/$APP" ]]; then
+        rsync -abhruvz "docker/compose/$APP/" "$DOCKER_STACK_DIR/$APP"
+        (
+            cd "$DOCKER_STACK_DIR/$APP"
+            docker compose up -d
+        )
         echo
     fi
-done
+done < <(git diff --name-only "$OLD_HASH" "$NEW_HASH" | grep '^docker/compose/*')
 
 clean
