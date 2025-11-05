@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-cd
 
 export BORG_PASSPHRASE=$BORG_PASSPHRASE
 export BASE_DIR="/mnt/nas/backups/docker"
@@ -10,12 +9,10 @@ export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 [[ -e "$BORG_REPO" ]]
 
 ARCHIVE="$(borg list | tail -n 1 | awk '{print $1}')"
-echo Restoring $ARCHIVE
-borg extract --verbose --progress ::"$ARCHIVE"
+echo Restoring "$ARCHIVE"
+borg extract --verbose --progress ::"$ARCHIVE" "${2:-}"
 
 if [[ -e ~/Docker/invoice-ninja/app ]]; then
     sudo chmod 755 ~/Docker/invoice-ninja/app
     sudo chown -R 1500:1500 ~/Docker/invoice-ninja/app
 fi
-
-restore-container-dumps
