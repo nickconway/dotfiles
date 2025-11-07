@@ -1,51 +1,21 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
 
-for d in ~/Docker/*; do
-    cd $d
+docker ps --format {{.Names}} | grep "${1:-}" | grep -v nextcloud-aio | while read c; do
+    DIR="$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
+    cd "$DIR"
 
-    if [[ $# -ne 0 && "$1" != "$(basename "$(pwd)")" ]]; then
-        continue
+    if docker exec "$c" bash -c 'which psql && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
+        echo "Restoring postgres container $c"
+        docker exec -i "$c" bash -c 'psql -U "$POSTGRES_USER"' < data/dump.sql > /dev/null
+    elif docker exec "$c" bash -c 'which mysql && [[ -n $MYSQL_USER ]]' &>/dev/null; then
+        echo "Restoring mysql container $c"
+        docker exec -i "$c" bash -c 'mysql -u "$MYSQL_USER" --password="$MYSQL_PASSWORD"' < data/dump.sql > /dev/null
+    elif docker exec "$c" bash -c 'which mariadb && [[ -n $MARIADB_USER ]]' &>/dev/null; then
+        echo "Restoring mariadb container $c"
+        docker exec -i "$c" bash -c 'mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD"' < data/dump.sql > /dev/null
+    elif docker exec "$c" bash -c 'which mongodump' &>/dev/null; then
+        echo "Restoring mongo container $c"
+        docker exec -i "$c" mongorestore --archive < data/mongo.dump > /dev/null
     fi
-
-    if [[ -e compose.yml ]] && grep -q -e "container_name:.*postgres" compose.yml; then
-        CONTAINER_NAME="$(grep -e 'container_name:.*postgres' compose.yml | awk '{print $2}')"
-        docker start "$CONTAINER_NAME"
-        DATABASE="$(docker exec $CONTAINER_NAME bash -c 'echo $POSTGRES_DB')"
-        USERNAME="$(docker exec $CONTAINER_NAME bash -c 'echo $POSTGRES_USER')"
-        PASSWORD="$(docker exec $CONTAINER_NAME bash -c 'echo $POSTGRES_PASSWORD')"
-        [[ -n "$CONTAINER_NAME" ]] && [[ -n "$DATABASE" ]] && [[ -n "$USERNAME" ]] && [[ -n "$PASSWORD" ]]
-        echo "Restoring $d"
-        docker compose down
-        docker compose create
-        docker start "$CONTAINER_NAME"
-        sleep 5
-        cat data/dump.sql | docker exec -i "$CONTAINER_NAME" psql -U "$USERNAME" -d "$DATABASE" > /dev/null
-    elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mysql" compose.yml; then
-        CONTAINER_NAME="$(grep -e 'container_name:.*mysql' compose.yml | awk '{print $2}')"
-        docker start "$CONTAINER_NAME"
-        DATABASE="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_DATABASE')"
-        USERNAME="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_USER')"
-        PASSWORD="$(docker exec $CONTAINER_NAME bash -c 'echo $MYSQL_PASSWORD')"
-        [[ -n "$CONTAINER_NAME" ]] && [[ -n "$DATABASE" ]] && [[ -n "$USERNAME" ]] && [[ -n "$PASSWORD" ]]
-        echo "Restoring $d"
-        docker compose down
-        docker compose create
-        docker start "$CONTAINER_NAME"
-        sleep 5
-        cat data/dump.sql | docker exec -i "$CONTAINER_NAME" /usr/bin/mysql -u "$USERNAME" --password="$PASSWORD" "$DATABASE" > /dev/null
-    elif [[ -e compose.yml ]] && grep -q -e "container_name:.*mongo" compose.yml; then
-        CONTAINER_NAME="$(grep -e 'container_name:.*mongo' compose.yml | awk '{print $2}')"
-        [[ -n "$CONTAINER_NAME" ]]
-        echo "Restoring $d"
-        docker compose down
-        docker compose create
-        docker start "$CONTAINER_NAME"
-        sleep 5
-        docker exec -i "$CONTAINER_NAME" mongorestore --archive < mongo.dump > /dev/null
-    fi
-
-    docker compose down
-    docker compose up -d
 done

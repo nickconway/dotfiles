@@ -2,27 +2,20 @@
 set -euo pipefail
 
 docker ps --format {{.Names}} | grep "${1:-}" | grep -v nextcloud-aio | while read c; do
-    if docker exec "$c" bash -c 'which psql && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
-        echo "Dumping postgres container $c" \
-            && docker exec "$c" bash -c 'pg_dump -c --if-exists --username "$POSTGRES_USER" -d "$POSTGRES_DB"' \
-            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/data/dump.sql"
-        fi
+    DIR="$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
+    cd "$DIR"
 
-    if docker exec "$c" bash -c '[[ -e /usr/bin/mysqldump ]] && [[ -n $MYSQL_USER ]]' &>/dev/null; then
-        echo "Dumping mysql container $c" \
-            && docker exec "$c" bash -c '/usr/bin/mysqldump -u "$MYSQL_USER" --password="$MYSQL_PASSWORD" "$MYSQL_DATABASE" --no-tablespaces' \
-            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/data/dump.sql"
-    fi
-
-    if docker exec "$c" bash -c 'which mariadb-dump && [[ -n $MARIADB_USER ]]' &>/dev/null; then
-        echo "Dumping mariadb container $c" \
-            && docker exec "$c" bash -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --all-databases' \
-            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/data/dump.sql"
-    fi
-
-    if docker exec "$c" bash -c 'which mongodump' &>/dev/null; then
-        echo "Dumping mongo container $c" \
-            && docker exec "$c" mongodump --archive \
-            > "$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')/data/mongo.dumb"
+    if docker exec "$c" bash -c 'which pg_dumpall && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
+        echo "Dumping postgres container $c"
+        docker exec "$c" bash -c 'pg_dumpall -c --if-exists --username "$POSTGRES_USER"' > data/dump.sql
+    elif docker exec "$c" bash -c 'which mysqldump && [[ -n $MYSQL_USER ]]' &>/dev/null; then
+        echo "Dumping mysql container $c"
+        docker exec "$c" bash -c 'mysqldump -u "$MYSQL_USER" --password="$MYSQL_PASSWORD" --all-databases --no-tablespaces' > data/dump.sql
+    elif docker exec "$c" bash -c 'which mariadb-dump && [[ -n $MARIADB_USER ]]' &>/dev/null; then
+        echo "Dumping mariadb container $c"
+        docker exec "$c" bash -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --all-databases --no-tablespaces' > data/dump.sql
+    elif docker exec "$c" bash -c 'which mongodump' &>/dev/null; then
+        echo "Dumping mongo container $c"
+        docker exec "$c" mongodump --archive > data/mongo.dump
     fi
 done
