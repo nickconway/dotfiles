@@ -9,6 +9,12 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     export DEBUG_MODE
 fi
 
+if command -v envsubst-better &>/dev/null; then
+    ENV_CMD=envsubst-better
+else
+    ENV_CMD=envsubst
+fi
+
 cd "$K8S_MANIFEST_DIR"
 if [[ -n "$(ls)" ]]; then
     for APP in *; do
@@ -30,7 +36,7 @@ if [[ -n "$(ls)" ]]; then
                     eval 'echo "$VAR_NAME=$VALUE"'
                 done
 
-                sops encrypt --pgp "$GPG_KEY" <(envsubst < secrets.template) > secrets.encrypted
+                sops encrypt --pgp "$GPG_KEY" <("$ENV_CMD" < secrets.template) > secrets.encrypted
             fi
             SECRETS="$(sops decrypt --input-type yaml --output-type yaml secrets.encrypted --extract '["data"]')"
             kubectl apply -f <(echo "$SECRETS")
@@ -39,7 +45,7 @@ if [[ -n "$(ls)" ]]; then
         if [[ -e .bootstrap ]]; then ./.bootstrap; fi
 
         for f in *.yml; do
-            envsubst < "$f" | kubectl apply -f -
+            "$ENV_CMD" < "$f" | kubectl apply -f -
         done
     done
 fi

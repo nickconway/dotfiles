@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if command -v envsubst-better &>/dev/null; then
+    ENV_CMD=envsubst-better
+else
+    ENV_CMD=envsubst
+fi
+
 TRAEFIK_CONFIG="$HOME/Docker/traefik/data/config.yml"
 
 if [[ ! -e "$TRAEFIK_CONFIG" ]]; then TRAEFIK_CONFIG=""; fi
@@ -15,7 +21,7 @@ CHANGED=false
 
 if [[ -n "$(ls ~/Docker/*/*compose*.yml 2>/dev/null)" ]]; then
     CNAME="server.conway.dev"
-    for DOMAIN in $(grep -iroh 'Host(`\S*`)' ~/Docker/*/compose.yml "$TRAEFIK_CONFIG" | envsubst | cut -c 7- | rev | cut -c 3- | rev | sort | uniq); do
+    for DOMAIN in $(grep -iroh 'Host(`\S*`)' ~/Docker/*/compose.yml "$TRAEFIK_CONFIG" | "$ENV_CMD" | cut -c 7- | rev | cut -c 3- | rev | sort | uniq); do
         IDX="$(echo "$LIST" | jq "map(test(\"^$DOMAIN.*\")) | index(true)")"
 
         if [[ "$IDX" == "null" ]]; then
@@ -42,7 +48,7 @@ if [[ -n "$(ls ~/Kubernetes/*/ingress.yml 2>/dev/null)" ]]; then
     done
 
     for d in $(sed -nr 's/\s*\- host: (.*)/\1/p' ~/Kubernetes/*/ingress.yml | sort | uniq); do
-        DOMAIN="$(echo "$d" | envsubst)"
+        DOMAIN="$(echo "$d" | "$ENV_CMD")"
         IDX="$(echo "$LIST" | jq "map(test(\"^$DOMAIN.*\")) | index(true)")"
 
         if [[ "$IDX" == "null" ]]; then
