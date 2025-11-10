@@ -12,7 +12,7 @@ exec-once = [workspace 1 silent] chromium
 exec-once = [workspace 2 silent] kitty
 exec-once = [workspace 2 silent] vesktop
 exec-once = [workspace 2 silent] thunderbird-beta
-exec-once = [workspace 3 silent] feishin --ozone-platform-hint=auto --password-store="kwallet6"
+exec-once = [workspace 3 silent] feishin --ozone-platform-hint=auto
 exec-once = [workspace 3 silent] chromium --app='https://messages.google.com/web'
 exec-once = [workspace 3 silent] flatpak run app.bluebubbles.BlueBubbles
 exec-once = [workspace 3 silent] chromium --app='https://x.com'

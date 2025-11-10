@@ -10,4 +10,4 @@ workspace = 2, on-created-empty: kitty
 workspace = 3, on-created-empty: vesktop
 workspace = 4, on-created-empty: chromium --app='https://messages.google.com/web' & flatpak run app.bluebubbles.BlueBubbles
 workspace = 5, on-created-empty: thunderbird-beta
-workspace = 6, on-created-empty: feishin --ozone-platform-hint=auto --password-store="kwallet6"
+workspace = 6, on-created-empty: feishin --ozone-platform-hint=auto
