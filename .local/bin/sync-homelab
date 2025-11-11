@@ -2,9 +2,11 @@
 set -euo pipefail
 
 function clean() {
-    until curl -f "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/sync-homelab-$(uname -n)?create=1"; do
-        sleep 5
-    done
+    if [[ "${SKIP_HEALTH_CHECK:-}" == "" ]]; then
+        until curl -f "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/sync-homelab-$(uname -n)?create=1"; do
+            sleep 5
+        done
+    fi
 }
 
 cd ~/Git/homelab
