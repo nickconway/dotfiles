@@ -6,6 +6,11 @@ if [[ "${1:-}" == "--force" ]]; then
     FORCE=true
 fi
 
+UNINSTALL=false
+if [[ "${1:-}" == "--uninstall" ]]; then
+    UNINSTALL=true
+fi
+
 YEETMOUSE_DIR="$HOME/.local/source/YeetMouse"
 
 [[ -e ~/.config/yeetmouse/config.h ]]
@@ -18,10 +23,12 @@ cd "$YEETMOUSE_DIR"
 git pull
 cp ~/.config/yeetmouse/config.h "$YEETMOUSE_DIR/driver"
 
-if [[ "$FORCE" == true ]]; then
+if [[ "$FORCE" == true ]] || [[ "$UNINSTALL" == true ]]; then
     ./uninstall.sh
 fi
 
-if ! grep -q yeetmouse <(lsmod) || [[ "$FORCE" == "true" ]]; then
-    ./install.sh
+if [[ "$UNINSTALL" != true ]]; then
+    if ! grep -q yeetmouse <(lsmod) || [[ "$FORCE" == "true" ]]; then
+        ./install.sh
+    fi
 fi
