@@ -10,7 +10,12 @@ export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 
 ARCHIVE="$(borg list | tail -n 1 | awk '{print $1}')"
 echo Restoring "$ARCHIVE"
-borg extract --verbose --progress ::"$ARCHIVE" "${2:-}"
+
+if [[ $# -gt 1 ]]; then
+    borg extract --verbose --progress ::"$ARCHIVE" "${@:2}"
+else
+    borg extract --verbose --progress ::"$ARCHIVE"
+fi
 
 if [[ -e ~/Docker/invoice-ninja/app ]]; then
     sudo chmod 755 ~/Docker/invoice-ninja/app

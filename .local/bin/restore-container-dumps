@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-docker ps --format {{.Names}} | grep "${1:-}" | grep -v nextcloud-aio | while read c; do
+docker ps --format '{{.Names}}' | grep -v nextcloud-aio | while read -r c; do
     DIR="$(docker inspect "$c" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
     cd "$DIR"
+
+    if [[ $# -gt 0 ]]; then
+        SKIP=true
+        for a in "$@"; do
+            if [[ "$a" == "$c" ]]; then
+                SKIP=false
+            fi
+        done
+
+        if [[ "$SKIP" == true ]]; then
+            continue
+        fi
+    fi
 
     if docker exec "$c" bash -c 'which psql && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
         echo "Restoring postgres container $c"
