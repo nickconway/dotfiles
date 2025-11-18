@@ -1,5 +1,5 @@
 #define SENSITIVITY 0.5
-#define SENSITIVITY_Y 0.5
+#define SENSITIVITY_Y 1.0
 #define OUTPUT_CAP 0
 #define INPUT_CAP 0
 #define OFFSET 0
