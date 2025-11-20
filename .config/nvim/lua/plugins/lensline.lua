@@ -9,7 +9,7 @@ return {
                 style = {
                     placement = 'inline',
                     prefix = '',
-                    -- render = "focused", optionally render lenses only for focused function
+                    render = "focused"
                 }
             }
         }
