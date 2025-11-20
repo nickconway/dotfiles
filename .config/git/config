@@ -45,17 +45,17 @@
     line-numbers = true
     line-numbers-minus-style = red
     line-numbers-plus-style = green
-    line-numbers-zero-style = dim 7
+    line-numbers-zero-style = dim gray
     commit-style = red
     commit-decoration-style = blue box
-    file-style = dim 7
-    file-decoration-style = dim 7 ol
+    file-style = dim gray
+    file-decoration-style = dim gray ol
     hunk-header-style = file line-number syntax
     hunk-header-file-style = red
     hunk-header-line-number-style = green
     hunk-header-decoration-style = blue box
 
-    map-styles = bold purple => syntax magenta, bold cyan => syntax blue
+    map-styles = bold purple => black magenta, bold cyan => black blue
 
     merge-conflict-ours-diff-header-style = bold red
     merge-conflict-ours-diff-header-decoration-style = red box
@@ -69,14 +69,14 @@
 
     zero-style = dim syntax
 
-    minus-style = syntax red
+    minus-style = black red
     minus-non-emph-style = dim syntax
-    minus-emph-style = syntax red
+    minus-emph-style = black red
     minus-empty-line-marker-style = syntax
 
-    plus-style = syntax green
+    plus-style = black green
     plus-non-emph-style = dim syntax
-    plus-emph-style = syntax green
+    plus-emph-style = black green
     plus-empty-line-marker-style = syntax
 [include]
     path = ~/.config/git/local
