@@ -43,8 +43,8 @@
     syntax-theme = base16
     hyperlinks = true
     line-numbers = true
-    line-numbers-minus-style = 9
-    line-numbers-plus-style = 10
+    line-numbers-minus-style = red
+    line-numbers-plus-style = green
     line-numbers-zero-style = dim 7
     commit-style = red
     commit-decoration-style = blue box

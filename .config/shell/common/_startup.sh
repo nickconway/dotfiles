@@ -3,6 +3,13 @@ if command -v steamos-update > /dev/null; then
         distrobox enter arch && exit || return
     fi
 else
+    export PATH="$PATH:$HOME/.local/bin"
+    export FZF_DEFAULT_OPTS='-m --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(80%|20%|hidden|)"
+        --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up --bind ctrl-a:select-all
+        --color=fg:7,fg+:15,bg:-1,bg+:-1,gutter:-1,info:11,prompt:10,spinner:12,pointer:14,marker:13,border:7,header:9,label:7,hl:10
+        --gutter " "
+    '
+
     if [[ -z "$NO_TMUX" ]]; then
         [[ "$(basename "$SHELL")" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
         if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
@@ -22,11 +29,5 @@ else
 fi
 
 if command -v termux-reload-settings > /dev/null; then
-    export PATH="$PATH:$HOME/.local/bin"
-    export FZF_DEFAULT_OPTS='-m --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(80%|20%|hidden|)"
-        --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up --bind ctrl-a:select-all
-        --color=fg:7,fg+:15,bg:-1,bg+:-1,gutter:-1,info:11,prompt:10,spinner:12,pointer:14,marker:13,border:7,header:9,label:7,hl:10
-    '
-
     immersive-ssh && exit || return
 fi
