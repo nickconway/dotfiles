@@ -52,19 +52,20 @@ return {
 		end)
 
 		mr.refresh(function()
-		    for _, tool in ipairs(opts.ensure_installed or {}) do
-		        local p = mr.get_package(tool)
-		        if not p:is_installed() then
-		            p:install()
-		        end
-		    end
+			for _, tool in ipairs(opts.ensure_installed or {}) do
+				local p = mr.get_package(tool)
+				if not p:is_installed() then
+					p:install()
+				end
+			end
 		end)
 
 		require("mason-lspconfig").setup({
 			automatic_installation = true,
 			ensure_installed = {
 				"ts_ls",
-				"eslint",
+				"eslint_d",
+				"prettierd",
 				"lua_ls",
 				"bashls",
 				"rust_analyzer",
