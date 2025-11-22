@@ -107,6 +107,31 @@ else
     end
 end
 
+local lsp_icons = {
+    [vim.diagnostic.severity.ERROR] = "✘",
+    [vim.diagnostic.severity.WARN] = "▲",
+    [vim.diagnostic.severity.HINT] = "⚑",
+    [vim.diagnostic.severity.INFO] = "»",
+}
+
+vim.diagnostic.config({
+    virtual_lines = {
+        current_line = true,
+        format = function(d)
+            return lsp_icons[d.severity] .. " " .. d.message
+        end
+    },
+    virtual_text = {
+        spacing = 4,
+        source = "if_many",
+        prefix = function(diagnostic)
+            return lsp_icons[diagnostic.severity]
+        end
+    },
+    severity_sort = true,
+    signs = { text = lsp_icons },
+})
+
 vim.cmd("highlight Normal ctermbg=none guibg=none")
 vim.cmd("highlight NormalFloat ctermbg=none guibg=none")
 vim.cmd("highlight StatusLine ctermbg=none guibg=none")

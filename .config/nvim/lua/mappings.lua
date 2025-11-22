@@ -125,21 +125,10 @@ map("n", "<leader>bn", ":bn<CR>", "Next buffer")
 map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 
 map("n", "<leader>F", function()
-    local null_ls_sources = require("null-ls.sources")
-    local ft = vim.bo.filetype
-
-    local has_null_ls = #null_ls_sources.get_available(ft, "NULL_LS_FORMATTING") > 0
-
-    vim.lsp.buf.format({
-        filter = function(client)
-            if has_null_ls then
-                return client.name == "null-ls"
-            else
-                return true
-            end
-        end,
+    require("conform").format({
+        lsp_format = "fallback"
     })
-end, "Format buffer")
+    vim.lsp.buf.format() end, "Format buffer")
 
 map("n", "<leader>q", ":xa<CR>", "Quit")
 map("n", "<leader>Q", ":qa!<CR>", "Force Quit")
