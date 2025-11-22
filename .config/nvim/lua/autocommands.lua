@@ -262,9 +262,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				vim.cmd([[%s/\s\+$//e]])
 				vim.fn.setpos(".", save_cursor)
 
-				require("conform").format({
-					lsp_format = "fallback",
-				})
+				require("conform").format()
 			end,
 			group = vim.api.nvim_create_augroup("autosave-lsp", { clear = true }),
 			buffer = args.buf,

@@ -119,14 +119,15 @@ vim.diagnostic.config({
         current_line = true,
         format = function(d)
             return lsp_icons[d.severity] .. " " .. d.message
-        end
+        end,
     },
     virtual_text = {
+        current_line = false,
         spacing = 4,
         source = "if_many",
         prefix = function(diagnostic)
             return lsp_icons[diagnostic.severity]
-        end
+        end,
     },
     severity_sort = true,
     signs = { text = lsp_icons },
@@ -135,7 +136,6 @@ vim.diagnostic.config({
 vim.cmd("highlight Normal ctermbg=none guibg=none")
 vim.cmd("highlight NormalFloat ctermbg=none guibg=none")
 vim.cmd("highlight StatusLine ctermbg=none guibg=none")
-vim.cmd("highlight CursorLine ctermbg=none guibg=none")
 vim.cmd("highlight FloatBorder ctermbg=none guibg=none")
 vim.cmd("highlight SignColumn ctermbg=none guibg=none")
 vim.cmd("highlight EndOfBuffer ctermbg=none guibg=none")

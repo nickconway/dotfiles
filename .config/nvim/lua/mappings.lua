@@ -20,7 +20,7 @@ end
 local run_commands = {
     cs = {
         cmd = "dotnet run",
-        window = true
+        window = true,
     },
     sh = function()
         return "bash " .. vim.fn.expand("%")
@@ -111,12 +111,12 @@ map("n", "<leader>uH", function()
     vim.cmd("set cursorline!")
     vim.cmd("set cursorcolumn!")
 end, "Toggle Crosshair")
--- commenting
+
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Below")
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", "Add Comment Above")
 
-map("n", "p", 'p=`]')
-map("n", "P", 'P=`]')
+map("n", "p", "p=`]")
+map("n", "P", "P=`]")
 map("x", "p", '"_dP=`]')
 
 map("n", "<leader><CR>", ":so ~/.config/nvim/init.lua<CR>", "Reload config")
@@ -125,10 +125,8 @@ map("n", "<leader>bn", ":bn<CR>", "Next buffer")
 map("n", "<leader>bp", ":bp<CR>", "Previous buffer")
 
 map("n", "<leader>F", function()
-    require("conform").format({
-        lsp_format = "fallback"
-    })
-    vim.lsp.buf.format() end, "Format buffer")
+    require("conform").format()
+end, "Format buffer")
 
 map("n", "<leader>q", ":xa<CR>", "Quit")
 map("n", "<leader>Q", ":qa!<CR>", "Force Quit")
@@ -217,7 +215,7 @@ for i = 1, 6, 1 do
     end, "Fold Markdown Headings of Level " .. i)
 end
 
-map('n', '<leader>uv', function()
+map("n", "<leader>uv", function()
     local new_config = not vim.diagnostic.config().virtual_lines
     vim.diagnostic.config({ virtual_lines = new_config })
-end, 'Toggle diagnostic virtual_lines')
+end, "Toggle diagnostic virtual_lines")
