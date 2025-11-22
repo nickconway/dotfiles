@@ -64,8 +64,6 @@ return {
 			automatic_installation = true,
 			ensure_installed = {
 				"ts_ls",
-				"eslint_d",
-				"prettierd",
 				"lua_ls",
 				"bashls",
 				"rust_analyzer",
