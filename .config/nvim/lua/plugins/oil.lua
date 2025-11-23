@@ -1,5 +1,6 @@
 return {
     "stevearc/oil.nvim",
+    lazy = false,
     keys = {
         {
             "-",
@@ -7,13 +8,13 @@ return {
                 local oil = require("oil")
                 local util = require("oil.util")
 
-                oil.toggle_float(".")
+                oil.toggle_float()
 
                 util.run_after_load(0, function()
                     oil.open_preview()
                 end)
             end,
-            desc = "Open directory"
+            desc = "Open directory",
         },
     },
     opts = {
@@ -30,8 +31,16 @@ return {
         keymaps = {
             ["g?"] = "actions.show_help",
             ["<CR>"] = "actions.select",
-            ["<leader>wv"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
-            ["<leader>ws"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
+            ["<leader>wv"] = {
+                "actions.select",
+                opts = { vertical = true },
+                desc = "Open the entry in a vertical split",
+            },
+            ["<leader>ws"] = {
+                "actions.select",
+                opts = { horizontal = true },
+                desc = "Open the entry in a horizontal split",
+            },
             ["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
             ["<C-p>"] = "actions.preview",
             ["<C-c>"] = "actions.close",
