@@ -1,5 +1,9 @@
 local debounce = function(ms, fn)
     local timer = vim.uv.new_timer()
+    if timer == nil then
+        return
+    end
+
     return function(...)
         local argv = { ... }
         timer:start(ms, 0, function()
@@ -13,6 +17,10 @@ return {
     "mfussenegger/nvim-lint",
     opts = {
         events = { "BufWritePost", "BufReadPost", "InsertLeave" },
+        linters_by_ft = {
+            javascript = { "eslint_d" },
+            typescript = { "eslint_d" },
+        },
     },
     config = function(_, opts)
         local lint = require("lint")
