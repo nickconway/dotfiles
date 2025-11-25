@@ -17,6 +17,8 @@ function clean() {
     if [[ $RESTART == 'true' ]]; then
         sudo systemctl start docker.socket docker.service
     fi
+
+    sudo chown -R "$USER:$USER" ~/.config/borg
 }
 
 trap clean EXIT
