@@ -15,9 +15,9 @@ return {
             current_line_blame = true,
             attach_to_untracked = true,
             numhl = true,
-            _on_attach_pre = function(_, callback)
+            _on_attach_pre = function(bufnr, callback)
                 if vim.fn.executable("yadm") == 1 then
-                    require("gitsigns-yadm").yadm_signs(callback)
+                    require("gitsigns-yadm").yadm_signs(callback, { bufnr = bufnr })
                 else
                     callback()
                 end
