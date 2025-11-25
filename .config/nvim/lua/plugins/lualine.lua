@@ -23,21 +23,21 @@ return {
                 {
                     function()
                         local recording_register = vim.fn.reg_recording()
-                        if recording_register == '' then
-                            return ''
+                        if recording_register == "" then
+                            return ""
                         else
-                            return ' ' .. recording_register
+                            return " " .. recording_register
                         end
-                    end
+                    end,
                 },
             },
             lualine_x = {
                 function()
-                    return require('lsp-progress').progress()
+                    return require("lsp-progress").progress()
                 end,
                 "encoding",
                 "fileformat",
-                "filetype"
+                "filetype",
             },
             lualine_y = { "progress" },
             lualine_z = { "location" },

@@ -8,7 +8,7 @@ if not is_installed then
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out,                            "WarningMsg" },
+            { out, "WarningMsg" },
             { "\nPress any key to exit..." },
         }, true, {})
         vim.fn.getchar()
@@ -34,6 +34,6 @@ require("lazy").setup({
     checker = { enabled = true },
 })
 
-require 'options'
-require 'mappings'
-require 'autocommands'
+require("options")
+require("mappings")
+require("autocommands")

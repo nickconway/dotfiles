@@ -11,19 +11,19 @@ return {
             "<leader>cc",
             snap("CodeSnapSave"),
             mode = "x",
-            desc = "Save selected code snapshot into clipboard"
+            desc = "Save selected code snapshot into clipboard",
         },
         {
             "<leader>cC",
             snap("CodeSnapSaveHighlight"),
             mode = "x",
-            desc = "Save selected code snapshot into clipboard and highlight"
+            desc = "Save selected code snapshot into clipboard and highlight",
         },
         {
             "<leader>cA",
             snap("CodeSnapASCII"),
             mode = "x",
-            desc = "Save selected code ASCII into clipboard"
+            desc = "Save selected code ASCII into clipboard",
         },
     },
     opts = {

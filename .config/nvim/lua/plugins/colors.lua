@@ -1,11 +1,11 @@
 return {
     {
-        'navarasu/onedark.nvim',
+        "navarasu/onedark.nvim",
         config = function()
-            require("onedark").setup {
+            require("onedark").setup({
                 transparent = true,
-            }
-        end
+            })
+        end,
     },
     {
         "rose-pine/neovim",
@@ -16,6 +16,6 @@ return {
                 italic = true,
                 transparency = false,
             },
-        }
-    }
+        },
+    },
 }

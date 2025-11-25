@@ -24,11 +24,11 @@ return {
                 local neogit = require("neogit")
                 neogit.open()
             end,
-            desc = "NeoGit"
+            desc = "NeoGit",
         },
     },
     dependencies = {
-        "nvim-lua/plenary.nvim",  -- required
+        "nvim-lua/plenary.nvim", -- required
         "sindrets/diffview.nvim", -- optional - Diff integration
 
         -- Only one of these is needed, not both.
@@ -44,7 +44,7 @@ return {
                 item = { "", "" },
                 hunk = { "", "" },
             },
-            integrations = { diffview = true }
+            integrations = { diffview = true },
         })
-    end
+    end,
 }

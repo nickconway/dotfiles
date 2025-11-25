@@ -1,5 +1,5 @@
 return {
-    'MagicDuck/grug-far.nvim',
+    "MagicDuck/grug-far.nvim",
     opts = { headerMaxWidth = 80 },
     cmd = "GrugFar",
     keys = {
@@ -43,7 +43,7 @@ return {
                     transient = true,
                     prefills = {
                         filesFilter = ext and ext ~= "" and "*." .. ext or nil,
-                        paths = vim.fn.expand("%")
+                        paths = vim.fn.expand("%"),
                     },
                 })
             end,
@@ -60,7 +60,7 @@ return {
                     prefills = {
                         search = vim.fn.expand("<cword>"),
                         filesFilter = ext and ext ~= "" and "*." .. ext or nil,
-                        paths = vim.fn.expand("%")
+                        paths = vim.fn.expand("%"),
                     },
                 })
             end,

@@ -24,16 +24,10 @@ return {
     },
     config = function(_, opts)
         local lint = require("lint")
+        lint.linters_by_ft = opts.linters_by_ft
 
         local _lint = function()
-            -- Use nvim-lint's logic first:
-            -- * checks if linters exist for the full filetype first
-            -- * otherwise will split filetype by "." and add all those linters
-            -- * this differs from conform.nvim which only uses the first filetype that has a formatter
             local names = lint._resolve_linter_by_ft(vim.bo.filetype)
-
-            -- Create a copy of the names table to avoid modifying the original.
-            names = vim.list_extend({}, names)
 
             -- Add fallback linters.
             if #names == 0 then

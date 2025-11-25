@@ -7,5 +7,5 @@ return {
             border = "rounded",
             border_color = colors.grey,
         })
-    end
+    end,
 }

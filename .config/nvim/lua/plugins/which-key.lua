@@ -3,7 +3,7 @@ return {
     event = "VeryLazy",
     opts = {
         win = {
-            no_overlap = false
+            no_overlap = false,
         },
         spec = {
             { "<leader>c", group = "Code" },

@@ -5,20 +5,22 @@ return {
     event = {
         -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
         -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
-        "BufReadPre " .. vim.fn.expand "~" .. "/Documents/Notes/**.md",
-        "BufNewFile " .. vim.fn.expand "~" .. "/Documents/Notes/**.md",
+        "BufReadPre "
+            .. vim.fn.expand("~")
+            .. "/Documents/Notes/**.md",
+        "BufNewFile " .. vim.fn.expand("~") .. "/Documents/Notes/**.md",
 
         "BufReadPre /mnt/nas/home/Documents/Notes/**.md",
         "BufNewFile /mnt/nas/home/Documents/Notes/**.md",
 
-        "BufReadPre " .. vim.fn.expand "~" .. "/Git/blog/**.md",
-        "BufNewFile " .. vim.fn.expand "~" .. "/Git/blog/**.md",
+        "BufReadPre " .. vim.fn.expand("~") .. "/Git/blog/**.md",
+        "BufNewFile " .. vim.fn.expand("~") .. "/Git/blog/**.md",
     },
     dependencies = {
         "nvim-lua/plenary.nvim",
         "hrsh7th/nvim-cmp",
         "nvim-telescope/telescope.nvim",
-        "nvim-treesitter/nvim-treesitter"
+        "nvim-treesitter/nvim-treesitter",
     },
     opts = {
         legacy_commands = false,
@@ -45,12 +47,17 @@ return {
             -- Optional, default tags to add to each new daily note created.
             default_tags = { "daily-notes" },
             -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
-            template = nil
+            template = nil,
         },
         callbacks = {
             enter_note = function(_, note)
-                vim.keymap.set("n", "<leader>od", "<cmd>Obsidian today<cr>", { buffer = note.bufnr, desc = "Obsidian Daily Note" })
-            end
-        }
+                vim.keymap.set(
+                    "n",
+                    "<leader>od",
+                    "<cmd>Obsidian today<cr>",
+                    { buffer = note.bufnr, desc = "Obsidian Daily Note" }
+                )
+            end,
+        },
     },
 }

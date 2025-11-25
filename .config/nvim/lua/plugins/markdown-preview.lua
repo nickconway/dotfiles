@@ -13,7 +13,7 @@ return {
                 vim.cmd("MarkdownPreview")
             end,
             mode = "n",
-            desc = "Preview Markdown File"
-        }
-    }
+            desc = "Preview Markdown File",
+        },
+    },
 }

@@ -9,15 +9,15 @@ return {
                 function()
                     require("minty.huefy").open({ border = true })
                 end,
-                desc = "Color Picker (Hues)"
+                desc = "Color Picker (Hues)",
             },
             {
                 "<leader>cO",
                 function()
                     require("minty.shades").open({ border = true })
                 end,
-                desc = "Color Picker (Shades)"
-            }
-        }
-    }
+                desc = "Color Picker (Shades)",
+            },
+        },
+    },
 }

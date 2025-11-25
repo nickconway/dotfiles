@@ -1,7 +1,7 @@
 return {
     "akinsho/bufferline.nvim",
     dependencies = {
-        "nvim-tree/nvim-web-devicons"
+        "nvim-tree/nvim-web-devicons",
     },
     opts = function()
         ---@param buf number?
@@ -49,9 +49,9 @@ return {
 
         local diagnostics_icons = {
             Error = " ",
-            Warn  = " ",
-            Hint  = " ",
-            Info  = " ",
+            Warn = " ",
+            Hint = " ",
+            Info = " ",
         }
 
         local highlights = {
@@ -276,8 +276,12 @@ return {
                 show_close_icon = true,
                 show_buffer_close_icons = true,
                 separator_style = { "", "" },
-                close_command = function(n) bufremove(n) end,
-                right_mouse_command = function(n) bufremove(n) end,
+                close_command = function(n)
+                    bufremove(n)
+                end,
+                right_mouse_command = function(n)
+                    bufremove(n)
+                end,
                 diagnostics = "nvim_lsp",
                 always_show_bufferline = false,
                 auto_toggle_bufferline = true,
@@ -288,12 +292,12 @@ return {
                     return vim.trim(ret)
                 end,
                 indicator = {
-                    style = 'none',
+                    style = "none",
                 },
                 hover = {
                     enabled = true,
                     delay = 0,
-                    reveal = { 'close' }
+                    reveal = { "close" },
                 },
                 offsets = {
                     {
@@ -306,8 +310,8 @@ return {
                 get_element_icon = function(opts)
                     return require("nvim-web-devicons").get_icon_by_filetype(opts.filetype)
                 end,
-            }
+            },
         }
         return o
-    end
+    end,
 }

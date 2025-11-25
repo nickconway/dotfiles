@@ -13,6 +13,6 @@ return {
         transparent_background = true,
         plugins = {
             markdown = true,
-        }
+        },
     },
 }
