@@ -8,7 +8,9 @@ while [[ $C -lt 3 ]]; do
         exit $CODE
     else
         CODE=$?
-        sleep 3
+        if [[ $CODE -ne 0 ]]; then
+            sleep 3
+        fi
     fi
     C=$((C + 1))
 done
