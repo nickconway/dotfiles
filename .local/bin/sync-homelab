@@ -14,7 +14,7 @@ git remote set-url origin https://github.com/nickconway/homelab
 git remote set-url origin git@github.com:nickconway/homelab --push
 
 OLD_HASH="$(git rev-parse HEAD)"
-git pull
+retry git pull
 NEW_HASH="$(git rev-parse HEAD)"
 
 if [[ "$OLD_HASH" == "$NEW_HASH" ]]; then

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+C=0
+while [[ $C -lt 2 ]]; do
+    if $*; then
+        CODE=$?
+        exit $CODE
+    else
+        CODE=$?
+        sleep 3
+    fi
+    C=$((C + 1))
+done
+
+exit $CODE
