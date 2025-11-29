@@ -2,7 +2,7 @@
 set -euo pipefail
 
 C=0
-while [[ $C -lt 2 ]]; do
+while [[ $C -lt 3 ]]; do
     if $*; then
         CODE=$?
         exit $CODE
