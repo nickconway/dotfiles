@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo freshclam
+
+if [[ -e .scan ]]; then
+    sudo bash -c "find \"${1:-.}\" -type f -cnewer .scan > .files"
+else
+    sudo bash -c "find \"${1:-.}\" -type f > .files"
+fi
+
+touch .scan
+systemd-inhibit sudo clamscan -i --file-list .files 2>/dev/null >.scan-log
+cat .scan-log
+
+if grep -q "Infected files: [^0]" .scan-log; then
+    curl -fsSL -d "Infected files found" "https://notifications.$SERVICES_BASE_DOMAIN/notifications" -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+fi
