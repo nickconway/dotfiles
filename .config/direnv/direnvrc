@@ -75,9 +75,7 @@ use_rbw() {
 
 use_nvm() {
   NODE_VERSION=$1
-
-  [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
-
+  [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh" --no-use
   nvm use
 }
 
