@@ -3,14 +3,18 @@ set -euo pipefail
 
 sudo freshclam
 
+echo "Finding new files..."
+
 if [[ -e .scan ]]; then
     sudo bash -c "find \"${1:-.}\" -type f -cnewer .scan > .files"
 else
     sudo bash -c "find \"${1:-.}\" -type f > .files"
 fi
 
+echo "Scanning files..."
+
 touch .scan
-systemd-inhibit sudo clamscan -i --file-list .files 2>/dev/null >.scan-log
+systemd-inhibit sudo clamscan -i --file-list .files 2>/dev/null >.scan-log || true
 cat .scan-log
 
 if grep -q "Infected files: [^0]" .scan-log; then
