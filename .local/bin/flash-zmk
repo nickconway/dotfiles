@@ -11,17 +11,17 @@ trap clean ERR EXIT
 
 enable_logging=false
 
-while getopts 'fls:u' flag; do
+while getopts 'flps:u' flag; do
     case "${flag}" in
-        l) enable_logging=true;;
-        s) log_search="$OPTARG";;
-        *) continue;;
+    l) enable_logging=true ;;
+    p) passthrough=true ;;
+    s) log_search="$OPTARG" ;;
+    *) continue ;;
     esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
 mkdir -p tmp
-
 
 if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ] || [ $(find ~/Git/zmk-config -name $1_left.conf | wc -l) -gt 0 ]; then
     echo "Set right keyboard to flashing mode..."
@@ -31,6 +31,9 @@ if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ] || [ $(find ~/Git/zmk-
     echo "Flashing..."
     sudo mount /dev/disk/by-label/NICENANO tmp
     sudo cp "$1_right.uf2" tmp
+    while [[ -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
     echo "Flashing complete"
 
     clean
@@ -43,6 +46,9 @@ if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ] || [ $(find ~/Git/zmk-
     echo "Flashing..."
     sudo mount /dev/disk/by-label/NICENANO tmp
     sudo cp "$1_left.uf2" tmp
+    while [[ -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
     echo "Flashing complete"
 
     clean
@@ -54,16 +60,24 @@ else
     echo "Flashing..."
     sudo mount /dev/disk/by-label/NICENANO tmp
     sudo cp "$1.uf2" tmp
+    while [[ -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
     echo "Flashing complete"
 
     clean
 fi
 
-
 if [[ $enable_logging == true ]]; then
-    if [[ -n ${log_search:-} ]]; then
-        sudo tio /dev/ttyACM0 < /dev/tty | rg -i "$log_search|$"
-    else
-        sudo tio /dev/ttyACM0 < /dev/tty
+    LOG_FLAGS=""
+
+    if [[ -n "$log_search" ]]; then
+        LOG_FLAGS+=" -s $log_search"
     fi
+
+    if [[ ${passthrough:-} == true ]]; then
+        LOG_FLAGS+=" -p"
+    fi
+
+    log-zmk $LOG_FLAGS
 fi

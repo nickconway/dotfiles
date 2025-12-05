@@ -21,7 +21,7 @@ enable_logging=false
 
 og_args=$*
 
-while getopts 'fls:u' flag; do
+while getopts 'flps:u' flag; do
     case "${flag}" in
         f) flash=true;;
         l) enable_logging=true;;
