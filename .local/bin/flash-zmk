@@ -21,45 +21,63 @@ while getopts 'flps:u' flag; do
 done
 shift $((OPTIND - 1))
 
-mkdir -p tmp
+OLD_BASE="$1"
 
-if [ $(find ~/Git/zmk -name $1_left.conf | wc -l) -gt 0 ] || [ $(find ~/Git/zmk-config -name $1_left.conf | wc -l) -gt 0 ]; then
-    echo "Set right keyboard to flashing mode..."
-    while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
-        true
-    done
-    echo "Flashing..."
-    sudo mount /dev/disk/by-label/NICENANO tmp
-    sudo cp "$1_right.uf2" tmp
-    while [[ -e /dev/disk/by-label/NICENANO ]]; do
-        true
-    done
-    echo "Flashing complete"
+BASE="$OLD_BASE"
+BASE="${BASE%_left}"
+BASE="${BASE%_right}"
 
-    clean
+IS_SPLIT=false
+if [[ $(find ~/Git/zmk{,-config} -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
+    IS_SPLIT=true
+fi
+
+if [[ "$IS_SPLIT" == true ]]; then
+    if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
+        mkdir -p tmp
+
+        echo "Set right keyboard to flashing mode..."
+        while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+            true
+        done
+        echo "Flashing..."
+        sudo mount /dev/disk/by-label/NICENANO tmp
+        sudo cp ~/Git/zmk/app/build/$BASE/right/zephyr/zmk.uf2 tmp
+        while [[ -e /dev/disk/by-label/NICENANO ]]; do
+            true
+        done
+        echo "Flashing complete"
+
+        clean
+    fi
+
+    if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
+        mkdir -p tmp
+
+        echo "Set left keyboard to flashing mode..."
+        while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+            true
+        done
+        echo "Flashing..."
+        sudo mount /dev/disk/by-label/NICENANO tmp
+        sudo cp ~/Git/zmk/app/build/$BASE/left/zephyr/zmk.uf2 tmp
+        while [[ -e /dev/disk/by-label/NICENANO ]]; do
+            true
+        done
+        echo "Flashing complete"
+
+        clean
+    fi
+else
     mkdir -p tmp
 
-    echo "Set left keyboard to flashing mode..."
-    while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
-        true
-    done
-    echo "Flashing..."
-    sudo mount /dev/disk/by-label/NICENANO tmp
-    sudo cp "$1_left.uf2" tmp
-    while [[ -e /dev/disk/by-label/NICENANO ]]; do
-        true
-    done
-    echo "Flashing complete"
-
-    clean
-else
     echo "Set keyboard to flashing mode..."
     while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
         true
     done
     echo "Flashing..."
     sudo mount /dev/disk/by-label/NICENANO tmp
-    sudo cp "$1.uf2" tmp
+    sudo cp ~/Git/zmk/app/build/$BASE/zmk.uf2 tmp
     while [[ -e /dev/disk/by-label/NICENANO ]]; do
         true
     done
@@ -67,6 +85,8 @@ else
 
     clean
 fi
+
+clean
 
 if [[ $enable_logging == true ]]; then
     LOG_FLAGS=""
