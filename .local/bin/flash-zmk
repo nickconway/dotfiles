@@ -91,7 +91,7 @@ clean
 if [[ $enable_logging == true ]]; then
     LOG_FLAGS=""
 
-    if [[ -n "$log_search" ]]; then
+    if [[ -n "${log_search:-}" ]]; then
         LOG_FLAGS+=" -s $log_search"
     fi
 
