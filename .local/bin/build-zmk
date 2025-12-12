@@ -101,30 +101,30 @@ if [[ "$IS_SPLIT" == true ]]; then
     if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
         if [ "${2:-}" = "nv" ]; then
             zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"${BASE}_left nice_view_adapter nice_view\""
-            zmkrun west build $FLAGS -d build/$BASE/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_left nice_view_adapter nice_view"
+            zmkrun west build $FLAGS -d build/$BASE/left -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_left nice_view_adapter nice_view"
 
         else
             zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_left"
-            zmkrun west build $FLAGS -d build/$BASE/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_left
+            zmkrun west build $FLAGS -d build/$BASE/left -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_left
         fi
     fi
 
     if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
         if [ "${2:-}" = "nv" ]; then
             zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"${BASE}_right nice_view_adapter nice_view\""
-            zmkrun west build $FLAGS -d build/$BASE/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_right nice_view_adapter nice_view"
+            zmkrun west build $FLAGS -d build/$BASE/right -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_right nice_view_adapter nice_view"
         else
             zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_right"
-            zmkrun west build $FLAGS -d build/$BASE/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_right
+            zmkrun west build $FLAGS -d build/$BASE/right -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_right
         fi
     fi
 else
     if [ "${2:-}" = "nv" ]; then
         zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE} nice_view_adapter nice_view"
-        zmkrun west build $FLAGS -d build/$BASE -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE} nice_view_adapter nice_view"
+        zmkrun west build $FLAGS -d build/$BASE -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE} nice_view_adapter nice_view"
     else
         zmkrun west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}"
-        zmkrun west build $FLAGS -d build/$BASE -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}
+        zmkrun west build $FLAGS -d build/$BASE -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}
     fi
 fi
 
