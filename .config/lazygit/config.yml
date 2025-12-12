@@ -4,8 +4,8 @@ git:
   commitPrefix:
     - pattern: "^(\\S+)\\/(\\S+).*"
       replace: "$1: "
-  paging:
-    pager: delta --paging=never
+  pagers:
+    - pager: delta --paging=never
   parseEmoji: true
   allBranchesLogCmds:
     - git log --graph --color=always --abbrev-commit --date=short --pretty=format:'%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset' --all
