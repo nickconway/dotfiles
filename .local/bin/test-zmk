@@ -1,36 +1,42 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+update=false
 verbose=false
 
-while getopts 'v' flag; do
+while getopts 'uv' flag; do
     case "${flag}" in
-        v) verbose=true;;
-        *) continue;;
+    u) update=true ;;
+    v) verbose=true ;;
+    *) continue ;;
     esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
 ARGS=""
 
-if [[ $verbose ==  true ]]; then
+if [[ $verbose == true ]]; then
     ARGS="ZMK_TESTS_VERBOSE=y"
 fi
 
-docker run \
-    -v ~/Git/zmk:/workspace \
-    -v ~/Git/zmk/zephyr:/workspace/zephyr \
-    -v ~/Git/zmk/modules:/workspace/modules \
-    -v ~/Git/zmk/tools:/workspace/tools \
-    -w /workspace/app \
-    --rm \
-    zmk bash -c 'rm -rf ../.west && west init -l . &>/dev/null'
+function zmkrun() {
+    docker run \
+        -v ~/Git/zmk:/workspace \
+        -v ~/Git/zmk-config:/workspace/zmk-config \
+        -v ~/Git/zmk/zephyr:/workspace/zephyr \
+        -v ~/Git/zmk/modules:/workspace/modules \
+        -v ~/Git/zmk/tools:/workspace/tools \
+        -v ~/Git/zmk/app/build:/workspace/app/build \
+        -w /workspace/app \
+        --rm \
+        zmk "$@"
+}
 
-docker run \
-    -v ~/Git/zmk:/workspace \
-    -v ~/Git/zmk/zephyr:/workspace/zephyr \
-    -v ~/Git/zmk/modules:/workspace/modules \
-    -v ~/Git/zmk/tools:/workspace/tools \
-    -w /workspace/app \
-    --rm \
-    zmk bash -c "$ARGS west test tests/${1:-}"
+if [[ ! -e ~/Git/zmk/.west ]]; then
+    zmkrun bash -c "west init -l ."
+    zmkrun bash -c "west update"
+elif [[ $update == true ]]; then
+    zmkrun bash -c "west update"
+fi
+
+zmkrun bash -xc "$ARGS west test tests/${1:-}"
