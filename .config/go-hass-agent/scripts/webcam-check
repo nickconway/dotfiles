@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-STATE="$([[ "$(fuser /dev/video* | wc -l)" -gt 0 ]] && echo true || echo false)"
+STATE="$(if [[ "$(fuser /dev/video* 2>&1 | wc -l)" -gt 0 ]]; then echo true; else echo false; fi)"
 echo "{\"schedule\":\"@every 5s\",\"sensors\":[{\"sensor_name\":\"Webcam Status\",\"sensor_type\":\"binary\",\"sensor_icon\":\"mdi:dice-5\",\"sensor_state\":$STATE}]}"
