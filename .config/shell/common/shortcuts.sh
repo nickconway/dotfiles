@@ -113,6 +113,19 @@ alias dnb='dotnet build'
 
 alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
+function find-up() {
+    local path_
+    path_="${PWD}"
+
+    while [ "${path_}" != "" ] && [ "${path_}" != '.' ] && [ ! -e "${path_}/${1-}" ]; do
+        path_=${path_%/*}
+    done
+
+    if [ -e "${path_}/${1-}" ]; then
+        echo "${path_}/${1-}"
+    fi
+}
+
 function fn() {
     SELECTED="$(fzft --preview="bat --color=always --style=plain {}")"
     [[ -n "$SELECTED" ]] && echo "$SELECTED" | xargs -d '\n' $EDITOR
@@ -266,8 +279,8 @@ function gwta() {
 }
 
 function grl() {
-    git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" \
-        | awk '{print $3}'
+    git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" |
+        awk '{print $3}'
 }
 
 function ghc() {
@@ -383,8 +396,8 @@ alias kdeld='kubectl delete deployment'
 alias ksd='kubectl scale deployment'
 alias krsd='kubectl rollout status deployment'
 
-function kres(){
-  kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
+function kres() {
+    kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
 }
 
 # Rollout management.
@@ -630,7 +643,7 @@ function toggleproxy() {
     }
 }
 
-command -v direnv &> /dev/null && alias tmux='direnv exec / tmux'
+command -v direnv &>/dev/null && alias tmux='direnv exec / tmux'
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias td='tmux detach'

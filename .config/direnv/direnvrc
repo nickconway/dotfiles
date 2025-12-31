@@ -70,7 +70,7 @@ use_rbw() {
   fi
 
   RESULT="$(rbw get "${@:2}")"
-	export $1="$RESULT"
+  export $1="$RESULT"
 }
 
 use_nvm() {
@@ -81,7 +81,7 @@ use_nvm() {
 
 export-function() {
   local name=$1
-  local alias_dir=$PWD/.direnv/aliases
+  local alias_dir="$PWD/.direnv/aliases"
   mkdir -p "$alias_dir"
   PATH_add "$alias_dir"
   local target="$alias_dir/$name"
@@ -96,7 +96,7 @@ export-function() {
 export-alias() {
   local name=$1
   shift
-  local alias_dir=$PWD/.direnv/aliases
+  local alias_dir="$PWD/.direnv/aliases"
   local target="$alias_dir/$name"
   local oldpath="$PATH"
   mkdir -p "$alias_dir"

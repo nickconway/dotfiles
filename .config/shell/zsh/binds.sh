@@ -98,12 +98,10 @@ bindkey -M emacs '^[[1;5D' backward-word
 bindkey -M viins '^[[1;5D' backward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 
-
 bindkey '\ew' kill-region                             # [Esc-w] - Kill from the cursor to the mark
 bindkey -s '\el' 'ls\n'                               # [Esc-l] - run command: ls
 bindkey '^r' history-incremental-search-backward      # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 bindkey ' ' magic-space                               # [Space] - don't do history expansion
-
 
 # Edit the current command line in $EDITOR
 autoload -U edit-command-line
@@ -113,3 +111,5 @@ bindkey -M viins '\C-x\C-e' edit-command-line
 
 # file rename magick
 bindkey "^[m" copy-prev-shell-word
+
+bindkey -M viins ' ' magic-space                               # [Space] - don't do history expansion
