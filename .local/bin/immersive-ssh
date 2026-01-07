@@ -7,9 +7,14 @@ if [[ $# -gt 0 ]]; then
 else
     SSH_HOSTS=$(grep "Host " ~/.ssh/config | awk '{print $2}' || echo '')
     KNOWN_HOSTS=$(cat ~/.ssh/known_hosts | awk '{print $1}' || echo '')
-    TAILSCALE_HOSTS="$(command -v tailscale > /dev/null && tailscale status | grep -v '^#' | awk '{print $2}' || echo '')"
-    TAILSCALE_WSL_HOSTS="$(command -v tailscale.exe > /dev/null && tailscale.exe status | grep -v '^#' | awk '{print $2}' || echo '')"
-    SELECTED=$((echo "$SSH_HOSTS"; echo "$KNOWN_HOSTS"; echo "$TAILSCALE_HOSTS"; echo "$TAILSCALE_WSL_HOSTS") | sort | uniq | awk NF | fzft --prompt=" > " --border-label ' SSH ')
+    TAILSCALE_HOSTS="$(command -v tailscale >/dev/null && tailscale status | grep -v '^#' | awk '{print $2}' || echo '')"
+    TAILSCALE_WSL_HOSTS="$(command -v tailscale.exe >/dev/null && tailscale.exe status | grep -v '^#' | awk '{print $2}' || echo '')"
+    SELECTED=$( (
+        echo "$SSH_HOSTS"
+        echo "$KNOWN_HOSTS"
+        echo "$TAILSCALE_HOSTS"
+        echo "$TAILSCALE_WSL_HOSTS"
+    ) | sort | uniq | awk NF | fzft --prompt=" > " --border-label ' SSH ')
 fi
 
 if [[ -z $SELECTED ]]; then
@@ -19,12 +24,15 @@ fi
 if [[ -n $TMUX ]]; then
     PANE_PID="$(tmux display -p '#{pane_pid}')"
     S_FILE="${PREFIX:-}/tmp/tmux-$PANE_PID"
-    (&>/dev/null hide-tmux-statusbar $PANE_PID & echo -n $! > "$S_FILE")
+    (
+        &>/dev/null hide-tmux-statusbar $PANE_PID &
+        echo -n $! >"$S_FILE"
+    )
     tmux set prefix C-h
     tmux bind C-h send-prefix
 fi
 
-if command -v ss &> /dev/null; then
+if command -v ss &>/dev/null; then
     PORT=
     ports=('5556' '5557' '5558' '5559' '5560')
     for p in "${ports[@]}"; do
@@ -35,7 +43,10 @@ if command -v ss &> /dev/null; then
     done
 
     if [[ -n ${TMUX:-} ]] && [[ -n $PORT ]]; then
-        (&>/dev/null ssh-copy-nc $PORT & echo -n " $!" >> "$S_FILE")
+        (
+            &>/dev/null ssh-copy-nc $PORT &
+            echo -n " $!" >>"$S_FILE"
+        )
     fi
 
     if [[ -n $PORT ]]; then
@@ -48,12 +59,12 @@ else
 fi
 
 if [[ -n $TMUX ]]; then
-    if ps -p $(cat "$S_FILE") &> /dev/null; then
+    if ps -p $(cat "$S_FILE") &>/dev/null; then
         kill $(cat "$S_FILE")
     fi
 fi
 
-if [[ -n $PORT ]] && pgrep "nc -l -p $PORT" -f &> /dev/null; then
+if [[ -n $PORT ]] && pgrep "nc -l -p $PORT" -f &>/dev/null; then
     kill $(pgrep "nc -l -p $PORT" -f)
 fi
 
