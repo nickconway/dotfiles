@@ -11,9 +11,9 @@ ARCHIVE="$(borg list | tail -n 1 | awk '{print $1}')"
 echo Restoring "$ARCHIVE"
 
 if [[ $# -gt 1 ]]; then
-    borg extract --verbose --progress ::"$ARCHIVE" "${@:2}"
+    borg extract --debug --progress ::"$ARCHIVE" "${@:2}"
 else
-    borg extract --verbose --progress ::"$ARCHIVE"
+    borg extract --debug --progress ::"$ARCHIVE"
 fi
 
 if [[ -e ~/Docker/invoice-ninja/app ]]; then
