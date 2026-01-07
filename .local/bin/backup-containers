@@ -47,6 +47,8 @@ sudo -E "$(which borg)" compact -v --progress
 
 clean
 
-until curl -f "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/backup-containers-$(uname -n)?create=1"; do
+COUNT=0
+until [[ $COUNT -gt 30 ]] || curl -f "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/backup-containers-$(uname -n)?create=1"; do
     sleep 5
+    COUNT=$((COUNT + 1))
 done
