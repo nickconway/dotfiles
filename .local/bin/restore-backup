@@ -3,8 +3,7 @@
 set -euo pipefail
 
 export BORG_PASSPHRASE=$BORG_PASSPHRASE
-export BASE_DIR="/mnt/nas/backups/docker"
-export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
+export BORG_REPO="${1:-}"
 
 [[ -e "$BORG_REPO" ]]
 
