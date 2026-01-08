@@ -547,7 +547,7 @@ function notes() {
 
     [[ -e /mnt/nas/home/Documents/Notes ]] && NOTES_DIR=/mnt/nas/home/Documents/Notes
 
-    (cd $NOTES_DIR && n)
+    (cd $NOTES_DIR && $EDITOR)
 }
 
 function np() {
