@@ -3,20 +3,23 @@
 echo "Monitoring UPS Status..."
 
 while true; do
-    COMMAND="$(ls /tmp/ups-status-*)"
-    [[ -z "$COMMAND" ]] && continue
+    COMMAND="$(journalctl -t ups -n0 -f | while read -r c; do
+        echo $c | rev | cut -d ':' -f 1 | rev | xargs
+        break
+    done)"
+    echo "$COMMAND"
     case "$COMMAND" in
-        *ONLINE)
-            notify-send "UPS Status" "UPS Switched to Main Power" -h string:synchronous:ups -e
+    ONLINE)
+        touch /tmp/ups-online
+        notify-send "UPS Status" "UPS Switched to Main Power" -h string:synchronous:ups -e
         ;;
-        *ONBATT)
-            (
-                ACTION=$(timeout 11s notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e --action "keep-awake=Keep Awake")
-                case $ACTION in
-                    '') [[ -e /tmp/ups-status-ONLINE ]] || shutdown -h now &>/dev/null;;
-                esac
-            ) &
+    ONBATT)
+        (
+            ACTION=$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e --action "shutdown=Shutdown")
+            case $ACTION in
+            shutdown) [[ -e /tmp/ups-online ]] || sudo systemctl reboot -i ;;
+            esac
+        ) &
         ;;
     esac
-    sleep 1
 done
