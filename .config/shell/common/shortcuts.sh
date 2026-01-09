@@ -573,6 +573,10 @@ function reload() {
     exec "$SHELL_NAME"
 }
 
+function record-audio() {
+    ffmpeg -f alsa -i default -codec:a flac ${1:-output}.mkv
+}
+
 function rgn() {
     SELECTED=$(
         rm -f /tmp/rg-fzf-{r,f}
