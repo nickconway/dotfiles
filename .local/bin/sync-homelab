@@ -9,6 +9,10 @@ function clean() {
     fi
 }
 
+if [[ ! -e ~/Git/homelab ]]; then
+    git clone https://github.com/nickconway/homelab ~/Git/homelab
+fi
+
 cd ~/Git/homelab
 git remote set-url origin https://github.com/nickconway/homelab
 git remote set-url origin git@github.com:nickconway/homelab --push
