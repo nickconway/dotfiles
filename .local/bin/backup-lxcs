@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-if [[ ! -e /etc/pve/lxc ]]; then
+if [[ ! -e /etc/pve/nodes/pve/lxc ]]; then
     echo LXC directory does not exist
     exit 1
 fi
 
-if [[ ! -e /mnt/nas ]] || [[ -z "$(ls -A /mnt/nas)" ]]; then
+if [[ ! -e /mnt/pve/nas-backups ]] || [[ -z "$(ls -A /mnt/pve/nas-backups)" ]]; then
     echo NAS directory does not exist or is empty
     exit 1
 fi
@@ -15,7 +15,7 @@ set -euo pipefail
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
 
 export BORG_PASSPHRASE=$BORG_PASSPHRASE
-export BASE_DIR="/mnt/nas/backups/lxc"
+export BASE_DIR="/mnt/pve/nas-backups/lxc"
 export BORG_REPO="$BASE_DIR/${1:-$(uname -n)}"
 
 if [[ ! -e "$BORG_REPO" ]]; then
