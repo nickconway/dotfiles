@@ -11,6 +11,7 @@ function clean() {
 
 if [[ ! -e ~/Git/homelab ]]; then
     git clone https://github.com/nickconway/homelab ~/Git/homelab
+    NEW=true
 fi
 
 cd ~/Git/homelab
@@ -21,7 +22,7 @@ OLD_HASH="$(git rev-parse HEAD)"
 retry git pull
 NEW_HASH="$(git rev-parse HEAD)"
 
-if [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
+if [[ ${NEW:-false} == false ]] && [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
     clean
     exit
 fi
