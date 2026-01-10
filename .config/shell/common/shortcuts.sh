@@ -62,7 +62,12 @@ alias cat='bat --style=plain'
 alias cata='bat --style=plain --show-all'
 alias cds=$'cd "$(tmux display-message -p \'#{session_path}\')"'
 
-alias cmatrix='[[ -n $TMUX ]] && tmux set status off; cmatrix; [[ -n $TMUX ]] && tmux set status on'
+CMATRIX_BIN=$(which cmatrix)
+function cmatrix() {
+    [[ -n $TMUX ]] && tmux set status off
+    $CMATRIX_BIN $@
+    [[ -n $TMUX ]] && tmux set status on
+}
 
 alias clipqr='wl-paste | qrencode -t utf8'
 
