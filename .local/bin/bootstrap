@@ -108,6 +108,7 @@ mkdir -p ~/Git
 if ! [[ -e ~/Git/ansible ]]; then
     git clone https://github.com/nickconway/ansible ~/Git/ansible &>/dev/null
 fi
+
 cd ~/Git/ansible
 git remote set-url origin git@github.com:nickconway/ansible --push
 git pull &>/dev/null

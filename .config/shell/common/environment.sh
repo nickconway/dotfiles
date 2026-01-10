@@ -76,8 +76,6 @@ export PROJECT_DIR=~/Git
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
-export DROPBOX=/c/Users/nickc/Dropbox
-
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
 export FZF_DEFAULT_OPTS='-m --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(80%|20%|hidden|)"
@@ -129,10 +127,9 @@ export TEXMFHOME="$HOME/.local/share/texmf"
 
 [ -s ~/.bun/_bun ] && source ~/.bun/_bun
 
-export GPG_EMAIL="nick@conway.dev"
+export GPG_EMAIL="$EMAIL"
 export DOCKER_STACK_DIR="$HOME/Docker"
-export SERVICES_BASE_DOMAIN="conway.dev"
-export GITEA_USER=nick
+export GITEA_USER="$USER"
 
 command -v brew >/dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
 command -v starship >/dev/null && eval "$(starship init $SHELL_NAME)"
@@ -165,3 +162,17 @@ else
         eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) >/dev/null
     fi
 fi
+
+export GUM_SPIN_SHOW_ERROR=true
+
+export GUM_CHOOSE_CURSOR_FOREGROUND=10
+export GUM_CHOOSE_HEADER_FOREGROUND=9
+export GUM_CHOOSE_SELECTED_FOREGROUND=11
+
+export GUM_SPIN_SPINNER_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
+
+export GUM_INPUT_HEADER_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
+export GUM_INPUT_CURSOR_FOREGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
+
+export GUM_CONFIRM_PROMPT_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
+export GUM_CONFIRM_SELECTED_BACKGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND

@@ -3,7 +3,7 @@ set -euo pipefail
 
 function clean() {
     if [[ "${SKIP_HEALTH_CHECK:-}" == "" ]]; then
-        until curl -f "https://health.conway.dev/ping/${HEALTHCHECK_TOKEN}/sync-homelab-$(uname -n)?create=1"; do
+        until curl -f "https://health.${SERVICES_BASE_DOMAIN}/ping/${HEALTHCHECK_TOKEN}/sync-homelab-$(uname -n)?create=1"; do
             sleep 5
         done
     fi
