@@ -1,1 +1,4 @@
-/home/nick/.local/bin/bootstap
+#!/usr/bin/env bash
+set -eou pipefail
+
+~/.local/bin/bootstrap
