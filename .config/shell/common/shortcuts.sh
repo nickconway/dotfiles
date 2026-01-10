@@ -560,17 +560,17 @@ function notes() {
 }
 
 function np() {
-    curl -d "$@" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+    curl -d "$@" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 }
 
 function npa() {
     ARGS="$@"
     eval $@
     if [[ $? -eq 0 ]]; then
-        curl -d "$ARGS finished successfully" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+        curl -d "$ARGS finished successfully" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
         command -v notify-send &>/dev/null && notify-send "$ARGS finished successfully"
     else
-        curl -d "$ARGS failed" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+        curl -d "$ARGS failed" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
         command -v notify-send &>/dev/null && notify-send "$ARGS failed"
     fi
 }

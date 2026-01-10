@@ -13,14 +13,14 @@ if [[ ! -e "$TRAEFIK_CONFIG" ]]; then TRAEFIK_CONFIG=""; fi
 
 echo "Updating DNS..."
 
-BASE_URL="https://dns.conway.dev"
+BASE_URL="https://dns.$SERVICES_BASE_DOMAIN"
 SID="$(curl -s -X POST $BASE_URL/api/auth --data "{\"password\": \"$PIHOLE_APP_PASSWORD\"}" | jq -r '.session.sid')"
 LIST="$(curl -s "$BASE_URL/api/config/dns/cnameRecords" -H "sid: $SID" | jq -r '.config.dns.cnameRecords')"
 CHANGED=false
 
 
 if [[ -n "$(ls ~/Docker/*/*compose*.yml 2>/dev/null)" ]]; then
-    CNAME="server.conway.dev"
+    CNAME="server.$SERVICES_BASE_DOMAIN"
     for DOMAIN in $(grep -iroh 'Host(`\S*`)' ~/Docker/*/compose.yml "$TRAEFIK_CONFIG" | "$ENV_CMD" | cut -c 7- | rev | cut -c 3- | rev | sort | uniq); do
         IDX="$(echo "$LIST" | jq "map(test(\"^$DOMAIN.*\")) | index(true)")"
 
@@ -41,7 +41,7 @@ if [[ -n "$(ls ~/Docker/*/*compose*.yml 2>/dev/null)" ]]; then
 fi
 
 if [[ -n "$(ls ~/Kubernetes/*/ingress.yml 2>/dev/null)" ]]; then
-    CNAME="load-balancer.k8s.conway.dev"
+    CNAME="load-balancer.k8s.$SERVICES_BASE_DOMAIN"
 
     for f in ~/Kubernetes/*/.env; do
         source "$f"

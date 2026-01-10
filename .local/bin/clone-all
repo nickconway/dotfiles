@@ -3,9 +3,9 @@
 mkdir -p ~/Git
 cd ~/Git || exit
 if [[ -n $GITEA_TOKEN ]] && [[ -n $GITEA_USER ]]; then
-    for r in $(curl -s -H "Authorization: token $GITEA_TOKEN" https://git.conway.dev/api/v1/user/repos | jq | grep -o '"name": "\w\+"' | cut -d \" -f 4); do
+    for r in $(curl -s -H "Authorization: token $GITEA_TOKEN" https://git.$SERVICES_BASE_DOMAIN/api/v1/user/repos | jq | grep -o '"name": "\w\+"' | cut -d \" -f 4); do
         REPO_NAME="${r%.*}"
-        [[ $REPO_NAME != "dotfiles" ]] && ([[ -e ~/Git/$REPO_NAME ]] && (cd $REPO_NAME; echo $REPO_NAME; git pull) || git clone git@git.conway.dev:$GITEA_USER/$r)
+        [[ $REPO_NAME != "dotfiles" ]] && ([[ -e ~/Git/$REPO_NAME ]] && (cd $REPO_NAME; echo $REPO_NAME; git pull) || git clone git@git.$SERVICES_BASE_DOMAIN:$GITEA_USER/$r)
     done
 fi
 

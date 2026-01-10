@@ -3,7 +3,7 @@ set -euo pipefail
 
 SERVER_ID=$(curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
     -H "X-API-SECRET: $KOMODO_API_SECRET" \
-    -H "Content-Type: application/json" -X POST https://deploy.conway.dev/read \
+    -H "Content-Type: application/json" -X POST https://deploy.$SERVICES_BASE_DOMAIN/read \
     -d "$(jq '{ type: "GetServer", params: { server: $server } }' -n --arg server $(uname -n))" | jq -r '._id."$oid"' \
 )
 
@@ -30,6 +30,6 @@ for d in *; do
     curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
         -H "X-API-SECRET: $KOMODO_API_SECRET" \
         -H "Content-Type: application/json" \
-        -X POST https://deploy.conway.dev/write \
+        -X POST https://deploy.$SERVICES_BASE_DOMAIN/write \
         -d "$JSON" | jq
 done

@@ -3,7 +3,7 @@ set -eou pipefail
 
 function fail() {
     if [[ -n $NTFY_TOKEN ]]; then
-        curl -d "Provisioning failed" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+        curl -d "Provisioning failed" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
     fi
 }
 
@@ -24,5 +24,5 @@ else
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then
-    curl -d "Provisioning complete" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+    curl -d "Provisioning complete" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
 fi
