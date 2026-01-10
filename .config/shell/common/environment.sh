@@ -1,3 +1,5 @@
+[[ -e ~/.env ]] && source ~/.env
+
 if [ -f /etc/os-release ]; then
     # freedesktop.org and systemd
     . /etc/os-release
@@ -49,7 +51,7 @@ export PATH=~/.local/bin:$PATH
 
 export HOSTNAME="$(uname -n)"
 
-if command -v termux-reload-settings > /dev/null; then
+if command -v termux-reload-settings >/dev/null; then
     export XDG_RUNTIME_DIR=$HOME/.termux
 elif [[ -e ~/Library/Caches/TemporaryItems ]]; then
     export XDG_RUNTIME_DIR=~/Library/Caches/TemporaryItems
@@ -59,7 +61,7 @@ fi
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
-command -v brew > /dev/null && export HOMEBREW_PREFIX="$(brew --prefix)"
+command -v brew >/dev/null && export HOMEBREW_PREFIX="$(brew --prefix)"
 
 export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
 [[ -n $HOMEBREW_PREFIX ]] && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
@@ -92,8 +94,8 @@ export FZF_CTRL_R_OPTS="
   --preview 'echo {}' --preview-window 3:wrap
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
-command -v pbcopy &> /dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'"
-command -v wl-copy &> /dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'"
+command -v pbcopy &>/dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'"
+command -v wl-copy &>/dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'"
 
 if [[ -e "$HOME/.config/colima/default/docker.sock" ]]; then
     export DOCKER_HOST=unix://$HOME/.config/colima/default/docker.sock
@@ -107,11 +109,13 @@ else
     export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
 fi
 
-export GIT_NAME="Nick Conway"
-export GIT_EMAIL="nick@conway.dev"
-export GIT_GPG_KEY="AA850592E4C1D453"
+export GIT_AUTHOR_NAME="$FULL_NAME"
+export GIT_AUTHOR_EMAIL="$EMAIL"
 
-export ATUIN_USER=nick
+export GIT_COMMITTER_NAME="$FULL_NAME"
+export GIT_COMMITTER_EMAIL="$EMAIL"
+
+export ATUIN_USER="$USER"
 
 export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc-2.0
 
@@ -130,15 +134,15 @@ export DOCKER_STACK_DIR="$HOME/Docker"
 export SERVICES_BASE_DOMAIN="conway.dev"
 export GITEA_USER=nick
 
-command -v brew > /dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
-command -v starship > /dev/null && eval "$(starship init $SHELL_NAME)"
-command -v zoxide > /dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
-command -v fzf > /dev/null && eval "$(fzf --$SHELL_NAME)"
-command -v fzf > /dev/null && [[ -e ~/.config/fzf-git/fzf-git.sh ]] && source ~/.config/fzf-git/fzf-git.sh
+command -v brew >/dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
+command -v starship >/dev/null && eval "$(starship init $SHELL_NAME)"
+command -v zoxide >/dev/null && eval "$(zoxide init $SHELL_NAME --cmd cd)"
+command -v fzf >/dev/null && eval "$(fzf --$SHELL_NAME)"
+command -v fzf >/dev/null && [[ -e ~/.config/fzf-git/fzf-git.sh ]] && source ~/.config/fzf-git/fzf-git.sh
 [[ -e $HOME/.atuin/bin/env ]] && . "$HOME/.atuin/bin/env"
-command -v atuin > /dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow | awk '/output=\$\(/{system("cat ~/.config/atuin/tmux.'$SHELL_NAME'");next}1')" \
-    && (pgrep -f "atuin daemon" &> /dev/null || atuin daemon &> $XDG_RUNTIME_DIR/atuin.log &)
-command -v direnv &> /dev/null && export DIRENV_LOG_FORMAT=$'\033[95m󰓴 \033[94m%s\033[0m' && eval "$(direnv hook $SHELL_NAME)"
+command -v atuin >/dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow | awk '/output=\$\(/{system("cat ~/.config/atuin/tmux.'$SHELL_NAME'");next}1')" &&
+    (pgrep -f "atuin daemon" &>/dev/null || atuin daemon &>$XDG_RUNTIME_DIR/atuin.log &)
+command -v direnv &>/dev/null && export DIRENV_LOG_FORMAT=$'\033[95m󰓴 \033[94m%s\033[0m' && eval "$(direnv hook $SHELL_NAME)"
 
 _fzf_git_fzf() {
     fzft --min-height=20 --border \
@@ -154,10 +158,10 @@ _fzf_git_fzf() {
 if [ -S $XDG_RUNTIME_DIR/agent.sock ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/agent.sock
     if [[ "$(ssh-add -l 2>&1)" == *"Error"* ]]; then
-        rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+        rm $XDG_RUNTIME_DIR/agent.sock && eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) >/dev/null
     fi
 else
     if ! [[ -f ~/.work ]]; then
-        eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) > /dev/null
+        eval $(ssh-agent -t 12h -s -a $XDG_RUNTIME_DIR/agent.sock) >/dev/null
     fi
 fi

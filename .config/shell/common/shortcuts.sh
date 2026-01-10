@@ -216,6 +216,8 @@ function gi() {
 
 }
 
+alias git-update-submodules='git submodule update --recursive --remote --init && GMSTATUS="$(git submodule status)" && if echo "$GMSTATUS" | grep "^+"; then gcam "Update submodules"; fi'
+
 GIT_LOG_FORMAT='%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset'
 alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
@@ -753,7 +755,6 @@ alias ycam="yadm commit -a -m"
 alias ycl="yadm config --get-all local.class"
 alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
-alias yconfig='yadm gitconfig user.name $GIT_NAME && yadm gitconfig user.email $GIT_EMAIL && yadm gitconfig user.signingkey $GIT_GPG_KEY'
 alias yd="yadm diff"
 alias yds="yadm diff --staged"
 alias ydec="yadm decrypt"

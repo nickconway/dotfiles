@@ -3,7 +3,7 @@ set -eou pipefail
 
 function err() {
     if [[ -n $NTFY_TOKEN ]]; then
-        curl -d "Bootstrapping failed on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+        curl -d "Bootstrapping failed on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
     fi
     exit 1
 }
@@ -29,7 +29,7 @@ if ! [[ -e ~/.local/share/yadm/repo.git ]]; then
     eval $(grep yconfig ~/.config/shell/common/alias.sh | cut -d "=" -f 2 | cut -c 2- | rev | cut -c 2- | rev)
 fi
 
-if command -v termux-reload-settings > /dev/null; then
+if command -v termux-reload-settings >/dev/null; then
     apt update -y && apt upgrade -y
     pkg install openssh starship rust termux-api gnupg fzf dnsutils zsh python3 yq imagemagick binutils pass rip bat git-delta fd ripgrep zoxide gh -y
     mkdir -p ~/.zsh
@@ -45,9 +45,11 @@ if command -v termux-reload-settings > /dev/null; then
     chsh -s zsh
 fi
 
-if command -v termux-reload-settings > /dev/null; then
+if command -v termux-reload-settings >/dev/null; then
     exit
 fi
+
+get-env-vars ~/.config/env.example >>.env
 
 if [[ $(yadm config --get-all local.class) == "" ]]; then
     YADM_CLASS=
@@ -77,20 +79,20 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     exit
 fi
 
-if ping -c 1 $WORK_SERVER 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &> /dev/null && ! [[ "$(systemd-detect-virt)" == "wsl" ]]; then
+if ping -c 1 $WORK_SERVER 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &>/dev/null && ! [[ "$(systemd-detect-virt)" == "wsl" ]]; then
     . ~/.config/shell/common/work.sh && work-setup
 fi
 
-if ! command -v python > /dev/null && command -v python3 > /dev/null; then
+if ! command -v python >/dev/null && command -v python3 >/dev/null; then
     ln -s "$(which python3)" ~/.local/bin/python
 fi
 
-if ! command -v uv > /dev/null; then
+if ! command -v uv >/dev/null; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
 for C in "community.general" "ansible.posix"; do
-    uvx --from ansible-core ansible-galaxy collection install "$C" > /dev/null
+    uvx --from ansible-core ansible-galaxy collection install "$C" >/dev/null
 done
 
 if [[ -e "$XDG_RUNTIME_DIR" ]]; then
@@ -106,20 +108,20 @@ fi
 mkdir -p ~/Git
 
 if ! [[ -e ~/Git/ansible ]]; then
-    git clone https://github.com/nickconway/ansible ~/Git/ansible &> /dev/null
+    git clone https://github.com/nickconway/ansible ~/Git/ansible &>/dev/null
 fi
 cd ~/Git/ansible
 git remote set-url origin git@github.com:nickconway/ansible --push
-git pull &> /dev/null
+git pull &>/dev/null
 
 cd ~/Git/ansible/bootstrap
 
-if ansible-vault-password &> /dev/null; then
+if ansible-vault-password &>/dev/null; then
     uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
 else
     uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then
-    curl -d "Bootstrapping complete on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &> /dev/null
+    curl -d "Bootstrapping complete on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 fi
