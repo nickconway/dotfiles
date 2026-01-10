@@ -65,7 +65,7 @@ alias cds=$'cd "$(tmux display-message -p \'#{session_path}\')"'
 CMATRIX_BIN=$(which cmatrix)
 function cmatrix() {
     [[ -n $TMUX ]] && tmux set status off
-    $CMATRIX_BIN $@
+    $CMATRIX_BIN -s $@
     [[ -n $TMUX ]] && tmux set status on
 }
 
