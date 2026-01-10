@@ -64,8 +64,11 @@
   },
   "custom/microphone": {
     "format": "{}",
-    "exec": "pactl get-source-mute $(pactl get-default-source) | grep -q no && echo 󰍬 || echo 󰍭",
-    "on-click": "pactl set-source-mute $(pactl get-default-source) toggle",
+    "exec": "waybar-microphone",
+    "return-type": "json",
+    "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+    "on-scroll-up": "pamixer --default-source -i 1",
+    "on-scroll-down": "pamixer --default-source -d 1",
     "interval": 1,
   },
   "hyprland/workspaces": {
