@@ -26,6 +26,7 @@
   ],
   "modules-right": [
     "custom/clipboard",
+    "custom/recording",
     "network",
     "pulseaudio",
     "custom/microphone",
@@ -69,6 +70,11 @@
     "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
     "on-scroll-up": "pamixer --default-source -i 1",
     "on-scroll-down": "pamixer --default-source -d 1",
+    "interval": 1,
+  },
+  "custom/recording": {
+    "format": "{}",
+    "exec": "if pgrep gpu-screen-reco >/dev/null; then echo 🔴; fi",
     "interval": 1,
   },
   "hyprland/workspaces": {
