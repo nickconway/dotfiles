@@ -77,10 +77,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     exit
 fi
 
-if ping -c 1 $WORK_SERVER 2>/dev/null | grep -e "^[^;]" && grep '^flags.*hypervisor' /proc/cpuinfo &>/dev/null && ! [[ "$(systemd-detect-virt)" == "wsl" ]]; then
-    . ~/.config/shell/common/work.sh && work-setup
-fi
-
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
     ln -s "$(which python3)" ~/.local/bin/python
 fi
