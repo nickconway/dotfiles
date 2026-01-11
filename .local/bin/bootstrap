@@ -2,7 +2,7 @@
 set -eou pipefail
 
 function err() {
-    if [[ -n $NTFY_TOKEN ]]; then
+    if [[ -n ${NTFY_TOKEN:-} ]]; then
         curl -d "Bootstrapping failed on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
     fi
     exit 1
@@ -10,7 +10,7 @@ function err() {
 
 trap err ERR
 
-export PATH=~/bin:~/.local/bin:$PATH
+export PATH=~/bin:~/.local/bin:"$PATH"
 cd
 
 touch .hushlogin
