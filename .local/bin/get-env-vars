@@ -3,7 +3,7 @@ set -euo pipefail
 
 FILE=${1:-env.example}
 
-[[ -e "$FILE" ]]
+[[ -e "$FILE" ]] || exit 0
 
 function get-input() {
     PROMPT=${1:-"Enter a value for $VAR"}
