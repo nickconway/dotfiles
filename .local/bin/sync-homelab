@@ -10,7 +10,7 @@ function clean() {
 }
 
 if [[ ! -e ~/Git/homelab ]]; then
-    git clone https://github.com/nickconway/homelab ~/Git/homelab
+    git clone https://github.com/nickconway/homelab ~/Git/homelab --recurse-submodules
     NEW=true
 fi
 
