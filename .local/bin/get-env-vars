@@ -2,6 +2,7 @@
 set -euo pipefail
 
 FILE=${1:-env.example}
+OUTPUT=${2:-.env}
 
 [[ -e "$FILE" ]] || exit 0
 
@@ -23,7 +24,7 @@ while read -r LINE; do
     VAR="$(echo "$STATEMENT" | awk '{ print $NF }')"
     PLACEHOLDER="$(echo "$LINE" | cut -d '=' -f 2- | envsubst | xargs)"
 
-    if ! grep -q "^$STATEMENT=" .env &>/dev/null || false; then
+    if ! grep -q "^$STATEMENT=" "$OUTPUT" &>/dev/null || false; then
         if env | grep -q "^$VAR="; then
             INPUT="$(env | (grep "^$VAR=" || true) | cut -d '=' -f 2-)"
         else
