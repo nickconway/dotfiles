@@ -31,6 +31,7 @@ while read -r LINE; do
             INPUT="$(get-input)"
             INPUT="${INPUT:-$PLACEHOLDER}"
         fi
-        echo "$STATEMENT=\"$INPUT\""
+        eval "$STATEMENT=\"$INPUT\""
+        echo "$STATEMENT=\"$INPUT\"" >>"$OUTPUT"
     fi
 done <"$FILE"
