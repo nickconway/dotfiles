@@ -26,7 +26,7 @@ docker ps --format '{{.Names}}' | grep -v nextcloud-aio | while read -r c; do
         docker exec "$c" bash -c 'mysqldump -u "$MYSQL_USER" --password="$MYSQL_PASSWORD" --all-databases --no-tablespaces' > data/dump.sql
     elif docker exec "$c" bash -c 'which mariadb-dump && [[ -n $MARIADB_USER ]]' &>/dev/null; then
         echo "Dumping mariadb container $c"
-        docker exec "$c" bash -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --all-databases --no-tablespaces' > data/dump.sql
+        # docker exec "$c" bash -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --all-databases --no-tablespaces' > data/dump.sql
     elif docker exec "$c" bash -c 'which mongodump' &>/dev/null; then
         echo "Dumping mongo container $c"
         docker exec "$c" mongodump --archive > data/mongo.dump
