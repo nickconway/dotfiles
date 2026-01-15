@@ -11,8 +11,6 @@ return {
     },
     build = ":TSUpdate",
     init = function()
-        require("nvim-treesitter").setup({})
-
         require("nvim-treesitter").install({
             "bash",
             "c",
@@ -22,6 +20,7 @@ return {
             "diff",
             "go",
             "html",
+            "hyprlang",
             "javascript",
             "jsdoc",
             "json",
