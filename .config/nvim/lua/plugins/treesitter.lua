@@ -11,7 +11,7 @@ return {
     },
     build = ":TSUpdate",
     init = function()
-        require("nvim-treesitter").install({
+        local parsers = {
             "bash",
             "c",
             "cpp",
@@ -42,7 +42,9 @@ return {
             "vimdoc",
             "xml",
             "yaml",
-        })
+        }
+
+        require("nvim-treesitter").install()
 
         vim.filetype.add({
             pattern = { [".*/hypr/.*%.conf.*"] = "hyprlang" },
@@ -56,5 +58,12 @@ return {
         }
 
         require("nvim-treesitter").install("comment")
+
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = parsers,
+            callback = function()
+                vim.treesitter.start()
+            end,
+        })
     end,
 }
