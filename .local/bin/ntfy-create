@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+NAME=$1
+
+docker exec -it -e NTFY_PASSWORD="$(pwgen 32)" ntfy-ntfy-1 ntfy user add $NAME
+docker exec -it ntfy-ntfy-1 ntfy access $NAME $NAME rw
+docker exec -it ntfy-ntfy-1 ntfy token add $NAME
