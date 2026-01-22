@@ -44,6 +44,13 @@ return {
             "yaml",
         }
 
+        local patterns = { "sh" }
+        local count = #patterns
+
+        for i, p in ipairs(parsers) do
+            patterns[count + i] = p
+        end
+
         require("nvim-treesitter").install()
 
         vim.filetype.add({
@@ -60,7 +67,7 @@ return {
         require("nvim-treesitter").install("comment")
 
         vim.api.nvim_create_autocmd("FileType", {
-            pattern = parsers,
+            pattern = patterns,
             callback = function()
                 vim.treesitter.start()
             end,
