@@ -59,7 +59,7 @@ if [[ -e /usr/share/sddm/themes/ltmnight/Themes/hyprltm.conf ]]; then
     for c in HighlightBackgroundColor DropdownSelectedBackgroundColor LoginButtonBackgroundColor UserIconColor PasswordIconColor SystemButtonsIconsColor SessionButtonTextColor VirtualKeyboardButtonTextColor; do
         sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '3q;d' ~/.cache/wal/colors)\"/" "$FILE"
     done
-    
+
     for c in HoverUserIconColor HoverPasswordIconColor HoverSystemButtonsIconsColor HoverSessionButtonTextColor HoverVirtualKeyboardButtonTextColor; do
         sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '14q;d' ~/.cache/wal/colors)\"/" "$FILE"
     done
@@ -80,8 +80,6 @@ if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
     sed -i "s/\(--mention-background:\).*/\1 rgba($(sed -n '3p' ~/.cache/wal/colors-rgb), 0.5);/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
     sed -i "s/\(--mention-foreground:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}');/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 fi
-
-(pidof waybar && killall -SIGUSR2 waybar) || true
 
 swaync-client -rs
 
