@@ -11,8 +11,8 @@ random='false'
 
 while getopts 'r' flag; do
     case "${flag}" in
-        r) random='true';;
-        *) ;;
+    r) random='true' ;;
+    *) ;;
     esac
 done
 
@@ -32,18 +32,43 @@ if [[ -z "$IMG" ]]; then exit 1; fi
 
 cp "$IMG" ~/.config/wallpaper
 
-hyprctl hyprpaper unload all
-echo
-hyprctl hyprpaper preload ~/.config/wallpaper
-echo
-hyprctl hyprpaper wallpaper ", ~/.config/wallpaper"
-echo
+hyprctl hyprpaper wallpaper ', ~/.config/wallpaper, '
 
 uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i ~/.config/wallpaper
 
 [[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
+
 [[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
 [[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
+
+[[ -e /usr/share/sddm/themes/ltmnight ]] && sudo cp ~/.config/wallpaper /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png
+
+if [[ -e /usr/share/sddm/themes/ltmnight/Themes/hyprltm.conf ]]; then
+    FILE=/usr/share/sddm/themes/ltmnight/Themes/hyprltm.conf
+
+    sudo sed -i "s/^\(Background=\).*/\1\"Backgrounds\/bg.png\"/" "$FILE"
+
+    for c in HeaderTextColor DateTextColor TimeTextColor LoginFieldTextColor PasswordFieldTextColor DropdownTextColor HighlightTextColor; do
+        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '16q;d' ~/.cache/wal/colors)\"/" "$FILE"
+    done
+
+    for c in FormBackgroundColor BackgroundColor DimBackgroundColor; do
+        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '1q;d' ~/.cache/wal/colors)\"/" "$FILE"
+    done
+
+    for c in HighlightBackgroundColor DropdownSelectedBackgroundColor LoginButtonBackgroundColor UserIconColor PasswordIconColor SystemButtonsIconsColor SessionButtonTextColor VirtualKeyboardButtonTextColor; do
+        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '3q;d' ~/.cache/wal/colors)\"/" "$FILE"
+    done
+    
+    for c in HoverUserIconColor HoverPasswordIconColor HoverSystemButtonsIconsColor HoverSessionButtonTextColor HoverVirtualKeyboardButtonTextColor; do
+        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '14q;d' ~/.cache/wal/colors)\"/" "$FILE"
+    done
+
+    for c in PlaceholderTextColor; do
+        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '10q;d' ~/.cache/wal/colors)\"/" "$FILE"
+    done
+fi
+
 [[ -e ~/.config/gtk-3.0 ]] && cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-3.0/gtk.css
 [[ -e ~/.config/gtk-4.0 ]] && cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-4.0/gtk.css
 
