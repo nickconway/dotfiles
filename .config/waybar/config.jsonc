@@ -36,6 +36,7 @@
     "custom/notifications",
     "tray",
     "clock",
+    "idle_inhibitor",
     "custom/weather",
     "custom/cycle_wall",
     "custom/power",
