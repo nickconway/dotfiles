@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+HIDDEN=false
+
+while true; do
+    CURSOR_POS=$(hyprctl cursorpos | tr -d ',')
+    CURSOR_Y=$(echo "$CURSOR_POS" | awk '{print $2}')
+    WINDOWS=$(hyprctl activeworkspace -j | jq '.windows')
+
+    echo $WINDOWS $CURSOR_Y
+
+    if { [[ $WINDOWS -eq 0 ]] || [[ $CURSOR_Y -eq 0 ]]; } && [[ $HIDDEN == true ]]; then
+        HIDDEN=false
+        killall waybar -SIGUSR1
+    elif { [[ $CURSOR_Y -gt 60 ]]; } && [[ $HIDDEN == false ]]; then
+        HIDDEN=true
+        killall waybar -SIGUSR1
+    fi
+done
