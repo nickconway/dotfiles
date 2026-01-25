@@ -7,8 +7,6 @@ while true; do
     CURSOR_Y=$(echo "$CURSOR_POS" | awk '{print $2}')
     WINDOWS=$(hyprctl activeworkspace -j | jq '.windows')
 
-    echo $WINDOWS $CURSOR_Y
-
     if { [[ $WINDOWS -eq 0 ]] || [[ $CURSOR_Y -eq 0 ]]; } && [[ $HIDDEN == true ]]; then
         HIDDEN=false
         killall waybar -SIGUSR1

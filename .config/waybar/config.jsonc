@@ -5,6 +5,7 @@
   //"gtk-layer-shell": "false",
   //"height": 32, // Waybar height (to be removed for auto height)
   // "width": 2560, // Waybar width
+  "reload_style_on_change": true,
   "spacing": 0, // Gaps between modules (0px) Adjusted in the css
   "margin-top": 0,
   //"margin-bottom":-10,
