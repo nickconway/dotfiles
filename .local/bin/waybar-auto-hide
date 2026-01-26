@@ -10,7 +10,7 @@ while true; do
     if { [[ $WINDOWS -eq 0 ]] || [[ $CURSOR_Y -eq 0 ]]; } && [[ $HIDDEN == true ]]; then
         HIDDEN=false
         killall waybar -SIGUSR1
-    elif { [[ $CURSOR_Y -gt 60 ]]; } && [[ $HIDDEN == false ]]; then
+    elif { [[ $CURSOR_Y -gt 60 ]] && [[ ! $WINDOWS -eq 0 ]]; } && [[ $HIDDEN == false ]]; then
         HIDDEN=true
         killall waybar -SIGUSR1
     fi
