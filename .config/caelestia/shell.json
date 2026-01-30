@@ -517,9 +517,7 @@
     },
     "vpn": {
       "enabled": false,
-      "provider": [
-        "netbird"
-      ]
+      "provider": []
     }
   },
   "sidebar": {
@@ -536,6 +534,7 @@
     "gpuType": "",
     "visualiserBars": 45,
     "audioIncrement": 0.1,
+    "brightnessIncrement": 0.1,
     "maxVolume": 1,
     "smartScheme": true,
     "defaultPlayer": "Spotify",
