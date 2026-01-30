@@ -45,6 +45,9 @@
       ],
       "explorer": [
         "thunar"
+      ],
+      "screenshot": [
+        "satty"
       ]
     },
     "idle": {
