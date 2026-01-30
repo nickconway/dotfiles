@@ -26,16 +26,16 @@
       }
     },
     "transparency": {
-      "enabled": false,
-      "base": 0.85,
-      "layers": 0.4
+      "enabled": true,
+      "base": 0.80,
+      "layers": 0.10
     }
   },
   "general": {
     "logo": "",
     "apps": {
       "terminal": [
-        "foot"
+        "kitty"
       ],
       "audio": [
         "pavucontrol"
@@ -103,12 +103,12 @@
       "invertColors": false,
       "background": {
         "enabled": true,
-        "opacity": 0.7,
+        "opacity": 1,
         "blur": true
       },
       "shadow": {
         "enabled": true,
-        "opacity": 0.7,
+        "opacity": 0.70,
         "blur": 0.4
       }
     },
