@@ -11,8 +11,8 @@
     },
     "font": {
       "family": {
-        "sans": "Rubik",
-        "mono": "CaskaydiaCove NF",
+        "sans": "JetBrainsMono Nerd Font Propo",
+        "mono": "JetBrainsMono Nerd Font Propo",
         "material": "Material Symbols Rounded",
         "clock": "Rubik"
       },
@@ -27,8 +27,8 @@
     },
     "transparency": {
       "enabled": true,
-      "base": 0.80,
-      "layers": 0.10
+      "base": 0.8,
+      "layers": 0.1
     }
   },
   "general": {
@@ -121,7 +121,7 @@
     }
   },
   "bar": {
-    "persistent": true,
+    "persistent": false,
     "showOnHover": true,
     "dragThreshold": 20,
     "scrollActions": {
@@ -155,9 +155,9 @@
       "iconSubs": []
     },
     "status": {
-      "showAudio": false,
-      "showMicrophone": false,
-      "showKbLayout": false,
+      "showAudio": true,
+      "showMicrophone": true,
+      "showKbLayout": true,
       "showNetwork": true,
       "showWifi": true,
       "showBluetooth": true,
@@ -215,7 +215,7 @@
   },
   "border": {
     "thickness": 1,
-    "rounding": 25
+    "rounding": 10
   },
   "dashboard": {
     "enabled": true,

@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 playerctl -a pause
 
-if ! pidof hyprlock; then
+if pgrep -f "qs -c caelestia" &>/dev/null; then
+    caelestia shell lock lock &
+elif ! pidof hyprlock; then
     hyprlock &
-    sleep 1
 fi
 
+sleep 1
 systemctl suspend

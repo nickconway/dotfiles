@@ -7,18 +7,22 @@ if [[ $(uname) == Darwin ]]; then
     exit
 fi
 
+reload='false'
 random='false'
 
-while getopts 'r' flag; do
+while getopts 'rR' flag; do
     case "${flag}" in
     r) random='true' ;;
+    R) reload='true' ;;
     *) ;;
     esac
 done
 
 echo "" >/tmp/wallpaper
 
-if [[ "$random" == "true" ]]; then
+if [[ "$reload" == "true" ]]; then
+    IMG="$HOME/.config/wallpaper"
+elif [[ "$random" == "true" ]]; then
     IMG="$(find /mnt/nas/home/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)" || true
     if [[ "$IMG" == "$(cat ~/.cache/wal/wal)" ]]; then
         change-theme -r
@@ -30,8 +34,13 @@ fi
 
 if [[ -z "$IMG" ]]; then exit 1; fi
 
-cp "$IMG" ~/.config/wallpaper
+if [[ "$IMG" != "$HOME/.config/wallpaper" ]]; then
+    cp "$IMG" ~/.config/wallpaper
+fi
+
 cp ~/.config/wallpaper{,.png}
+
+kitten icat ~/.config/wallpaper || true
 
 uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i ~/.config/wallpaper
 
@@ -85,8 +94,8 @@ if pgrep hyprpaper &>/dev/null; then
 fi
 
 if pgrep -f "qs -c caelestia" &>/dev/null; then
-    caelestia scheme set --name dynamic -m dark -v vibrant --notify
-    caelestia wallpaper -N -f ~/.config/wallpaper.png
+    cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
+    caelestia wallpaper -N -f ~/.config/wallpaper.png || true
     qs -c caelestia kill
     qs -c caelestia -d
 fi
