@@ -9,9 +9,11 @@ fi
 
 reload='false'
 random='false'
+light='false'
 
-while getopts 'rR' flag; do
+while getopts 'lrR' flag; do
     case "${flag}" in
+    l) light='true' ;;
     r) random='true' ;;
     R) reload='true' ;;
     *) ;;
@@ -42,7 +44,13 @@ cp ~/.config/wallpaper{,.png}
 
 kitten icat ~/.config/wallpaper || true
 
-uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i ~/.config/wallpaper
+uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i ~/.config/wallpaper $([[ $light == true ]] && echo "-l")
+
+if [[ $light == true ]]; then
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
+else
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+fi
 
 [[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
 
@@ -90,14 +98,14 @@ if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
 fi
 
 if pgrep hyprpaper &>/dev/null; then
-    hyprctl hyprpaper wallpaper ', ~/.config/wallpaper, '
+    hyprctl hyprpaper wallpaper ', ~/.config/wallpaper, ' &>/dev/null
 fi
 
 if pgrep -f "qs -c caelestia" &>/dev/null; then
     cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
-    caelestia wallpaper -N -f ~/.config/wallpaper.png || true
-    qs -c caelestia kill
-    qs -c caelestia -d
+    caelestia wallpaper -N -f ~/.config/wallpaper.png &>/dev/null || true
+    qs -c caelestia kill &>/dev/null
+    qs -c caelestia -d &>/dev/null
 fi
 
 if pgrep swaync &>/dev/null; then
