@@ -426,10 +426,10 @@
   },
   "notifs": {
     "expire": true,
-    "defaultExpireTimeout": 5000,
+    "defaultExpireTimeout": 10000,
     "clearThreshold": 0.3,
     "expandThreshold": 20,
-    "actionOnClick": false,
+    "actionOnClick": true,
     "groupPreviewNum": 3,
     "sizes": {
       "width": 400,

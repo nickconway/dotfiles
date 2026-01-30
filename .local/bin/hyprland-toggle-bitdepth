@@ -17,5 +17,5 @@ hyprctl monitors -j | jq -r ".[] | .name, .currentFormat" | xargs -n2 echo | whi
 
     K="$(grep "$MONITOR" ~/.config/hypr/include/monitors.conf | sed -r "s/bitdepth, \w+/bitdepth, $BITDEPTH/" | sed 's/monitor = //' | xargs)"
     hyprctl --batch "keyword monitor $K"
-    notify-send -e "Set $MONITOR to bitdepth of $BITDEPTH" -h string:synchronous:bitdepth-"$MONITOR"
+    notify-send -e "Set $MONITOR to bitdepth of $BITDEPTH" -h string:notification-name:bitdepth-"$MONITOR"
 done

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-notify-send "Current volume: $(pamixer --get-volume)%" -h string:synchronous:audio -h int:value:$(pamixer --get-volume) -e
+notify-send "Current volume: $(pamixer --get-volume)%" -h string:notification-name:audio -h int:value:$(pamixer --get-volume) -e

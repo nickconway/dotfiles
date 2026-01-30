@@ -3,5 +3,5 @@ set -eou pipefail
 
 swaync-client -d
 if [[ $(swaync-client -D) == "false" ]]; then
-    notify-send "Do Not Disturb" "Do not disturb is now off" -h string:synchronous:dnd -e
+    notify-send "Do Not Disturb" "Do not disturb is now off" -h string:notification-name:dnd -e
 fi
