@@ -19,7 +19,7 @@ done
 echo "" >/tmp/wallpaper
 
 if [[ "$random" == "true" ]]; then
-    IMG="$(find /mnt/nas/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)" || true
+    IMG="$(find /mnt/nas/home/Pictures/Wallpapers/PC | awk 'NR>1' | sort -R | head -n 1)" || true
     if [[ "$IMG" == "$(cat ~/.cache/wal/wal)" ]]; then
         change-theme -r
         exit 0
@@ -31,8 +31,7 @@ fi
 if [[ -z "$IMG" ]]; then exit 1; fi
 
 cp "$IMG" ~/.config/wallpaper
-
-hyprctl hyprpaper wallpaper ', ~/.config/wallpaper, '
+cp ~/.config/wallpaper{,.png}
 
 uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i ~/.config/wallpaper
 
@@ -81,7 +80,20 @@ if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
     sed -i "s/\(--mention-foreground:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}');/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 fi
 
-swaync-client -rs
+if pgrep hyprpaper &>/dev/null; then
+    hyprctl hyprpaper wallpaper ', ~/.config/wallpaper, '
+fi
+
+if pgrep -f "qs -c caelestia" &>/dev/null; then
+    caelestia scheme set --name dynamic -m dark -v vibrant
+    caelestia wallpaper -N -f ~/.config/wallpaper.png
+    qs -c caelestia kill
+    qs -c caelestia -d
+fi
+
+if pgrep swaync-client &>/dev/null; then
+    swaync-client -rs
+fi
 
 magick ~/.config/wallpaper -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb
 magick ~/.config/wallpaper -strip -thumbnail 500x500^ -gravity center -extent 500x500 ~/.cache/wal/wal.sqre
