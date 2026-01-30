@@ -246,14 +246,14 @@
   },
   "launcher": {
     "enabled": true,
-    "showOnHover": false,
+    "showOnHover": true,
     "maxShown": 7,
     "maxWallpapers": 9,
     "specialPrefix": "@",
     "actionPrefix": ">",
-    "enableDangerousActions": false,
+    "enableDangerousActions": true,
     "dragThreshold": 50,
-    "vimKeybinds": false,
+    "vimKeybinds": true,
     "hiddenApps": [],
     "useFuzzy": {
       "apps": false,
