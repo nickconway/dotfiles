@@ -85,7 +85,7 @@ if pgrep hyprpaper &>/dev/null; then
 fi
 
 if pgrep -f "qs -c caelestia" &>/dev/null; then
-    caelestia scheme set --name dynamic -m dark -v vibrant
+    caelestia scheme set --name dynamic -m dark -v vibrant --notify
     caelestia wallpaper -N -f ~/.config/wallpaper.png
     qs -c caelestia kill
     qs -c caelestia -d
