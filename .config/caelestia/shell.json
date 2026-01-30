@@ -56,18 +56,10 @@
       "timeouts": [
         {
           "idleAction": "lock",
-          "timeout": 180
-        },
-        {
-          "idleAction": "dpms off",
-          "returnAction": "dpms on",
           "timeout": 300
         },
         {
-          "idleAction": [
-            "systemctl",
-            "suspend-then-hibernate"
-          ],
+          "idleAction": "hyprsleep",
           "timeout": 600
         }
       ]
@@ -470,8 +462,7 @@
         "poweroff"
       ],
       "hibernate": [
-        "systemctl",
-        "hibernate"
+        "hyprsleep"
       ],
       "reboot": [
         "systemctl",
