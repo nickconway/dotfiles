@@ -108,7 +108,7 @@ if pgrep -f "qs -c caelestia" &>/dev/null; then
     qs -c caelestia -d &>/dev/null
 fi
 
-if pgrep swaync &>/dev/null; then
+if pgrep -x swaync &>/dev/null; then
     swaync-client -rs
 fi
 
