@@ -430,6 +430,7 @@
     "clearThreshold": 0.3,
     "expandThreshold": 20,
     "actionOnClick": true,
+    "expandOnHover": true,
     "groupPreviewNum": 3,
     "sizes": {
       "width": 400,
