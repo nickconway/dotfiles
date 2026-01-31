@@ -99,9 +99,7 @@ fi
 
 if pgrep hyprpaper &>/dev/null; then
     hyprctl hyprpaper wallpaper ', ~/.config/wallpaper, ' &>/dev/null
-fi
-
-if pgrep -f "qs -c caelestia" &>/dev/null; then
+elif pgrep -f "qs -c caelestia" &>/dev/null; then
     cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
     caelestia wallpaper -N -f ~/.config/wallpaper.png &>/dev/null || true
     qs -c caelestia kill &>/dev/null

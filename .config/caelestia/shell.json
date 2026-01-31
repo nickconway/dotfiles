@@ -90,7 +90,7 @@
     }
   },
   "background": {
-    "enabled": true,
+    "enabled": false,
     "desktopClock": {
       "enabled": false,
       "scale": 1,
