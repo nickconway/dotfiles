@@ -548,6 +548,8 @@
   },
   "paths": {
     "wallpaperDir": "/home/nick/Pictures/Wallpapers",
+    "screenshotDir": "/home/nick/Pictures/Screenshots",
+    "recDir": "/home/nick/Videos/Screen Recordings",
     "sessionGif": "root:/assets/kurukuru.gif",
     "mediaGif": "root:/assets/bongocat.gif"
   }
