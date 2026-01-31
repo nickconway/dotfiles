@@ -28,11 +28,11 @@ DEFAULT_ACTION=0
 
 if [[ -e /var/run/reboot-required ]]; then
     TEXT="A reboot is required. Would you like to reboot now?"
-
-    prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
 elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( (uname -r | grep -q zen && pacman -Q linux-zen || pacman -Q linux) | awk '{print $2}' | sed 's/\./-/g')"* ]]; then
     TEXT="The kernel was updated. Would you like to reboot now?"
+fi
 
+if [[ -n "${TEXT:-}" ]]; then
     prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
 fi
 

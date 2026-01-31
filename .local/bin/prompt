@@ -10,7 +10,7 @@ DEFAULT_ACTION="$5"
 IFS="," read -ra TERM_PROMPTS_ARR <<<"$TERM_PROMPTS"
 IFS="," read -ra NOTIFICATION_PROMPTS_ARR <<<"$NOTIFICATION_PROMPTS"
 
-if [[ -t 0 ]]; then
+function term() {
     while [[ -z "${EXIT:-}" ]]; do
         echo -n "$TEXT [${TERM_PROMPTS}] "
         read -r INPUT
@@ -26,15 +26,26 @@ if [[ -t 0 ]]; then
             done
         fi
     done
-else
+}
+
+function gui() {
     declare -a NOTIFICATION_PROMPTS_FLAGS=()
     for A in "${NOTIFICATION_PROMPTS_ARR[@]}"; do
         NOTIFICATION_PROMPTS_FLAGS+=("--action")
         NOTIFICATION_PROMPTS_FLAGS+=("$A")
     done
 
-    echo "${NOTIFICATION_PROMPTS_FLAGS[@]}"
     EXIT="$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical)"
+}
+
+if [[ -n ${PROMPT_TERM:-} ]]; then
+    term
+elif [[ -n ${PROMPT_GUI:-} ]]; then
+    gui
+elif [[ -t 0 ]]; then
+    term
+elif [[ ! -t 0 ]]; then
+    gui
 fi
 
-exit "$EXIT"
+exit "${EXIT:-$DEFAULT_ACTION}"
