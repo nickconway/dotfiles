@@ -3,7 +3,7 @@ set -euo pipefail
 
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$HOME"/.local/share/pnpm:$PATH
-command -v pnpm &> /dev/null && export PATH="$(pnpm root -g)":$PATH
+command -v pnpm &>/dev/null && export PATH="$(pnpm root -g)":$PATH
 
 if command -v pacman &>/dev/null; then
     printf "\033[95m::\033[0m Checking Arch Linux PGP Keyring...\n"
@@ -21,19 +21,19 @@ fi
 
 systemd-inhibit --why "Upgrading" topgrade -y --no-retry || true
 
-TERM_PROMPTS="Y,n"
 NOTIFICATION_TITLE="Upgrade"
+TERM_PROMPTS="Y,n"
 NOTIFICATION_PROMPTS="Yes,No"
 DEFAULT_ACTION=0
 
 if [[ -e /var/run/reboot-required ]]; then
     TEXT="A reboot is required. Would you like to reboot now?"
 
-    prompt "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_TITLE" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
+    prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
 elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( (uname -r | grep -q zen && pacman -Q linux-zen || pacman -Q linux) | awk '{print $2}' | sed 's/\./-/g')"* ]]; then
     TEXT="The kernel was updated. Would you like to reboot now?"
 
-    prompt "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_TITLE" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
+    prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
 fi
 
 if [[ "${REBOOT:-}" == "0" ]]; then

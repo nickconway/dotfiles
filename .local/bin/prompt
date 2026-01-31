@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TEXT="$1"
-TERM_PROMPTS="$2"
-NOTIFICATION_TITLE="$3"
+NOTIFICATION_TITLE="$1"
+TEXT="$2"
+TERM_PROMPTS="$3"
 NOTIFICATION_PROMPTS="$4"
 DEFAULT_ACTION="$5"
 
-IFS="," read -ra TERM_PROMPTS_ARR <<< "$2"
-IFS="," read -ra NOTIFICATION_PROMPTS_ARR <<< "$NOTIFICATION_PROMPTS"
+IFS="," read -ra TERM_PROMPTS_ARR <<<"$TERM_PROMPTS"
+IFS="," read -ra NOTIFICATION_PROMPTS_ARR <<<"$NOTIFICATION_PROMPTS"
 
 if [[ -t 0 ]]; then
-    while  [[ -z "${EXIT:-}" ]]; do
+    while [[ -z "${EXIT:-}" ]]; do
         echo -n "$TEXT [${TERM_PROMPTS}] "
         read -r INPUT
 
         if [[ -z "$INPUT" ]]; then
             EXIT="$DEFAULT_ACTION"
         else
-            for ((i = 0 ; i < ${#TERM_PROMPTS_ARR[@]}; i++)); do
+            for ((i = 0; i < ${#TERM_PROMPTS_ARR[@]}; i++)); do
                 if [[ "$(echo "${TERM_PROMPTS_ARR[$i]}" | tr '[:upper:]' '[:lower:]')" == "$(echo "$INPUT" | tr '[:upper:]' '[:lower:]')" ]]; then
                     EXIT="$i"
                     break
