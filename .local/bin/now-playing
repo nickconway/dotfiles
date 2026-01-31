@@ -11,4 +11,16 @@ else
 fi
 
 curl -s "$URL" --output /tmp/feishin-cover.png
-notify-send "Now Playing" "$TEXT" -i /tmp/feishin-cover.png -e -h string:key:audio
+
+if [[ $(playerctl status) == "Playing" ]]; then
+    A="pause=󰏤"
+else
+    A="play=󰐊"
+fi
+
+ACTION=$(notify-send "Now Playing" "$TEXT" -i /tmp/feishin-cover.png -e -h string:key:audio --action "prev=󰒮" --action "$A" --action "next=󰒭")
+
+if [[ -n "$ACTION" ]]; then
+    playerctl "$ACTION"
+    now-playing
+fi
