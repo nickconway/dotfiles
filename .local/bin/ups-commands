@@ -15,7 +15,7 @@ while true; do
         ;;
     ONBATT)
         (
-            ACTION=$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:notification-name:ups -e --action "shutdown=Shutdown")
+            ACTION=$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:notification-name:ups -e -u critical --action "shutdown=Shutdown")
             case $ACTION in
             shutdown) [[ -e /tmp/ups-online ]] || sudo systemctl reboot -i ;;
             esac

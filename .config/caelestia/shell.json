@@ -47,7 +47,13 @@
         "nautilus"
       ],
       "screenshot": [
-        "satty"
+        "satty",
+        "--initial-tool",
+        "brush",
+        "--save-after-copy",
+        "--disable-notifications",
+        "--annotation-size-factor",
+        "0.5"
       ]
     },
     "idle": {
@@ -90,7 +96,7 @@
     }
   },
   "background": {
-    "enabled": false,
+    "enabled": true,
     "desktopClock": {
       "enabled": false,
       "scale": 1,
