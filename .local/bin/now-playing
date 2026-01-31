@@ -11,4 +11,4 @@ else
 fi
 
 curl -s "$URL" --output /tmp/feishin-cover.png
-notify-send "Now Playing" "$TEXT" -i /tmp/feishin-cover.png -e -h string:notification-name:audio
+notify-send "Now Playing" "$TEXT" -i /tmp/feishin-cover.png -e -h string:key:audio

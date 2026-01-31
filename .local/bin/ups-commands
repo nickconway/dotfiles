@@ -11,11 +11,11 @@ while true; do
     case "$COMMAND" in
     ONLINE)
         touch /tmp/ups-online
-        notify-send "UPS Status" "UPS Switched to Main Power" -h string:notification-name:ups -e
+        notify-send "UPS Status" "UPS Switched to Main Power" -h string:key:ups -e
         ;;
     ONBATT)
         (
-            ACTION=$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:notification-name:ups -e -u critical --action "shutdown=Shutdown")
+            ACTION=$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:key:ups -e -u critical --action "shutdown=Shutdown")
             case $ACTION in
             shutdown) [[ -e /tmp/ups-online ]] || sudo systemctl reboot -i ;;
             esac

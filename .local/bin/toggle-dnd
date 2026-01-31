@@ -6,6 +6,6 @@ if pgrep -f "qs -c caelestia"; then
 elif pgrep -x "swaync"; then
     swaync-client -d
     if [[ $(swaync-client -D) == "false" ]]; then
-        notify-send "Do Not Disturb" "Do not disturb is now off" -h string:notification-name:dnd -e
+        notify-send "Do Not Disturb" "Do not disturb is now off" -h string:key:dnd -e
     fi
 fi
