@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd ~/.local/source
+git clone https://github.com/nickconway/quickshell || true
+cd quickshell
+cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+sudo cmake --install build
+
+cd ~/.local/source
+git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
+cd caelestia-cli
+git pull
+if [[ -e /usr/bin/caelestia ]]; then
+    sudo rm /usr/bin/caelestia
+    sudo pip uninstall caelestia --break-system-packages --yes --root-user-action ignore
+    rm -rf dist
+fi
+python -m build --wheel
+sudo python -m installer dist/*.whl
+sudo cp completions/caelestia.fish /usr/share/fish/vendor_completions.d/caelestia.fish
+
+mkdir -p ~/.config/quickshell
+cd ~/.config/quickshell
+git clone https://github.com/nickconway/caelestia.git caelestia || true
+cd caelestia
+git pull
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
+cmake --build build
+sudo cmake --install build
+
+if pgrep -f "qs -c calestia"; then
+    qs -c caelestia kill
+    qs -c caelestia -d
+fi
