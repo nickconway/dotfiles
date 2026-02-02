@@ -16,8 +16,11 @@ cd
 touch .hushlogin
 mkdir -p ~/.local/bin
 
-if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
+if [[ -f ~/.local/bin/yadm ]]; then
     curl -sSL https://raw.githubusercontent.com/nickconway/yadm/refs/heads/master/yadm -o ~/.local/bin/yadm
+fi
+
+if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
     yadm user-config nickconway
     yadm clone https://github.com/nickconway/dotfiles
     yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
