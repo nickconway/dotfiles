@@ -784,7 +784,7 @@ function yl() {
     fi
 }
 alias ylog='yadm log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
-alias ylogv='(cd ~/.local/share/yadm/repo.git && _fzf_git_hashes)'
+alias ylogv='(cd "$(yadm user-config)" && _fzf_git_hashes)'
 function yp() {
     if [[ $# -eq 0 ]]; then
         yca

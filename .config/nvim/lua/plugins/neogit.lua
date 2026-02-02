@@ -18,7 +18,7 @@ return {
                     vim.env.GIT_DIR = get_git_root() .. "/.git"
                     vim.env.GIT_WORK_TREE = get_git_root()
                 else
-                    vim.env.GIT_DIR = vim.fn.expand("~/.local/share/yadm/repo.git")
+                    vim.env.GIT_DIR = vim.fn.system("yadm user-config")
                     vim.env.GIT_WORK_TREE = vim.fn.expand("~")
                 end
                 local neogit = require("neogit")
