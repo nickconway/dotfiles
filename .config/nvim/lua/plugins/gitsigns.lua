@@ -2,7 +2,12 @@ return {
     "lewis6991/gitsigns.nvim",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        "purarue/gitsigns-yadm.nvim",
+        {
+            "purarue/gitsigns-yadm.nvim",
+            opts = {
+                yadm_repo_git = vim.fn.system("yadm user-config"),
+            },
+        },
     },
     event = "BufEnter",
     keys = {

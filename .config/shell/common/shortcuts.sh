@@ -624,6 +624,12 @@ function remove-whitespace() {
     rg '\s+$' -l | xargs sed -i 's/\s\+$//g'
 }
 
+function respawn() {
+    local CMD=$(pgrep -af $* | grep -v $PPID | cut -d ' ' -f 2-)
+    kill $(pgrep -f $*)
+    eval $CMD
+}
+
 alias s='immersive-ssh'
 alias server='s server'
 
