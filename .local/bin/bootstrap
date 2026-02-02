@@ -43,9 +43,6 @@ if command -v termux-reload-settings >/dev/null; then
     yadm decrypt
     yadm alt
     chsh -s zsh
-fi
-
-if command -v termux-reload-settings >/dev/null; then
     exit
 fi
 
