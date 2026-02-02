@@ -15,10 +15,7 @@ cd
 
 touch .hushlogin
 mkdir -p ~/.local/bin
-
-if [[ -f ~/.local/bin/yadm ]]; then
-    curl -sSL https://raw.githubusercontent.com/nickconway/yadm/refs/heads/master/yadm -o ~/.local/bin/yadm
-fi
+curl -sSL https://raw.githubusercontent.com/nickconway/yadm/refs/heads/master/yadm -o ~/.local/bin/yadm
 
 if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
     yadm user-config nickconway
