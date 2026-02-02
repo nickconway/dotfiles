@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+pamixer -u
+pamixer -i 1
+
+if ! pgrep -f "qs -c caelestia"; then
+    show-audio
+fi

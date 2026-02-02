@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! caelestia shell brightness set $(echo "$(caelestia shell brightness get) + 0.1" | bc); then
+    brightnessctl set +1%
+    brightnessctl set +1% -d 'intel*'
+    show-brightness
+fi
