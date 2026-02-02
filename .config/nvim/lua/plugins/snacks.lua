@@ -251,7 +251,7 @@ return {
 
                 require("snacks").picker({
                     finder = "proc",
-                    cmd = "get-yadm-files",
+                    cmd = "yadm list -a -e",
                     cwd = vim.fn.getcwd(),
                     title = "YADM Files",
                     transform = function(item)
