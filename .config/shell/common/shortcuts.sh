@@ -815,6 +815,7 @@ function ysp() {
     fi
 }
 alias yu="yadm upgrade"
+alias yuc="yadm user-config"
 
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
