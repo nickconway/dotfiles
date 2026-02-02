@@ -5,7 +5,7 @@ return {
         {
             "purarue/gitsigns-yadm.nvim",
             opts = {
-                yadm_repo_git = vim.fn.system("yadm user-config"),
+                yadm_repo_git = vim.fn.system("yadm user-config -d"),
             },
         },
     },
