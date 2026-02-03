@@ -65,7 +65,9 @@
           "timeout": 300
         },
         {
-          "idleAction": ["hyprsleep"],
+          "idleAction": [
+            "hyprsleep"
+          ],
           "timeout": 600
         }
       ]
@@ -547,9 +549,9 @@
     ]
   },
   "paths": {
-    "wallpaperDir": "/home/nick/Pictures/Wallpapers",
-    "screenshotDir": "/home/nick/Pictures/Screenshots",
-    "recDir": "/home/nick/Videos/Screen Recordings",
+    "wallpaperDir": "$HOME/Pictures/Wallpapers",
+    "screenshotDir": "$HOME/Pictures/Screenshots",
+    "recDir": "$HOME/Videos/Screen Recordings",
     "sessionGif": "root:/assets/kurukuru.gif",
     "mediaGif": "root:/assets/bongocat.gif"
   }
