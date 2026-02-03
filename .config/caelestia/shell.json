@@ -321,7 +321,7 @@
         ],
         "dangerous": false,
         "description": "Change shell transparency",
-        "enabled": false,
+        "enabled": true,
         "icon": "opacity",
         "name": "Transparency"
       },
