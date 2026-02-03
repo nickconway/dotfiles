@@ -20,7 +20,7 @@ curl -sSL https://raw.githubusercontent.com/nickconway/yadm/refs/heads/master/ya
 yadm user-config nickconway &>/dev/null
 
 if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
-    yadm clone https://github.com/nickconway/dotfiles
+    yadm clone https://github.com/nickconway/dotfiles --no-bootstrap
     yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
     yadm decrypt
     yadm alt
