@@ -2,8 +2,8 @@ if [[ -n "$DEBUGRC" ]]; then
   zmodload zsh/zprof
 fi
 
-export SHELL_NAME="$(ps -p $$ | awk 'NR==2 {print $4}')"
-export SHELL_PATH="$(which "$SHELL_NAME")"
+export SHELL_NAME=zsh
+export SHELL="$(which "$SHELL_NAME")"
 
 for f in ~/.config/shell/common/*; do
     source $f
