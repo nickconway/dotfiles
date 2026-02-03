@@ -26,6 +26,8 @@ cd ~/.config/quickshell
 git clone https://github.com/nickconway/caelestia.git caelestia || true
 cd caelestia
 git pull
+git remote add upstream https://github.com/caelestia-dots/shell || true
+git fetch upstream --tags
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
 cmake --build build
 sudo cmake --install build
