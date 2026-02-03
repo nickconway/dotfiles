@@ -4,7 +4,7 @@ set -euo pipefail
 cd ~/.local/source
 git clone https://github.com/nickconway/quickshell || true
 cd quickshell
-cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release
+cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
 
