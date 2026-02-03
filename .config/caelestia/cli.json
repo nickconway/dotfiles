@@ -1,7 +1,7 @@
 {
     "record": {
         "extraArgs": [],
-        "directory": "/home/nick/Videos/Screen Recordings"
+        "directory": "~/Videos/Screen Recordings"
     },
     "wallpaper": {
         "postHook": "echo $WALLPAPER_PATH"
@@ -17,7 +17,7 @@
         "enableQt": false
     },
     "screenshot": {
-        "directory": "/home/nick/Pictures/Screenshots"
+        "directory": "~/Pictures/Screenshots"
     },
     "toggles": {
         "communication": {
