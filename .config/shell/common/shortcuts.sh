@@ -723,7 +723,7 @@ alias v="$EDITOR"
 
 function venv() {
     if [[ ! -e .venv ]]; then
-        uv venv
+        uv venv $*
     fi
     source .venv/bin/activate
 }
