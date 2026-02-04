@@ -1,27 +1,24 @@
 #!/usr/bin/env bash
 
 function rotate() {
-    if [[ "$1" == "normal" ]]; then
+    if [[ "$1" == normal* ]]; then
         TRANSFORM=0
-        OFFSET="0x1125"
-    elif [[ "$1" == "left-up" ]]; then
+    elif [[ "$1" == left-up* ]]; then
         TRANSFORM=1
-        OFFSET="-1125x0"
-    elif [[ "$1" == "bottom-up" ]]; then
+    elif [[ "$1" == bottom-up* ]]; then
         TRANSFORM=2
-        OFFSET="0x-1125"
-    elif [[ "$1" == "right-up" ]]; then
+    elif [[ "$1" == right-up* ]]; then
         TRANSFORM=3
-        OFFSET="1125x0"
     fi
 
-    hyprctl keyword monitor "eDP-1,preferred,0x0,1.6,transform,$TRANSFORM,bitdepth,10"
-    if [[ "$(hyprctl monitors all -j | jq '.[] | select(.name == "eDP-2") .disabled')" == "false" ]]; then
-        hyprctl keyword monitor "eDP-2,preferred,$OFFSET,1.6,transform,$TRANSFORM,bitdepth,10"
-    fi
+    while read -r MONITOR; do
+        hyprctl --batch "keyword monitor $MONITOR, transform, $TRANSFORM"
+    done < <(hyprctl monitors -j | jq -r ".[] | .name")
+
+    notify-send -e Auto-Rotate "Monitors set to $*" -h string:key:auto-rotate
     hyprctl keyword input:touchdevice:transform "$TRANSFORM"
     hyprctl keyword input:tablet:transform "$TRANSFORM"
 }
 
 export -f rotate
-monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL sed 's/[ )]//g' | xargs -I '{}' bash -c "rotate '{}'"
+monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL rev | stdbuf -oL cut -d , -f 2- | stdbuf -oL rev | stdbuf -oL sed 's/[ )]//g' | xargs -I '{}' bash -c "rotate '{}'"
