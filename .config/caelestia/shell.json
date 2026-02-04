@@ -549,9 +549,9 @@
     ]
   },
   "paths": {
-    "wallpaperDir": "$HOME/Pictures/Wallpapers",
-    "screenshotDir": "$HOME/Pictures/Screenshots",
-    "recDir": "$HOME/Videos/Screen Recordings",
+    "wallpaperDir": "~/Pictures/Wallpapers",
+    "screenshotDir": "~/Pictures/Screenshots",
+    "recDir": "~/Videos/Screen Recordings",
     "sessionGif": "root:/assets/kurukuru.gif",
     "mediaGif": "root:/assets/bongocat.gif"
   }
