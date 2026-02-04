@@ -501,6 +501,7 @@
   "utilities": {
     "enabled": true,
     "maxToasts": 4,
+    "gameModeAutoKeepAwake": true,
     "sizes": {
       "width": 430,
       "toastWidth": 430
