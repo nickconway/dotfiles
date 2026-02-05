@@ -1,5 +1,0 @@
-ACTION=="add", SUBSYSTEM=="input", ATTRS{NAME}=="ASUS Zenbook Duo Keyboard" GOTO="add"
-ACTION=="remove", SUBSYSTEM=="input", ATTRS{NAME}=="ASUS Zenbook Duo Keyboard" GOTO="remove"
-
-ACTION=="add", SUBSYSTEM=="input", ENV{ID_BUS}=="bluetooth", ENV{ID_INPUT_KEYBOARD}=="1", SYMLINK+="input/by-id/usb-Primax_Electronics_Ltd._ASUS_Zenbook_Duo_Keyboard-event-kbd", RUN+="/usr/bin/sudo -u $USER $HOME/.local/bin/hyprland-zenbook-duo-toggle-second-screen on", LABEL="add"
-ACTION=="remove", SUBSYSTEM=="input", ENV{ID_BUS}=="bluetooth", ENV{ID_INPUT_KEYBOARD}=="1", SYMLINK-="input/by-idpl/usb-Primax_Electronics_Ltd._ASUS_Zenbook_Duo_Keyboard-event-kbd", RUN+="/usr/bin/sudo -u $USER $HOME/.local/bin/hyprland-zenbook-duo-toggle-second-screen off", LABEL="remove"
