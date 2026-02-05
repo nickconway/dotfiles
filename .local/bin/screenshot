@@ -7,6 +7,22 @@ function error() {
 
 trap error ERR
 
+function caelestia-pick() {
+    FILE="/tmp/caelestia-picker-$(pgrep -f "qs -c caelestia")-coords"
+    touch "$FILE"
+    caelestia shell picker pick &>/dev/null
+    inotifywait "$FILE" &>/dev/null
+
+    if [[ ${1:-} == -r ]]; then
+        echo "$(cat "$FILE" | cut -d ' ' -f 2)+$(cat "$FILE" | cut -d ' ' -f 1 | tr ',' +)"
+        return
+    fi
+
+    cat "$FILE"
+}
+
+STOP_SCRIPT="$(which "$0-stopped")"
+
 mkdir -p "$(xdg-user-dir PICTURES)/Screenshots"
 mkdir -p "$(xdg-user-dir DOCUMENTS)/OCR"
 mkdir -p "$(xdg-user-dir VIDEOS)/Screen Recordings"
@@ -20,7 +36,7 @@ VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mp4"
 
 case ${1:-} in
 '')
-    REGION="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
+    REGION="$(caelestia-pick || slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
     grim -g "$REGION" -l 0 $IMG
     ;;
 
@@ -38,7 +54,7 @@ case ${1:-} in
     ;;
 
 'window')
-    REGION="$(hyprctl clients -j |
+    REGION="$(caelestia-pick || hyprctl clients -j |
         jq -r '.[] | select(.workspace.id | tostring | test("'"$(echo $(hyprctl monitors -j | jq ".[].activeWorkspace.id") | sed "s/ /|/g")"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
         slurp -c cba67f88 -b 00000099 -w 0 -B 00000099)"
     grim -g "$REGION" -l 0 $IMG
@@ -52,16 +68,7 @@ case ${1:-} in
 
 'record')
     if pidof gpu-screen-recorder &>/dev/null; then
-        killall gpu-screen-recorder --signal SIGINT
-        (
-            ACTION=$(notify-send "Screen Recording" "Screen recording saved" -e --action "open=Open" -e)
-            case $ACTION in
-            'open') xdg-open "$(cat /tmp/gpu-screen-recorder-path)" ;;
-            esac
-        ) &
-
-        pactl unload-module module-loopback
-        pactl unload-module module-null-sink
+        pkill -f --signal INT gpu-screen-recorder
         exit
     fi
 
@@ -72,30 +79,28 @@ case ${1:-} in
     pactl load-module module-loopback sink=Combined source=Virtual-Speakers.monitor
     pactl load-module module-loopback sink=Combined source=@DEFAULT_SINK@
 
-    FLAGS='-f 60 -k hevc -a Combined.monitor'
+    FLAGS=(-f 60 -k hevc -a Combined.monitor -sc "$STOP_SCRIPT")
 
     case ${2:-} in
     '')
         OUTPUT="$(hyprctl monitors -j | jq -r ".[] | select(.focused == true) | .name")"
-        FLAGS+=" -w $OUTPUT"
+        FLAGS+=(-w "$OUTPUT")
         ;;
 
     'region')
-        OUTPUT="$(slurp -c cba67f88 -b 00000099 -w 0 -B 00000099 -f "%wx%h+%x+%y")"
-        FLAGS+=" -w region -region $OUTPUT"
+        OUTPUT="$(caelestia-pick -r || slurp -c cba67f88 -b 00000099 -w 0 -B 00000099 -f "%wx%h+%x+%y")"
+        FLAGS+=(-w region -region "$OUTPUT")
         ;;
 
     'window')
-        OUTPUT="$(hyprctl clients -j |
+        OUTPUT="$(caelestia-pick -r || hyprctl clients -j |
             jq -r '.[] | select(.workspace.id | tostring | test("'"$(echo $(hyprctl monitors -j | jq ".[].activeWorkspace.id") | sed "s/ /|/g")"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
             slurp -c cba67f88 -b 00000099 -w 0 -B 00000099 -f "%wx%h+%x+%y")"
-        FLAGS+=" -w region -region $OUTPUT"
+        FLAGS+=(-w region -region "$OUTPUT")
         ;;
-
     esac
 
-    gpu-screen-recorder -o "$VIDEO" $FLAGS &
-    echo "$VIDEO" >/tmp/gpu-screen-recorder-path
+    gpu-screen-recorder -o "$VIDEO" "${FLAGS[@]}" &
     notify-send "Screen Recording" "Screen recording started" -e
     ;;
 
