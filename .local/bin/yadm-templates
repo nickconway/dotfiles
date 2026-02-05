@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd
+while read -r f; do
+    echo "~/${f%%.template}:"
+    envsubst <"$HOME/$f" | tee "${f%%.template}"
+    echo
+done < <(yadm list -a -e | rg '\.template$')

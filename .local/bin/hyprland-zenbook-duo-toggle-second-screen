@@ -2,15 +2,13 @@
 
 set -euo pipefail
 
-SCREEN_ON=
+export XDG_RUNTIME_DIR="/run/user/$(id -u $USER)"
+export HYPRLAND_INSTANCE_SIGNATURE=$(ls $XDG_RUNTIME_DIR/hypr/ 2>/dev/null | head -n1)
 
-while true; do
-    if [[ -n $SCREEN_ON ]] && [[ "$(lsusb)" == *"ASUSTek Computer, Inc. ASUS Zenbook Duo Keyboard"* ]]; then
-        hyprctl keyword monitor "eDP-2,disabled"
-        SCREEN_ON=
-    elif [[ -z $SCREEN_ON ]] && [[ "$(lsusb)" != *"ASUSTek Computer, Inc. ASUS Zenbook Duo Keyboard"* ]]; then
-        hyprctl keyword monitor "eDP-2,2880x1800@120,auto-down,1.6,bitdepth,10"
-        SCREEN_ON=1
-    fi
-    sleep 1
-done
+if [[ $1 == off ]]; then
+    hyprctl keyword monitor "eDP-2,disabled"
+    notify-send -e -h string:key:zenbook-screen "Zenbook" "Second screen disabled"
+else
+    hyprctl keyword monitor "eDP-2,2880x1800@120,auto-down,1.6,bitdepth,10"
+    notify-send -e -h string:key:zenbook-screen "Zenbook" "Second screen enabled"
+fi
