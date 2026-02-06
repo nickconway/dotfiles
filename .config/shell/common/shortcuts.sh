@@ -239,6 +239,7 @@ alias greu='git remote update'
 alias gs='git stash'
 alias gsa='git stash --all'
 alias gsu='git stash --include-untracked'
+
 function gsp() {
     if ! git rev-parse --is-inside-work-tree &>/dev/null; then
         return
@@ -257,6 +258,7 @@ function gsp() {
         git stash pop $@
     fi
 }
+
 function gsw() {
     if [[ "$@" == "-" ]]; then
         git switch -
@@ -766,6 +768,7 @@ alias yds="yadm diff --staged"
 alias ydec="yadm decrypt"
 alias ye="(cd; n)"
 alias yenc="yadm encrypt"
+
 function yl() {
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
@@ -789,31 +792,29 @@ function yl() {
         exec $SHELL_NAME
     fi
 }
-alias ylog='yadm log --graph --pretty=format:'\''%Cred%h%Creset %Cblue(%an) %Cred-%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
+
+alias ylog='yadm log --graph --pretty=format:$GIT_LOG_FORMAT --abbrev-commit --date=short'
 alias ylogv='(cd "$(yadm user-config -d)" && _fzf_git_hashes)'
+
 function yp() {
     if [[ $# -eq 0 ]]; then
         yca
     else
         ycam $@
     fi
+
     if [[ "$(yadm status -sb)" == *"ahead"* ]]; then
         yadm push
     fi
 }
+
 alias yrh="yadm reset --hard"
 alias ys="yadm stash"
+
 function ysp() {
-    if [[ -z "$@" ]]; then
-        if [[ "$(yadm stash list | wc -l)" == "1" ]]; then
-            yadm stash pop
-        else
-            yadm stash pop "$(yadm stash list | fzft --preview 'yadm stash show --color -p $(echo {1} | tr -d :) | delta' | awk '{print $1}' | tr -d :)"
-        fi
-    else
-        yadm stash pop $@
-    fi
+    (cd "$(yadm user-config -d)" && gsp)
 }
+
 alias yu="yadm upgrade"
 alias yuc="yadm user-config"
 
