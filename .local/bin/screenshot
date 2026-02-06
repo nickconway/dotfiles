@@ -2,6 +2,8 @@
 set -euo pipefail
 
 function error() {
+    pactl unload-module module-loopback &>/dev/null || true
+    pactl unload-module module-null-sink &>/dev/null || true
     notify-send "Screenshot" "An error occurred" -e
 }
 
@@ -79,7 +81,7 @@ case ${1:-} in
     pactl load-module module-loopback sink=Combined source=Virtual-Speakers.monitor
     pactl load-module module-loopback sink=Combined source=@DEFAULT_SINK@
 
-    FLAGS=(-f 60 -k hevc -a Combined.monitor -sc "$STOP_SCRIPT")
+    FLAGS=(-f 60 -k hevc -a Combined.monitor -sc "$STOP_SCRIPT" -fallback-cpu-encoding yes)
 
     case ${2:-} in
     '')
@@ -100,8 +102,8 @@ case ${1:-} in
         ;;
     esac
 
-    gpu-screen-recorder -o "$VIDEO" "${FLAGS[@]}" &
     notify-send "Screen Recording" "Screen recording started" -e
+    gpu-screen-recorder -o "$VIDEO" "${FLAGS[@]}"
     ;;
 
 esac
