@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+case ${1:-} in
+raise)
+    pamixer -u
+    pamixer -i ${2:-1}
+    ;;
+
+lower)
+    pamixer -u
+    pamixer -d ${2:-1}
+    ;;
+
+mute)
+    pamixer -t
+    ;;
+esac
