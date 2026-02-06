@@ -6,4 +6,4 @@ while read -r f; do
     echo "~/${f%%.template}:"
     envsubst <"$HOME/$f" | tee "${f%%.template}"
     echo
-done < <(yadm list -a -e | rg '\.template$')
+done < <(fd --type f --hidden '\.template$' "$1")
