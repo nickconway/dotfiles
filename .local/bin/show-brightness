@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-notify-send "Current brightness: $(brightnessctl -m | awk -F ',' '{print $4}')" -h string:key:brightness -h int:value:$(brightnessctl -m | awk -F ',' '{print $4}' | rev | cut -c 2- | rev) -e

@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ALL=
+BRIGHTNESS=
+VAL=
+
+case ${1:-} in
+ALL)
+    ALL=true
+    shift
+    ;;
+esac
+
+case ${1:-} in
+set)
+    VAL="$2"
+    ;;
+
+raise)
+    VAL="+${2:-1%}"
+    ;;
+
+lower)
+    VAL="${2:-1%}-"
+    ;;
+
+show)
+    if [[ -z ${2:-} ]]; then
+        BRIGHTNESS=$(brightnessctl -m | awk -F ',' '{print $4}')
+    else
+        BRIGHTNESS=$(brightnessctl -m -d "$2" | awk -F ',' '{print $4}')
+        NAME="$2"
+    fi
+    ;;
+esac
+
+if [[ -n $VAL ]] && [[ $ALL == true ]]; then
+    for d in $(brightnessctl -l | grep backlight | awk '{print $2}' | xargs); do
+        if [[ $(caelestia shell brightness getFor $d) -ne -1 ]]; then
+            caelestia shell brightness setFor $d $VAL
+        else
+            brightnessctl set -d $d $VAL
+        fi
+
+        brightness show $d
+    done
+elif [[ -n $VAL ]]; then
+    caelestia shell brightness set $VAL || brightnessctl set $VAL
+    brightness show
+fi
+
+if [[ -n $BRIGHTNESS ]]; then
+    if [[ $ALL == true ]]; then
+        for d in $(brightnessctl -l | grep backlight | awk '{print $2}' | xargs); do
+            brightness show $d
+        done
+    else
+        if [[ -n ${NAME:-} ]]; then
+            EXT=" for $NAME"
+        fi
+
+        notify-send Brightness "Current brightness${EXT:-}: $BRIGHTNESS" \
+            -h string:key:brightness-${NAME:-main} \
+            -h int:value:$(echo $BRIGHTNESS | rev | cut -c 2- | rev) -e
+    fi
+fi
