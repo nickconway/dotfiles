@@ -1,13 +1,10 @@
 [Unit]
 Description=Zenbook Kmonad
-After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/kmonad {{ env.HOME }}/.config/kmonad/zenbook.kbd
+ExecStart=/usr/bin/sudo /usr/bin/kmonad {{ env.HOME }}/.config/kmonad/zenbook.kbd
 Restart=always
-User=root
-Group=root
 
 [Install]
 WantedBy=basic.target
