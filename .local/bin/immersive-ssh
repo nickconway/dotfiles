@@ -44,8 +44,11 @@ if command -v ss &>/dev/null; then
 
     if [[ -n ${TMUX:-} ]] && [[ -n $PORT ]]; then
         (
-            &>/dev/null ssh-copy-nc $PORT &
-            echo -n " $!" >>"$S_FILE"
+            while true; do
+                nc -l -p "$PORT" | wl-copy
+            done &>/dev/null &
+
+            echo -n $! >"$S_FILE"
         )
     fi
 
@@ -72,5 +75,5 @@ if [[ -n $TMUX ]]; then
     tmux set status on
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
-    rm ""$S_FILE""
+    rm "$S_FILE"
 fi
