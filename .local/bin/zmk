@@ -41,8 +41,12 @@ function build() {
     log=false
     niceview=false
     pristine=false
+    reset=false
 
-    while getopts 'b:flnp' flag; do
+    FLASH_FLAGS=()
+    LOG_FLAGS=()
+
+    while getopts 'b:flnoprs:' flag; do
         case "${flag}" in
         b) board=$OPTARG ;;
         f) flash=true ;;
@@ -51,7 +55,13 @@ function build() {
             board=nice_nano
             niceview=true
             ;;
+        o) LOG_FLAGS+=(-o) ;;
         p) pristine=true ;;
+        s) LOG_FLAGS+=(-s "$OPTARG") ;;
+        r)
+            reset=true
+            FLASH_FLAGS+=(-r)
+            ;;
         *) continue ;;
         esac
     done
@@ -94,7 +104,7 @@ EOF
         FLAGS+=(-p)
     fi
 
-    OLD_BASE="$1"
+    OLD_BASE="${1:-}"
 
     BASE="$OLD_BASE"
     BASE="${BASE%_left}"
@@ -109,6 +119,7 @@ EOF
 
     CMAKE_ARGS=()
     BUILD_DIRS=()
+    SHIELDS=()
 
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
@@ -119,6 +130,7 @@ EOF
             fi
 
             BUILD_DIRS+=("$BASE/left")
+            SHIELDS+=("${BASE}_left")
         fi
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
@@ -129,6 +141,7 @@ EOF
             fi
 
             BUILD_DIRS+=("$BASE/right")
+            SHIELDS+=("${BASE}_right")
         fi
     else
         if [[ $niceview == true ]]; then
@@ -138,20 +151,52 @@ EOF
         fi
 
         BUILD_DIRS+=("$BASE")
+        SHIELDS+=("$BASE")
+    fi
+
+    if [[ $reset == true ]]; then
+        FLAGS=(-b nice_nano)
+        CMAKE_ARGS=("-DSHIELD=settings_reset")
+        BUILD_DIRS=("settings-reset")
     fi
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
         run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
-        run west build "${FLAGS[@]}" -d build/${BUILD_DIRS[$index]}
+        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "run west build ${FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
     done
 
     if [[ $flash == true ]]; then
-        flash $*
+        flash "${FLASH_FLAGS[@]}" $*
+    fi
+
+    if [[ $log == true ]]; then
+        log "${LOG_FLAGS[@]}" $*
     fi
 }
 
+function wait-for-dev() {
+    while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
+}
+
+function wait-for-complete() {
+    while [[ -e /dev/disk/by-label/NICENANO ]]; do
+        true
+    done
+}
+
+export -f run wait-for-dev wait-for-complete
+
 function flash() {
-    OLD_BASE="$1"
+    reset=false
+
+    if [[ ${1:-} == -r ]]; then
+        reset=true
+        shift
+    fi
+
+    OLD_BASE="${1:-}"
 
     BASE="$OLD_BASE"
     BASE="${BASE%_left}"
@@ -180,25 +225,29 @@ function flash() {
         SHIELDS+=("$BASE")
     fi
 
+    if [[ $reset == true ]]; then
+        length=${#BUILD_DIRS[@]}
+
+        FLAGS=(-b nice_nano)
+        BUILD_DIRS=()
+        SHIELDS=()
+
+        for ((index = 0; index < length; index++)); do
+            BUILD_DIRS+=("settings-reset")
+            SHIELDS+=(settings_reset)
+        done
+    fi
+
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
         mkdir -p ~/Git/zmk/tmp
 
-        echo "Set ${SHIELDS[$index]} to flashing mode..."
-
-        while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
-            true
-        done
-
-        echo "Flashing..."
+        gum spin --title "Set ${SHIELDS[$index]} to flashing mode..." -- bash -c wait-for-dev
 
         sudo mount /dev/disk/by-label/NICENANO ~/Git/zmk/tmp
-        sudo cp ~/Git/zmk/app/build/$BASE/right/zephyr/zmk.uf2 ~/Git/zmk/tmp
+        sudo cp ~/Git/zmk/app/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 ~/Git/zmk/tmp
 
-        while [[ -e /dev/disk/by-label/NICENANO ]]; do
-            true
-        done
+        gum spin --title "Flashing ${SHIELDS[$index]}..." -- bash -c wait-for-complete
 
-        echo "Flashing complete"
         clean
     done
 }
@@ -207,24 +256,24 @@ function log() {
     search=""
     passthrough=false
 
-    while getopts 'ps:' flag; do
+    while getopts 'os:' flag; do
         case "${flag}" in
-        p) passthrough=true ;;
+        o) passthrough=true ;;
         s) search="$OPTARG" ;;
         *) continue ;;
         esac
     done
     shift $((OPTIND - 1))
 
-    RG_FLAGS="-i"
+    RG_FLAGS=(-i)
 
     if [[ -n "$search" ]]; then
-        RG_FLAGS+=" $search"
+        RG_FLAGS+=("$search")
         if [[ "$passthrough" == true ]]; then
-            RG_FLAGS+=" --passthrough"
+            RG_FLAGS+=("--passthrough")
         fi
 
-        (sudo tio /dev/ttyACM0) </dev/tty | rg $RG_FLAGS
+        (sudo tio /dev/ttyACM0) </dev/tty | rg "${RG_FLAGS[@]}"
     else
         (sudo tio /dev/ttyACM0) </dev/tty
     fi
