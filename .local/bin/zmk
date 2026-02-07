@@ -54,6 +54,7 @@ function build() {
         n)
             board=nice_nano
             niceview=true
+            FLASH_FLAGS+=(-n)
             ;;
         o) LOG_FLAGS+=(-o) ;;
         p) pristine=true ;;
@@ -125,32 +126,35 @@ EOF
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
             if [[ $niceview == true ]]; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view'")
+                BUILD_DIRS+=("$BASE/nick-view/left")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_left")
+                BUILD_DIRS+=("$BASE/left")
             fi
 
-            BUILD_DIRS+=("$BASE/left")
             SHIELDS+=("${BASE}_left")
         fi
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
             if [[ $niceview == true ]]; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view'")
+                BUILD_DIRS+=("$BASE/nick-view/right")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_right")
+                BUILD_DIRS+=("$BASE/right")
             fi
 
-            BUILD_DIRS+=("$BASE/right")
             SHIELDS+=("${BASE}_right")
         fi
     else
         if [[ $niceview == true ]]; then
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view'")
+            BUILD_DIRS+=("$BASE/nick-view")
         else
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}")
+            BUILD_DIRS+=("$BASE")
         fi
 
-        BUILD_DIRS+=("$BASE")
         SHIELDS+=("$BASE")
     fi
 
@@ -166,11 +170,11 @@ EOF
     done
 
     if [[ $flash == true ]]; then
-        flash "${FLASH_FLAGS[@]}" $*
+        $0 flash "${FLASH_FLAGS[@]}" $*
     fi
 
     if [[ $log == true ]]; then
-        log "${LOG_FLAGS[@]}" $*
+        $0 log "${LOG_FLAGS[@]}" $*
     fi
 }
 
@@ -190,11 +194,16 @@ export -f run wait-for-dev wait-for-complete
 
 function flash() {
     reset=false
+    niceview=false
 
-    if [[ ${1:-} == -r ]]; then
-        reset=true
-        shift
-    fi
+    while getopts ':nr' flag; do
+        case "${flag}" in
+        n) niceview=true ;;
+        r) reset=true ;;
+        *) continue ;;
+        esac
+    done
+    shift $((OPTIND - 1))
 
     OLD_BASE="${1:-}"
 
