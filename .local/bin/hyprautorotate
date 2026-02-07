@@ -10,15 +10,20 @@ function rotate() {
         return
     fi
 
-    if [[ "$ORIENTATION" == normal ]]; then
+    case "$ORIENTATION" in
+    normal)
         TRANSFORM=0
-    elif [[ "$ORIENTATION" == left-up ]]; then
+        ;;
+    left-up)
         TRANSFORM=1
-    elif [[ "$ORIENTATION" == bottom-up ]]; then
+        ;;
+    bottom-up)
         TRANSFORM=2
-    elif [[ "$ORIENTATION" == right-up ]]; then
+        ;;
+    right-up)
         TRANSFORM=3
-    fi
+        ;;
+    esac
 
     while read -r MONITOR; do
         NAME="$(echo "$MONITOR" | jq -r '.name')"
@@ -67,9 +72,9 @@ function rotate() {
         hyprctl --batch keyword monitor "$NAME, ${WIDTH}x${HEIGHT}@${REFRESH}, $PLACEMENT, $SCALE, transform, $TRANSFORM, bitdepth, 10" >/dev/null
     done < <(hyprctl monitors -j | jq -rc ".[]")
 
-    notify-send -e Auto-Rotate "Monitors set to $ORIENTATION" -h string:key:auto-rotate
     hyprctl keyword input:touchdevice:transform "$TRANSFORM" >/dev/null
     hyprctl keyword input:tablet:transform "$TRANSFORM" >/dev/null
+    notify-send -e Auto-Rotate "Monitors set to $ORIENTATION" -h string:key:auto-rotate
 }
 
 FILE="/tmp/${HYPRLAND_INSTANCE_SIGNATURE}_auto_rotate"
