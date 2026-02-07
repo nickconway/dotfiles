@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DIR="$PWD"
+
+for repo in *; do
+    echo $repo
+    cd $DIR/$repo
+    [[ -e .git ]] || continue
+    git $* || echo "FAILED"
+    echo
+done
