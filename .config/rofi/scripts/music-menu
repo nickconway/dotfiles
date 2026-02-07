@@ -4,15 +4,15 @@
 theme=~/.config/rofi/styles/applets.rasi
 
 # Theme Elements
-status="`playerctl status`"
-loop_status="`playerctl loop`"
-shuffle_status="`playerctl shuffle`"
+status="$(playerctl status)"
+loop_status="$(playerctl loop)"
+shuffle_status="$(playerctl shuffle)"
 if [[ -z "$status" ]]; then
-	prompt='Offline'
-	mesg="Nothing is Playing"
+    prompt='Offline'
+    mesg="Nothing is Playing"
 else
-	prompt="`playerctl metadata -f "{{artist}}" | sed "s/&/&amp;/g"`"
-	mesg="`playerctl metadata -f "{{title}}" | sed "s/&/&amp;/g"` :: `playerctl metadata -f "{{album}}" | sed "s/&/&amp;/g"`"
+    prompt="$(playerctl metadata -f "{{artist}}" | sed "s/&/&amp;/g")"
+    mesg="$(playerctl metadata -f "{{title}}" | sed "s/&/&amp;/g") :: $(playerctl metadata -f "{{album}}" | sed "s/&/&amp;/g")"
 fi
 
 list_col='6'
@@ -20,9 +20,9 @@ list_row='1'
 
 # Options
 if [[ ${status} == *"Playing"* ]]; then
-	option_1=""
+    option_1=""
 else
-	option_1=""
+    option_1=""
 fi
 option_2=""
 option_3=""
@@ -40,8 +40,8 @@ if [[ ${loop_status} == "Playlist" ]]; then
 elif [[ ${loop_status} == "Track" ]]; then
     active="-a 4"
 elif [[ ${loop_status} != "None" ]]; then
-#     urgent="-u 4"
-# else
+    #     urgent="-u 4"
+    # else
     option_5=" Parsing Error"
 fi
 
@@ -49,21 +49,21 @@ fi
 if [[ ${shuffle_status} == "On" ]]; then
     [ -n "$active" ] && active+=",5" || active="-a 5"
 elif [[ ${shuffle_status} != "Off" ]]; then
-#     [ -n "$urgent" ] && urgent+=",5" || urgent="-u 5"
-# else
+    #     [ -n "$urgent" ] && urgent+=",5" || urgent="-u 5"
+    # else
     option_6=" Parsing Error"
 fi
 
 # Rofi CMD
 rofi_cmd() {
-	rofi -theme-str "listview {columns: $list_col; lines: $list_row;}" \
-		-theme-str 'textbox-prompt-colon {str: "";}' \
-		-dmenu \
-		-p "$prompt" \
-		-mesg "$mesg" \
-		${active} ${urgent} \
-		-markup-rows \
-		-theme ${theme} \
+    rofi -theme-str "listview {columns: $list_col; lines: $list_row;}" \
+        -theme-str 'textbox-prompt-colon {str: "";}' \
+        -dmenu \
+        -p "$prompt" \
+        -mesg "$mesg" \
+        ${active} ${urgent} \
+        -markup-rows \
+        -theme ${theme} \
         -kb-custom-1 "t" \
         -kb-custom-2 "s" \
         -kb-custom-3 "p" \
@@ -74,7 +74,7 @@ rofi_cmd() {
 
 # Pass variables to rofi dmenu
 run_rofi() {
-	echo -e "$option_1\n$option_2\n$option_3\n$option_4\n$option_5\n$option_6" | rofi_cmd
+    echo -e "$option_1\n$option_2\n$option_3\n$option_4\n$option_5\n$option_6" | rofi_cmd
 }
 
 # Actions
@@ -82,34 +82,34 @@ chosen="$(run_rofi)"
 code=$?
 
 case ${code} in
-    10) playerctl play-pause;;
-    11) playerctl stop;;
-    12) previous-song;;
-    13) next-song;;
-    14) if [[ ${loop_status} == "Playlist" ]]; then
-            playerctl loop Track
-        elif [[ ${loop_status} == "Track" ]]; then
-            playerctl loop None
-        elif [[ ${loop_status} == "None" ]]; then
-            playerctl loop Playlist
-        fi;;
-    15) playerctl shuffle toggle;;
+10) playerctl play-pause ;;
+11) playerctl stop ;;
+12) playerctl previous ;;
+13) playerctl next ;;
+14) if [[ ${loop_status} == "Playlist" ]]; then
+    playerctl loop Track
+elif [[ ${loop_status} == "Track" ]]; then
+    playerctl loop None
+elif [[ ${loop_status} == "None" ]]; then
+    playerctl loop Playlist
+fi ;;
+15) playerctl shuffle toggle ;;
 esac
 [[ $code == 0 ]] || exit
 
 case ${chosen} in
-    $option_1) playerctl play-pause;;
-    $option_2) playerctl stop;;
-    $option_3) previous-song;;
-    $option_4) next-song;;
-    $option_5)
-        if [[ ${loop_status} == "Playlist" ]]; then
-            playerctl loop Track
-        elif [[ ${loop_status} == "Track" ]]; then
-            playerctl loop None
-        elif [[ ${loop_status} == "None" ]]; then
-            playerctl loop Playlist
-        fi
-        ;;
-    $option_6) playerctl shuffle toggle;;
+$option_1) playerctl play-pause ;;
+$option_2) playerctl stop ;;
+$option_3) playerctl previous ;;
+$option_4) playerctl next ;;
+$option_5)
+    if [[ ${loop_status} == "Playlist" ]]; then
+        playerctl loop Track
+    elif [[ ${loop_status} == "Track" ]]; then
+        playerctl loop None
+    elif [[ ${loop_status} == "None" ]]; then
+        playerctl loop Playlist
+    fi
+    ;;
+$option_6) playerctl shuffle toggle ;;
 esac

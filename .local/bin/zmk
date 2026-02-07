@@ -1,0 +1,257 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+function clean() {
+    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
+        mv ~/Git/zmk-config/config/include/leader.dtsi{.bkp,}
+    fi
+
+    if [[ -e ~/Git/zmk-config/config/include/macros.dtsi.bkp ]]; then
+        mv ~/Git/zmk-config/config/include/macros.dtsi{.bkp,}
+    fi
+
+    [[ -e ~/Git/zmk/app/.clangd ]] && rm ~/Git/zmk/app/.clangd
+
+    if [[ -e tmp ]]; then
+        sudo umount tmp
+        rmdir tmp
+    fi
+}
+
+trap clean ERR EXIT
+
+function run() {
+    docker run \
+        -v ~/Git/zmk:/workspace \
+        -v ~/Git/zmk-config:/workspace/zmk-config \
+        -v ~/Git/zmk/zephyr:/workspace/zephyr \
+        -v ~/Git/zmk/modules:/workspace/modules \
+        -v ~/Git/zmk/tools:/workspace/tools \
+        -v ~/Git/zmk/app/build:/workspace/app/build \
+        -w /workspace/app \
+        --rm \
+        zmk "$@"
+}
+
+function build() {
+    log=false
+    update=false
+
+    while getopts 'flps:uv' flag; do
+        case "${flag}" in
+        l) log=true ;;
+        u) update=true ;;
+        *) continue ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi ]]; then
+        cp ~/Git/zmk-config/config/include/macros.dtsi{,.bkp}
+        cp ~/Git/zmk-config/config/include/leader.dtsi{,.bkp}
+
+        cat ~/.config/zmk/macros.dtsi >>~/Git/zmk-config/config/include/macros.dtsi
+
+        (
+            n=0
+            while read line; do
+                if [[ "$line" == '};' && $n = 0 ]]; then
+                    cat ~/.config/zmk/leader.dtsi
+                    n=1
+                fi
+                echo "$line"
+            done <~/Git/zmk-config/config/include/leader.dtsi
+        ) >~/Git/zmk-config/config/include/leader.dtsi.new
+
+        mv ~/Git/zmk-config/config/include/leader.dtsi{.new,}
+    fi
+
+    if ! docker image inspect zmk &>/dev/null; then
+        docker build -t zmk ~/Git/zmk/.devcontainer
+    fi
+
+    if [[ ! -e ~/Git/zmk/.west ]]; then
+        run bash -c "west init -l ."
+        run bash -c "west update"
+    elif [[ $update == true ]]; then
+        run bash -c "west update"
+    fi
+
+    cat <<EOF >~/Git/zmk/app/.clangd
+        CompileFlags:
+        Add: -Wno-unknown-warning-option
+        Remove: [-m*, -f*]
+EOF
+
+    FLAGS=""
+    if [[ $log == true ]]; then
+        FLAGS="-S zmk-usb-logging"
+    fi
+
+    OLD_BASE="$1"
+
+    BASE="$OLD_BASE"
+    BASE="${BASE%_left}"
+    BASE="${BASE%_right}"
+
+    IS_SPLIT=false
+    if [[ $(find ~/Git/zmk{,-config} -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
+        IS_SPLIT=true
+    fi
+
+    if [[ "$IS_SPLIT" == true ]]; then
+        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
+            if [ "${2:-}" = "nv" ]; then
+                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"${BASE}_left nice_view_adapter nice_view\""
+                run west build $FLAGS -d build/$BASE/left -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_left nice_view_adapter nice_view"
+
+            else
+                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_left"
+                run west build $FLAGS -d build/$BASE/left -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_left
+            fi
+        fi
+
+        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
+            if [ "${2:-}" = "nv" ]; then
+                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"${BASE}_right nice_view_adapter nice_view\""
+                run west build $FLAGS -d build/$BASE/right -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_right nice_view_adapter nice_view"
+            else
+                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_right"
+                run west build $FLAGS -d build/$BASE/right -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_right
+            fi
+        fi
+    else
+        if [ "${2:-}" = "nv" ]; then
+            run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE} nice_view_adapter nice_view"
+            run west build $FLAGS -d build/$BASE -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE} nice_view_adapter nice_view"
+        else
+            run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}"
+            run west build $FLAGS -d build/$BASE -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}
+        fi
+    fi
+}
+
+function flash() {
+    OLD_BASE="$1"
+
+    BASE="$OLD_BASE"
+    BASE="${BASE%_left}"
+    BASE="${BASE%_right}"
+
+    IS_SPLIT=false
+    if [[ $(find ~/Git/zmk{,-config} -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
+        IS_SPLIT=true
+    fi
+
+    if [[ "$IS_SPLIT" == true ]]; then
+        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
+            mkdir -p tmp
+
+            echo "Set right keyboard to flashing mode..."
+            while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+                true
+            done
+            echo "Flashing..."
+            sudo mount /dev/disk/by-label/NICENANO tmp
+            sudo cp ~/Git/zmk/app/build/$BASE/right/zephyr/zmk.uf2 tmp
+            while [[ -e /dev/disk/by-label/NICENANO ]]; do
+                true
+            done
+            echo "Flashing complete"
+
+            clean
+        fi
+
+        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
+            mkdir -p tmp
+
+            echo "Set left keyboard to flashing mode..."
+            while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+                true
+            done
+            echo "Flashing..."
+            sudo mount /dev/disk/by-label/NICENANO tmp
+            sudo cp ~/Git/zmk/app/build/$BASE/left/zephyr/zmk.uf2 tmp
+            while [[ -e /dev/disk/by-label/NICENANO ]]; do
+                true
+            done
+            echo "Flashing complete"
+
+            clean
+        fi
+    else
+        mkdir -p tmp
+
+        echo "Set keyboard to flashing mode..."
+        while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+            true
+        done
+        echo "Flashing..."
+        sudo mount /dev/disk/by-label/NICENANO tmp
+        sudo cp ~/Git/zmk/app/build/$BASE/zmk.uf2 tmp
+        while [[ -e /dev/disk/by-label/NICENANO ]]; do
+            true
+        done
+        echo "Flashing complete"
+
+        clean
+    fi
+}
+
+function log() {
+    search=""
+    passthrough=false
+
+    while getopts 'ps:' flag; do
+        case "${flag}" in
+        p) passthrough=true ;;
+        s) search="$OPTARG" ;;
+        *) continue ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    RG_FLAGS="-i"
+
+    if [[ -n "$search" ]]; then
+        RG_FLAGS+=" $search"
+        if [[ "$passthrough" == true ]]; then
+            RG_FLAGS+=" --passthrough"
+        fi
+
+        (sudo tio /dev/ttyACM0) </dev/tty | rg $RG_FLAGS
+    else
+        (sudo tio /dev/ttyACM0) </dev/tty
+    fi
+}
+
+function test() {
+    update=false
+    verbose=false
+
+    while getopts 'uv' flag; do
+        case "${flag}" in
+        u) update=true ;;
+        v) verbose=true ;;
+        *) continue ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    ARGS=""
+
+    if [[ $verbose == true ]]; then
+        ARGS="ZMK_TESTS_VERBOSE=y"
+    fi
+
+    if [[ ! -e ~/Git/zmk/.west ]]; then
+        run bash -c "west init -l ."
+        run bash -c "west update"
+    elif [[ $update == true ]]; then
+        run bash -c "west update"
+    fi
+
+    run bash -xc "$ARGS west test tests/${1:-}"
+}
+
+$*

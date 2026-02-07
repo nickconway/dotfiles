@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 case ${1:-} in
+show)
+    notify-send "Current volume: $(pamixer --get-volume)%" -h string:key:audio -h int:value:$(pamixer --get-volume) -e
+    ;;
+
 raise)
     pamixer -u
     pamixer -i ${2:-1}

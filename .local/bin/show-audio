@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-notify-send "Current volume: $(pamixer --get-volume)%" -h string:key:audio -h int:value:$(pamixer --get-volume) -e
