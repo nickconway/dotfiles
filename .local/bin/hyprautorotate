@@ -3,25 +3,19 @@ set -euo pipefail
 
 function rotate() {
     ORIENTATION="$1"
-    LAST_ORIENTATION="$(cat "$2")"
-    echo $ORIENTATION >"$2"
-
-    if [[ -z $LAST_ORIENTATION ]] || [[ $ORIENTATION == "$LAST_ORIENTATION" ]]; then
-        return
-    fi
 
     case "$ORIENTATION" in
     normal)
-        TRANSFORM=0
+        NEW_TRANSFORM=0
         ;;
     left-up)
-        TRANSFORM=1
+        NEW_TRANSFORM=1
         ;;
     bottom-up)
-        TRANSFORM=2
+        NEW_TRANSFORM=2
         ;;
     right-up)
-        TRANSFORM=3
+        NEW_TRANSFORM=3
         ;;
     esac
 
@@ -31,8 +25,13 @@ function rotate() {
         HEIGHT="$(echo "$MONITOR" | jq '.height')"
         REFRESH="$(echo "$MONITOR" | jq '.refreshRate')"
         SCALE="$(echo "$MONITOR" | jq '.scale')"
+        TRANSFORM="$(echo "$MONITOR" | jq '.transform')"
         X="$(echo "$MONITOR" | jq '.x')"
         Y="$(echo "$MONITOR" | jq '.y')"
+
+        if [[ $NEW_TRANSFORM == "$TRANSFORM" ]]; then
+            continue
+        fi
 
         PLACEMENT=$(grep $NAME ~/.config/hypr/include/monitors.conf | grep -o 'auto\S*' | tr -d ,)
 
@@ -66,18 +65,16 @@ function rotate() {
         esac
 
         if [[ $X -eq 0 && $Y -eq 0 ]]; then
-            PLACEMENT=auto
+            PLACEMENT=0x0
         fi
 
-        hyprctl --batch keyword monitor "$NAME, ${WIDTH}x${HEIGHT}@${REFRESH}, $PLACEMENT, $SCALE, transform, $TRANSFORM, bitdepth, 10" >/dev/null
+        hyprctl --batch keyword monitor "$NAME, ${WIDTH}x${HEIGHT}@${REFRESH}, $PLACEMENT, $SCALE, transform, $NEW_TRANSFORM, bitdepth, 10" >/dev/null
+        notify-send -e Auto-Rotate "$NAME set to $ORIENTATION" -h string:key:auto-rotate-$NAME
     done < <(hyprctl monitors -j | jq -rc ".[]")
 
-    hyprctl keyword input:touchdevice:transform "$TRANSFORM" >/dev/null
-    hyprctl keyword input:tablet:transform "$TRANSFORM" >/dev/null
-    notify-send -e Auto-Rotate "Monitors set to $ORIENTATION" -h string:key:auto-rotate
+    hyprctl keyword input:touchdevice:transform "$NEW_TRANSFORM" >/dev/null
+    hyprctl keyword input:tablet:transform "$NEW_TRANSFORM" >/dev/null
 }
 
-FILE="/tmp/${HYPRLAND_INSTANCE_SIGNATURE}_auto_rotate"
-
 export -f rotate
-monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL rev | stdbuf -oL cut -d , -f 2- | stdbuf -oL rev | stdbuf -oL sed 's/[ )]//g' | xargs -I '{}' bash -c "rotate '{}' $FILE"
+monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL rev | stdbuf -oL cut -d , -f 2- | stdbuf -oL rev | stdbuf -oL sed 's/[ )]//g' | xargs -I '{}' bash -c "rotate '{}'"
