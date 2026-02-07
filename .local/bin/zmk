@@ -12,9 +12,11 @@ function clean() {
 
     [[ -e ~/Git/zmk/app/.clangd ]] && rm ~/Git/zmk/app/.clangd
 
-    if [[ -e tmp ]]; then
-        sudo umount tmp
-        rmdir tmp
+    if [[ -e ~/Git/zmk/tmp ]]; then
+        if mountpoint -q ~/Git/zmk/tmp; then
+            sudo umount ~/Git/zmk/tmp
+        fi
+        rmdir ~/Git/zmk/tmp
     fi
 }
 
@@ -34,13 +36,22 @@ function run() {
 }
 
 function build() {
+    board=
+    flash=false
     log=false
-    update=false
+    niceview=false
+    pristine=false
 
-    while getopts 'flps:uv' flag; do
+    while getopts 'b:flnp' flag; do
         case "${flag}" in
+        b) board=$OPTARG ;;
+        f) flash=true ;;
         l) log=true ;;
-        u) update=true ;;
+        n)
+            board=nice_nano
+            niceview=true
+            ;;
+        p) pristine=true ;;
         *) continue ;;
         esac
     done
@@ -66,26 +77,21 @@ function build() {
         mv ~/Git/zmk-config/config/include/leader.dtsi{.new,}
     fi
 
-    if ! docker image inspect zmk &>/dev/null; then
-        docker build -t zmk ~/Git/zmk/.devcontainer
-    fi
-
-    if [[ ! -e ~/Git/zmk/.west ]]; then
-        run bash -c "west init -l ."
-        run bash -c "west update"
-    elif [[ $update == true ]]; then
-        run bash -c "west update"
-    fi
-
     cat <<EOF >~/Git/zmk/app/.clangd
         CompileFlags:
         Add: -Wno-unknown-warning-option
         Remove: [-m*, -f*]
 EOF
 
-    FLAGS=""
+    FLAGS=()
+    FLAGS+=(-b "$board")
+
     if [[ $log == true ]]; then
-        FLAGS="-S zmk-usb-logging"
+        FLAGS+=(-S zmk-usb-logging)
+    fi
+
+    if [[ $pristine == true ]]; then
+        FLAGS+=(-p)
     fi
 
     OLD_BASE="$1"
@@ -99,35 +105,48 @@ EOF
         IS_SPLIT=true
     fi
 
+    CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config"
+
+    CMAKE_ARGS=()
+    BUILD_DIRS=()
+
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
-            if [ "${2:-}" = "nv" ]; then
-                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"${BASE}_left nice_view_adapter nice_view\""
-                run west build $FLAGS -d build/$BASE/left -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_left nice_view_adapter nice_view"
-
+            if [[ $niceview == true ]]; then
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view'")
             else
-                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_left"
-                run west build $FLAGS -d build/$BASE/left -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_left
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_left")
             fi
+
+            BUILD_DIRS+=("$BASE/left")
         fi
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
-            if [ "${2:-}" = "nv" ]; then
-                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=\"${BASE}_right nice_view_adapter nice_view\""
-                run west build $FLAGS -d build/$BASE/right -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE}_right nice_view_adapter nice_view"
+            if [[ $niceview == true ]]; then
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view'")
             else
-                run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_right"
-                run west build $FLAGS -d build/$BASE/right -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}_right
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_right")
             fi
+
+            BUILD_DIRS+=("$BASE/right")
         fi
     else
-        if [ "${2:-}" = "nv" ]; then
-            run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE} nice_view_adapter nice_view"
-            run west build $FLAGS -d build/$BASE -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD="${BASE} nice_view_adapter nice_view"
+        if [[ $niceview == true ]]; then
+            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view'")
         else
-            run west config build.cmake-args -- "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}"
-            run west build $FLAGS -d build/$BASE -b nice_nano -- -DZMK_CONFIG=/workspace/zmk-config/config -DSHIELD=${BASE}
+            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}")
         fi
+
+        BUILD_DIRS+=("$BASE")
+    fi
+
+    for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
+        run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
+        run west build "${FLAGS[@]}" -d build/${BUILD_DIRS[$index]}
+    done
+
+    if [[ $flash == true ]]; then
+        flash $*
     fi
 }
 
@@ -143,59 +162,45 @@ function flash() {
         IS_SPLIT=true
     fi
 
+    BUILD_DIRS=()
+    SHIELDS=()
+
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
-            mkdir -p tmp
-
-            echo "Set right keyboard to flashing mode..."
-            while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
-                true
-            done
-            echo "Flashing..."
-            sudo mount /dev/disk/by-label/NICENANO tmp
-            sudo cp ~/Git/zmk/app/build/$BASE/right/zephyr/zmk.uf2 tmp
-            while [[ -e /dev/disk/by-label/NICENANO ]]; do
-                true
-            done
-            echo "Flashing complete"
-
-            clean
+            BUILD_DIRS+=("$BASE/right")
+            SHIELDS+=("${BASE}_right")
         fi
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
-            mkdir -p tmp
-
-            echo "Set left keyboard to flashing mode..."
-            while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
-                true
-            done
-            echo "Flashing..."
-            sudo mount /dev/disk/by-label/NICENANO tmp
-            sudo cp ~/Git/zmk/app/build/$BASE/left/zephyr/zmk.uf2 tmp
-            while [[ -e /dev/disk/by-label/NICENANO ]]; do
-                true
-            done
-            echo "Flashing complete"
-
-            clean
+            BUILD_DIRS+=("$BASE/left")
+            SHIELDS+=("${BASE}_left")
         fi
     else
-        mkdir -p tmp
+        BUILD_DIRS+=("$BASE")
+        SHIELDS+=("$BASE")
+    fi
 
-        echo "Set keyboard to flashing mode..."
+    for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
+        mkdir -p ~/Git/zmk/tmp
+
+        echo "Set ${SHIELDS[$index]} to flashing mode..."
+
         while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
             true
         done
+
         echo "Flashing..."
-        sudo mount /dev/disk/by-label/NICENANO tmp
-        sudo cp ~/Git/zmk/app/build/$BASE/zmk.uf2 tmp
+
+        sudo mount /dev/disk/by-label/NICENANO ~/Git/zmk/tmp
+        sudo cp ~/Git/zmk/app/build/$BASE/right/zephyr/zmk.uf2 ~/Git/zmk/tmp
+
         while [[ -e /dev/disk/by-label/NICENANO ]]; do
             true
         done
-        echo "Flashing complete"
 
+        echo "Flashing complete"
         clean
-    fi
+    done
 }
 
 function log() {
@@ -226,12 +231,10 @@ function log() {
 }
 
 function test() {
-    update=false
     verbose=false
 
-    while getopts 'uv' flag; do
+    while getopts 'v' flag; do
         case "${flag}" in
-        u) update=true ;;
         v) verbose=true ;;
         *) continue ;;
         esac
@@ -244,14 +247,20 @@ function test() {
         ARGS="ZMK_TESTS_VERBOSE=y"
     fi
 
-    if [[ ! -e ~/Git/zmk/.west ]]; then
-        run bash -c "west init -l ."
-        run bash -c "west update"
-    elif [[ $update == true ]]; then
-        run bash -c "west update"
-    fi
-
     run bash -xc "$ARGS west test tests/${1:-}"
 }
+
+function update() {
+    run bash -c "west update"
+}
+
+if ! docker image inspect zmk &>/dev/null; then
+    docker build -t zmk ~/Git/zmk/.devcontainer
+fi
+
+if [[ ! -e ~/Git/zmk/.west ]]; then
+    run bash -c "west init -l ."
+    update
+fi
 
 $*
