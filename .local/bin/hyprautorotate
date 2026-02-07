@@ -1,21 +1,14 @@
 #!/usr/bin/env bash
-
-function clockwise() {
-    x=$1
-    y=$2
-    r=${3:-1}
-
-    for ((i = 0; i < r; i++)); do
-        tmp=$x
-        x=$y
-        y=$((-1 * tmp))
-    done
-
-    echo $x $y
-}
+set -euo pipefail
 
 function rotate() {
     ORIENTATION="$1"
+    LAST_ORIENTATION="$(cat "$2")"
+    echo $ORIENTATION >"$2"
+
+    if [[ -z $LAST_ORIENTATION ]] || [[ $ORIENTATION == "$LAST_ORIENTATION" ]]; then
+        return
+    fi
 
     if [[ "$ORIENTATION" == normal ]]; then
         TRANSFORM=0
@@ -27,63 +20,59 @@ function rotate() {
         TRANSFORM=3
     fi
 
-    ROTATIONS=0
-
-    case $LAST_ORIENTATION in
-    normal)
-        case $ORIENTATION in
-        left-up) ROTATIONS=1 ;;
-        bottom-up) ROTATIONS=2 ;;
-        right-up) ROTATIONS=3 ;;
-        esac
-        ;;
-
-    left-up)
-        case $ORIENTATION in
-        bottom-up) ROTATIONS=1 ;;
-        right-up) ROTATIONS=2 ;;
-        normal) ROTATIONS=3 ;;
-        esac
-        ;;
-
-    bottom-up)
-        case $ORIENTATION in
-        right-up) ROTATIONS=1 ;;
-        normal) ROTATIONS=2 ;;
-        left-up) ROTATIONS=3 ;;
-        esac
-        ;;
-
-    right-up)
-        case $ORIENTATION in
-        normal) ROTATIONS=1 ;;
-        left-up) ROTATIONS=2 ;;
-        bottom-up) ROTATIONS=3 ;;
-        esac
-        ;;
-    esac
-
     while read -r MONITOR; do
-        NAME="$(echo "$MONITOR" | jq '.name')"
+        NAME="$(echo "$MONITOR" | jq -r '.name')"
+        WIDTH="$(echo "$MONITOR" | jq '.width')"
+        HEIGHT="$(echo "$MONITOR" | jq '.height')"
+        REFRESH="$(echo "$MONITOR" | jq '.refreshRate')"
+        SCALE="$(echo "$MONITOR" | jq '.scale')"
         X="$(echo "$MONITOR" | jq '.x')"
         Y="$(echo "$MONITOR" | jq '.y')"
 
-        COORDS="$(clockwise $X $Y $ROTATIONS)"
-        X="$(echo "$COORDS" | awk '{print $1}')"
-        Y="$(echo "$COORDS" | awk '{print $2}')"
+        PLACEMENT=$(grep $NAME ~/.config/hypr/include/monitors.conf | grep -o 'auto\S*' | tr -d ,)
 
-        hyprctl --batch "keyword monitor $NAME, transform, $TRANSFORM"
-    done < <(hyprctl monitors -j | jq -rac ".[]")
+        case "$ORIENTATION" in
+        left-up)
+            case "$PLACEMENT" in
+            auto | auto-right) PLACEMENT=auto-down ;;
+            auto-down) PLACEMENT=auto-left ;;
+            auto-left) PLACEMENT=auto-up ;;
+            auto-up) PLACEMENT=auto-right ;;
+            esac
+            ;;
 
-    notify-send -e Auto-Rotate "Monitors set to $*" -h string:key:auto-rotate
-    hyprctl keyword input:touchdevice:transform "$TRANSFORM"
-    hyprctl keyword input:tablet:transform "$TRANSFORM"
+        bottom-up)
+            case "$PLACEMENT" in
+            auto | auto-right) PLACEMENT=auto-left ;;
+            auto-down) PLACEMENT=auto-up ;;
+            auto-left) PLACEMENT=auto-right ;;
+            auto-up) PLACEMENT=auto-down ;;
+            esac
+            ;;
 
-    LAST_ORIENTATION=$ORIENTATION
+        right-up)
+            case "$PLACEMENT" in
+            auto | auto-right) PLACEMENT=auto-up ;;
+            auto-down) PLACEMENT=auto-right ;;
+            auto-left) PLACEMENT=auto-down ;;
+            auto-up) PLACEMENT=auto-left ;;
+            esac
+            ;;
+        esac
+
+        if [[ $X -eq 0 && $Y -eq 0 ]]; then
+            PLACEMENT=auto
+        fi
+
+        hyprctl --batch keyword monitor "$NAME, ${WIDTH}x${HEIGHT}@${REFRESH}, $PLACEMENT, $SCALE, transform, $TRANSFORM, bitdepth, 10" >/dev/null
+    done < <(hyprctl monitors -j | jq -rc ".[]")
+
+    notify-send -e Auto-Rotate "Monitors set to $ORIENTATION" -h string:key:auto-rotate
+    hyprctl keyword input:touchdevice:transform "$TRANSFORM" >/dev/null
+    hyprctl keyword input:tablet:transform "$TRANSFORM" >/dev/null
 }
 
-LAST_ORIENTATION=$(monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL rev | stdbuf -oL cut -d , -f 2- | stdbuf -oL rev | stdbuf -oL sed 's/[ )]//g')
+FILE="/tmp/${HYPRLAND_INSTANCE_SIGNATURE}_auto_rotate"
 
-while read -r O; do
-    rotate $O
-done < <(monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL rev | stdbuf -oL cut -d , -f 2- | stdbuf -oL rev | stdbuf -oL sed 's/[ )]//g')
+export -f rotate
+monitor-sensor --accel | stdbuf -oL grep orientation | stdbuf -oL cut -d : -f 2 | stdbuf -oL rev | stdbuf -oL cut -d , -f 2- | stdbuf -oL rev | stdbuf -oL sed 's/[ )]//g' | xargs -I '{}' bash -c "rotate '{}' $FILE"
