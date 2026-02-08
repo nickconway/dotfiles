@@ -1,7 +1,7 @@
 # DO NOT EDIT! This file will be overwritten by nwg-look.
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
-include "/home/nick/.gtkrc-2.0.mine"
+include "{{ env.HOME }}/.gtkrc-2.0.mine"
 gtk-theme-name="Orchis-Dark"
 gtk-icon-theme-name="Papirus-Dark"
 gtk-font-name="NotoSans Nerd Font 10"

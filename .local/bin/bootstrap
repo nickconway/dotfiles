@@ -3,7 +3,7 @@ set -eou pipefail
 
 function err() {
     if [[ -n ${NTFY_TOKEN:-} ]]; then
-        curl -d "Bootstrapping failed on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+        curl -d "Bootstrapping failed on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
     fi
     exit 1
 }
@@ -117,5 +117,5 @@ else
 fi
 
 if [[ -n $NTFY_TOKEN ]]; then
-    curl -d "Bootstrapping complete on $(uname -n)" https://notifications.conway.dev/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+    curl -d "Bootstrapping complete on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 fi

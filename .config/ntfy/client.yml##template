@@ -1,0 +1,1 @@
+default-host: https://notifications.{{ env.SERVICES_BASE_DOMAIN }}
