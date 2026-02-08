@@ -126,7 +126,7 @@ EOF
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
             if [[ $niceview == true ]]; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view'")
-                BUILD_DIRS+=("$BASE/nick-view/left")
+                BUILD_DIRS+=("$BASE/nice-view/left")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_left")
                 BUILD_DIRS+=("$BASE/left")
@@ -138,7 +138,7 @@ EOF
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
             if [[ $niceview == true ]]; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view'")
-                BUILD_DIRS+=("$BASE/nick-view/right")
+                BUILD_DIRS+=("$BASE/nice-view/right")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_right")
                 BUILD_DIRS+=("$BASE/right")
@@ -149,7 +149,7 @@ EOF
     else
         if [[ $niceview == true ]]; then
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view'")
-            BUILD_DIRS+=("$BASE/nick-view")
+            BUILD_DIRS+=("$BASE/nice-view")
         else
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}")
             BUILD_DIRS+=("$BASE")
