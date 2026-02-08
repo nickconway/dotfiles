@@ -93,13 +93,13 @@
   "cpu": {
     "format": " {usage}%",
     "tooltip": true,
-    "on-click": "hyprland-special top",
+    "on-click": "hyprworkspace special top",
     "interval": 2,
   },
   "memory": {
     "format": " {}%",
     "tooltip": true,
-    "on-click": "hyprland-special top",
+    "on-click": "hyprworkspace special top",
     "interval": 2,
   },
   "temperature": {
@@ -110,13 +110,13 @@
     "format": "{icon} {temperatureC}°C",
     "format-icons": ["", "", ""],
     "tooltip": true,
-    "on-click": "hyprland-special top",
+    "on-click": "hyprworkspace special top",
     "interval": 2,
   },
   "disk": {
     "format": " {percentage_used}% ({free})",
     "tooltip": true,
-    "on-click": "hyprland-special top",
+    "on-click": "hyprworkspace special top",
     "interval": 2,
   },
   "custom/updates": {
@@ -184,7 +184,7 @@
       "car": " ",
       "default": ["", "", ""],
     },
-    "on-click": "hyprland-special audio",
+    "on-click": "hyprworkspace special audio",
     "ignored_sinks": ["easyeffects_sink"],
   },
   "backlight/slider": {

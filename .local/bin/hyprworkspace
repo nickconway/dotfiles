@@ -13,6 +13,10 @@ elif [[ "${1:-}" == "prev" ]]; then
     else
         hyprctl dispatch swapactiveworkspaces current l
     fi
+elif [[ "${1:-}" == "special" ]]; then
+    hyprctl keyword misc:initial_workspace_tracking 0
+    hyprctl dispatch togglespecialworkspace $2
+    hyprctl keyword misc:initial_workspace_tracking 1
 else
     hyprctl keyword misc:initial_workspace_tracking 0
     hyprctl dispatch focusworkspaceoncurrentmonitor "$1"
