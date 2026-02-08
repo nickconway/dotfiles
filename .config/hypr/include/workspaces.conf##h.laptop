@@ -1,9 +1,9 @@
-bind = $mainMod, B, exec, hyprland-workspace 1
-bind = $mainMod, T, exec, hyprland-workspace 2
-bind = $mainMod, D, exec, hyprland-workspace 3
-bind = $mainMod, X, exec, hyprland-workspace 4
-bind = $mainMod, M, exec, hyprland-workspace 5
-bind = $mainMod, F, exec, hyprland-workspace 6
+bind = $mainMod, B, exec, hyprworkspace 1
+bind = $mainMod, T, exec, hyprworkspace 2
+bind = $mainMod, D, exec, hyprworkspace 3
+bind = $mainMod, X, exec, hyprworkspace 4
+bind = $mainMod, M, exec, hyprworkspace 5
+bind = $mainMod, F, exec, hyprworkspace 6
 
 workspace = 1, on-created-empty: chromium
 workspace = 2, on-created-empty: kitty
