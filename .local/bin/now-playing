@@ -10,7 +10,9 @@ else
     TEXT="$(playerctl metadata -f "{{title}}\n{{artist}}")"
 fi
 
-curl -s "$URL" --output /tmp/feishin-cover.png
+rm /tmp/feishin-cover-* &>/dev/null || true
+COVER_FILE="/tmp/feishin-cover-$(playerctl metadata -f "{{title}}-{{artist}}").png"
+curl -s "$URL" --output "$COVER_FILE"
 
 if [[ $(playerctl status) == "Playing" ]]; then
     A="pause=󰏤"
@@ -18,7 +20,7 @@ else
     A="play=󰐊"
 fi
 
-ACTION=$(notify-send "Now Playing" "$TEXT" -i /tmp/feishin-cover.png -e -h string:key:audio --action "prev=󰒮" --action "$A" --action "next=󰒭")
+ACTION=$(notify-send "Now Playing" "$TEXT" -i "$COVER_FILE" -e -h string:key:audio --action "prev=󰒮" --action "$A" --action "next=󰒭")
 
 if [[ -n "$ACTION" ]]; then
     playerctl "$ACTION"
