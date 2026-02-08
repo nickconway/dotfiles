@@ -37,6 +37,7 @@ function run() {
 
 function build() {
     board=
+    snippet=
     flash=false
     log=false
     niceview=false
@@ -98,10 +99,14 @@ EOF
     FLAGS+=(-b "$board")
 
     if [[ $log == true ]]; then
-        FLAGS+=(-S zmk-usb-logging)
+        snippet=zmk-usb-logging
     fi
 
-    if [[ $pristine == true ]]; then
+    if [[ -n $snippet ]]; then
+        FLAGS+=(-S "$snippet")
+    fi
+
+    if [[ $pristine == true ]] ; then
         FLAGS+=(-p)
     fi
 
@@ -165,8 +170,12 @@ EOF
     fi
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
+        if ! grep "^CACHED_SNIPPET:STRING=$snippet$" "app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" &>/dev/null; then
+            PRISTINE=-p
+        fi
+
         run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
-        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "run west build ${FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
+        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "run west build ${FLAGS[*]} ${PRISTINE:-} -d build/${BUILD_DIRS[$index]}"
     done
 
     if [[ $flash == true ]]; then
