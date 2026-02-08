@@ -45,8 +45,8 @@ if command -v ss &>/dev/null; then
     if [[ -n ${TMUX:-} ]] && [[ -n $PORT ]]; then
         (
             while true; do
-                nc -l -p "$PORT" | wl-copy
-            done &>/dev/null &
+                (nc -l -p "$PORT" | wl-copy) || true
+            done &
 
             echo -n $! >"$S_FILE"
         )
