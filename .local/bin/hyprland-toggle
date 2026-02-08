@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case $1 in
+bit-depth)
+    hyprctl monitors -j | jq -r ".[] | .name, .currentFormat" | xargs -n2 echo | while read -r LINE; do
+        MONITOR="$(echo "$LINE" | awk '{print $1}')"
+        FORMAT="$(echo "$LINE" | awk '{print $2}')"
+
+        if [[ "$FORMAT" == "XRGB8888" ]]; then
+            BITDEPTH=10
+        else
+            BITDEPTH=8
+        fi
+
+        if ! grep -q "$MONITOR" ~/.config/hypr/include/monitors.conf; then
+            continue
+        fi
+
+        K="$(grep "$MONITOR" ~/.config/hypr/include/monitors.conf | sed -r "s/bitdepth, \w+/bitdepth, $BITDEPTH/" | sed 's/monitor = //' | xargs)"
+        hyprctl --batch "keyword monitor $K"
+        notify-send -e "Set $MONITOR to bitdepth of $BITDEPTH" -h string:key:bitdepth-"$MONITOR"
+    done
+    ;;
+
+scaling)
+    shift
+
+    config_file="$HOME/.config/hypr/include/monitors.conf"
+
+    monitor_config=$(sed -n '1p' "$config_file" | cut -d ' ' -f 3-)
+    primay_monitor=$(echo "$monitor_config" | awk '{print $1}' | tr -d ",")
+    config_scale=$(echo "$monitor_config" | awk '{print $4}' | tr -d ",")
+
+    old_scale="$(hyprctl monitors -j | jq -r ".[] | select(.name == \"$primay_monitor\") | .scale")"
+
+    if [[ -z "${1:-}" ]] && [[ "$old_scale" == "1.00" ]]; then
+        new_scale=$config_scale
+    elif [[ "${1:-}" == "config" ]]; then
+        new_scale=$config_scale
+    elif [[ "${1:-}" == "1" ]]; then
+        new_scale=1.00
+    else
+        new_scale=1.00
+    fi
+
+    if [[ "$new_scale" != "$old_scale" ]]; then
+        new_config="$(echo "$monitor_config" | sed "s/\S\+,/$new_scale,/4")"
+        hyprctl keyword monitor "$new_config"
+    fi
+    ;;
+
+zenbook-screen)
+    shift
+
+    export XDG_RUNTIME_DIR="/run/user/$(id -u $USER)"
+    export HYPRLAND_INSTANCE_SIGNATURE=$(ls $XDG_RUNTIME_DIR/hypr/ 2>/dev/null | head -n1)
+
+    if [[ $1 == off ]]; then
+        hyprctl keyword monitor "eDP-2,disabled"
+        notify-send -e -h string:key:zenbook-screen "Zenbook" "Second screen disabled"
+    else
+        hyprctl keyword monitor "eDP-2,2880x1800@120,auto-down,1.6,bitdepth,10"
+        notify-send -e -h string:key:zenbook-screen "Zenbook" "Second screen enabled"
+    fi
+    ;;
+esac

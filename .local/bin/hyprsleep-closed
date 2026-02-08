@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-while true; do
-    if grep -q closed /proc/acpi/button/lid/LID/state; then
-        sleep 5 && grep -q closed /proc/acpi/button/lid/LID/state && hyprsleep
-    fi
-done

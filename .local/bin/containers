@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+function start() {
+    if rg -q '\- proxy$' "$DOCKER_STACK_DIR" 2>/dev/null; then
+        docker network inspect proxy &>/dev/null || docker network create proxy
+    fi
+
+    cd "$1" || return
+    echo "$1"
+
+    if [[ -e setup ]]; then
+        ./setup
+    fi
+
+    "${BIN[@]}" up -d --build
+}
+
+function stop() {
+    cd "$1" || return
+    echo "$1"
+
+    "${BIN[@]}" stop
+}
+
+function update() {
+    cd "$1" || return
+    echo "$1"
+
+    "${BIN[@]}" pull
+    "${BIN[@]}" up -d --build
+}
+
+function dump() {
+    CONTAINER=$1
+    DIR="$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
+    cd "$DIR" || return
+
+    if docker exec "$CONTAINER" bash -c 'which pg_dumpall && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
+        echo "Dumping postgres container $CONTAINER"
+        docker exec "$CONTAINER" bash -c 'pg_dumpall -c --if-exists --username "$POSTGRES_USER"' >data/dump.sql
+    elif docker exec "$CONTAINER" bash -c 'which mysqldump && [[ -n $MYSQL_USER ]]' &>/dev/null; then
+        echo "Dumping mysql container $CONTAINER"
+        docker exec "$CONTAINER" bash -c 'mysqldump -u "$MYSQL_USER" --password="$MYSQL_PASSWORD" --all-databases --no-tablespaces' >data/dump.sql
+    elif docker exec "$CONTAINER" bash -c 'which mariadb-dump && [[ -n $MARIADB_USER ]]' &>/dev/null; then
+        echo "Dumping mariadb container $CONTAINER"
+        # docker exec "$c" bash -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" --all-databases --no-tablespaces' > data/dump.sql
+    elif docker exec "$CONTAINER" bash -c 'which mongodump' &>/dev/null; then
+        echo "Dumping mongo container $CONTAINER"
+        docker exec "$CONTAINER" mongodump --archive >data/mongo.dump
+    fi
+}
+
+function restore() {
+    CONTAINER=$1
+    DIR="$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
+    cd "$DIR" || return
+
+    if docker exec "$CONTAINER" bash -c 'which psql && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
+        echo "Restoring postgres container $CONTAINER"
+        docker exec -i "$CONTAINER" bash -c 'psql -U "$POSTGRES_USER"' <data/dump.sql >/dev/null
+    elif docker exec "$CONTAINER" bash -c 'which mysql && [[ -n $MYSQL_USER ]]' &>/dev/null; then
+        echo "Restoring mysql container $CONTAINER"
+        docker exec -i "$CONTAINER" bash -c 'mysql -u "$MYSQL_USER" --password="$MYSQL_PASSWORD"' <data/dump.sql >/dev/null
+    elif docker exec "$CONTAINER" bash -c 'which mariadb && [[ -n $MARIADB_USER ]]' &>/dev/null; then
+        echo "Restoring mariadb container $CONTAINER"
+        docker exec -i "$CONTAINER" bash -c 'mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD"' <data/dump.sql >/dev/null
+    elif docker exec "$CONTAINER" bash -c 'which mongodump' &>/dev/null; then
+        echo "Restoring mongo container $CONTAINER"
+        docker exec -i "$CONTAINER" mongorestore --archive <data/mongo.dump >/dev/null
+    fi
+}
+
+function unhealthy() {
+    docker ps --format=json | jq -r '{Names, State, Status} | select((.State != "running") or (.Status | contains("unhealthy"))) | .Names'
+}
+
+if [[ $# -eq 0 ]]; then
+    exit
+fi
+
+BIN=(docker compose)
+
+if [[ -e /usr/bin/docker-compose ]]; then
+    BIN=(docker-compose)
+fi
+
+DOCKER_STACK_DIR=${DOCKER_STACK_DIR:-~/Docker}
+
+CMD="$1"
+shift
+
+TARGETS=("$DOCKER_STACK_DIR"/*)
+
+if [[ $CMD == unhealthy ]]; then
+    $CMD
+    exit
+fi
+
+if [[ $CMD == dump ]] || [[ $CMD == restore ]]; then
+    readrray TARGETS < <(docker ps --format '{{.Names}}' | grep -v nextcloud-aio)
+fi
+
+for T in "${TARGETS[@]}"; do
+    if [[ $# -eq 0 ]] || [[ "$*" == *"$T"* ]]; then
+        "$CMD" "$T"
+    fi
+done
+
+if docker ps | grep -q nextcloud-aio-mastercontainer; then
+    if [[ $CMD == start ]]; then
+        docker exec -it nextcloud-aio-mastercontainer sudo -u www-data php /var/www/docker-aio/php/src/Cron/StartContainers.php
+    elif [[ $CMD == stop ]]; then
+        docker exec -it nextcloud-aio-mastercontainer sudo -u www-data php /var/www/docker-aio/php/src/Cron/StopContainers.php
+    fi
+fi
+
+if [[ $CMD == start ]] || [[ $CMD == stop ]]; then
+    readarray CONTAINERS < <(docker ps -qa)
+    docker "$CMD" "${CONTAINERS[@]}"
+fi

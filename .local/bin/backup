@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+function clean() {
+    sudo chown -R "$USER:$USER" ~/.{cache,config}/borg
+
+    COUNT=0
+    until [[ -z ${HEALTHCHECK_ID:-} ]] || [[ $COUNT -gt 30 ]] || curl -f "https://health.$SERVICES_BASE_DOMAIN/ping/${HEALTHCHECK_TOKEN}/${HEALTHCHECK_ID}?create=1"; do
+        sleep 5
+        COUNT=$((COUNT + 1))
+    done
+}
+
+function create() {
+    FILES=()
+    for f in "$@"; do
+        if [[ ! -e "$f" ]]; then
+            echo $f does not exist
+            exit 1
+        fi
+        FILES+=("$f")
+    done
+
+    if [[ ! -e "$BORG_REPO" ]]; then
+        mkdir -p "$(dirname "$BORG_REPO")"
+        sudo -E "$(which borg)" init -e repokey
+    fi
+
+    sudo -E "$(which borg)" create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE" "${FILES[@]}"
+    sudo -E "$(which borg)" prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 6
+    sudo -E "$(which borg)" compact -v --progress
+}
+
+function restore() {
+    [[ -e "$BORG_REPO" ]]
+
+    ARCHIVE="$(borg list | fzft --tac | awk '{print $1}')"
+    echo Restoring "$ARCHIVE"
+
+    if [[ $# -gt 1 ]]; then
+        borg extract --debug --progress ::"$ARCHIVE" "${@:2}"
+    else
+        borg extract --debug --progress ::"$ARCHIVE"
+    fi
+}
+
+function talos() {
+    mkdir -p /mnt/nas/backups/talos
+    cd /mnt/nas/backups/talos
+
+    talosctl etcd snapshot "etcd.snapshot.$(date +%Y%m%d)"
+    find /mnt/nas/backups/talos -mtime +30 -type f -delete
+}
+
+function get-opt-arg() {
+    TOKEN=${!OPTIND}
+
+    if [[ -n $TOKEN && $TOKEN != -* ]]; then
+        OPTIND=$((OPTIND + 1))
+        OPTARG=$TOKEN
+    else
+        OPTARG=""
+    fi
+}
+
+trap clean EXIT ERR
+
+while getopts "i" arg; do
+    case $arg in
+    i)
+        get-opt-arg "$@"
+        HEALTHCHECK_ID=$OPTARG
+        ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+export BORG_EXIT_CODES=modern
+DATE=$(date +"%d-%b-%Y-%H-%M-%S")
+
+"$@"

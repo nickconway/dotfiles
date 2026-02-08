@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-docker ps --format=json | jq -r '{Names, State, Status} | select((.State != "running") or (.Status | contains("unhealthy"))) | .Names'
