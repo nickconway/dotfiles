@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export GUM_INPUT_HEADER_FOREGROUND=${GUM_INPUT_HEADER_FOREGROUND:-9}
+export GUM_INPUT_CURSOR_FOREGROUND=${GUM_INPUT_CURSOR_FOREGROUND:-11}
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+    export DEBUG_MODE
+fi
+
+if command -v envsubst-better &>/dev/null; then
+    ENV_CMD=envsubst-better
+else
+    ENV_CMD=envsubst
+fi
+
+function apply() {
+    cd "$1" || return
+    echo "$1"
+
+    get-env-vars >>.env
+    source .env
+
+    if [[ -e setup ]]; then
+        ./setup
+    fi
+
+    for f in *.yml; do
+        "$ENV_CMD" <"$f" | kubectl apply -f -
+    done
+}
+
+K8S_MANIFEST_DIR=${K8S_MANIFEST_DIR:-~/Kubernetes}
+
+CMD="$1"
+shift
+
+TARGETS=("$K8S_MANIFEST_DIR"/*)
+
+for T in "${TARGETS[@]}"; do
+    if [[ $# -eq 0 ]] || [[ "$*" == *"$T"* ]]; then
+        "$CMD" "$T"
+    fi
+done

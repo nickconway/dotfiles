@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function start() {
-    if rg -q '\- proxy$' "$DOCKER_STACK_DIR" 2>/dev/null; then
+    if grep -q '\- proxy$' "$DOCKER_STACK_DIR" 2>/dev/null; then
         docker network inspect proxy &>/dev/null || docker network create proxy
     fi
 
@@ -73,10 +73,6 @@ function restore() {
 function unhealthy() {
     docker ps --format=json | jq -r '{Names, State, Status} | select((.State != "running") or (.Status | contains("unhealthy"))) | .Names'
 }
-
-if [[ $# -eq 0 ]]; then
-    exit
-fi
 
 BIN=(docker compose)
 
