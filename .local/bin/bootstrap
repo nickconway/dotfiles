@@ -46,7 +46,7 @@ if command -v termux-reload-settings >/dev/null; then
     exit
 fi
 
-get-env-vars ~/.config/env.example
+get-vars env ~/.config/env.example
 
 if [[ $(yadm config --get-all local.class) == "" ]]; then
     YADM_CLASS=
