@@ -91,12 +91,21 @@ icon)
     ;;
 
 password)
-    rbw list --fields name,user | sed "s/\s\+/ /g" >passwords
+    rbw list --fields type,name,user | sed "s/\s\+/ /g" >passwords
+
+    function get-rbw() {
+        TYPE=$1
+        shift
+
+        case $TYPE in
+        Note) rbw get "$*" ;;
+        Login) rbw get "$@" ;;
+        esac
+    }
 
     FZF_FLAGS=(--border-label " Passwords " --prompt "󱉼 > ")
     ROFI_FLAGS=(-dmenu -p 󱉼 -i -config ~/.config/rofi/styles/style_2.rasi -theme-str 'listview { columns: 1; } mode-switcher { enabled: false; }')
-    PROCESSING=(rbw get)
-    PROCESSING_STDIN=false
+    PROCESSING=(get-rbw)
     LIST=passwords
     ;;
 esac
@@ -108,9 +117,5 @@ if [[ -n "${LIST:-}" ]]; then
         CMD=(rofi "${ROFI_FLAGS[@]}")
     fi
 
-    if [[ ${PROCESSING_STDIN:-} != false ]]; then
-        echo -e "$("${CMD[@]}" <"$LIST")" | "${PROCESSING[@]}" | wl-copy -n && paste-keys
-    else
-        "${PROCESSING[@]}" $(echo -e "$("${CMD[@]}" <"$LIST")") | wl-copy -n && paste-keys
-    fi
+    "${PROCESSING[@]}" $(echo -e "$("${CMD[@]}" <"$LIST")") | wl-copy -n && paste-keys
 fi
