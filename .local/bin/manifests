@@ -19,7 +19,7 @@ function apply() {
     cd "$1" || return
     echo "$1"
 
-    get-env-vars >>.env
+    get-env-vars
     source .env
 
     if [[ -e setup ]]; then
