@@ -34,7 +34,7 @@ sudo cmake --install build
 
 cd ~/.config/quickshell
 git clone https://github.com/noctalia-dev/noctalia-shell noctalia || true
-cd noctalia-shell
+cd noctalia
 git pull
 
 for q in $(basename "$(dirname "$(qs list --all | grep Config | cut -d ':' -f 2)")" | xargs); do
