@@ -81,11 +81,12 @@ if [[ -e /usr/bin/docker-compose ]]; then
 fi
 
 DOCKER_STACK_DIR=${DOCKER_STACK_DIR:-~/Docker}
+cd "$DOCKER_STACK_DIR"
 
 CMD="$1"
 shift
 
-TARGETS=("$DOCKER_STACK_DIR"/*)
+TARGETS=(*)
 
 if [[ $CMD == unhealthy ]]; then
     $CMD
@@ -98,7 +99,7 @@ fi
 
 for T in "${TARGETS[@]}"; do
     if [[ $# -eq 0 ]] || [[ "$*" == *"$T"* ]]; then
-        "$CMD" "$T"
+        ("$CMD" "$T")
     fi
 done
 

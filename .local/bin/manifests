@@ -32,14 +32,15 @@ function apply() {
 }
 
 K8S_MANIFEST_DIR=${K8S_MANIFEST_DIR:-~/Kubernetes}
+cd "$K8S_MANIFEST_DIR"
 
 CMD="$1"
 shift
 
-TARGETS=("$K8S_MANIFEST_DIR"/*)
+TARGETS=(*)
 
 for T in "${TARGETS[@]}"; do
     if [[ $# -eq 0 ]] || [[ "$*" == *"$T"* ]]; then
-        "$CMD" "$T"
+        ("$CMD" "$T")
     fi
 done
