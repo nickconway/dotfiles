@@ -5,6 +5,7 @@ ALL=
 BRIGHTNESS=
 VAL=
 CAELESTIA=$(pgrep -f "qs -c caelestia" || echo "")
+NOCTALIA=$(pgrep -f "qs -c noctalia" || echo "")
 
 case ${1:-} in
 ALL)
@@ -33,15 +34,17 @@ show)
 esac
 
 if [[ -n "$CAELESTIA" ]]; then
-    TARGETS="$(caelestia shell brightness list)"
+    TARGETS="$(qs -c caelestia ipc call brightness list)"
 
     if [[ -z ${NAME:-} ]]; then
-        BRIGHTNESS=$(caelestia shell brightness get)
+        BRIGHTNESS=$(qs -c caelestia ipc call brightness get)
     else
-        BRIGHTNESS=$(caelestia shell brightness getFor $NAME)
+        BRIGHTNESS=$(qs -c caelestia ipc call brightness getFor $NAME)
     fi
 
     BRIGHTNESS="$(echo "$BRIGHTNESS * 100" | bc | sed 's/\.00//g')%"
+elif [[ -n "$NOCTALIA" ]]; then
+    TARGETS="$(hyprctl monitors -j | jq '.[].name' | xargs)"
 else
     TARGETS="$(brightnessctl -l | grep backlight | awk '{print $2}' | xargs)"
 
@@ -56,8 +59,10 @@ fi
 
 if [[ -n $VAL ]] && [[ $ALL == true ]]; then
     for d in $TARGETS; do
-        if [[ -n "$CAELESTIA" ]] && [[ $(caelestia shell brightness getFor $d) != -1 ]]; then
-            caelestia shell brightness setFor $d $VAL
+        if [[ -n "$CAELESTIA" ]] && [[ $(qs -c caelestia ipc call brightness getFor $d) != -1 ]]; then
+            qs -c caelestia ipc call brightness setFor $d $VAL
+        elif [[ -n "$NOCTALIA" ]]; then
+            qs -c noctalia ipc call brightness set $VAL
         else
             brightnessctl set -d $d $VAL
         fi
@@ -65,7 +70,15 @@ if [[ -n $VAL ]] && [[ $ALL == true ]]; then
         brightness show $d
     done
 elif [[ -n $VAL ]]; then
-    caelestia shell brightness set $VAL || brightnessctl set $VAL
+    if [[ -n "$CAELESTIA" ]]; then
+        qs -c caelestia ipc call brightness set $VAL
+    elif [[ -n "$NOCTALIA" ]] && [[ $VAL == +* ]]; then
+        qs -c noctalia ipc call brightness increase
+    elif [[ -n "$NOCTALIA" ]] && [[ $VAL == *- ]]; then
+        qs -c noctalia ipc call brightness decrease
+    else
+        brightnessctl set $VAL
+    fi
     brightness show
 fi
 

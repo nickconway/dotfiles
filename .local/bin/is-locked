@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if { pgrep -f "qs -c caelestia" &>/dev/null && qs -c caelestia ipc call lock isLocked; } \
+    || pidof hyprlock; then
+    echo true
+    exit 0
+fi
+
+echo false
+exit 1

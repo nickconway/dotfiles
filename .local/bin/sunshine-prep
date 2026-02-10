@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 if [[ $1 == "do" ]]; then
     if pidof hyprlock; then
@@ -8,12 +7,12 @@ if [[ $1 == "do" ]]; then
     fi
 
     swaync-client -dn
-    caelestia shell gameMode enable || true
+    qs -c caelestia ipc call gameMode enable || true
     sunshine-headless enable
 elif [[ $1 == "undo" ]]; then
     sunshine-headless disable
     swaync-client -df
-    caelestia shell gameMode disable || true
+    qs -c caelestia ipc call gameMode disable || true
 
     if [[ -e /tmp/.sunshine-locked ]]; then
         rm /tmp/.sunshine-locked

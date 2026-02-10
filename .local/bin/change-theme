@@ -99,12 +99,21 @@ fi
 
 if pgrep hyprpaper &>/dev/null; then
     hyprctl hyprpaper wallpaper ', ~/.config/wallpaper, ' &>/dev/null
+fi
+
+if pgrep -f "qs -c noctalia" &>/dev/null; then
+    for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
+        qs -c noctalia ipc call wallpaper set ~/.config/wallpaper.png $m
+    done
 elif pgrep -f "qs -c caelestia" &>/dev/null; then
     cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
     caelestia wallpaper -N -f ~/.config/wallpaper.png &>/dev/null || true
-    qs -c caelestia kill &>/dev/null
-    qs -c caelestia -d &>/dev/null
 fi
+
+for q in $(basename "$(dirname "$(qs list --all | grep Config | cut -d ':' -f 2)")" | xargs); do
+    qs -c $q kill &>/dev/null
+    qs -c $q -d &>/dev/null
+done
 
 if pgrep -x swaync &>/dev/null; then
     swaync-client -rs

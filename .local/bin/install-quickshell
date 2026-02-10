@@ -33,16 +33,11 @@ cmake --build build
 sudo cmake --install build
 
 cd ~/.config/quickshell
-git clone https://github.com/noctalia-dev/noctalia-shell 2>/dev/null || true
+git clone https://github.com/noctalia-dev/noctalia-shell noctalia || true
 cd noctalia-shell
 git pull
 
-if pgrep -f "qs -c noctalia-shell" &>/dev/null; then
-    qs -c noctalia-shell kill
-    qs -c noctalia-shell -d
-fi
-
-if pgrep -f "qs -c calestia" &>/dev/null; then
-    qs -c caelestia kill
-    qs -c caelestia -d
-fi
+for q in $(basename "$(dirname "$(qs list --all | grep Config | cut -d ':' -f 2)")" | xargs); do
+    qs -c $q kill &>/dev/null
+    qs -c $q -d &>/dev/null
+done
