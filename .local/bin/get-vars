@@ -29,7 +29,8 @@ terraform)
     ;;
 esac
 
-touch "$FILE"
+touch "$OUTPUT"
+[[ -e "$FILE" ]] || exit 0
 
 case $1 in
 env)
