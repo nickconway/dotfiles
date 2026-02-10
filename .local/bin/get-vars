@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+    export DEBUG_MODE
+fi
+
 function get-input() {
     PROMPT=${1:-"Enter a value for $VAR"}
 
@@ -56,7 +61,7 @@ terraform)
         DEFAULT=$(echo var."$VAR" | tofu console)
         PLACEHOLDER=$(echo "$DEFAULT" | xargs)
 
-        if ! grep -q "^$VAR =" terraform.tfvars; then
+        if grep -q "^$VAR =" "$OUTPUT"; then
             continue
         fi
 
