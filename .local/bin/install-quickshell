@@ -32,7 +32,17 @@ cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
 cmake --build build
 sudo cmake --install build
 
-if pgrep -f "qs -c calestia"; then
+cd ~/.config/quickshell
+git clone https://github.com/noctalia-dev/noctalia-shell 2>/dev/null || true
+cd noctalia-shell
+git pull
+
+if pgrep -f "qs -c noctalia-shell" &>/dev/null; then
+    qs -c noctalia-shell kill
+    qs -c noctalia-shell -d
+fi
+
+if pgrep -f "qs -c calestia" &>/dev/null; then
     qs -c caelestia kill
     qs -c caelestia -d
 fi
