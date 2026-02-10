@@ -29,7 +29,7 @@ terraform)
     ;;
 esac
 
-[[ -e "$FILE" ]] || exit 0
+touch "$FILE"
 
 case $1 in
 env)
