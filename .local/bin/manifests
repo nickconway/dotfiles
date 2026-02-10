@@ -27,7 +27,7 @@ function apply() {
     fi
 
     for f in *.yml; do
-        "$ENV_CMD" <"$f" | kubectl apply -f -
+        kubectl apply -f <("$ENV_CMD" <"$f")
     done
 }
 
