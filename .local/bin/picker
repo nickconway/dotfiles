@@ -20,6 +20,8 @@ ROFI_FLAGS=(
     'listview { columns: 6; } mode-switcher { enabled: false; } element-text { font: "NotoSans Nerd Font Propo 20"; }'
 )
 
+PROCESSING=(tee)
+
 case $1 in
 clipboard)
     LIST=$(mktemp)
@@ -117,5 +119,5 @@ if [[ -n "${LIST:-}" ]]; then
         CMD=(rofi "${ROFI_FLAGS[@]}")
     fi
 
-    "${PROCESSING[@]}" $(echo -e "$("${CMD[@]}" <"$LIST")") | wl-copy -n && paste-keys
+    echo -e "$("${CMD[@]}" <"$LIST")" | "${PROCESSING[@]}" | wl-copy -n && paste-keys
 fi

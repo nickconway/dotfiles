@@ -83,9 +83,8 @@ function dr() {
     if [[ $# -gt 0 ]]; then
         docker restart $@
     else
-        SELECTED=$(docker ps -a --format {{.Names}} | fzft --prompt=" > ")
+        local SELECTED=$(docker ps -a --format {{.Names}} | fzft --prompt=" > ")
         [[ -z $SELECTED ]] || docker restart $SELECTED
-        unset SELECTED
     fi
 }
 
@@ -136,9 +135,8 @@ function find-up() {
 }
 
 function fn() {
-    SELECTED="$(fzft --preview="bat --color=always --style=plain {}")"
+    local SELECTED="$(fzft --preview="bat --color=always --style=plain {}")"
     [[ -n "$SELECTED" ]] && echo "$SELECTED" | xargs -d '\n' $EDITOR
-    unset SELECTED
 }
 
 alias g='git status'
@@ -205,16 +203,15 @@ function ggp() {
 
 function gi() {
     if [[ $# -eq 0 ]]; then
-        GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" |
+        local GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" |
             fzft --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
     else
-        GI_TYPE="$(echo $@ | sed "s/ /,/g")"
+        local GI_TYPE="$(echo $@ | sed "s/ /,/g")"
     fi
     [[ -n "$GI_TYPE" ]] && curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/"$GI_TYPE" |
         grep -v '# Created' | grep -v '# Edit at' | grep -v '# End of' |
         sed '1{/^$/d}' | sed '1{/^$/d}' |
         sed '${/^$/d}' | sed '${/^$/d}'
-    unset GI_TYPE
 
 }
 
@@ -591,41 +588,61 @@ function record-audio() {
 }
 
 function rgn() {
-    SELECTED=$(
-        rm -f /tmp/rg-fzf-{r,f}
-        RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden -g '!{**/node_modules/*,**/.github/*,**/.git/*}' "
-        INITIAL_QUERY="${*:-}"
-        fzft --ansi --disabled --query "$INITIAL_QUERY" \
-            --bind "start:reload:$RG_PREFIX {q}" \
-            --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-            --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~ RG ]] &&
-              echo "rebind(change)+change-prompt(RG > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
-              echo "unbind(change)+change-prompt(FZF > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
-            --color "hl:-1:underline,hl+:-1:underline:reverse" \
-            --prompt 'RG > ' \
-            --delimiter : \
-            --header 'CTRL-R: Switch between ripgrep/fzf' \
-            --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
-            --preview-window 'down,+{2}+3/3,~3'
-    )
+    rm -f /tmp/rg-fzf-{r,f}
 
+    if [[ ${1:-} == -a ]]; then
+        local INITIAL_QUERY="${2:-}"
+        shift &>/dev/null
+        shift &>/dev/null
+        local SELECTED="$(rg --column --line-number --no-heading --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}' "$INITIAL_QUERY" "${*:-.}")"
+    else
+        local INITIAL_QUERY="${1:-}"
+        shift &>/dev/null
+        local SELECTED="$(
+            RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}' {q} $*"
+            fzft --ansi --disabled --query "$INITIAL_QUERY" \
+                --bind "start:reload:$RG_PREFIX" \
+                --bind "change:reload:sleep 0.1; $RG_PREFIX || true" \
+                --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~  ]] &&
+              echo "rebind(change)+change-prompt( > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
+              echo "unbind(change)+change-prompt( > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+                --color "hl:-1:underline,hl+:-1:underline:reverse" \
+                --prompt ' > ' \
+                --delimiter : \
+                --header 'CTRL-R: Switch between ripgrep/fzf' \
+                --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
+                --preview-window 'down,+{2}+3/3,~3' \
+                --border-label " Search and Edit "
+        )"
+    fi
+
+    rm -f /tmp/rg-fzf-{r,f}
     [[ -z "$SELECTED" ]] && return
 
     COMMANDS=""
+    local FILES=()
     while IFS= read -r line; do
-        if [[ "$COMMANDS" == "" ]]; then
-            COMMANDS+="$(echo $line | awk -F ':' '{printf "\"%s\" +%s", $1, $2}')"
-        else
-            COMMANDS+="$(echo $line | awk -F ':' '{printf " -c \"e %s | %s\"", $1, $2}')"
+        local FILE=$(echo $line | awk -F ':' '{print $1}')
+
+        if [[ "${FILES[*]}" == *"$FILE"* ]]; then
+            continue
         fi
+
+        if [[ "$COMMANDS" == "" ]]; then
+            COMMANDS+="$(echo $line | awk -F ':' '{printf "%s \"+normal %sG%s|\"", $1, $2, $3}')"
+        else
+            COMMANDS+="$(echo $line | awk -F ':' '{printf " -c \"e %s | +normal %sG%s|\"", $1, $2, $3}')"
+        fi
+
+        FILES+=("$FILE")
     done <<<"$SELECTED"
 
+    echo "$EDITOR $COMMANDS -c first"
     eval "$EDITOR $COMMANDS -c first"
-    unset SELECTED
 }
 
 function remove-whitespace() {
-    rg '\s+$' -l | xargs sed -i 's/\s\+$//g'
+    rg '\s+$' -l ${1:-.} | xargs sed -i 's/\s\+$//g'
 }
 
 function respawn() {

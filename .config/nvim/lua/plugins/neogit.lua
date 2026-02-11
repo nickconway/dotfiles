@@ -19,8 +19,9 @@ return {
                     vim.env.GIT_WORK_TREE = get_git_root()
                 else
                     vim.env.GIT_DIR = vim.fn.system("yadm user-config -d")
-                    vim.env.GIT_WORK_TREE = vim.fn.expand("~")
+                    vim.env.GIT_WORK_TREE = vim.fn.system("yadm enter 'git config get core.worktree'")
                 end
+
                 local neogit = require("neogit")
                 neogit.open()
             end,

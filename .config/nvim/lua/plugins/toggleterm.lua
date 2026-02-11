@@ -37,15 +37,12 @@ return {
 
                 if not is_git_repo() then
                     opts.cmd = "yadm enter lazygit"
-                    opts.dir = os.getenv("HOME")
                 else
-                    vim.fn.system("tmux display-popup -w 90% -h 80% -B -E lazygit")
-                    return
+                    opts.cmd = "lazygit"
                 end
 
-                local Terminal = require("toggleterm.terminal").Terminal
-                local term = Terminal:new(opts)
-                term:toggle()
+                vim.cmd("bufdo update")
+                require("toggleterm.terminal").Terminal:new(opts):toggle()
             end,
             desc = "LazyGit",
         },

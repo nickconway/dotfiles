@@ -90,7 +90,10 @@ return {
                     section = "terminal",
                     enabled = function()
                         return Snacks.git.get_root() == nil
-                            and vim.fn.getcwd():find(vim.fn.getenv("HOME"), 1, true) == 1
+                            and vim.fn
+                                    .getcwd()
+                                    :find(vim.fn.system("yadm enter 'git config get core.worktree'"), 1, true)
+                                == 1
                     end,
                     cmd = "yadm status --short --branch --renames",
                     padding = 1,
@@ -252,7 +255,7 @@ return {
                 require("snacks").picker({
                     finder = "proc",
                     cmd = "yadm list -a -e",
-                    cwd = vim.fn.getcwd(),
+                    cwd = vim.fn.system("yadm enter 'git config get core.worktree'"),
                     title = "YADM Files",
                     transform = function(item)
                         item.file = item.text
@@ -679,13 +682,13 @@ return {
             desc = "Git Browse",
             mode = { "n", "v" },
         },
-        {
-            "<leader>gg",
-            function()
-                Snacks.lazygit()
-            end,
-            desc = "Lazygit",
-        },
+        -- {
+        --     "<leader>gg",
+        --     function()
+        --         Snacks.lazygit()
+        --     end,
+        --     desc = "Lazygit",
+        -- },
         {
             "<leader>un",
             function()
