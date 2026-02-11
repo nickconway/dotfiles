@@ -10,6 +10,6 @@ fi
 if pgrep -x "swaync"; then
     swaync-client -d
     if [[ $(swaync-client -D) == "false" ]]; then
-        notify-send "Do Not Disturb" "Do not disturb is now off" -h string:key:dnd -e
+        notify-send "Do Not Disturb" "Do not disturb is now off" -h string:synchronous:dnd -e
     fi
 fi

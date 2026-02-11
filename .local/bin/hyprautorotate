@@ -69,7 +69,7 @@ function rotate() {
         fi
 
         hyprctl --batch keyword monitor "$NAME, ${WIDTH}x${HEIGHT}@${REFRESH}, $PLACEMENT, $SCALE, transform, $NEW_TRANSFORM, bitdepth, 10" >/dev/null
-        notify-send -e Auto-Rotate "$NAME set to $ORIENTATION" -h string:key:auto-rotate-$NAME
+        notify-send -e Auto-Rotate "$NAME set to $ORIENTATION" -h string:synchronous:auto-rotate-$NAME
     done < <(hyprctl monitors -j | jq -rc ".[]")
 
     hyprctl keyword input:touchdevice:transform "$NEW_TRANSFORM" >/dev/null

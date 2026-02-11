@@ -2,7 +2,7 @@
 
 case ${1:-} in
 show)
-    notify-send "Current volume: $(pamixer --get-volume)%" -h string:key:audio -h int:value:$(pamixer --get-volume) -e
+    notify-send "Current volume: $(pamixer --get-volume)%" -h string:synchronous:audio -h int:value:$(pamixer --get-volume) -e
     ;;
 
 raise)

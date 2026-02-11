@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd ~/.local/source
+mkdir -p ~/Git
+
+cd ~/Git
 git clone https://github.com/nickconway/quickshell || true
 cd quickshell
 cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
 
-cd ~/.local/source
+cd ~/Git
 git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
 cd caelestia-cli
 git pull

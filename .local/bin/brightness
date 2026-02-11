@@ -93,7 +93,7 @@ if [[ -n ${SHOW:-} ]]; then
         fi
 
         notify-send Brightness "Current brightness${EXT:-}: $BRIGHTNESS" \
-            -h string:key:brightness-${NAME:-main} \
+            -h string:synchronous:brightness-${NAME:-main} \
             -h int:value:$BRIGHTNESS -e
     fi
 fi

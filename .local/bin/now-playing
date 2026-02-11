@@ -20,7 +20,7 @@ else
     A="play=󰐊"
 fi
 
-ACTION=$(notify-send "Now Playing" "$TEXT" -i "$COVER_FILE" -e -h string:key:audio --action "prev=󰒮" --action "$A" --action "next=󰒭")
+ACTION=$(notify-send "Now Playing" "$TEXT" -i "$COVER_FILE" -e -h string:synchronous:audio --action "prev=󰒮" --action "$A" --action "next=󰒭")
 
 if [[ -n "$ACTION" ]]; then
     playerctl "$ACTION"
