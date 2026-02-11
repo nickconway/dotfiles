@@ -388,7 +388,8 @@
     },
     "hooks": {
         "darkModeChange": "",
-        "enabled": false,
+        "enabled": true,
+        "mediaChange": "now-playing",
         "performanceModeDisabled": "",
         "performanceModeEnabled": "",
         "screenLock": "",
@@ -433,7 +434,7 @@
         "criticalUrgencyDuration": 30,
         "enableBatteryToast": true,
         "enableKeyboardLayoutToast": true,
-        "enableMediaToast": true,
+        "enableMediaToast": false,
         "enabled": true,
         "location": "top_right",
         "lowUrgencyDuration": 5,
