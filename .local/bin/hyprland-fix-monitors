@@ -3,7 +3,7 @@ set -euo pipefail
 set -x
 
 while true; do
-    if is-locked && { [[ "$(hyprctl monitors -j | jq -r '.[] | select(.name == "DP-3") | .disabled')" == "false" ]] && [[ "$(hyprctl monitors -j | jq -r '.[] | select(.name == "DP-3") | .width')" != 3840 ]]; }; then
+    if ! is-locked && { [[ "$(hyprctl monitors -j | jq -r '.[] | select(.name == "DP-3") | .disabled')" == "false" ]] && [[ "$(hyprctl monitors -j | jq -r '.[] | select(.name == "DP-3") | .width')" != 3840 ]]; }; then
         hyprctl keyword monitor "$(grep 'DP-1' .config/hypr/include/monitors.conf | sed 's/monitor = //g' | sed 's/preferred/1920x1080/g')"
         sleep 10
         hyprctl keyword monitor "$(grep 'DP-1' .config/hypr/include/monitors.conf | sed 's/monitor = //g')"
