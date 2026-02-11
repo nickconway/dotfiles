@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if pgrep -f "qs -c caelestia" &>/dev/null; then
+    qs -c caelestia ipc call drawers toggle sidebar
+elif pgrep -f "qs -c noctalia" &>/dev/null; then
+    qs -c noctalia ipc call notifications toggleHistory
+else
+    swaync-client -t
+fi

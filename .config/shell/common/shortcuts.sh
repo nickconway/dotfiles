@@ -62,6 +62,8 @@ alias cat='bat --style=plain'
 alias cata='bat --style=plain --show-all'
 alias cds=$'cd "$(tmux display-message -p \'#{session_path}\')"'
 
+alias choose-quickshell='find ~/.config/quickshell -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzft --border-label " Choose QuickShell Config " > ~/.config/quickshell/config'
+
 CMATRIX_BIN=$(which cmatrix)
 function cmatrix() {
     [[ -n $TMUX ]] && tmux set status off

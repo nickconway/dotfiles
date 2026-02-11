@@ -7,12 +7,12 @@ if [[ $1 == "do" ]]; then
     fi
 
     swaync-client -dn
-    qs -c caelestia ipc call gameMode enable || true
+    qs -c caelestia ipc call gameMode enable
     sunshine-headless enable
 elif [[ $1 == "undo" ]]; then
     sunshine-headless disable
     swaync-client -df
-    qs -c caelestia ipc call gameMode disable || true
+    qs -c caelestia ipc call gameMode disable
 
     if [[ -e /tmp/.sunshine-locked ]]; then
         rm /tmp/.sunshine-locked

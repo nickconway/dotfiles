@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if pgrep -f "qs -c caelestia" &>/dev/null; then
+    qs -c caelestia ipc call drawers toggle launcher
+elif pgrep -f "qs -c noctalia" &>/dev/null; then
+    qs -c noctalia ipc call launcher toggle
+else
+    rofi -show drun -config ~/.config/rofi/styles/style_2.rasi
+fi
