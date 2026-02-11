@@ -389,7 +389,7 @@
     "hooks": {
         "darkModeChange": "",
         "enabled": true,
-        "mediaChange": "now-playing",
+        "mediaChange": "flock -nu /tmp/now-playing-lock --command now-playing",
         "performanceModeDisabled": "",
         "performanceModeEnabled": "",
         "screenLock": "",
