@@ -10,9 +10,14 @@ else
     TEXT="$(playerctl metadata -f "{{title}}\n{{artist}}")"
 fi
 
-rm /tmp/feishin-cover-* &>/dev/null || true
-COVER_FILE="/tmp/feishin-cover-$(playerctl metadata -f "{{title}}-{{artist}}").png"
-curl -s "$URL" --output "$COVER_FILE"
+rm /tmp/now-playing-cover-* &>/dev/null || true
+
+if [[ "$URL" == file://* ]]; then
+    COVER_FILE="$URL"
+else
+    COVER_FILE="/tmp/now-playing-cover-$(playerctl metadata -f "{{title}}-{{artist}}").png"
+    curl -s "$URL" --output "$COVER_FILE"
+fi
 
 if [[ $(playerctl status) == "Playing" ]]; then
     A="pause=󰏤"
