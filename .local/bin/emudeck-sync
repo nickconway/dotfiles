@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-NAS_DIR="/mnt/nas/home/Documents/Emulation"
 EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
 
 RSYNC_CMD="rsync -Lauvz --progress --info=progress2"
 
 function pull-saves() {
     echo "Pulling Saves"
-    $RSYNC_CMD "$NAS_DIR"/Saves/ "$EMUDECK_DIR/saves"
+    $RSYNC_CMD "$REMOTE_EMUDECK_DIR"/Saves/ "$EMUDECK_DIR/saves"
 }
 
 function push-saves() {
     echo "Pushing Saves"
-    $RSYNC_CMD "$EMUDECK_DIR/saves/" "$NAS_DIR"/Saves
+    $RSYNC_CMD "$EMUDECK_DIR/saves/" "$REMOTE_EMUDECK_DIR"/Saves
 }
 
 function sync-saves() {
@@ -24,12 +23,12 @@ function sync-saves() {
 
 function pull-games() {
     echo "Pulling Games"
-    $RSYNC_CMD "$NAS_DIR"/Games/ "$EMUDECK_DIR/roms"
+    $RSYNC_CMD "$REMOTE_EMUDECK_DIR"/Games/ "$EMUDECK_DIR/roms"
 }
 
 function push-games() {
     echo "Pushing Games"
-    $RSYNC_CMD "$EMUDECK_DIR/roms/" "$NAS_DIR"/Games
+    $RSYNC_CMD "$EMUDECK_DIR/roms/" "$REMOTE_EMUDECK_DIR"/Games
 }
 
 function link-games() {
@@ -38,7 +37,7 @@ function link-games() {
     fi
 
     if [[ ! -e "$EMUDECK_DIR/roms" ]]; then
-        ln -sf "$NAS_DIR"/Games "$EMUDECK_DIR/roms"
+        ln -sf "$REMOTE_EMUDECK_DIR"/Games "$EMUDECK_DIR/roms"
     fi
 }
 
@@ -50,12 +49,12 @@ function sync-games() {
 
 function pull-bios() {
     echo "Pulling BIOS"
-    $RSYNC_CMD "$NAS_DIR"/BIOS/ "$EMUDECK_DIR/bios"
+    $RSYNC_CMD "$REMOTE_EMUDECK_DIR"/BIOS/ "$EMUDECK_DIR/bios"
 }
 
 function push-bios() {
     echo "Pushing BIOS"
-    $RSYNC_CMD "$EMUDECK_DIR/bios/" "$NAS_DIR"/BIOS
+    $RSYNC_CMD "$EMUDECK_DIR/bios/" "$REMOTE_EMUDECK_DIR"/BIOS
 }
 
 function sync-bios() {

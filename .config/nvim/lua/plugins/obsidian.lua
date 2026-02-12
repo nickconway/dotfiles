@@ -10,8 +10,8 @@ return {
             .. "/Documents/Notes/**.md",
         "BufNewFile " .. vim.fn.expand("~") .. "/Documents/Notes/**.md",
 
-        "BufReadPre /mnt/nas/home/Documents/Notes/**.md",
-        "BufNewFile /mnt/nas/home/Documents/Notes/**.md",
+        "BufReadPre " .. os.getenv("NOTES_DIR") .. "/**.md",
+        "BufNewFile " .. os.getenv("NOTES_DIR") .. "/**.md",
 
         "BufReadPre " .. vim.fn.expand("~") .. "/Git/blog/**.md",
         "BufNewFile " .. vim.fn.expand("~") .. "/Git/blog/**.md",
@@ -30,7 +30,7 @@ return {
             },
             {
                 name = "Notes",
-                path = "/mnt/nas/home/Documents/Notes",
+                path = os.getenv("NOTES_DIR"),
             },
             {
                 name = "Blog",

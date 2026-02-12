@@ -62,8 +62,6 @@ alias cat='bat --style=plain'
 alias cata='bat --style=plain --show-all'
 alias cds=$'cd "$(tmux display-message -p \'#{session_path}\')"'
 
-alias choose-quickshell='find ~/.config/quickshell -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzft --border-label " Choose QuickShell Config " > ~/.config/quickshell/config'
-
 CMATRIX_BIN=$(which cmatrix)
 function cmatrix() {
     [[ -n $TMUX ]] && tmux set status off
@@ -551,14 +549,7 @@ function mkcd() {
 
 alias n="$EDITOR"
 
-function notes() {
-    NOTES_DIR=~/Documents/Notes
-    mkdir -p $NOTES_DIR
-
-    [[ -e /mnt/nas/home/Documents/Notes ]] && NOTES_DIR=/mnt/nas/home/Documents/Notes
-
-    (cd $NOTES_DIR && $EDITOR)
-}
+alias notes='(mkdir -p "$NOTES_DIR" && cd "$NOTES_DIR" && $EDITOR)'
 
 function np() {
     curl -d "$@" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
@@ -619,7 +610,7 @@ function rgn() {
     rm -f /tmp/rg-fzf-{r,f}
     [[ -z "$SELECTED" ]] && return
 
-    COMMANDS=""
+    local COMMANDS=""
     local FILES=()
     while IFS= read -r line; do
         local FILE=$(echo $line | awk -F ':' '{print $1}')
@@ -629,15 +620,14 @@ function rgn() {
         fi
 
         if [[ "$COMMANDS" == "" ]]; then
-            COMMANDS+="$(echo $line | awk -F ':' '{printf "%s \"+normal %sG%s|\"", $1, $2, $3}')"
+            COMMANDS+="$(echo $line | sed 's/#/\\#/g' | awk -F ':' '{printf "%s \"+normal %sG%s|\"", $1, $2, $3}')"
         else
-            COMMANDS+="$(echo $line | awk -F ':' '{printf " -c \"e %s | +normal %sG%s|\"", $1, $2, $3}')"
+            COMMANDS+="$(echo $line | sed 's/#/\\#/g' | awk -F ':' '{printf " -c \"e %s | +normal %sG%s|\"", $1, $2, $3}')"
         fi
 
         FILES+=("$FILE")
     done <<<"$SELECTED"
 
-    echo "$EDITOR $COMMANDS -c first"
     eval "$EDITOR $COMMANDS -c first"
 }
 

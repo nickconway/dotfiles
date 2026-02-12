@@ -45,11 +45,11 @@ function restore() {
 }
 
 function talos() {
-    mkdir -p /mnt/nas/backups/talos
-    cd /mnt/nas/backups/talos
+    mkdir -p "$BORG_REPO"
+    cd "$BORG_REPO"
 
     talosctl etcd snapshot "etcd.snapshot.$(date +%Y%m%d)"
-    find /mnt/nas/backups/talos -mtime +30 -type f -delete
+    find "$BORG_REPO" -mtime +30 -type f -delete
 }
 
 function get-opt-arg() {

@@ -1,6 +1,8 @@
+source = include/wallpaper.conf
+
 background {
     monitor =
-    path = ~/.config/wallpaper
+    path = $WALLPAPER
     color = rgba(25, 20, 20, 0.9)
     blur_passes = 4 # 0 disables blurring
     blur_size = 8
