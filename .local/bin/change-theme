@@ -43,7 +43,11 @@ cp ~/.config/wallpaper{,.png}
 
 kitten icat "$IMG" || true
 
-uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i "$IMG" $([[ $light == true ]] && echo "-l")
+if command -v gum &>/dev/null; then
+    gum spin --title "Generating colors" -- uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i "$IMG" $([[ $light == true ]] && echo "-l")
+else
+    uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -i "$IMG" $([[ $light == true ]] && echo "-l")
+fi
 
 if [[ $light == true ]]; then
     gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
