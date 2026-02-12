@@ -36,9 +36,12 @@ PROCESSING=(tee)
 
 if [[ -p /dev/stdin ]]; then
     LIST=$(mktemp)
+    ROFI_FLAGS=(-dmenu -p 󰲌 -i -config ~/.config/rofi/styles/style_2.rasi -theme-str 'listview { columns: 1; } mode-switcher { enabled: false; }')
+
     while read -r; do
         echo "$REPLY" >>"$LIST"
     done
+
     pick || true
     rm "$LIST"
     exit

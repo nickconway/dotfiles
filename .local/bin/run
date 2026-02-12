@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CWD="$PWD"
+shopt -s dotglob
+
 TMP=$(mktemp)
 
 DIRS=(*)
@@ -13,26 +14,23 @@ for D in "${DIRS[@]}"; do
     readarray -t CMD <<<"$@"
     export D
 
-    if [[ "${CMD:-}" != *\$D* ]]; then
-        CMD=(cd "$D" '&&' "${CMD[@]}")
-    fi
-
     if command -v gum &>/dev/null; then
         CMD=(gum spin --title "$D" -- bash -c "'{ ${CMD[@]}; } &> $TMP'")
     fi
 
-    if eval "${CMD[*]}"; then
+    if (eval "${CMD[*]}"); then
         echo "✅ $D"
     else
         echo "❌ $D"
-        echo -----------------------------------------------------------
-        echo
-        cat "$TMP"
-        echo
-        echo -----------------------------------------------------------
-    fi
 
-    cd "$CWD"
+        if [[ -n "$(cat "$TMP")" ]]; then
+            echo -----------------------------------------------------------
+            echo
+            cat "$TMP"
+            echo
+            echo -----------------------------------------------------------
+        fi
+    fi
 done
 
 rm "$TMP"
