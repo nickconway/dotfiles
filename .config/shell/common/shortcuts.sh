@@ -578,22 +578,22 @@ function record-audio() {
     ffmpeg -f alsa -i default -codec:a flac ${1:-output}.mkv
 }
 
-function rgn() {
+function find-edit() {
     rm -f /tmp/rg-fzf-{r,f}
+    local RG_CMD="rg --column --line-number --no-heabing --color=always --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}'"
 
     if [[ ${1:-} == -a ]]; then
-        local INITIAL_QUERY="${2:-}"
-        shift &>/dev/null
-        shift &>/dev/null
-        local SELECTED="$(rg --column --line-number --no-heading --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}' "$INITIAL_QUERY" "${*:-.}")"
+        local SELECTED="$(eval "$RG_CMD --color=never $*")"
     else
         local INITIAL_QUERY="${1:-}"
         shift &>/dev/null
+
+        RG_CMD="$RG_CMD {q} $*"
+
         local SELECTED="$(
-            RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}' {q} $*"
             fzft --ansi --disabled --query "$INITIAL_QUERY" \
-                --bind "start:reload:$RG_PREFIX" \
-                --bind "change:reload:sleep 0.1; $RG_PREFIX || true" \
+                --bind "start:reload:$RG_CMD || true" \
+                --bind "change:reload:sleep 0.1; $RG_CMD || true" \
                 --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~  ]] &&
               echo "rebind(change)+change-prompt( > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
               echo "unbind(change)+change-prompt( > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
