@@ -103,6 +103,7 @@ if pgrep hyprpaper &>/dev/null; then
 fi
 
 if pgrep -f "qs -c noctalia" &>/dev/null; then
+    cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
     for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
         qs -c noctalia ipc call wallpaper set "$IMG" $m
     done

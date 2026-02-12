@@ -580,7 +580,7 @@ function record-audio() {
 
 function find-edit() {
     rm -f /tmp/rg-fzf-{r,f}
-    local RG_CMD="rg --column --line-number --no-heabing --color=always --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}'"
+    local RG_CMD="rg --column --line-number --no-heading --color=always --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}'"
 
     if [[ ${1:-} == -a ]]; then
         local SELECTED="$(eval "$RG_CMD --color=never $*")"
