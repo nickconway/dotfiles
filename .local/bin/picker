@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+function pick() {
+    if [[ -n "${LIST:-}" ]]; then
+        if [[ -t 0 ]]; then
+            CMD=(fzft "${FZF_FLAGS[@]}")
+        else
+            CMD=(rofi "${ROFI_FLAGS[@]}")
+        fi
+
+        SELECTED="$(echo -e "$("${CMD[@]}" <"$LIST")" | "${PROCESSING[@]}")" && [[ -n "$SELECTED" ]] && echo -e "$SELECTED" | wl-copy -n && paste-keys
+    fi
+}
+
 cd ~/.cache
 
 ROFI_FLAGS=(
@@ -22,7 +34,17 @@ ROFI_FLAGS=(
 
 PROCESSING=(tee)
 
-case $1 in
+if [[ -p /dev/stdin ]]; then
+    LIST=$(mktemp)
+    while read -r; do
+        echo "$REPLY" >>"$LIST"
+    done
+    pick || true
+    rm "$LIST"
+    exit
+fi
+
+case ${1:-} in
 clipboard)
     LIST=$(mktemp)
     cliphist list >$LIST
@@ -112,12 +134,4 @@ password)
     ;;
 esac
 
-if [[ -n "${LIST:-}" ]]; then
-    if [[ -t 0 ]]; then
-        CMD=(fzft "${FZF_FLAGS[@]}")
-    else
-        CMD=(rofi "${ROFI_FLAGS[@]}")
-    fi
-
-    SELECTED="$(echo -e "$("${CMD[@]}" <"$LIST")" | "${PROCESSING[@]}")" && [[ -n "$SELECTED" ]] && echo -e "$SELECTED" | wl-copy -n && paste-keys
-fi
+pick

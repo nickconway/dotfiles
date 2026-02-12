@@ -578,6 +578,10 @@ function record-audio() {
     ffmpeg -f alsa -i default -codec:a flac ${1:-output}.mkv
 }
 
+function repos() {
+    (cd ~/Git && gh repo list --json name -q ".[].name" | run $*)
+}
+
 function find-edit() {
     rm -f /tmp/rg-fzf-{r,f}
     local RG_CMD="rg --column --line-number --no-heading --color=always --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}'"

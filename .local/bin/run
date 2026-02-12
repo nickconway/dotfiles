@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CWD="$PWD"
+TMP=$(mktemp)
+
+DIRS=(*)
+if [[ -p /dev/stdin ]]; then
+    readarray -t DIRS
+fi
+
+for D in "${DIRS[@]}"; do
+    readarray -t CMD <<<"$@"
+    export D
+
+    if [[ "${CMD:-}" != *\$D* ]]; then
+        CMD=(cd "$D" '&&' "${CMD[@]}")
+    fi
+
+    if command -v gum &>/dev/null; then
+        CMD=(gum spin --title "$D" -- bash -c "'{ ${CMD[@]}; } &> $TMP'")
+    fi
+
+    if eval "${CMD[*]}"; then
+        echo "✅ $D"
+    else
+        echo "❌ $D"
+        echo -----------------------------------------------------------
+        echo
+        cat "$TMP"
+        echo
+        echo -----------------------------------------------------------
+    fi
+
+    cd "$CWD"
+done
+
+rm "$TMP"
