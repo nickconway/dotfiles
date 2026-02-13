@@ -44,7 +44,7 @@ TEXT="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.txt"
 OCR_IMG="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.png"
 VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mp4"
 
-SLURP_CMD=(slurp -b "$(cat .cache/wal/colors | sed '1q;d' | tr -d '#')99" -c "$(cat .cache/wal/colors | sed '4q;d' | tr -d '#')ff" -B "$(cat .cache/wal/colors | sed '1q;d' | tr -d '#')99" -d -w 1 -F "NotoSans")
+SLURP_CMD=(slurp -b "$(cat .cache/wal/colors | sed '1q;d' | tr -d '#')bb" -c "$(cat .cache/wal/colors | sed '4q;d' | tr -d '#')ff" -B "$(cat .cache/wal/colors | sed '1q;d' | tr -d '#')bb" -d -w 1 -F "NotoSans")
 
 case ${1:-} in
 '')
@@ -61,8 +61,11 @@ case ${1:-} in
     ;;
 
 'window')
+    WORKSPACES="$(
+        (hyprctl monitors -j | jq ".[].activeWorkspace.id" | sed "s/ /|/g" && hyprctl monitors -j | jq ".[].specialWorkspace.id" | tr -d 0) | xargs | sed "s/ /|/g"
+    )"
     REGION="$(pick || hyprctl clients -j |
-        jq -r '.[] | select(.workspace.id | tostring | test("'"$(echo $(hyprctl monitors -j | jq ".[].activeWorkspace.id") | sed "s/ /|/g")"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
+        jq -r '.[] | select(.workspace.id | tostring | test("'"$WORKSPACES"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
         "${SLURP_CMD[@]}")"
     grim -g "$REGION" -l 0 $IMG
     ;;

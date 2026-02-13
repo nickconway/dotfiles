@@ -1,11 +1,11 @@
 {
-    "mPrimary": "{color1}",
+    "mPrimary": "{background}",
     "mSecondary": "{color5}",
     "mTertiary": "{color6}",
     "mError": "{color1}",
     "mSurface": "{background}",
     "mSurfaceVariant": "{background}",
-    "mHover": "{color9}",
+    "mHover": "{color4}",
 
     "mOnPrimary": "{foreground}",
     "mOnSecondary": "{background}",

@@ -131,4 +131,4 @@ if pgrep -x swaync &>/dev/null; then
 fi
 
 fastfetch
-notify-send -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed"
+eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0 -r=Change Again")" &
