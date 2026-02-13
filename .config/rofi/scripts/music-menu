@@ -4,15 +4,15 @@
 theme=~/.config/rofi/styles/applets.rasi
 
 # Theme Elements
-status="$(playerctl status)"
-loop_status="$(playerctl loop)"
-shuffle_status="$(playerctl shuffle)"
+status="$(media status)"
+loop_status="$(media loop)"
+shuffle_status="$(media shuffle)"
 if [[ -z "$status" ]]; then
     prompt='Offline'
     mesg="Nothing is Playing"
 else
-    prompt="$(playerctl metadata -f "{{artist}}" | sed "s/&/&amp;/g")"
-    mesg="$(playerctl metadata -f "{{title}}" | sed "s/&/&amp;/g") :: $(playerctl metadata -f "{{album}}" | sed "s/&/&amp;/g")"
+    prompt="$(media metadata -f "{{artist}}" | sed "s/&/&amp;/g")"
+    mesg="$(media metadata -f "{{title}}" | sed "s/&/&amp;/g") :: $(media metadata -f "{{album}}" | sed "s/&/&amp;/g")"
 fi
 
 list_col='6'
@@ -82,34 +82,34 @@ chosen="$(run_rofi)"
 code=$?
 
 case ${code} in
-10) playerctl play-pause ;;
-11) playerctl stop ;;
-12) playerctl previous ;;
-13) playerctl next ;;
+10) media play-pause ;;
+11) media stop ;;
+12) media previous ;;
+13) media next ;;
 14) if [[ ${loop_status} == "Playlist" ]]; then
-    playerctl loop Track
+    media loop Track
 elif [[ ${loop_status} == "Track" ]]; then
-    playerctl loop None
+    media loop None
 elif [[ ${loop_status} == "None" ]]; then
-    playerctl loop Playlist
+    media loop Playlist
 fi ;;
-15) playerctl shuffle toggle ;;
+15) media shuffle toggle ;;
 esac
 [[ $code == 0 ]] || exit
 
 case ${chosen} in
-$option_1) playerctl play-pause ;;
-$option_2) playerctl stop ;;
-$option_3) playerctl previous ;;
-$option_4) playerctl next ;;
+$option_1) media play-pause ;;
+$option_2) media stop ;;
+$option_3) media previous ;;
+$option_4) media next ;;
 $option_5)
     if [[ ${loop_status} == "Playlist" ]]; then
-        playerctl loop Track
+        media loop Track
     elif [[ ${loop_status} == "Track" ]]; then
-        playerctl loop None
+        media loop None
     elif [[ ${loop_status} == "None" ]]; then
-        playerctl loop Playlist
+        media loop Playlist
     fi
     ;;
-$option_6) playerctl shuffle toggle ;;
+$option_6) media shuffle toggle ;;
 esac

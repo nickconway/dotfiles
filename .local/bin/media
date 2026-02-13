@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PLAYER=
+PLAYERCTL_FLAGS=()
+while getopts 'ao:' f; do
+    case $f in
+    a)
+        ALL=true
+        PLAYERCTL_FLAGS+=(-a)
+        ;;
+    o)
+        PLAYER="$OPTARG"
+        PLAYERCTL_FLAGS+=(-p "$PLAYER")
+        ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [[ -z $PLAYER ]] && [[ -e /tmp/current-player ]]; then
+    PLAYER="$(cat /tmp/current-player)"
+elif [[ -z $PLAYER ]]; then
+    PLAYER="$(playerctl -l | head -n 1)"
+fi
+
+PLAYER="$(echo "$PLAYER" | sed 's/org.mpris.MediaPlayer2.//g')"
+
+if ! playerctl -l | grep -q "^$PLAYER$"; then
+    echo "$PLAYER is not a valid player"
+    exit 1
+fi
+
+echo $PLAYER >/tmp/current-player
+PLAYERCTL_FLAGS+=(-p "$PLAYER")
+
+export PLAYERCTL_CMD=(playerctl "${PLAYERCTL_FLAGS[@]}")
+
+function show() {
+    sleep .5
+    URL="$("${PLAYERCTL_CMD[@]}" metadata | rg Url | nth-to-end 3 | sed "s/size=300/size=80/" || true)"
+
+    if pgrep -afx "qs -c caelestia.*"; then
+        TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}} - {{artist}}")"
+    else
+        TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}}\n{{artist}}")"
+    fi
+
+    rm /tmp/now-playing-cover-* &>/dev/null || true
+
+    COVER_FILE=""
+    if [[ "$URL" == file://* ]]; then
+        COVER_FILE="$URL"
+    elif [[ -n "$URL" ]]; then
+        COVER_FILE="/tmp/now-playing-cover-$("${PLAYERCTL_FLAGS[@]}" metadata -f "{{title}}-{{artist}}").png"
+        curl -s "$URL" --output "$COVER_FILE"
+    fi
+
+    if [[ $("${PLAYERCTL_CMD[@]}" status) == "Playing" ]]; then
+        A="pause=󰏤"
+    else
+        A="play=󰐊"
+    fi
+
+    (
+        "${PLAYERCTL_CMD[@]}" "$(notify-send "Now Playing${PLAYER:+" ($PLAYER)"}" "$TEXT" -i "$COVER_FILE" -e -h string:synchronous:audio --action "previous=󰒮" --action "$A" --action "next=󰒭" || :)"
+        "$0" show "${PLAYER:-}"
+    ) &
+}
+
+$* || "${PLAYERCTL_CMD[@]}" $*

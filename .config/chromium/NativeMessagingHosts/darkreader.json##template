@@ -1,0 +1,10 @@
+{
+    "name": "darkreader",
+    "description": "custom darkreader native host for syncing with pywal",
+    "path": "{{ env.HOME }}/.config/darkreader/pywal",
+    "type": "stdio",
+    "allowed_origins": [
+        "chrome-extension://gidgehhdgebooieidpcckaphjbfcghpe/",
+        "chrome-extension://hjoipmcngnnckaljdhndonpajpnfjnpm/"
+    ]
+}

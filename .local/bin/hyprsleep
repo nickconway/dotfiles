@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-playerctl -a pause
+media -a pause
 
 lock &
 sleep 1

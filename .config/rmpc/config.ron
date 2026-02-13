@@ -6,7 +6,7 @@
     password: None,
     theme: "borders",
     cache_dir: None,
-    on_song_change: ["flock", "-nu", "/tmp/now-playing-lock", "--command", "now-playing"],
+    on_song_change: ["flock", "-nu", "/tmp/media-show-lock", "--command", "media -o mpd show"],
     volume_step: 5,
     max_fps: 60,
     scrolloff: 0,
