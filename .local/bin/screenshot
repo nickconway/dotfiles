@@ -65,7 +65,7 @@ case ${1:-} in
         (hyprctl monitors -j | jq ".[].activeWorkspace.id" | sed "s/ /|/g" && hyprctl monitors -j | jq ".[].specialWorkspace.id" | tr -d 0) | xargs | sed "s/ /|/g"
     )"
     REGION="$(pick || hyprctl clients -j |
-        jq -r '.[] | select(.workspace.id | tostring | test("'"$WORKSPACES"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
+        jq -r '.[] | select(.pinned), select(.workspace.id | tostring | test("'"$WORKSPACES"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
         "${SLURP_CMD[@]}")"
     grim -g "$REGION" -l 0 $IMG
     ;;
