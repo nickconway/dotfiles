@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if { pgrep -f "qs -c caelestia" &>/dev/null && [[ $(qs -c caelestia ipc call lock isLocked) == true ]]; } \
-    || { pgrep -f "qs -c noctalia" &>/dev/null && [[ $(qs -c noctalia ipc call lockScreen isLocked) == true ]]; } \
+if { pgrep -afx "qs -c caelestia.*" &>/dev/null && [[ $(qs -c caelestia ipc call lock isLocked) == true ]]; } \
+    || { pgrep -afx "qs -c noctalia.*" &>/dev/null && [[ $(qs -c noctalia ipc call lockScreen isLocked) == true ]]; } \
     || pidof hyprlock; then
     echo true
     exit 0

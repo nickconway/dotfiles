@@ -9,7 +9,7 @@ function pick() {
             CMD=(rofi "${ROFI_FLAGS[@]}")
         fi
 
-        SELECTED="$(echo -e "$("${CMD[@]}" <"$LIST")" | "${PROCESSING[@]}")" && [[ -n "$SELECTED" ]] && echo -e "$SELECTED" | wl-copy -n && paste-keys
+        SELECTED="$("${CMD[@]}" <"$LIST")" && [[ -n "$SELECTED" ]] && echo -e "$SELECTED" | "${PROCESSING[@]}" | wl-copy -n && paste-keys
     fi
 }
 
@@ -121,12 +121,14 @@ password)
     rbw list --fields type,name,user | sed "s/\s\+/ /g" >passwords
 
     function get-rbw() {
-        TYPE=$1
-        shift
+        read -r INPUT
+        TYPE=$(echo $INPUT | cut -d ' ' -f 1)
+        QUERY=$(echo $INPUT | cut -d ' ' -f 2-)
 
         case $TYPE in
-        Note) rbw get "$*" ;;
-        Login) rbw get "$@" ;;
+        Note) rbw get "$QUERY" ;;
+        Login) rbw get $QUERY ;;
+        *) echo "Unknown type" ;;
         esac
     }
 

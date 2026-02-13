@@ -24,7 +24,7 @@ systemd-inhibit --why "Upgrading" topgrade -y --no-retry || true
 NOTIFICATION_TITLE="Upgrade"
 TERM_PROMPTS="Y,n"
 NOTIFICATION_PROMPTS="Yes,No"
-DEFAULT_ACTION=0
+ACTIONS="systemctl reboot,true"
 
 if [[ -e /var/run/reboot-required ]]; then
     TEXT="A reboot is required. Would you like to reboot now?"
@@ -33,9 +33,5 @@ elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( (uname -r | grep -q zen && pacman
 fi
 
 if [[ -n "${TEXT:-}" ]]; then
-    prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$DEFAULT_ACTION" && REBOOT="$?" || REBOOT="$?"
-fi
-
-if [[ "${REBOOT:-}" == "0" ]]; then
-    systemctl reboot
+    prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$ACTIONS"
 fi

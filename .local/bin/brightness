@@ -4,8 +4,8 @@ set -euo pipefail
 ALL=
 BRIGHTNESS=
 VAL=
-CAELESTIA=$(pgrep -f "qs -c caelestia" || echo "")
-NOCTALIA=$(pgrep -f "qs -c noctalia" || echo "")
+CAELESTIA=$(pgrep -afx "qs -c caelestia.*" || echo "")
+NOCTALIA=$(pgrep -afx "qs -c noctalia.*" || echo "")
 
 case ${1:-} in
 ALL)

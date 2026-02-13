@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if pgrep -f "qs -c caelestia" &>/dev/null; then
+if pgrep -afx "qs -c caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call drawers toggle session
-elif pgrep -f "qs -c noctalia" &>/dev/null; then
+elif pgrep -afx "qs -c noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call sessionMenu toggle
 else
     ~/.config/rofi/scripts/power-menu

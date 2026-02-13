@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
-if pgrep -f "qs -c caelestia"; then
+if pgrep -afx "qs -c caelestia.*"; then
     qs -c caelestia ipc call notifs toggleDnd
-elif pgrep -f "qs -c noctalia"; then
+elif pgrep -afx "qs -c noctalia.*"; then
     qs -c noctalia ipc call notifications toggleDND
 fi
 

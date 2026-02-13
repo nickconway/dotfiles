@@ -591,7 +591,9 @@ function find-edit() {
     local RG_CMD="rg --column --line-number --no-heading --color=always --smart-case --hidden --with-filename -g '!{**/node_modules/*,**/.github/*,**/.git/*}'"
 
     if [[ ${1:-} == -a ]]; then
-        local SELECTED="$(eval "$RG_CMD --color=never $*")"
+        shift
+        local SELECTED
+        SELECTED="$(eval "$RG_CMD --color=never $*")"
     else
         local INITIAL_QUERY="${1:-}"
         shift &>/dev/null
@@ -603,8 +605,8 @@ function find-edit() {
                 --bind "start:reload:$RG_CMD || true" \
                 --bind "change:reload:sleep 0.1; $RG_CMD || true" \
                 --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~  ]] &&
-              echo "rebind(change)+change-prompt( > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
-              echo "unbind(change)+change-prompt( > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+                      echo "rebind(change)+change-prompt( > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
+                      echo "unbind(change)+change-prompt( > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
                 --color "hl:-1:underline,hl+:-1:underline:reverse" \
                 --prompt ' > ' \
                 --delimiter : \
@@ -620,19 +622,24 @@ function find-edit() {
 
     local COMMANDS=""
     local FILES=()
-    while IFS= read -r line; do
+    while read -r line; do
         local FILE=$(echo $line | awk -F ':' '{print $1}')
+
+        if [[ ! -e "$FILE" ]]; then
+            continue
+        fi
 
         if [[ "${FILES[*]}" == *"$FILE"* ]]; then
             continue
         fi
 
         if [[ "$COMMANDS" == "" ]]; then
-            COMMANDS+="$(echo $line | sed 's/#/\\#/g' | awk -F ':' '{printf "%s \"+normal %sG%s|\"", $1, $2, $3}')"
+            COMMAND="$(echo $line | sed 's/#/\\#/g' | awk -F ':' '{printf "%s \"+normal %sG%s|\"", $1, $2, $3}')"
         else
-            COMMANDS+="$(echo $line | sed 's/#/\\#/g' | awk -F ':' '{printf " -c \"e %s | +normal %sG%s|\"", $1, $2, $3}')"
+            COMMAND="$(echo $line | sed 's/#/\\#/g' | awk -F ':' '{printf " -c \"e %s | +normal %sG%s|\"", $1, $2, $3}')"
         fi
 
+        COMMANDS+=("$COMMAND")
         FILES+=("$FILE")
     done <<<"$SELECTED"
 

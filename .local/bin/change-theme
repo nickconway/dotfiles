@@ -111,12 +111,12 @@ if pgrep hyprpaper &>/dev/null; then
     hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null
 fi
 
-if pgrep -f "qs -c noctalia" &>/dev/null; then
+if pgrep -afx "qs -c noctalia.*" &>/dev/null; then
     cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
     for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
         qs -c noctalia ipc call wallpaper set "$IMG" $m
     done
-elif pgrep -f "qs -c caelestia" &>/dev/null; then
+elif pgrep -afx "qs -c caelestia.*" &>/dev/null; then
     cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
     caelestia wallpaper -N -f "$IMG" &>/dev/null || true
 fi
@@ -131,4 +131,4 @@ if pgrep -x swaync &>/dev/null; then
 fi
 
 fastfetch
-notify-send -i "$IMG" "Theme" "Theme changed"
+notify-send -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed"

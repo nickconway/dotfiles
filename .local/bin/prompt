@@ -5,23 +5,26 @@ NOTIFICATION_TITLE="$1"
 TEXT="$2"
 TERM_PROMPTS="$3"
 NOTIFICATION_PROMPTS="$4"
-DEFAULT_ACTION="$5"
+ACTIONS="$5"
+DEFAULT_ACTION="${6:-0}"
 
 IFS="," read -ra TERM_PROMPTS_ARR <<<"$TERM_PROMPTS"
 IFS="," read -ra NOTIFICATION_PROMPTS_ARR <<<"$NOTIFICATION_PROMPTS"
+IFS="," read -ra ACTIONS_ARR <<<"$ACTIONS"
 
 function term() {
-    while [[ -z "${EXIT:-}" ]]; do
+    while true; do
         echo -n "$TEXT [${TERM_PROMPTS}] "
-        read -r INPUT
+        read -r
 
-        if [[ -z "$INPUT" ]]; then
-            EXIT="$DEFAULT_ACTION"
+        if [[ -z "${REPLY:-}" ]]; then
+            IDX="$DEFAULT_ACTION"
+            return
         else
             for ((i = 0; i < ${#TERM_PROMPTS_ARR[@]}; i++)); do
-                if [[ "$(echo "${TERM_PROMPTS_ARR[$i]}" | tr '[:upper:]' '[:lower:]')" == "$(echo "$INPUT" | tr '[:upper:]' '[:lower:]')" ]]; then
-                    EXIT="$i"
-                    break
+                if [[ "$(echo "${TERM_PROMPTS_ARR[$i]}" | tr '[:upper:]' '[:lower:]')" == "$(echo "$REPLY" | tr '[:upper:]' '[:lower:]')" ]]; then
+                    IDX=$i
+                    return
                 fi
             done
         fi
@@ -35,7 +38,7 @@ function gui() {
         NOTIFICATION_PROMPTS_FLAGS+=("$A")
     done
 
-    EXIT="$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical)"
+    IDX="$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical)"
 }
 
 if [[ -n ${PROMPT_TERM:-} ]]; then
@@ -48,4 +51,4 @@ elif [[ ! -t 0 ]]; then
     gui
 fi
 
-exit "${EXIT:-$DEFAULT_ACTION}"
+eval "${ACTIONS_ARR[${IDX:-$DEFAULT_ACTION}]}"

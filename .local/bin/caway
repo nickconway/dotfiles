@@ -3,26 +3,26 @@
 # Nuke all internal spawns when script dies
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
 
-BARS=8;
-FRAMERATE=60;
-EQUILIZER=1;
+BARS=8
+FRAMERATE=60
+EQUILIZER=1
 
 # Get script options
 while getopts 'b:f:m:eh' flag; do
     case "${flag}" in
-        b) BARS="${OPTARG}" ;;
-        f) FRAMERATE="${OPTARG}" ;;
-        e) EQUILIZER=0 ;;
-        h)
-            echo "caway usage: caway [ options ... ]"
-            echo "where options include:"
-            echo
-            echo "  -b <integer>  (Number of bars to display. Default 8)"
-            echo "  -f <integer>  (Framerate of the equilizer. Default 60)"
-            echo "  -e            (Disable equilizer. Default enabled)"
-            echo "  -h            (Show help message)"
-            exit 0
-            ;;
+    b) BARS="${OPTARG}" ;;
+    f) FRAMERATE="${OPTARG}" ;;
+    e) EQUILIZER=0 ;;
+    h)
+        echo "caway usage: caway [ options ... ]"
+        echo "where options include:"
+        echo
+        echo "  -b <integer>  (Number of bars to display. Default 8)"
+        echo "  -f <integer>  (Framerate of the equilizer. Default 60)"
+        echo "  -e            (Disable equilizer. Default enabled)"
+        echo "  -h            (Show help message)"
+        exit 0
+        ;;
     esac
 done
 
@@ -31,10 +31,9 @@ dict="s/;//g;"
 
 # creating "dictionary" to replace char with bar + thin space " "
 i=0
-while [ $i -lt ${#bar} ]
-do
+while [ $i -lt ${#bar} ]; do
     dict="${dict}s/$i/${bar:$i:1} /g;"
-    i=$((i=i+1))
+    i=$((i = i + 1))
 done
 
 # Remove last extra thin space
@@ -51,7 +50,7 @@ kill_pid_file() {
     if [[ -f $1 ]]; then
         while read pid; do
             { kill "$pid" && wait "$pid"; } 2>/dev/null
-        done < $1
+        done <$1
     fi
 }
 
@@ -75,7 +74,7 @@ method = raw
 raw_target = $cava_waybar_pipe
 data_format = ascii
 ascii_max_range = 7
-" > $cava_waybar_config
+" >$cava_waybar_config
 
 # Clean pipe for playerctl
 playerctl_waybar_pipe="/tmp/playerctl_waybar.fifo"
@@ -101,15 +100,15 @@ while read -r line; do
         cava -p $cava_waybar_config >$cava_waybar_pipe &
 
         # Save the PID of child process
-        echo $! > $cava_waybar_pid
+        echo $! >$cava_waybar_pid
 
         # Read the cava o/p via its fifo pipe
         while read -r cmd2; do
             # Change the "text" key to bars
             echo "$line" | jq --arg a $(echo $cmd2 | sed "$dict") '.text = $a' --unbuffered --compact-output
-        done < $cava_waybar_pipe & # Do this fifo read in background
+        done <$cava_waybar_pipe & # Do this fifo read in background
 
         # Save the while loop PID into the file as well
-        echo $! >> $cava_waybar_pid
+        echo $! >>$cava_waybar_pid
     fi
-done < $playerctl_waybar_pipe
+done <$playerctl_waybar_pipe
