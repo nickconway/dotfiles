@@ -59,18 +59,7 @@
     "idle": {
       "lockBeforeSleep": true,
       "inhibitWhenAudio": true,
-      "timeouts": [
-        {
-          "idleAction": "lock",
-          "timeout": 300
-        },
-        {
-          "idleAction": [
-            "hyprsleep"
-          ],
-          "timeout": 600
-        }
-      ]
+      "timeouts": []
     },
     "battery": {
       "warnLevels": [
