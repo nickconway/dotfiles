@@ -6,7 +6,6 @@ PLAYERCTL_FLAGS=(-i plasma-browser-integration)
 while getopts 'ao:' f; do
     case $f in
     a)
-        ALL=true
         PLAYERCTL_FLAGS+=(-a)
         ;;
     o)
@@ -52,11 +51,10 @@ function show() {
 
     rm /tmp/now-playing-cover-* &>/dev/null || true
 
-    COVER_FILE=""
     if [[ "$URL" == file://* ]]; then
         COVER_FILE="$URL"
     elif [[ -n "$URL" ]]; then
-        COVER_FILE="/tmp/now-playing-cover-$("${PLAYERCTL_FLAGS[@]}" metadata -f "{{title}}-{{artist}}").png"
+        COVER_FILE="/tmp/now-playing-cover-$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}}-{{artist}}").png"
         curl -s "$URL" --output "$COVER_FILE"
     fi
 
@@ -66,10 +64,11 @@ function show() {
         A="play=󰐊"
     fi
 
-    (
-        "${PLAYERCTL_CMD[@]}" "$(notify-send "Now Playing${PLAYER:+" ($PLAYER)"}" "$TEXT" -i "$COVER_FILE" -e -h string:synchronous:audio --action "previous=󰒮" --action "$A" --action "next=󰒭" || :)"
-        "$0" show "${PLAYER:-}"
-    ) &
+    ACTION="$(notify-send "Now Playing${PLAYER:+" ($PLAYER)"}" "$TEXT" -i "${COVER_FILE:-}" -e -h string:synchronous:audio --action "previous=󰒮" --action "$A" --action "next=󰒭" || :)"
+    if [[ -n "$ACTION" ]]; then
+        "${PLAYERCTL_CMD[@]}" "$ACTION"
+        "$0" show
+    fi
 }
 
 $* || "${PLAYERCTL_CMD[@]}" $*
