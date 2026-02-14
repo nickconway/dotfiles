@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PLAYER=
-PLAYERCTL_FLAGS=()
+PLAYERCTL_FLAGS=(-i plasma-browser-integration)
 while getopts 'ao:' f; do
     case $f in
     a)
@@ -25,6 +25,10 @@ elif [[ -z $PLAYER ]]; then
 fi
 
 PLAYER="$(echo "$PLAYER" | sed 's/org.mpris.MediaPlayer2.//g')"
+
+if [[ "$PLAYER" == plasma-browser-integration ]]; then
+    exit 1
+fi
 
 if ! playerctl -l | grep -q "^$PLAYER$"; then
     echo "$PLAYER is not a valid player"
