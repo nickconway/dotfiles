@@ -32,7 +32,7 @@ else
     INPUT="$(cd "$WALLPAPER_DIR" && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
-WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT")
+WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" --cols16 lighten)
 
 if [[ $light == true ]]; then
     WAL_CMD+=(-l)
