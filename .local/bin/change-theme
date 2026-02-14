@@ -16,14 +16,14 @@ while getopts 'lrR' flag; do
     esac
 done
 
-echo "" >/tmp/wallpaper
+gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal
 
 if [[ "$reload" == "true" ]]; then
     INPUT="$(cat ~/.cache/wal/wal)"
 elif [[ "$random" == "true" ]]; then
     INPUT="$WALLPAPER_DIR"
 else
-    INPUT="$(cd "$WALLPAPER_DIR" && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
+    INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
 WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" --cols16 lighten)
