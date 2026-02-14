@@ -1,4 +1,4 @@
-source = include/wallpaper.conf
+source = ~/.cache/wal/colors-hyprland.conf
 
 background {
     monitor =
@@ -21,8 +21,8 @@ input-field {
     dots_spacing = 0.2 # Scale of dots' absolute size, 0.0 - 1.0
     dots_center = true
     outer_color = rgba(0, 0, 0, 0)
-    inner_color = rgba(0, 0, 0, 0.5)
-    font_color = rgb(200, 200, 200)
+    inner_color = $backgroundAlpha
+    font_color = $foreground
     fade_on_empty = false
     font_family = NotoSans
     placeholder_text = <i><span foreground="##cccccc">Input Password...</span></i>
