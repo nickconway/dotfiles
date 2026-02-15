@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 # From https://github.com/janoamaral/tokyo-night-tmux/blob/master/tokyo-night.tmux
@@ -24,20 +24,20 @@ FORMAT=${2:-none}
 format="$(eval echo \"\$format_${FORMAT}\")"
 
 if [ "$FORMAT" = "hide" ]; then
-  exit 0
+    exit 0
 fi
 
 if [ -z "$format" ]; then
-  echo "Invalid format: $FORMAT"
-  exit 1
+    echo "Invalid format: $FORMAT"
+    exit 1
 fi
 
 # If format is roman numerals (-r), only handle IDs of 1 digit
 if [ "$FORMAT" = "roman" ] && [ ${#ID} -gt 1 ]; then
-  echo -n "$ID "
+    echo -n "$ID "
 else
-  for ((i = 0; i < ${#ID}; i++)); do
-    DIGIT=${ID:i:1}
-    echo -n "${format:DIGIT:1}"
-  done
+    for ((i = 0; i < ${#ID}; i++)); do
+        DIGIT=${ID:i:1}
+        echo -n "${format:DIGIT:1}"
+    done
 fi

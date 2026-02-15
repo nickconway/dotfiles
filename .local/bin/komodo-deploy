@@ -2,13 +2,14 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
-SERVER_ID=$(curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
-    -H "X-API-SECRET: $KOMODO_API_SECRET" \
-    -H "Content-Type: application/json" -X POST https://deploy.$SERVICES_BASE_DOMAIN/read \
-    -d "$(jq '{ type: "GetServer", params: { server: $server } }' -n --arg server $(uname -n))" | jq -r '._id."$oid"' \
+SERVER_ID=$(
+    curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
+        -H "X-API-SECRET: $KOMODO_API_SECRET" \
+        -H "Content-Type: application/json" -X POST https://deploy.$SERVICES_BASE_DOMAIN/read \
+        -d "$(jq '{ type: "GetServer", params: { server: $server } }' -n --arg server $(uname -n))" | jq -r '._id."$oid"'
 )
 
 [[ $SERVER_ID != null ]]
@@ -16,7 +17,8 @@ SERVER_ID=$(curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
 cd ~/Docker
 for d in *; do
     [[ -e "$d/compose.yml" ]] || continue
-    JSON=$(jq '{ type: "CreateStack", params: { name: $name, config: {
+    JSON=$(
+        jq '{ type: "CreateStack", params: { name: $name, config: {
             server_id: $server_id,
             project_name: $project_name,
             files_on_host: true,
@@ -25,10 +27,10 @@ for d in *; do
                 "compose.yml"
             ]
         } } }' -n \
-        --arg name ""$d"_$(uname -n)" \
-        --arg server_id $SERVER_ID \
-        --arg project_name $d \
-        --arg run_directory "/etc/komodo/stacks/$d"
+            --arg name ""$d"_$(uname -n)" \
+            --arg server_id $SERVER_ID \
+            --arg project_name $d \
+            --arg run_directory "/etc/komodo/stacks/$d"
     )
 
     curl -s -H "X-API-KEY: $KOMODO_API_KEY" \

@@ -2,24 +2,24 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 while getopts 'h:t:p:w:' flag; do
-  case "${flag}" in
-    h) HEIGHT=$OPTARG;;
-    t) TITLE=$OPTARG;;
-    p) PROFILE=$OPTARG;;
-    w) WIDTH=$OPTARG;;
+    case "${flag}" in
+    h) HEIGHT=$OPTARG ;;
+    t) TITLE=$OPTARG ;;
+    p) PROFILE=$OPTARG ;;
+    w) WIDTH=$OPTARG ;;
     *) ;;
-  esac
+    esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
-[[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-command -v svg-term &> /dev/null || npm install -g svg-term-cli
-command -v svgembed &> /dev/null || npm install -g git+https://github.com/miraclx/svgembed
+command -v svg-term &>/dev/null || npm install -g svg-term-cli
+command -v svgembed &>/dev/null || npm install -g git+https://github.com/miraclx/svgembed
 
 uvx asciinema rec "$1.cast" --overwrite
 
@@ -31,8 +31,8 @@ sed -i "s/  */ /g" "$1.cast"
 # Remove recording indicator
 sed -i 's/ \\u001b\[1;31m⏺\\u001b\[0m//g' "$1.cast"
 
-svg-term --out "$1.svg" --window --profile=${PROFILE:-Seti} --height=${HEIGHT:-20} --width=${WIDTH:-80} --term=iterm2 < "$1.cast"
+svg-term --out "$1.svg" --window --profile=${PROFILE:-Seti} --height=${HEIGHT:-20} --width=${WIDTH:-80} --term=iterm2 <"$1.cast"
 svgembed -i "$1.svg" -o "$1-embed.svg" -r -f ~/.local/share/fonts/hack-nerd-font/HackNerdFontMono-Regular.ttf --hover -t "${TITLE:-$(basename "$1")}" --overwrite
 rm "$1.svg"
 mv "$1-embed.svg" "$1.svg"
-command -v xdg-open &> /dev/null && xdg-open "$1.svg"
+command -v xdg-open &>/dev/null && xdg-open "$1.svg"

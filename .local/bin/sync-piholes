@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 diff <(ssh server cat docker/pihole/data/custom.list) <(ssh pihole cat docker/pihole/data/custom.list) || scp server:docker/pihole/data/custom.list pihole:docker/pihole/data/custom.list

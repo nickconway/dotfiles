@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 if command -v envsubst-better &>/dev/null; then
@@ -21,7 +21,6 @@ BASE_URL="https://dns.$SERVICES_BASE_DOMAIN"
 SID="$(curl -s -X POST $BASE_URL/api/auth --data "{\"password\": \"$PIHOLE_APP_PASSWORD\"}" | jq -r '.session.sid')"
 LIST="$(curl -s "$BASE_URL/api/config/dns/cnameRecords" -H "sid: $SID" | jq -r '.config.dns.cnameRecords')"
 CHANGED=false
-
 
 if [[ -n "$(ls ~/Docker/*/*compose*.yml 2>/dev/null)" ]]; then
     CNAME="server.$SERVICES_BASE_DOMAIN"
@@ -73,7 +72,7 @@ fi
 
 if [[ "$CHANGED" == "true" ]]; then
     DATA="$(jq --null-input --argjson list "$LIST" '{"config": { "dns": { "cnameRecords": $list } } }')"
-    curl -s -X PATCH "$BASE_URL/api/config" -H "sid: $SID" --data-raw "$DATA" > /dev/null
+    curl -s -X PATCH "$BASE_URL/api/config" -H "sid: $SID" --data-raw "$DATA" >/dev/null
     echo "DNS Updated"
 else
     echo "Nothing to update"

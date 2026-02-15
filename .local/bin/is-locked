@@ -2,12 +2,12 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
-if { pgrep -afx "qs -c caelestia.*" &>/dev/null && [[ $(qs -c caelestia ipc call lock isLocked) == true ]]; } \
-    || { pgrep -afx "qs -c noctalia.*" &>/dev/null && [[ $(qs -c noctalia ipc call lockScreen isLocked) == true ]]; } \
-    || pidof hyprlock; then
+if { pgrep -afx "qs -c caelestia.*" &>/dev/null && [[ $(qs -c caelestia ipc call lock isLocked) == true ]]; } ||
+    { pgrep -afx "qs -c noctalia.*" &>/dev/null && [[ $(qs -c noctalia ipc call lockScreen isLocked) == true ]]; } ||
+    pidof hyprlock; then
     echo true
     exit 0
 fi

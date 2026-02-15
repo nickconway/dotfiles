@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 STATE="$(if [[ "$(fuser /dev/video* 2>&1 | wc -l)" -gt 0 ]]; then echo true; else echo false; fi)"

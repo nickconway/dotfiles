@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 # Import Current Theme
@@ -29,13 +29,13 @@ option_6="󰭩"
 
 # Rofi CMD
 rofi_cmd() {
-	rofi -theme-str "listview {columns: $list_col; lines: $list_row;}" \
-		-theme-str 'textbox-prompt-colon {str: "󰹑";}' \
-		-dmenu \
-		-p "$prompt" \
-		${active} ${urgent} \
-		-markup-rows \
-		-theme ${theme} \
+    rofi -theme-str "listview {columns: $list_col; lines: $list_row;}" \
+        -theme-str 'textbox-prompt-colon {str: "󰹑";}' \
+        -dmenu \
+        -p "$prompt" \
+        ${active} ${urgent} \
+        -markup-rows \
+        -theme ${theme} \
         -kb-custom-1 "s" \
         -kb-custom-2 "m" \
         -kb-custom-3 "w" \
@@ -46,7 +46,7 @@ rofi_cmd() {
 
 # Pass variables to rofi dmenu
 run_rofi() {
-	echo -e "$option_1\n$option_2\n$option_3\n$option_4\n$option_5\n$option_6" | rofi_cmd
+    echo -e "$option_1\n$option_2\n$option_3\n$option_4\n$option_5\n$option_6" | rofi_cmd
 }
 
 # Actions
@@ -54,20 +54,20 @@ chosen="$(run_rofi)"
 code=$?
 
 case ${code} in
-    10) screenshot;;
-    11) screenshot monitor;;
-    12) screenshot window;;
-    13) screenshot ocr;;
-    14) screenshot record;;
-    15) screenshot record region;;
+10) screenshot ;;
+11) screenshot monitor ;;
+12) screenshot window ;;
+13) screenshot ocr ;;
+14) screenshot record ;;
+15) screenshot record region ;;
 esac
 [[ $code == 0 ]] || exit
 
 case ${chosen} in
-    $option_1) screenshot;;
-    $option_2) screenshot monitor;;
-    $option_3) screenshot window;;
-    $option_4) screenshot ocr;;
-    $option_5) screenshot record;;
-    $option_6) screenshot record region;;
+$option_1) screenshot ;;
+$option_2) screenshot monitor ;;
+$option_3) screenshot window ;;
+$option_4) screenshot ocr ;;
+$option_5) screenshot record ;;
+$option_6) screenshot record region ;;
 esac

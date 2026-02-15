@@ -2,9 +2,9 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 [[ -n "$(git --no-pager diff)" ]]
 
-git --no-pager diff | mods -f --role code-review > .git/review
+git --no-pager diff | mods -f --role code-review >.git/review

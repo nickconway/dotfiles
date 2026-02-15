@@ -2,10 +2,10 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
-if command -v ss &> /dev/null; then
+if command -v ss &>/dev/null; then
     ports=('5556' '5557' '5558' '5559' '5560')
     for p in ${ports[@]}; do
         if ss -n -4 state listening | tail -n +2 | grep -q "127.0.0.1:$p"; then

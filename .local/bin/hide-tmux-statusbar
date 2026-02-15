@@ -2,14 +2,14 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
-	set -x
+    set -x
 fi
 
 starting_pane=$(tmux display -p '#{pane_pid}')
 status=off
 
 tmux set status $status
-while ps -p $1 &> /dev/null; do
+while ps -p $1 &>/dev/null; do
     current_pane="$(tmux display -p '#{pane_pid}')"
     if [[ -n "$current_pane" && -n "$starting_pane" && "$current_pane" == "$starting_pane" ]]; then
         prefix_mode="$(tmux display -p '#{?client_prefix,on,off}')"
