@@ -3,38 +3,42 @@
 file=${*/#\~\//$HOME/}
 type=$(file --dereference --mime -- "$file")
 
-if tmux has-session -t "$file" 2> /dev/null; then
+if tmux has-session -t "$file" 2>/dev/null; then
     tmux capture-pane -ep -t "$file"
     exit
 elif [[ -d "$file" ]]; then
-    eza "$file" -1 --icons --color=always
+    if commnd -v eza &>/dev/null; then
+        eza -1 --icons always --color always "$file"
+    else
+        ls -1 -h --color "$file"
+    fi
     exit
 elif [[ ! $type =~ image/ ]]; then
-  if [[ $type =~ =binary ]]; then
-    file "$1"
+    if [[ $type =~ =binary ]]; then
+        file "$1"
+        exit
+    fi
+    bat --style=plain --color=always --pager=never -- "$file"
     exit
-  fi
-  bat --style=plain --color=always --pager=never -- "$file"
-  exit
 fi
 
 dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}
 if [[ $dim = x ]]; then
-  dim=$(stty size < /dev/tty | awk '{print $2 "x" $1}')
-elif ! [[ $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}') )); then
-  dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
+    dim=$(stty size </dev/tty | awk '{print $2 "x" $1}')
+elif ! [[ $KITTY_WINDOW_ID ]] && ((FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size </dev/tty | awk '{print $1}'))); then
+    dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
 fi
 
 cells_width=$(echo $dim | cut -d x -f 1)
 cells_height=$(echo $dim | cut -d x -f 2)
 
 if [[ $KITTY_WINDOW_ID ]]; then
-  kitty icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" --use-window-size="$cells_width,$cells_height,$(($cells_width * 8)),$(($cells_height * 8))" "$file" | sed '$d' | sed $'$s/$/\e[m/'
-elif command -v chafa > /dev/null; then
-  chafa -s "$dim" "$file"
-  echo
-elif command -v imgcat > /dev/null; then
-  imgcat -W "${dim%%x*}" -H "${dim##*x}" "$file"
+    kitty icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" --use-window-size="$cells_width,$cells_height,$(($cells_width * 8)),$(($cells_height * 8))" "$file" | sed '$d' | sed $'$s/$/\e[m/'
+elif command -v chafa >/dev/null; then
+    chafa -s "$dim" "$file"
+    echo
+elif command -v imgcat >/dev/null; then
+    imgcat -W "${dim%%x*}" -H "${dim##*x}" "$file"
 else
-  file "$file"
+    file "$file"
 fi

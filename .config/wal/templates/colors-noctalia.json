@@ -1,20 +1,25 @@
 {
-    "mPrimary": "{background}",
-    "mSecondary": "{color5}",
-    "mTertiary": "{color6}",
-    "mError": "{color1}",
-    "mSurface": "{background}",
-    "mSurfaceVariant": "{background}",
-    "mHover": "{color4}",
-
+    "mPrimary": "{color1}",
     "mOnPrimary": "{foreground}",
+
+    "mSecondary": "{color5}",
     "mOnSecondary": "{background}",
+
+    "mTertiary": "{color6}",
     "mOnTertiary": "{background}",
+
+    "mError": "{color1}",
     "mOnError": "{background}",
+
+    "mSurface": "{background}",
     "mOnSurface": "{foreground}",
-    "mOnSurfaceVariant": "{color3}",
+
+    "mSurfaceVariant": "{background.lighten(10%)}",
+    "mOnSurfaceVariant": "{foreground}",
+
+    "mHover": "{color4}",
     "mOnHover": "{background}",
 
     "mOutline": "{color1}",
-    "mShadow": "#000000"
+    "mShadow": "{background}"
 }

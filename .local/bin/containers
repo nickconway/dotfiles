@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 function start() {
     if grep -q '\- proxy$' "$DOCKER_STACK_DIR" 2>/dev/null; then

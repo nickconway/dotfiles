@@ -1,7 +1,11 @@
 function _gen_completions() {
-    if command -v $1 &> /dev/null && [[ ! -e ~/.config/zsh/completions/_"$1" ]]; then
-        $* > ~/.config/zsh/completions/_"$1"
+    CMD=$1
+    if [[ -e ~/.config/zsh/completions/_"$CMD" ]]; then
+        return
     fi
+
+    ! command -v $1 &> /dev/null && shift
+    $* > ~/.config/zsh/completions/_"$CMD"
 }
 
 [[ -d ~/.config/zsh/zsh-completions ]] && fpath=(~/.config/zsh/zsh-completions/src $fpath)
@@ -22,19 +26,17 @@ _gen_completions gitleaks completion zsh
 _gen_completions fd --gen-completions zsh
 _gen_completions uv generate-shell-completion zsh
 _gen_completions uvx --generate-shell-completion zsh
-
-[[ ! -e ~/.config/zsh/completions/_yadm ]] && curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm -o ~/.config/zsh/completions/_yadm
+_gen_completions yadm curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm
 
 _dotnet_zsh_complete() {
-    local completions=("$(dotnet complete "$words")")
+    local completions=("$(dotnet complete "")")
 
-    if [ -z "$completions" ]
-    then
+    if [ -z "${completions[*]}" ]; then
         _arguments '*::arguments: _normal'
         return
     fi
 
-    _values = "${(ps:\n:)completions}"
+    _values '=' $(xargs <<< $completions)
 }
 
 autoload -Uz compinit && compinit

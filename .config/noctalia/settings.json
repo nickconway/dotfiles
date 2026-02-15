@@ -389,7 +389,7 @@
     "hooks": {
         "darkModeChange": "",
         "enabled": true,
-        "mediaChange": "flock -nu /tmp/media-show-lock --command 'media -o $1 show $2 $3 $4'",
+        "mediaChange": "media -o $1 show",
         "performanceModeDisabled": "",
         "performanceModeEnabled": "",
         "screenLock": "",

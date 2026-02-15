@@ -2,15 +2,17 @@
 set -euo pipefail
 
 function pick() {
-    if [[ -n "${LIST:-}" ]]; then
-        if [[ -t 0 ]]; then
-            CMD=(fzft "${FZF_FLAGS[@]}")
-        else
-            CMD=(rofi "${ROFI_FLAGS[@]}")
-        fi
-
-        SELECTED="$("${CMD[@]}" <"$LIST")" && [[ -n "$SELECTED" ]] && echo -e "$SELECTED" | "${PROCESSING[@]}" | wl-copy -n && paste-keys
+    if [[ -z "${LIST:-}" ]]; then
+        return
     fi
+
+    if [[ -t 0 ]]; then
+        CMD=(fzft "${FZF_FLAGS[@]}")
+    else
+        CMD=(rofi "${ROFI_FLAGS[@]}")
+    fi
+
+    SELECTED="$("${CMD[@]}" <"$LIST")" && [[ -n "$SELECTED" ]] && echo -e "$SELECTED" | "${PROCESSING[@]}" | wl-copy -n && paste-keys
 }
 
 cd ~/.cache

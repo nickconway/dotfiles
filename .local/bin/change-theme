@@ -6,12 +6,17 @@ export YAZI_CONFIG_HOME=~/.config/yazi/wal
 reload='false'
 random='false'
 light='false'
+eight='false'
 
-while getopts 'lrR' flag; do
+METHOD=lighten
+
+while getopts 'lm:rR8' flag; do
     case "${flag}" in
-    l) light='true' ;;
-    r) random='true' ;;
-    R) reload='true' ;;
+    l) light=true ;;
+    m) METHOD="$OPTARG" ;;
+    r) random=true ;;
+    R) reload=true ;;
+    8) eight=true ;;
     *) ;;
     esac
 done
@@ -26,7 +31,11 @@ else
     INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
 
-WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" --cols16 lighten)
+WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT")
+
+if [[ "$eight" == false ]]; then
+    WAL_CMD+=(--cols16 "${METHOD:-lighten}")
+fi
 
 if [[ $light == true ]]; then
     WAL_CMD+=(-l)
@@ -124,4 +133,4 @@ if pgrep -x swaync &>/dev/null; then
 fi
 
 fastfetch
-eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 -r=Random")"
+eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 -r=Random" --action "$0  -R=Reload")"

@@ -37,43 +37,47 @@
 [delta]
     true-color = always
     navigate = true    # use n and N to move between diff sections
-    syntax-theme = base16
+    syntax-theme = ansi
     hyperlinks = true
     line-numbers = true
-    line-numbers-minus-style = red
-    line-numbers-plus-style = green
-    line-numbers-zero-style = dim gray
-    commit-style = red
+
+    line-numbers-minus-style = 1
+    line-numbers-plus-style = 2
+    line-numbers-zero-style = gray
+
+    commit-style = 1
     commit-decoration-style = blue box
-    file-style = dim gray
-    file-decoration-style = dim gray ol
+
+    file-style = gray
+    file-decoration-style = gray ol
+
     hunk-header-style = file line-number syntax
-    hunk-header-file-style = red
-    hunk-header-line-number-style = green
+    hunk-header-file-style = 1
+    hunk-header-line-number-style = 2
     hunk-header-decoration-style = blue box
 
     map-styles = bold purple => white magenta, bold cyan => white blue
 
-    merge-conflict-ours-diff-header-style = bold red
-    merge-conflict-ours-diff-header-decoration-style = red box
+    merge-conflict-ours-diff-header-style = bold 1
+    merge-conflict-ours-diff-header-decoration-style = 1 box
     merge-conflict-theirs-diff-header-style = bold blue
     merge-conflict-theirs-diff-header-decoration-style = blue box
 
     grep-file-style = purple
-    grep-line-number-style = green
+    grep-line-number-style = 2
 
     whitespace-error-style = reverse purple
 
     zero-style = dim syntax
 
-    minus-style = white red
+    minus-style = dim syntax
     minus-non-emph-style = dim syntax
-    minus-emph-style = white red
-    minus-empty-line-marker-style = syntax
+    minus-emph-style = dim syntax 8
+    minus-empty-line-marker-style = dim syntax
 
-    plus-style = white green
+    plus-style = syntax 8
     plus-non-emph-style = dim syntax
-    plus-emph-style = white green
+    plus-emph-style = syntax 8
     plus-empty-line-marker-style = syntax
 [include]
     path = ~/.config/git/local

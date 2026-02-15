@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+    export DEBUG_MODE
+fi
+
 function clean() {
     if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
         mv ~/Git/zmk-config/config/include/leader.dtsi{.bkp,}
@@ -106,7 +111,7 @@ EOF
         FLAGS+=(-S "$snippet")
     fi
 
-    if [[ $pristine == true ]] ; then
+    if [[ $pristine == true ]]; then
         FLAGS+=(-p)
     fi
 

@@ -493,13 +493,8 @@ alias la='ls -A'
 alias ll='ls -lg'
 alias lla='ls -lAg'
 alias tree='ls --tree'
-function ls() {
-    if command -v eza &>/dev/null; then
-        eza --icons=always --color $@
-    else
-        command ls -h --color $@
-    fi
-}
+
+alias ls="$(command -v eza &>/dev/null && echo eza --icons auto --color auto || echo ls -h --color)"
 
 alias lzd='[[ -n $TMUX ]] && tmux display-popup -w 90% -h 80% -B -E "cd \"$(pwd)\" && lazydocker" || lazydocker'
 
