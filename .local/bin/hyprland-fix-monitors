@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 while true; do
     if ! is-locked && { [[ "$(hyprctl monitors -j | jq -r '.[] | select(.name == "DP-3") | .disabled')" == "false" ]] && [[ "$(hyprctl monitors -j | jq -r '.[] | select(.name == "DP-3") | .width')" != 3840 ]]; }; then

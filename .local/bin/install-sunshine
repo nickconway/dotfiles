@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-set -eou pipefail
-set -x
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 yay -S --needed --noconfirm sunshine
 sudo setcap cap_sys_admin+p "$(readlink -f "$(which sunshine)")"

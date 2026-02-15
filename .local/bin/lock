@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 if pgrep -afx "qs -c caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call lock lock
 elif pgrep -afx "qs -c noctalia.*" &>/dev/null; then

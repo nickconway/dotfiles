@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 function start() {
     if grep -q '\- proxy$' "$DOCKER_STACK_DIR" 2>/dev/null; then
         docker network inspect proxy &>/dev/null || docker network create proxy

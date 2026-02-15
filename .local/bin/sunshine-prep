@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 if [[ $1 == "do" ]]; then
     if pidof hyprlock; then
@@ -6,12 +11,18 @@ if [[ $1 == "do" ]]; then
         pkill -USR1 hyprlock
     fi
 
-    swaync-client -dn
+    if pidof swaync; then
+        swaync-client -dn
+    fi
     qs -c caelestia ipc call gameMode enable
     sunshine-headless enable
 elif [[ $1 == "undo" ]]; then
     sunshine-headless disable
-    swaync-client -df
+
+    if pidof swaync; then
+        swaync-client -df
+    fi
+
     qs -c caelestia ipc call gameMode disable
 
     if [[ -e /tmp/.sunshine-locked ]]; then

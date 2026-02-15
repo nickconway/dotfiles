@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 PLAYER=
 PLAYERCTL_FLAGS=(-i plasma-browser-integration)
 while getopts 'ao:' f; do

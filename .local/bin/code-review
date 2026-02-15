@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 gum spin --title 'Getting Code Review' --spinner.foreground 12 -- get-code-review
 glow -p .git/review

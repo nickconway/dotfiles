@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 sudo flatpak override --nosocket=x11 dev.vencord.Vesktop
 
 [[ -e $XDG_RUNTIME_DIR/discord-ipc-0 ]] && rm $XDG_RUNTIME_DIR/discord-ipc-0

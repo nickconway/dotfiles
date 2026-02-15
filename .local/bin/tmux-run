@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 [[ "${1:-}" == "-w" ]] && WINDOW=true && shift
 
 PANE_ID="$(tmux list-panes -a -F '#{pane_id}' -f '#{==:#{pane_title},Runner}')"

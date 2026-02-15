@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 function error() {
     pactl unload-module module-loopback &>/dev/null || true
     pactl unload-module module-null-sink &>/dev/null || true

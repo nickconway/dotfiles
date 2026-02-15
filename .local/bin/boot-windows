@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 WIN="$(grep -i windows /boot/grub/grub.cfg | cut -d "'" -f 2)"
 sudo grub-reboot "$WIN"
 systemctl reboot

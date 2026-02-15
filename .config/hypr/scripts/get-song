@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 media metadata --format '󰎇   {{title}} - {{artist}}'

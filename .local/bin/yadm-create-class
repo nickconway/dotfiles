@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 for CLASS in "$@"; do
     if [[ ! -e ~/.config/yadm/alt/.$CLASS##c.$CLASS ]]; then

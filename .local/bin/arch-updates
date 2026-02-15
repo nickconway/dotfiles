@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 # Original script by @speltriao on GitHub
 # https://github.com/speltriao/Pacman-Update-for-GNOME-Shell

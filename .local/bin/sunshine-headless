@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 if [[ "$1" == "disable" ]]; then
     hyprctl reload

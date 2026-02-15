@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 DOCKER_NETWORK="$1"
 
 sudo sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0

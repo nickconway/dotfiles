@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 NAME=$1
 
 docker exec -it -e NTFY_PASSWORD="$(pwgen 32)" ntfy-ntfy-1 ntfy user add $NAME

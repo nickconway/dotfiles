@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 SERVER_ID=$(curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
     -H "X-API-SECRET: $KOMODO_API_SECRET" \
     -H "Content-Type: application/json" -X POST https://deploy.$SERVICES_BASE_DOMAIN/read \

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 while getopts 'h:t:p:w:' flag; do
   case "${flag}" in
     h) HEIGHT=$OPTARG;;

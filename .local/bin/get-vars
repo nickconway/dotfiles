@@ -2,6 +2,10 @@
 set -euo pipefail
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
     export DEBUG_MODE
 fi

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 find ~/.config/quickshell -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzft --border-label " Choose QuickShell Config " >~/.config/quickshell/config
 killall qs || true
 qs -c $(cat ~/.config/quickshell/config) $*

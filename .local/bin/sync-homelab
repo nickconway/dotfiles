@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 function clean() {
     if [[ "${SKIP_HEALTH_CHECK:-}" == "" ]]; then
         until curl -f "https://health.${SERVICES_BASE_DOMAIN}/ping/${HEALTHCHECK_TOKEN}/sync-homelab-$(uname -n)?create=1"; do

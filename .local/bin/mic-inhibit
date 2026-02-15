@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 while true; do
     if pactl -f json list source-outputs | jq -r '.[].properties["media.name"]' | grep -q RecordStream; then

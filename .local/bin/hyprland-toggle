@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 case $1 in
 bit-depth)
     hyprctl monitors -j | jq -r ".[] | .name, .currentFormat" | xargs -n2 echo | while read -r LINE; do

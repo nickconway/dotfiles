@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
 
 # Nuke all internal spawns when script dies
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM

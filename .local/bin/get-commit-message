@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+	set -x
+fi
+
 [[ -n "$(git --no-pager diff)" ]]
 
 git --no-pager diff | mods --role commit-message > .git/gcai
