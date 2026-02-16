@@ -19,7 +19,7 @@ while true; do
         notify-send "UPS Status" "UPS Switched to Main Power" -h string:synchronous:ups -e
         ;;
     ONBATT)
-        eval "$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e -u critical --action "[[ -e /tmp/ups-online ]] || sudo systemctl reboot -i=Shutdown")" &
+        eval "$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e -t 0 -u critical --action "[[ -e /tmp/ups-online ]] || sudo systemctl reboot -i=Shutdown")" &
         ;;
     esac
 done
