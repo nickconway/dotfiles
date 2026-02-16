@@ -18,15 +18,19 @@ IFS="," read -ra ACTIONS_ARR <<<"$ACTIONS"
 
 function term() {
     while true; do
-        echo -n "$TEXT [${TERM_PROMPTS}] "
-        read -r
+        if command -v gum &>/dev/null; then
+            REPLY="$(gum choose --header "$TEXT" "${NOTIFICATION_PROMPTS_ARR[@]}")"
+        else
+            echo -n "$TEXT [${TERM_PROMPTS}] "
+            read -r
+        fi
 
         if [[ -z "${REPLY:-}" ]]; then
             IDX="$DEFAULT_ACTION"
             return
         else
             for ((i = 0; i < ${#TERM_PROMPTS_ARR[@]}; i++)); do
-                if [[ "$(echo "${TERM_PROMPTS_ARR[$i]}" | tr '[:upper:]' '[:lower:]')" == "$(echo "$REPLY" | tr '[:upper:]' '[:lower:]')" ]]; then
+                if [[ "$REPLY" == "${NOTIFICATION_PROMPTS_ARR[$i]}" ]] || [[ "$(echo "${TERM_PROMPTS_ARR[$i]}" | tr '[:upper:]' '[:lower:]')" == "$(echo "$REPLY" | tr '[:upper:]' '[:lower:]')" ]]; then
                     IDX=$i
                     return
                 fi
@@ -42,7 +46,7 @@ function gui() {
         NOTIFICATION_PROMPTS_FLAGS+=("$A")
     done
 
-    IDX="$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical)"
+    IDX="$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical -t 0)"
 }
 
 if [[ -n ${PROMPT_TERM:-} ]]; then
