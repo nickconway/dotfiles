@@ -40,12 +40,7 @@ function restore() {
 
     ARCHIVE="$(borg list | fzft --tac | awk '{print $1}')"
     echo Restoring "$ARCHIVE"
-
-    if [[ $# -gt 1 ]]; then
-        borg extract --debug --progress ::"$ARCHIVE" "${@:2}"
-    else
-        borg extract --debug --progress ::"$ARCHIVE"
-    fi
+    borg extract --debug --progress ::"$ARCHIVE" "${@}"
 }
 
 function talos() {
