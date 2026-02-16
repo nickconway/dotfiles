@@ -32,7 +32,7 @@ ACTIONS="systemctl reboot,true"
 
 if [[ -e /var/run/reboot-required ]]; then
     TEXT="A reboot is required. Would you like to reboot now?"
-elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( (uname -r | grep -q zen && pacman -Q linux-zen || pacman -Q linux) | awk '{print $2}' | sed 's/\./-/g')"* ]]; then
+elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( ( (uname -r | grep -q cachyos && pacman -Q linux-cachyos) || (uname -r | grep -q zen && pacman -Q linux-zen) || pacman -Q linux) | awk '{print $2}' | sed 's/\./-/g')"* ]]; then
     TEXT="The kernel was updated. Would you like to reboot now?"
 fi
 
