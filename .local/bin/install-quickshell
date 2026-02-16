@@ -5,17 +5,17 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-mkdir -p ~/Git
+mkdir -p ~/Git/GitHub
 
-cd ~/Git
-git clone https://github.com/nickconway/quickshell || true
+cd ~/Git/GitHub
+gh repo clone quickshell || git clone https://github.com/nickconway/quickshell || true
 cd quickshell
 cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
 
-cd ~/Git
-git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
+cd ~/Git/GitHub
+gh repo clone caeletia-cli || git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
 cd caelestia-cli
 git pull
 if [[ -e /usr/bin/caelestia ]]; then
@@ -29,7 +29,7 @@ sudo cp completions/caelestia.fish /usr/share/fish/vendor_completions.d/caelesti
 
 mkdir -p ~/.config/quickshell
 cd ~/.config/quickshell
-git clone https://github.com/nickconway/caelestia.git caelestia || true
+gh repo clone caeletia || git clone https://github.com/nickconway/caelestia.git caelestia || true
 cd caelestia
 git pull
 git remote add upstream https://github.com/caelestia-dots/shell || true
@@ -39,7 +39,7 @@ cmake --build build
 sudo cmake --install build
 
 cd ~/.config/quickshell
-git clone https://github.com/noctalia-dev/noctalia-shell noctalia || true
+gh repo clone noctalia-shell noctalia || git clone https://github.com/nickconway/noctalia-shell noctalia || true
 cd noctalia
 git pull
 
