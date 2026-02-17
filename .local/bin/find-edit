@@ -3,6 +3,7 @@ set -euo pipefail
 
 if [[ -n "${LOG:-}" ]]; then
     exec &>"/tmp/$(basename "$0").log"
+    set -x
 fi
 
 if [[ -n "${DEBUG_MODE:-}" ]]; then
@@ -84,4 +85,5 @@ while read -r LINE; do
     FILES+=("$FILE")
 done <<<"$SELECTED"
 
+echo "Opening ${#FILES[@]} file(s)"
 "$EDITOR" -c "${COMMANDS[*]}" -c bfirst
