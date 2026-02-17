@@ -179,7 +179,7 @@ function gcf() {
 alias gcm='git commit -m'
 
 function gcl() {
-    gh repo clone "$@" || git clone --recurse-submodules "$@"
+    gh repo clone "$@" -- --recurse-submodules || git clone --recurse-submodules "$@"
 }
 
 function gco() {
