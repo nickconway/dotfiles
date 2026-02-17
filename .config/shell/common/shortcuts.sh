@@ -177,7 +177,11 @@ function gcf() {
 }
 
 alias gcm='git commit -m'
-alias gcl='git clone --recurse-submodules'
+
+function gcl() {
+    gh repo clone "$@" || git clone --recurse-submodules "$@"
+}
+
 function gco() {
     if [[ $# -gt 0 ]]; then
         git checkout "$1"
@@ -186,6 +190,7 @@ function gco() {
         [[ -n "$HASH" ]] && git checkout "$HASH"
     fi
 }
+
 alias gcom='git checkout main && git pull origin main'
 alias gcp='git cherry-pick'
 alias gd='git diff'
