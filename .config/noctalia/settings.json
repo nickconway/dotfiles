@@ -214,6 +214,7 @@
                     "textColor": "none"
                 },
                 {
+                    "applyScrollToAllMonitors": false,
                     "displayMode": "onhover",
                     "iconColor": "none",
                     "id": "Brightness",
@@ -234,7 +235,8 @@
     "brightness": {
         "brightnessStep": 5,
         "enableDdcSupport": true,
-        "enforceMinimum": true
+        "enforceMinimum": true,
+        "syncAllMonitors": false
     },
     "calendar": {
         "cards": [
