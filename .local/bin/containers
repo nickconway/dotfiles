@@ -15,35 +15,29 @@ function start() {
         docker network inspect proxy &>/dev/null || docker network create proxy
     fi
 
-    cd "$1" || return
-    echo "$1"
+    cd "$1"
 
     if [[ -e setup ]]; then
         ./setup
     fi
 
-    "${BIN[@]}" up -d --build
+    docker compose up -d --build
 }
 
 function stop() {
-    cd "$1" || return
-    echo "$1"
-
-    "${BIN[@]}" stop
+    cd "$1"
+    docker compose stop
 }
 
 function update() {
-    cd "$1" || return
-    echo "$1"
-
-    "${BIN[@]}" pull
-    "${BIN[@]}" up -d --build
+    cd "$1"
+    docker compose pull
+    docker compose up -d --build
 }
 
 function dump() {
     CONTAINER=$1
-    DIR="$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
-    cd "$DIR" || return
+    cd "$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
 
     if docker exec "$CONTAINER" bash -c 'which pg_dumpall && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
         echo "Dumping postgres container $CONTAINER"
@@ -62,8 +56,7 @@ function dump() {
 
 function restore() {
     CONTAINER=$1
-    DIR="$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
-    cd "$DIR" || return
+    cd "$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
 
     if docker exec "$CONTAINER" bash -c 'which psql && [[ -n $POSTGRES_USER ]]' &>/dev/null; then
         echo "Restoring postgres container $CONTAINER"
@@ -84,34 +77,28 @@ function unhealthy() {
     docker ps --format=json | jq -r '{Names, State, Status} | select((.State != "running") or (.Status | contains("unhealthy"))) | .Names'
 }
 
-BIN=(docker compose)
+export -f start stop update dump restore
 
-if [[ -e /usr/bin/docker-compose ]]; then
-    BIN=(docker-compose)
-fi
-
-DOCKER_STACK_DIR=${DOCKER_STACK_DIR:-~/Docker}
-cd "$DOCKER_STACK_DIR"
-
+cd "${DOCKER_STACK_DIR:-~/Docker}"
 CMD="$1"
 shift
 
-TARGETS=(*)
+if [[ -p /dev/stdin ]]; then
+    readarray -t TARGETS
+elif [[ $CMD == dump ]] || [[ $CMD == restore ]]; then
+    readarray -t TARGETS < <(docker ps --format '{{.Names}}' | grep -v nextcloud-aio)
+elif [[ -n "$*" ]]; then
+    TARGETS=("${@}")
+else
+    TARGETS=(*)
+fi
 
 if [[ $CMD == unhealthy ]]; then
     $CMD
     exit
 fi
 
-if [[ $CMD == dump ]] || [[ $CMD == restore ]]; then
-    readrray TARGETS < <(docker ps --format '{{.Names}}' | grep -v nextcloud-aio)
-fi
-
-for T in "${TARGETS[@]}"; do
-    if [[ $# -eq 0 ]] || [[ "$*" == *"$T"* ]]; then
-        ("$CMD" "$T")
-    fi
-done
+run "$CMD \$D" "${TARGETS[@]}"
 
 if docker ps | grep -q nextcloud-aio-mastercontainer; then
     if [[ $CMD == start ]]; then
@@ -122,6 +109,6 @@ if docker ps | grep -q nextcloud-aio-mastercontainer; then
 fi
 
 if [[ $CMD == start ]] || [[ $CMD == stop ]]; then
-    readarray CONTAINERS < <(docker ps -qa)
-    docker "$CMD" "${CONTAINERS[@]}"
+    readarray -t CONTAINERS < <(docker ps -qa)
+    docker "$CMD" "${CONTAINERS[@]}" &>/dev/null
 fi

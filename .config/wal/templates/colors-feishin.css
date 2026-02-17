@@ -1,0 +1,39 @@
+:root {
+    --theme-colors-dark-1: {background};
+    --theme-colors-dark-2: {background};
+    --theme-colors-dark-3: {background};
+    --theme-colors-dark-4: {background};
+    --theme-colors-dark-5: {background};
+    --theme-colors-dark-6: {background};
+    --theme-colors-dark-7: {background};
+    --theme-colors-dark-8: {background};
+    --theme-colors-dark-9: {background};
+    --theme-colors-dark-10: {background};
+
+    --theme-colors-light-1: {foreground};
+    --theme-colors-light-2: {foreground};
+    --theme-colors-light-3: {foreground};
+    --theme-colors-light-4: {foreground};
+    --theme-colors-light-5: {foreground};
+    --theme-colors-light-6: {foreground};
+    --theme-colors-light-7: {foreground};
+    --theme-colors-light-8: {foreground};
+    --theme-colors-light-9: {foreground};
+    --theme-colors-light-10: {foreground};
+
+    --theme-colors-black: {background};
+    --theme-colors-white: {foreground};
+
+    --theme-colors-background: {background};
+    --theme-colors-foreground: {foreground};
+    --theme-colors-foreground-muted: {color8};
+
+    --theme-colors-background-alternate: {background.lighten(5%)};
+
+    --theme-colors-primary: {color1};
+    --theme-colors-primary-filled: {color1};
+    --theme-colors-primary-contrast: {foreground};
+
+    --theme-colors-surface: {background};
+    --theme-colors-surface-foreground: {foreground};
+}

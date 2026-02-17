@@ -12,22 +12,30 @@ fi
 
 shopt -s dotglob
 
-TMP=$(mktemp)
+cmd="$1"
+shift
 
-DIRS=(*)
 if [[ -p /dev/stdin ]]; then
     readarray -t DIRS
+elif [[ -n "$*" ]]; then
+    DIRS=("${@}")
+else
+    DIRS=(*)
 fi
 
+TMP=$(mktemp)
+
 for D in "${DIRS[@]}"; do
-    readarray -t CMD <<<"$@"
     export D
+    CMD=("$(echo "$cmd" | envsubst)")
 
     if command -v gum &>/dev/null; then
-        CMD=(gum spin --title "$D" -- bash -c "'{ ${CMD[@]}; } &> $TMP'")
+        CMD=(gum spin --title "$D" -- bash -c "{ ${CMD[@]}; } &> $TMP")
+    else
+        CMD=("(${CMD[@]}) &> $TMP")
     fi
 
-    if (eval "${CMD[*]}"); then
+    if ("${CMD[@]}"); then
         echo "✅ $D"
     else
         echo "❌ $D"
