@@ -5,6 +5,12 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+function cp() {
+    local DIR
+    DIR="$(dirname "${@: -1}")"
+    mkdir -p "$DIR" || sudo mkdir -p "$DIR"
+}
+
 export YAZI_CONFIG_HOME=~/.config/yazi/wal
 
 reload='false'
@@ -63,78 +69,42 @@ magick "$IMG" -strip -scale 10% -blur 0x3 -resize 100% ~/.cache/wal/wal.blur
 magick ~/.cache/wal/wal.sqre \( -size 500x500 xc:white -fill "rgba(0,0,0,0.7)" -draw "polygon 400,500 500,500 500,0 450,0" -fill black -draw "polygon 500,500 500,0 450,500" \) -alpha Off -compose CopyOpacity -composite ~/.cache/wal/wal.png
 mv ~/.cache/wal/wal.png ~/.cache/wal/wal.quad
 
-if command -v gsettings &>/dev/null; then
-    if [[ $light == true ]]; then
-        gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
-    else
-        gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
-    fi
+if [[ $light == true ]]; then
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-light" || true
+else
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" || true
 fi
 
-[[ -e ~/.config/k9s/skins ]] && cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
+cp ~/.cache/wal/pywal.kvconfig ~/.config/Kvantum/pywal/pywal.kvconfig
+cp ~/.cache/wal/pywal.svg ~/.config/Kvantum/pywal/pywal.svg
+kvantummanager --set pywal || true
 
-[[ -e /usr/share/sddm/themes/sugar-candy ]] && sudo cp "$IMG" /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
-[[ -e /usr/share/sddm/themes/sugar-candy/theme.conf ]] && sudo sed -i "s/AccentColor=.*/AccentColor=\"$(grep '$color14' ~/.cache/wal/colors.scss | cut -d ' ' -f 2 | tr -d ';')\"/g" /usr/share/sddm/themes/sugar-candy/theme.conf
+cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
 
-[[ -e /usr/share/sddm/themes/ltmnight ]] && sudo cp "$IMG" /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png
+cp "$IMG" /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
+cp ~/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf
 
-if [[ -e /usr/share/sddm/themes/ltmnight/Themes/hyprltm.conf ]]; then
-    FILE=/usr/share/sddm/themes/ltmnight/Themes/hyprltm.conf
+cp "$IMG" /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png
+cp ~/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof
 
-    sudo sed -i "s/^\(Background=\).*/\1\"Backgrounds\/bg.png\"/" "$FILE"
+cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-3.0/gtk.css
+cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-4.0/gtk.css
 
-    for c in HeaderTextColor DateTextColor TimeTextColor LoginFieldTextColor PasswordFieldTextColor DropdownTextColor HighlightTextColor; do
-        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '16q;d' ~/.cache/wal/colors)\"/" "$FILE"
-    done
-
-    for c in FormBackgroundColor BackgroundColor DimBackgroundColor; do
-        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '1q;d' ~/.cache/wal/colors)\"/" "$FILE"
-    done
-
-    for c in HighlightBackgroundColor DropdownSelectedBackgroundColor LoginButtonBackgroundColor UserIconColor PasswordIconColor SystemButtonsIconsColor SessionButtonTextColor VirtualKeyboardButtonTextColor; do
-        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '3q;d' ~/.cache/wal/colors)\"/" "$FILE"
-    done
-
-    for c in HoverUserIconColor HoverPasswordIconColor HoverSystemButtonsIconsColor HoverSessionButtonTextColor HoverVirtualKeyboardButtonTextColor; do
-        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '14q;d' ~/.cache/wal/colors)\"/" "$FILE"
-    done
-
-    for c in PlaceholderTextColor; do
-        sudo sed -i "s/\(^${c}=\).*/\1\"$(sed '10q;d' ~/.cache/wal/colors)\"/" "$FILE"
-    done
-fi
-
-[[ -e ~/.config/gtk-3.0 ]] && cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-3.0/gtk.css
-[[ -e ~/.config/gtk-4.0 ]] && cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-4.0/gtk.css
-
-if [[ -e ~/.var/app/dev.vencord.Vesktop ]]; then
-    cp ~/.config/vesktop/pywal.theme.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes
-    sed -i "s/\(--link-colour:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}')/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--gradient-primary:\).*/\1 $(sed -n '3p' ~/.cache/wal/colors-rgb);/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--gradient-secondary:\).*/\1 $(sed -n '4p' ~/.cache/wal/colors-rgb);/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--mention-background:\).*/\1 rgba($(sed -n '3p' ~/.cache/wal/colors-rgb), 0.5);/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-    sed -i "s/\(--mention-foreground:\).*/\1 $(grep color3 ~/.cache/wal/colors.css | awk '{print $2}');/" ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-fi
+cp ~/.cache/wal/vesktop.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 
 echo "\$WALLPAPER = $IMG" >~/.config/hypr/include/wallpaper.conf
 
-if pgrep hyprpaper &>/dev/null; then
-    hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null
-fi
+hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null || true
 
-if pgrep -afx "qs -c noctalia.*" &>/dev/null; then
-    cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
-    for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
-        qs -c noctalia ipc call wallpaper set "$IMG" $m
-    done
-elif pgrep -afx "qs -c caelestia.*" &>/dev/null; then
-    cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
-    caelestia wallpaper -N -f "$IMG" &>/dev/null || true
-fi
+cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
+for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
+    qs -c noctalia ipc call wallpaper set "$IMG" $m || true
+done
 
-if pgrep -x swaync &>/dev/null; then
-    swaync-client -rs
-fi
+cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
+caelestia wallpaper -N -f "$IMG" &>/dev/null || true
+
+timeout 1 swaync-client -rs &>/dev/null || true
 
 fastfetch
 eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 -r=Random" --action "$0  -R=Reload")"

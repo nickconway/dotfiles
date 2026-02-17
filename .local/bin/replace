@@ -5,7 +5,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-if ! command -v rg >/dev/null; then
+if ! command -v rg &>/dev/null; then
     echo "rg not found"
     return
 fi
@@ -20,13 +20,11 @@ F=c
 
 while getopts 'f' flag; do
     case "${flag}" in
-    f)
-        F=
-        shift
-        ;;
+    f) F= ;;
     *) continue ;;
     esac
 done
+shift $((OPTIND - 1))
 
 FIND="$1"
 REPLACE="$2"
@@ -38,7 +36,6 @@ read -ra FILES < <(rg --smart-case -l "$FIND" "${*:-.}" | xargs)
 
 if [[ -n "${FILES:-}" ]] && [[ ${#FILES} -gt 0 ]]; then
     CMD=(
-        AUTOSESSION_ENABLED=no
         nvim
         -c
         "':set nohlsearch | :argdo %s/$FIND/$REPLACE/g${F:-} | update'"
@@ -49,7 +46,7 @@ if [[ -n "${FILES:-}" ]] && [[ ${#FILES} -gt 0 ]]; then
     if [[ -n "$TMUX" ]]; then
         tmux display-popup -w 80% -h 80% -d $PWD -E "${CMD[*]} ${FILES[*]}"
     else
-        eval "${CMD[@]}" "${FILES[@]}"
+        "${CMD[@]}" "${FILES[@]}"
     fi
 
 else

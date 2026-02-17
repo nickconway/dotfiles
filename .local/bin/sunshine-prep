@@ -14,6 +14,7 @@ if [[ $1 == "do" ]]; then
     if pidof swaync; then
         swaync-client -dn
     fi
+
     qs -c caelestia ipc call gameMode enable
     sunshine-headless enable
 elif [[ $1 == "undo" ]]; then

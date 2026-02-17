@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+while getopts 'a' flag; do
+    case "${flag}" in
+    a) ALL=true ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+rm -f /tmp/rg-fzf-{r,f}
+
+RG_CMD=(rg --column --line-number --no-heading --color=always --smart-case --hidden --with-filename -g)
+
+if [[ ${ALL:-} == true ]]; then
+    RG_CMD+=("!{**/node_modules/*,**/.github/*,**/.git/*}")
+else
+    RG_CMD+=("'!{**/node_modules/*,**/.github/*,**/.git/*}'")
+fi
+
+QUERY="${1:-}"
+shift || true
+
+read -ra FILES <<<"$@"
+if [[ -p /dev/stdin ]]; then
+    readarray -t FILES
+fi
+
+SELECTED="$(
+    if [[ ${ALL:-} == true ]]; then
+        "${RG_CMD[@]}" --color=never "$QUERY" "${FILES[@]}"
+    else
+        RG_CMD+=('{q}' "${FILES[@]}")
+        fzft --ansi --disabled --query "$QUERY" \
+            --bind "start:reload:${RG_CMD[*]} || true" \
+            --bind "change:reload:sleep 0.1; ${RG_CMD[*]} || true" \
+            --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~  ]] &&
+                                echo "rebind(change)+change-prompt( > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
+                                echo "unbind(change)+change-prompt( > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+            --color "hl:-1:underline,hl+:-1:underline:reverse" \
+            --prompt ' > ' \
+            --delimiter : \
+            --header 'CTRL-R: Switch between ripgrep/fzf' \
+            --preview 'bat --color=always {1} --style=plain --highlight-line {2}' \
+            --preview-window 'down,+{2}+3/3,~3' \
+            --border-label " Search and Edit "
+    fi
+)"
+
+[[ -n "$SELECTED" ]]
+
+COMMANDS=()
+FILES=()
+while read -r LINE; do
+    FILE=$(echo $LINE | awk -F ':' '{print $1}')
+    ROW=$(echo $LINE | awk -F ':' '{print $2}')
+    COL=$(echo $LINE | awk -F ':' '{print $3}')
+    COORDS="${ROW}G${COL}|"
+
+    if [[ ! -e "$FILE" ]]; then
+        continue
+    fi
+
+    if [[ "${FILES[*]}" == *"$FILE"* ]]; then
+        continue
+    fi
+
+    COMMAND="execute 'e $FILE | +normal $COORDS'"
+
+    if [[ -n "${COMMANDS:-}" ]]; then
+        COMMAND="| $COMMAND"
+    fi
+
+    COMMANDS+=("$COMMAND")
+    FILES+=("$FILE")
+done <<<"$SELECTED"
+
+"$EDITOR" -c "${COMMANDS[*]}" -c bfirst
