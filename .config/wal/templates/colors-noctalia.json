@@ -14,7 +14,7 @@
     "mSurface": "{background}",
     "mOnSurface": "{foreground}",
 
-    "mSurfaceVariant": "{background.darken(10%)}",
+    "mSurfaceVariant": "{background.darken(5%)}",
     "mOnSurfaceVariant": "{foreground}",
 
     "mHover": "{color4}",

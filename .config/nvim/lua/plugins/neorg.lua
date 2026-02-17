@@ -8,7 +8,11 @@ return {
         end
         return true
     end,
-    dependencies = { "luarocks.nvim" },
+    dependencies = {
+        "vhyrro/luarocks.nvim",
+        priority = 1000,
+        config = true,
+    },
     config = function()
         require("neorg").setup({
             load = {

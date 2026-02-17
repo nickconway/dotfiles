@@ -10,10 +10,11 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-function cp() {
+function _cp() {
     local DIR
     DIR="$(dirname "${@: -1}")"
     mkdir -p "$DIR" || sudo mkdir -p "$DIR"
+    cp "${@}" &>/dev/null || sudo cp "${@}"
 }
 
 export YAZI_CONFIG_HOME=~/.config/yazi/wal
@@ -64,8 +65,8 @@ fi
 
 IMG="$(cat ~/.cache/wal/wal)"
 kitten icat "$IMG" || true
-cp "$IMG" ~/.config/wallpaper
-cp ~/.config/wallpaper{,.png}
+_cp "$IMG" ~/.config/wallpaper
+_cp ~/.config/wallpaper{,.png}
 
 magick "$IMG" -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb
 
@@ -80,33 +81,34 @@ else
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" || true
 fi
 
-cp ~/.cache/wal/pywal.kvconfig ~/.config/Kvantum/pywal/pywal.kvconfig
-cp ~/.cache/wal/pywal.svg ~/.config/Kvantum/pywal/pywal.svg
+_cp ~/.cache/wal/pywal.kvconfig ~/.config/Kvantum/pywal/pywal.kvconfig
+_cp ~/.cache/wal/pywal.svg ~/.config/Kvantum/pywal/pywal.svg
 kvantummanager --set pywal || true
 
-cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
+_cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
 
-cp "$IMG" /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
-cp ~/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf
+_cp "$IMG" /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
+_cp ~/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf
 
-cp "$IMG" /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png
-cp ~/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof
+_cp "$IMG" /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png
+_cp ~/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof
 
-cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-3.0/gtk.css
-cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-4.0/gtk.css
+_cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-3.0/gtk.css
+_cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-4.0/gtk.css
 
-cp ~/.cache/wal/vesktop.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
+_cp ~/.cache/wal/vesktop.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 
 echo "\$WALLPAPER = $IMG" >~/.config/hypr/include/wallpaper.conf
 
 hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null || true
 
-cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
+_cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
+_cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
 for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
     qs -c noctalia ipc call wallpaper set "$IMG" $m || true
 done
 
-cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
+_cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
 caelestia wallpaper -N -f "$IMG" &>/dev/null || true
 
 timeout 1 swaync-client -rs &>/dev/null || true
