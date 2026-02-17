@@ -44,14 +44,14 @@ return {
             "yaml",
         }
 
+        require("nvim-treesitter").install(parsers)
+
         local patterns = { "sh" }
         local count = #patterns
 
         for i, p in ipairs(parsers) do
             patterns[count + i] = p
         end
-
-        require("nvim-treesitter").install()
 
         vim.filetype.add({
             pattern = { [".*/hypr/.*%.conf.*"] = "hyprlang" },

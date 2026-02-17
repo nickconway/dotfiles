@@ -88,7 +88,7 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
     group = vim.api.nvim_create_augroup("autosession", { clear = true }),
     nested = true,
     callback = function()
-        if os.getenv("AUTOSESSION_DISABLED") or vim.fn.argv ~= "" or vim.fn.argc() ~= 0 or vim.g.started_with_stdin then
+        if os.getenv("AUTOSESSION_DISABLED") ~= nil or vim.fn.argv ~= "" or vim.fn.argc() ~= 0 or vim.g.started_with_stdin then
             require("persistence").stop()
         else
             require("persistence").load()
