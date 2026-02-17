@@ -585,12 +585,6 @@ function remove-whitespace() {
     rg '\s+$' -l ${1:-.} | xargs sed -i 's/\s\+$//g'
 }
 
-function respawn() {
-    local CMD=$(pgrep -af $* | grep -v $PPID | cut -d ' ' -f 2-)
-    kill $(pgrep -f $*)
-    eval $CMD
-}
-
 alias s='immersive-ssh'
 alias server='s server'
 
@@ -712,9 +706,12 @@ alias xd='tmux detach -E false'
 alias xx='tmux switch-client -l && tmux kill-session'
 
 alias y="yadm status"
-alias ya="yadm add"
+
+function ya() {
+    yadm add ${*:-\-u}
+}
+
 alias yalt="yadm alt"
-alias yau="yadm add -u"
 alias yb='yadm bootstrap'
 alias yc="yadm commit -v"
 alias yca="yadm commit -av"
