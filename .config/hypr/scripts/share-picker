@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+slurp -b $(cat .cache/wal/colors | sed '1q;d' | tr -d '#')99 -c $(cat .cache/wal/colors | sed '4q;d' | tr -d '#')ff -B $(cat .cache/wal/colors | sed '9q;d' | tr -d '#')ff -d -f '%o@%x,%y,%w,%h'
