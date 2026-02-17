@@ -21,9 +21,9 @@
     --middle-brightness: 0;
     --right-brightness: 0;
     --overlay-brightness: 0.85;
-    --gradient-primary: 150,54,120;
-    --gradient-secondary: 238,137,121;
-    --link-colour: blue;
+    --gradient-primary: {color2.rgb};
+    --gradient-secondary: {color3.rgb};
+    --link-colour: {color3};
     --scrollbar-colour: rgba(255,255,255,0.05);
     --gradient-direction: 320deg;
     --tint-colour: 255,51,159;
@@ -32,8 +32,8 @@
     --window-padding: 0px;
     --window-roundness: 0px;
     --update-notice-1: none;
-    --mention-background: rgba(255,255,255,0.05);
-    --mention-foreground: rgba(255,255,255,0.05);
+    --mention-background: {background};
+    --mention-foreground: {color3};
 }
 
 body, .bg__960e4, .layers__960e4, .appMount__51fd7, .app__160d8, .tabBody__133bf {
