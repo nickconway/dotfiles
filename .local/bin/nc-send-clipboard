@@ -14,13 +14,17 @@ if command -v ss &>/dev/null; then
     ports=('5556' '5557' '5558' '5559' '5560')
     for p in "${ports[@]}"; do
         if ss -n -4 state listening 2>/dev/null | tail -n +2 | grep -q "127.0.0.1:$p"; then
-            if [[ -p /dev/stdin ]]; then
-                while read -r; do
-                    echo "$REPLY"
-                done | nc -q 0 localhost $p
-            else
-                tmux show-buffer | nc -q 0 localhost $p
-            fi
+            {
+                if [[ -p /dev/stdin ]]; then
+                    while read -r; do
+                        echo "$REPLY"
+                    done
+                elif [[ -n $TMUX ]]; then
+                    tmux show-buffer
+                elif command -v wl-paste &>/dev/null; then
+                    wl-paste
+                fi
+            } | nc -q 0 localhost $p
         fi
     done
 fi
