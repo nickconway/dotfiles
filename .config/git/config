@@ -83,3 +83,5 @@
     path = ~/.config/git/local
 [submodule]
 	recurse = true
+[advice]
+	skippedCherryPicks = false

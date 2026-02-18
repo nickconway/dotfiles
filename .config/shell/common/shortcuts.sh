@@ -218,8 +218,6 @@ function gi() {
 
 }
 
-alias git-update-submodules='git submodule update --recursive --remote --init && GMSTATUS="$(git submodule status)" && if echo "$GMSTATUS" | grep "^+"; then gcam "Update submodules"; fi'
-
 GIT_LOG_FORMAT='%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset'
 alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
@@ -271,6 +269,8 @@ function gsw() {
         git switch $@ 2>/dev/null || git switch -c $@
     fi
 }
+
+alias gus='git submodule update --recursive --remote --init && git submodule status | grep -q "^+" && gcam "Update submodules"'
 
 function gwt() {
     WORKTREE="$(_fzf_git_worktrees)"
@@ -710,24 +710,17 @@ alias xc='tmux detach && clear'
 alias xd='tmux detach -E false'
 alias xx='tmux switch-client -l && tmux kill-session'
 
-alias y="yadm status"
-
 function ya() {
     yadm add ${*:-\-u}
 }
 
+alias y="yadm status"
 alias yalt="yadm alt"
 alias yb='yadm bootstrap'
-alias yc="yadm commit -v"
-alias yca="yadm commit -av"
-alias ycam="yadm commit -a -m"
 alias ycl="yadm config --get-all local.class"
 alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
-alias yd="yadm diff"
-alias yds="yadm diff --staged"
 alias ydec="yadm decrypt"
-alias ye="(cd; n)"
 alias yenc="yadm encrypt"
 
 function yl() {
@@ -740,12 +733,12 @@ function yl() {
 
     YADM_ARCHIVE_AFTER="$(sha1sum ~/.local/share/yadm/archive)"
     if [[ $YADM_ARCHIVE_BEFORE != $YADM_ARCHIVE_AFTER ]]; then
-        ydec
+        yadm decrypt
     fi
 
     ALT_FILES_AFTER="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
     if [[ $ALT_FILES_BEFORE != $ALT_FILES_AFTER ]]; then
-        yalt
+        yadm alt
     fi
 
     SHELL_FILES_AFTER="$(sha1sum ~/.config/shell/*/*)"
@@ -754,14 +747,12 @@ function yl() {
     fi
 }
 
-alias ylog='yadm log --graph --pretty=format:$GIT_LOG_FORMAT --abbrev-commit --date=short'
-alias ylogv='(cd "$(yadm user-config -d)" && _fzf_git_hashes)'
-
 function yp() {
     if [[ $# -eq 0 ]]; then
-        yca
+        yadm add -u
+        yadm commit -v
     else
-        ycam $@
+        yadm commit -v -a -m "$@"
     fi
 
     if [[ "$(yadm status -sb)" == *"ahead"* ]]; then
@@ -769,15 +760,15 @@ function yp() {
     fi
 }
 
-alias yrh="yadm reset --hard"
-alias ys="yadm stash"
-
-function ysp() {
-    (cd "$(yadm user-config -d)" && gsp)
-}
-
 alias yu="yadm upgrade"
 alias yuc="yadm user-config"
+
+alias | grep "='git" | while read -r A; do
+    l="$(cut -d = -f 1 <<<"${A/g/y}")"
+    r="$(sed "s/='\(.*\)'/=(cd \$(yadm user-config -d) \&\& \1)/" <<<"$A" | cut -d = -f 2-)"
+
+    which $l &>/dev/null || alias $l=$r
+done
 
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
@@ -794,7 +785,7 @@ alias wsls='wsl.exe --shutdown'
 alias z="zellij"
 
 function dis() {
-    $@ &>/dev/null &
+    "$@" &>/dev/null &
     disown
 }
 

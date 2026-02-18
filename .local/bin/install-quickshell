@@ -13,16 +13,19 @@ fi
 mkdir -p ~/Git/GitHub
 
 cd ~/Git/GitHub
-gh repo clone quickshell || git clone https://github.com/nickconway/quickshell || true
+gh repo clone nickconway/quickshell || git clone https://github.com/nickconway/quickshell || true
 cd quickshell
+git pull
+git pull upstream master
 cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
 
 cd ~/Git/GitHub
-gh repo clone caeletia-cli || git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
+gh repo clone nickconway/caelestia-cli || git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
 cd caelestia-cli
 git pull
+git pull upstream main
 if [[ -e /usr/bin/caelestia ]]; then
     sudo rm /usr/bin/caelestia
     sudo pip uninstall caelestia --break-system-packages --yes --root-user-action ignore
@@ -34,10 +37,10 @@ sudo cp completions/caelestia.fish /usr/share/fish/vendor_completions.d/caelesti
 
 mkdir -p ~/.config/quickshell
 cd ~/.config/quickshell
-gh repo clone caeletia || git clone https://github.com/nickconway/caelestia.git caelestia || true
+gh repo clone nickconway/caelestia || git clone https://github.com/nickconway/caelestia.git caelestia || true
 cd caelestia
 git pull
-git remote add upstream https://github.com/caelestia-dots/shell || true
+git pull upstream main
 git fetch upstream --tags
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
 cmake --build build
