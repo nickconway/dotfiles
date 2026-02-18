@@ -710,6 +710,8 @@ alias xc='tmux detach && clear'
 alias xd='tmux detach -E false'
 alias xx='tmux switch-client -l && tmux kill-session'
 
+eval "$(declare -f | sed -n '/^g.*\(\) {/ , /^}$/p' | sed 's/^g/y/' | sed 's/) {$/) {\n(cd $(yadm user-config -d)/g' | sed 's/^}$/)\n}/g')"
+
 function ya() {
     yadm add ${*:-\-u}
 }
@@ -727,7 +729,7 @@ function yl() {
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
     ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
-    RESULT="$(yadm pull $@)"
+    RESULT="$(yadm pull "$@")"
     echo "$RESULT"
     [[ "$RESULT" == "Already up to date." ]] && return
 
@@ -763,11 +765,13 @@ function yp() {
 alias yu="yadm upgrade"
 alias yuc="yadm user-config"
 
-alias | grep "='git" | while read -r A; do
+alias | grep "^.*=.*git.*" | while read -r A; do
     l="$(cut -d = -f 1 <<<"${A/g/y}")"
-    r="$(sed "s/='\(.*\)'/=(cd \$(yadm user-config -d) \&\& \1)/" <<<"$A" | cut -d = -f 2-)"
+    r="$(cut -d = -f 2- <<<"$A" | xargs)"
 
-    which $l &>/dev/null || alias $l=$r
+    which $l &>/dev/null || alias $l="(cd \$(yadm user-config -d) && $r)"
+    unset l
+    unset r
 done
 
 function yy() {
