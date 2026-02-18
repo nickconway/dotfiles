@@ -11,11 +11,11 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 function clean() {
-    if [[ "${SKIP_HEALTH_CHECK:-}" == "" ]]; then
-        until curl -f "https://health.${SERVICES_BASE_DOMAIN}/ping/${HEALTHCHECK_TOKEN}/sync-homelab-$(uname -n)?create=1"; do
-            sleep 5
-        done
-    fi
+    COUNT=0
+    until [[ -z ${HEALTHCHECK_ID:-} ]] || [[ $COUNT -gt 30 ]] || curl -f "https://health.$SERVICES_BASE_DOMAIN/ping/${HEALTHCHECK_TOKEN}/${HEALTHCHECK_ID}?create=1"; do
+        sleep 5
+        COUNT=$((COUNT + 1))
+    done
 }
 
 if [[ ! -e ~/Git/homelab ]]; then
