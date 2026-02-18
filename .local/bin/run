@@ -12,33 +12,33 @@ fi
 
 shopt -s dotglob
 
-cmd="$1"
+CMD_INIT="$1"
 shift
 
 if [[ -p /dev/stdin ]]; then
-    readarray -t DIRS
+    readarray -t TARGETS
 elif [[ -n "$*" ]]; then
-    DIRS=("${@}")
+    TARGETS=("${@}")
 else
-    DIRS=(*)
+    TARGETS=(*)
 fi
 
 TMP=$(mktemp)
 
-for D in "${DIRS[@]}"; do
+for D in "${TARGETS[@]}"; do
     export D
-    CMD=("$(echo "$cmd" | envsubst)")
+    cmd=("$(envsubst <<<"$CMD_INIT")")
 
     if command -v gum &>/dev/null; then
-        CMD=(gum spin --title "$D" -- bash -c "{ ${CMD[@]}; } &> $TMP")
+        CMD=(gum spin --title "${cmd[@]}" -- bash -c "{ ${cmd[@]}; } &> $TMP")
     else
-        CMD=("(${CMD[@]}) &> $TMP")
+        CMD=("(${cmd[@]}) &> $TMP")
     fi
 
     if ("${CMD[@]}"); then
-        echo "✅ $D"
+        echo "✅ ${cmd[*]}"
     else
-        echo "❌ $D"
+        echo "❌ ${cmd[*]}"
 
         if [[ -n "$(cat "$TMP")" ]]; then
             echo -----------------------------------------------------------
