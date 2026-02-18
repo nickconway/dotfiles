@@ -69,12 +69,9 @@ function get-opt-arg() {
 
 trap clean EXIT ERR
 
-while getopts "i" arg; do
+while getopts "i:" arg; do
     case $arg in
-    i)
-        get-opt-arg "$@"
-        HEALTHCHECK_ID=$OPTARG
-        ;;
+    i) HEALTHCHECK_ID=$OPTARG ;;
     *) continue ;;
     esac
 done

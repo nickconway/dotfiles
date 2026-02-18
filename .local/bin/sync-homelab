@@ -18,6 +18,14 @@ function clean() {
     done
 }
 
+while getopts "i:" arg; do
+    case $arg in
+    i) HEALTHCHECK_ID=$OPTARG ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
+
 if [[ ! -e ~/Git/homelab ]]; then
     git clone https://github.com/nickconway/homelab ~/Git/homelab --recurse-submodules
     NEW=true
