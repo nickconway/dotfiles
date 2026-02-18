@@ -10,9 +10,9 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-mkdir -p ~/Git/GitHub
+mkdir -p ~/Git
 
-cd ~/Git/GitHub
+cd ~/Git
 gh repo clone nickconway/quickshell || git clone https://github.com/nickconway/quickshell || true
 cd quickshell
 git pull
@@ -21,7 +21,7 @@ cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
 
-cd ~/Git/GitHub
+cd ~/Git
 gh repo clone nickconway/caelestia-cli || git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
 cd caelestia-cli
 git pull
