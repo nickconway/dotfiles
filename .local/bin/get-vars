@@ -16,14 +16,18 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 function get-input() {
-    PROMPT=${1:-"Enter a value for $VAR"}
+    local PROMPT=${1:-"Enter a value for $VAR"}
+    local PLACEHOLDER=$(eval echo ${PLACEHOLDER})
+    local INPUT
 
     if command -v gum &>/dev/null; then
-        gum input --header "$PROMPT" --placeholder "$PLACEHOLDER" </dev/tty
+        INPUT="$(gum input --header "$PROMPT" --placeholder "$PLACEHOLDER" </dev/tty)"
     else
-        read -r -p "$PROMPT: " </dev/tty
-        echo $REPLY
+        read -r -p "$PROMPT: " INPUT </dev/tty
     fi
+
+    INPUT="${INPUT:-$PLACEHOLDER}"
+    eval "echo $INPUT"
 }
 
 case $1 in
@@ -58,6 +62,7 @@ env)
             else
                 INPUT="$(get-input)"
                 INPUT="${INPUT:-$PLACEHOLDER}"
+                INPUT="$(eval "echo $INPUT")"
             fi
             eval "$STATEMENT=\"$INPUT\""
             echo "$STATEMENT=\"$INPUT\"" >>"$OUTPUT"
