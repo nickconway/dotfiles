@@ -1,6 +1,6 @@
 bind = $mainMod, B, focuswindow, chromium
 bind = $mainMod, T, focuswindow, kitty
-bind = $mainMod, D, focuswindow, vesktop
+bind = $mainMod, D, focuswindow, flatpak run dev.vencord.Vesktop
 bind = $mainMod, M, focuswindow, thunderbird
 bind = $mainMod, F, focuswindow, feishin
 
@@ -10,7 +10,7 @@ workspace = 3, monitor:DP-2, default:true
 
 exec-once = [workspace 1 silent] chromium
 exec-once = [workspace 2 silent] kitty
-exec-once = [workspace 2 silent] vesktop
+exec-once = [workspace 2 silent] flatpak run dev.vencord.Vesktop
 exec-once = [workspace 2 silent] thunderbird-beta
 exec-once = [workspace 3 silent] feishin --ozone-platform-hint=auto --password-store="kwallet6"
 exec-once = [workspace 3 silent] chromium --app='https://messages.google.com/web'

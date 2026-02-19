@@ -214,7 +214,7 @@
                     "textColor": "none"
                 },
                 {
-                    "applyToAllMonitors": false,
+                    "applyScrollToAllMonitors": false,
                     "displayMode": "onhover",
                     "iconColor": "none",
                     "id": "Brightness",
@@ -235,7 +235,8 @@
     "brightness": {
         "brightnessStep": 5,
         "enableDdcSupport": true,
-        "enforceMinimum": true
+        "enforceMinimum": true,
+        "syncAllMonitors": false
     },
     "calendar": {
         "cards": [
@@ -414,6 +415,7 @@
     "hooks": {
         "darkModeChange": "",
         "enabled": true,
+        "mediaChange": "media -o $1 show",
         "performanceModeDisabled": "",
         "performanceModeEnabled": "",
         "screenLock": "",
@@ -471,6 +473,7 @@
         ],
         "normalUrgencyDuration": 10,
         "overlayLayer": true,
+        "resetTimerOnUpdate": true,
         "respectExpireTimeout": true,
         "saveToHistory": {
             "critical": true,

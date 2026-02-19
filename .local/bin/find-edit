@@ -76,6 +76,7 @@ while read -r LINE; do
     fi
 
     COMMAND="execute 'e $FILE | +normal $COORDS'"
+    COMMAND="${COMMAND//\#/\\#}"
 
     if [[ -n "${COMMANDS:-}" ]]; then
         COMMAND="| $COMMAND"
