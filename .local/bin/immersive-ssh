@@ -53,7 +53,7 @@ if command -v ss &>/dev/null; then
     if [[ -n ${TMUX:-} ]] && [[ -n $PORT ]]; then
         (
             while true; do
-                (nc -l -p "$PORT" | wl-copy) || true
+                (nc -l -p "$PORT" | wl-copy) &>/dev/null || true
             done &
 
             echo -n $! >"$S_FILE"
@@ -76,7 +76,7 @@ if [[ -n $TMUX ]]; then
 fi
 
 if [[ -n $PORT ]] && pgrep "nc -l -p $PORT" -f &>/dev/null; then
-    kill $(pgrep "nc -l -p $PORT" -f)
+    kill $(pgrep "nc -l -p $PORT" -f) &>/dev/null
 fi
 
 if [[ -n $TMUX ]]; then
