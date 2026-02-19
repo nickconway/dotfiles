@@ -214,7 +214,7 @@
                     "textColor": "none"
                 },
                 {
-                    "applyScrollToAllMonitors": false,
+                    "applyToAllMonitors": false,
                     "displayMode": "onhover",
                     "iconColor": "none",
                     "id": "Brightness",
@@ -235,8 +235,7 @@
     "brightness": {
         "brightnessStep": 5,
         "enableDdcSupport": true,
-        "enforceMinimum": true,
-        "syncAllMonitors": false
+        "enforceMinimum": true
     },
     "calendar": {
         "cards": [
@@ -398,6 +397,7 @@
         "lockScreenMonitors": [
         ],
         "lockScreenTint": 0,
+        "passwordChars": false,
         "radiusRatio": 1,
         "reverseScroll": false,
         "scaleRatio": 1,
@@ -414,7 +414,6 @@
     "hooks": {
         "darkModeChange": "",
         "enabled": true,
-        "mediaChange": "media -o $1 show",
         "performanceModeDisabled": "",
         "performanceModeEnabled": "",
         "screenLock": "",
@@ -472,7 +471,6 @@
         ],
         "normalUrgencyDuration": 10,
         "overlayLayer": true,
-        "resetTimerOnUpdate": false,
         "respectExpireTimeout": true,
         "saveToHistory": {
             "critical": true,
