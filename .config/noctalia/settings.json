@@ -356,7 +356,7 @@
         "animationDisabled": false,
         "animationSpeed": 1,
         "autoStartAuth": true,
-        "avatarImage": "/home/nick/.face",
+        "avatarImage": "~/.face",
         "boxRadiusRatio": 1,
         "clockFormat": "hh\\nmm",
         "clockStyle": "custom",
@@ -604,7 +604,7 @@
     },
     "wallpaper": {
         "automationEnabled": false,
-        "directory": "/home/nick/.config",
+        "directory": "~/.config",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
         "favorites": [
