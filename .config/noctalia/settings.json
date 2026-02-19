@@ -214,7 +214,7 @@
                     "textColor": "none"
                 },
                 {
-                    "applyScrollToAllMonitors": false,
+                    "applyToAllMonitors": false,
                     "displayMode": "onhover",
                     "iconColor": "none",
                     "id": "Brightness",
@@ -235,8 +235,7 @@
     "brightness": {
         "brightnessStep": 5,
         "enableDdcSupport": true,
-        "enforceMinimum": true,
-        "syncAllMonitors": false
+        "enforceMinimum": true
     },
     "calendar": {
         "cards": [
@@ -340,6 +339,7 @@
         "enabled": true,
         "floatingRatio": 0.5,
         "inactiveIndicators": false,
+        "launcherPosition": "end",
         "monitors": [
         ],
         "onlySameOutput": true,
@@ -348,6 +348,7 @@
         "pinnedStatic": false,
         "position": "bottom",
         "showFrameIndicator": true,
+        "showLauncherIcon": false,
         "sitOnFrame": false,
         "size": 0.8
     },
