@@ -38,7 +38,7 @@ rofi_cmd() {
         -theme-str 'textbox-prompt-colon {str: "󰹑";}' \
         -dmenu \
         -p "$prompt" \
-        ${active} ${urgent} \
+        ${active:-} ${urgent:-} \
         -markup-rows \
         -theme ${theme} \
         -kb-custom-1 "s" \
