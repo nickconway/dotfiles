@@ -10,6 +10,17 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+function get-opt-arg() {
+    TOKEN=${!OPTIND}
+
+    if [[ -n $TOKEN && $TOKEN != -* ]]; then
+        OPTIND=$((OPTIND + 1))
+        OPTARG=$TOKEN
+    else
+        OPTARG=""
+    fi
+}
+
 function clean() {
     if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
         mv ~/Git/zmk-config/config/include/leader.dtsi{.bkp,}
@@ -45,39 +56,6 @@ function run() {
 }
 
 function build() {
-    board=
-    snippet=
-    flash=false
-    log=false
-    niceview=false
-    pristine=false
-    reset=false
-
-    FLASH_FLAGS=()
-    LOG_FLAGS=()
-
-    while getopts 'b:flnoprs:' flag; do
-        case "${flag}" in
-        b) board=$OPTARG ;;
-        f) flash=true ;;
-        l) log=true ;;
-        n)
-            board=nice_nano
-            niceview=true
-            FLASH_FLAGS+=(-n)
-            ;;
-        o) LOG_FLAGS+=(-o) ;;
-        p) pristine=true ;;
-        s) LOG_FLAGS+=(-s "$OPTARG") ;;
-        r)
-            reset=true
-            FLASH_FLAGS+=(-r)
-            ;;
-        *) continue ;;
-        esac
-    done
-    shift $((OPTIND - 1))
-
     if [[ -e ~/Git/zmk-config/config/include/leader.dtsi ]]; then
         cp ~/Git/zmk-config/config/include/macros.dtsi{,.bkp}
         cp ~/Git/zmk-config/config/include/leader.dtsi{,.bkp}
@@ -139,8 +117,8 @@ EOF
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
             if [[ $niceview == true ]]; then
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view'")
-                BUILD_DIRS+=("$BASE/nice-view/left")
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view${niceview_ext}'")
+                BUILD_DIRS+=("$BASE/nice-view${niceview_ext+=-$niceview_ext}/left")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_left")
                 BUILD_DIRS+=("$BASE/left")
@@ -151,8 +129,8 @@ EOF
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
             if [[ $niceview == true ]]; then
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view'")
-                BUILD_DIRS+=("$BASE/nice-view/right")
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view${niceview_ext}'")
+                BUILD_DIRS+=("$BASE/nice-view${niceview_ext+=-$niceview_ext}/right")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_right")
                 BUILD_DIRS+=("$BASE/right")
@@ -164,6 +142,9 @@ EOF
         if [[ $niceview == true ]]; then
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view'")
             BUILD_DIRS+=("$BASE/nice-view")
+
+            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view_gem'")
+            BUILD_DIRS+=("$BASE/nice-view-gem")
         else
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}")
             BUILD_DIRS+=("$BASE")
@@ -173,7 +154,7 @@ EOF
     fi
 
     if [[ $reset == true ]]; then
-        FLAGS=(-b nice_nano)
+        FLAGS=(-b nice_nano//zmk)
         CMAKE_ARGS=("-DSHIELD=settings_reset")
         BUILD_DIRS=("settings-reset")
     fi
@@ -211,18 +192,6 @@ function wait-for-complete() {
 export -f run wait-for-dev wait-for-complete
 
 function flash() {
-    reset=false
-    niceview=false
-
-    while getopts ':nr' flag; do
-        case "${flag}" in
-        n) niceview=true ;;
-        r) reset=true ;;
-        *) continue ;;
-        esac
-    done
-    shift $((OPTIND - 1))
-
     OLD_BASE="${1:-}"
 
     BASE="$OLD_BASE"
@@ -255,7 +224,7 @@ function flash() {
     if [[ $reset == true ]]; then
         length=${#BUILD_DIRS[@]}
 
-        FLAGS=(-b nice_nano)
+        FLAGS=(-b nice_nano//zmk)
         BUILD_DIRS=()
         SHIELDS=()
 
@@ -280,18 +249,6 @@ function flash() {
 }
 
 function log() {
-    search=""
-    passthrough=false
-
-    while getopts 'os:' flag; do
-        case "${flag}" in
-        o) passthrough=true ;;
-        s) search="$OPTARG" ;;
-        *) continue ;;
-        esac
-    done
-    shift $((OPTIND - 1))
-
     RG_FLAGS=(-i)
 
     if [[ -n "$search" ]]; then
@@ -307,16 +264,6 @@ function log() {
 }
 
 function test() {
-    verbose=false
-
-    while getopts 'v' flag; do
-        case "${flag}" in
-        v) verbose=true ;;
-        *) continue ;;
-        esac
-    done
-    shift $((OPTIND - 1))
-
     ARGS=""
 
     if [[ $verbose == true ]]; then
@@ -330,6 +277,41 @@ function update() {
     run bash -c "west update"
 }
 
+board=
+snippet=
+flash=false
+log=false
+niceview=false
+pristine=false
+reset=false
+search=""
+passthrough=false
+verbose=false
+
+FLASH_FLAGS=()
+LOG_FLAGS=()
+
+while getopts ':b:fgln:oprs:v' flag; do
+    case "${flag}" in
+    b) board=$OPTARG ;;
+    f) flash=true ;;
+    l) log=true ;;
+    n)
+        get-opt-arg "$@"
+        board=nice_nano//zmk
+        niceview=true
+        niceview_ext=$OPTARG
+        ;;
+    o) passthrough=true ;;
+    p) pristine=true ;;
+    s) search="$OPTARG" ;;
+    r) reset=true ;;
+    v) verbose=true ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
+
 if ! docker image inspect zmk &>/dev/null; then
     docker build -t zmk ~/Git/zmk/.devcontainer
 fi
@@ -339,4 +321,5 @@ if [[ ! -e ~/Git/zmk/.west ]]; then
     update
 fi
 
+echo $*
 $*

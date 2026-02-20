@@ -56,17 +56,6 @@ function talos() {
     find "$BORG_REPO" -mtime +30 -type f -delete
 }
 
-function get-opt-arg() {
-    TOKEN=${!OPTIND}
-
-    if [[ -n $TOKEN && $TOKEN != -* ]]; then
-        OPTIND=$((OPTIND + 1))
-        OPTARG=$TOKEN
-    else
-        OPTARG=""
-    fi
-}
-
 trap clean EXIT ERR
 
 while getopts "i:" arg; do
