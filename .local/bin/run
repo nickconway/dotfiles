@@ -10,6 +10,10 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+RESET='\033[0m'
+
 shopt -s dotglob
 
 CMD_INIT="$1"
@@ -36,16 +40,16 @@ for D in "${TARGETS[@]}"; do
     fi
 
     if ("${CMD[@]}"); then
-        echo "✅ ${cmd[*]}"
+        echo -e "$GREEN$RESET ${cmd[*]}"
     else
-        echo "❌ ${cmd[*]}"
+        echo -e "$RED$RESET ${cmd[*]}"
 
         if [[ -n "$(cat "$TMP")" ]]; then
-            echo -----------------------------------------------------------
+            echo -e $RED-----------------------------------------------------------$RESET
             echo
             cat "$TMP"
             echo
-            echo -----------------------------------------------------------
+            echo -e $RED-----------------------------------------------------------$RESET
         fi
     fi
 done
