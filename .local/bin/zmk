@@ -10,17 +10,6 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-function get-opt-arg() {
-    TOKEN=${!OPTIND}
-
-    if [[ -n $TOKEN && $TOKEN != -* ]]; then
-        OPTIND=$((OPTIND + 1))
-        OPTARG=$TOKEN
-    else
-        OPTARG=""
-    fi
-}
-
 function clean() {
     if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
         mv ~/Git/zmk-config/config/include/leader.dtsi{.bkp,}
@@ -82,21 +71,6 @@ function build() {
         Remove: [-m*, -f*]
 EOF
 
-    FLAGS=()
-    FLAGS+=(-b "$board")
-
-    if [[ $log == true ]]; then
-        snippet=zmk-usb-logging
-    fi
-
-    if [[ -n $snippet ]]; then
-        FLAGS+=(-S "$snippet")
-    fi
-
-    if [[ $pristine == true ]]; then
-        FLAGS+=(-p)
-    fi
-
     OLD_BASE="${1:-}"
 
     BASE="$OLD_BASE"
@@ -117,8 +91,8 @@ EOF
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
             if [[ $niceview == true ]]; then
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view${niceview_ext}'")
-                BUILD_DIRS+=("$BASE/nice-view${niceview_ext+=-$niceview_ext}/left")
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
+                BUILD_DIRS+=("$BASE/nice-view${niceview_ext:+-$niceview_ext}/left")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_left")
                 BUILD_DIRS+=("$BASE/left")
@@ -129,8 +103,8 @@ EOF
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
             if [[ $niceview == true ]]; then
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view${niceview_ext}'")
-                BUILD_DIRS+=("$BASE/nice-view${niceview_ext+=-$niceview_ext}/right")
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
+                BUILD_DIRS+=("$BASE/nice-view${niceview_ext:+-$niceview_ext}/right")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_right")
                 BUILD_DIRS+=("$BASE/right")
@@ -154,26 +128,26 @@ EOF
     fi
 
     if [[ $reset == true ]]; then
-        FLAGS=(-b nice_nano//zmk)
+        BUILD_FLAGS=(-b nice_nano)
         CMAKE_ARGS=("-DSHIELD=settings_reset")
         BUILD_DIRS=("settings-reset")
     fi
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
         if ! grep "^CACHED_SNIPPET:STRING=$snippet$" "app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" &>/dev/null; then
-            PRISTINE=-p
+            BUILD_FLAGS+=(-p)
         fi
 
         run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
-        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "run west build ${FLAGS[*]} ${PRISTINE:-} -d build/${BUILD_DIRS[$index]}"
+        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "run west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
     done
 
     if [[ $flash == true ]]; then
-        $0 flash "${FLASH_FLAGS[@]}" $*
+        "$0" flash "${FLASH_FLAGS[@]}" "$@"
     fi
 
     if [[ $log == true ]]; then
-        $0 log "${LOG_FLAGS[@]}" $*
+        "$0" log "${LOG_FLAGS[@]}" "$@"
     fi
 }
 
@@ -224,13 +198,9 @@ function flash() {
     if [[ $reset == true ]]; then
         length=${#BUILD_DIRS[@]}
 
-        FLAGS=(-b nice_nano//zmk)
         BUILD_DIRS=()
-        SHIELDS=()
-
         for ((index = 0; index < length; index++)); do
             BUILD_DIRS+=("settings-reset")
-            SHIELDS+=(settings_reset)
         done
     fi
 
@@ -249,10 +219,8 @@ function flash() {
 }
 
 function log() {
-    RG_FLAGS=(-i)
 
     if [[ -n "$search" ]]; then
-        RG_FLAGS+=("$search")
         if [[ "$passthrough" == true ]]; then
             RG_FLAGS+=("--passthrough")
         fi
@@ -264,49 +232,44 @@ function log() {
 }
 
 function test() {
-    ARGS=""
-
-    if [[ $verbose == true ]]; then
-        ARGS="ZMK_TESTS_VERBOSE=y"
-    fi
-
-    run bash -xc "$ARGS west test tests/${1:-}"
+    run bash -xc "${TEST_ARGS[*]} west test tests/${1:-}"
 }
 
 function update() {
     run bash -c "west update"
 }
 
-board=
 snippet=
 flash=false
 log=false
 niceview=false
-pristine=false
 reset=false
-search=""
+search=
 passthrough=false
-verbose=false
 
+BUILD_FLAGS=()
 FLASH_FLAGS=()
 LOG_FLAGS=()
+TEST_ARGS=()
 
-while getopts ':b:fgln:oprs:v' flag; do
+while getopts ':b:fglnoprs:v' flag; do
     case "${flag}" in
-    b) board=$OPTARG ;;
+    b) BUILD_FLAGS+=(-b "${OPTARG:-nice_nano}") ;;
     f) flash=true ;;
-    l) log=true ;;
+    l)
+        BUILD_FLAGS+=(-S zmk-usb-logging)
+        log=true
+        ;;
     n)
-        get-opt-arg "$@"
-        board=nice_nano//zmk
+        eval "$(get-opt-arg $OPTIND "$@")"
         niceview=true
         niceview_ext=$OPTARG
         ;;
-    o) passthrough=true ;;
-    p) pristine=true ;;
-    s) search="$OPTARG" ;;
+    o) RG_FLAGS+=(--passthrough) ;;
+    p) BUILD_FLAGS+=(-p) ;;
+    s) RG_FLAGS+=(-i "$OPTARG") ;;
     r) reset=true ;;
-    v) verbose=true ;;
+    v) TEST_ARGS+=("ZMK_TESTS_VERBOSE=y") ;;
     *) continue ;;
     esac
 done
@@ -321,5 +284,4 @@ if [[ ! -e ~/Git/zmk/.west ]]; then
     update
 fi
 
-echo $*
 $*
