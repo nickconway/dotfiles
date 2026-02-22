@@ -46,6 +46,7 @@
         "density": "default",
         "displayMode": "auto_hide",
         "floating": false,
+        "fontScale": 1,
         "frameRadius": 12,
         "frameThickness": 8,
         "hideOnOverview": false,
@@ -58,8 +59,10 @@
         "screenOverrides": [
         ],
         "showCapsule": true,
+        "showOnWorkspaceSwitch": true,
         "showOutline": false,
         "useSeparateOpacity": false,
+        "widgetSpacing": 6,
         "widgets": {
             "center": [
                 {
@@ -338,7 +341,12 @@
         "dockType": "floating",
         "enabled": true,
         "floatingRatio": 0.5,
+        "groupApps": false,
+        "groupClickAction": "cycle",
+        "groupContextMenuMode": "extended",
+        "groupIndicatorStyle": "dots",
         "inactiveIndicators": false,
+        "launcherIconColor": "none",
         "launcherPosition": "end",
         "monitors": [
         ],
