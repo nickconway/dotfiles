@@ -712,6 +712,15 @@ alias xx='tmux switch-client -l && tmux kill-session'
 
 eval "$(declare -f | sed -n '/^g.*\(\) {/ , /^}$/p' | sed 's/^g/y/' | sed 's/) {$/) {\n(cd $(yadm user-config -d)/g' | sed 's/^}$/)\n}/g')"
 
+alias | grep "^.*=.*git.*" | while read -r A; do
+    l="$(cut -d = -f 1 <<<"${A/g/y}")"
+    r="$(cut -d = -f 2- <<<"$A" | xargs)"
+
+    which $l &>/dev/null || eval "function $l() { (cd $(yadm user-config -d) && $r \$@) }"
+    unset l
+    unset r
+done
+
 function ya() {
     yadm add ${*:-\-u}
 }
@@ -764,15 +773,6 @@ function yp() {
 
 alias yu="yadm upgrade"
 alias yuc="yadm user-config"
-
-alias | grep "^.*=.*git.*" | while read -r A; do
-    l="$(cut -d = -f 1 <<<"${A/g/y}")"
-    r="$(cut -d = -f 2- <<<"$A" | xargs)"
-
-    which $l &>/dev/null || alias $l="(cd \$(yadm user-config -d) && $r)"
-    unset l
-    unset r
-done
 
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
