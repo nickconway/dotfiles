@@ -19,74 +19,50 @@ function clean() {
         mv ~/Git/zmk-config/config/include/macros.dtsi{.bkp,}
     fi
 
-    [[ -e ~/Git/zmk/app/.clangd ]] && rm ~/Git/zmk/app/.clangd
+    [[ -e app/.clangd ]] && rm app/.clangd
 
-    if [[ -e ~/Git/zmk/tmp ]]; then
-        if mountpoint -q ~/Git/zmk/tmp; then
-            sudo umount ~/Git/zmk/tmp
+    if [[ -e tmp ]]; then
+        if mountpoint -q tmp; then
+            sudo umount tmp
         fi
-        rmdir ~/Git/zmk/tmp
+        rmdir tmp
     fi
 }
 
 trap clean ERR EXIT
 
+CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/config/config"
+
+if [[ -e ../zmk-config/extra-modules ]]; then
+    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$(ls ../zmk-config/extra-modules | while read -r M; do echo /config/extra-modules/$M; done | xargs | sed 's/ /,/g')"
+fi
+
+cd ~/Git/zmk
+
 function run() {
     docker run \
         -v ~/Git/zmk:/workspace \
-        -v ~/Git/zmk-config:/workspace/zmk-config \
-        -v ~/Git/zmk/zephyr:/workspace/zephyr \
-        -v ~/Git/zmk/modules:/workspace/modules \
-        -v ~/Git/zmk/tools:/workspace/tools \
-        -v ~/Git/zmk/app/build:/workspace/app/build \
+        -v ~/Git/zmk-config:/config \
         -w /workspace/app \
         --rm \
         zmk "$@"
 }
 
-function build() {
-    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi ]]; then
-        cp ~/Git/zmk-config/config/include/macros.dtsi{,.bkp}
-        cp ~/Git/zmk-config/config/include/leader.dtsi{,.bkp}
-
-        cat ~/.config/zmk/macros.dtsi >>~/Git/zmk-config/config/include/macros.dtsi
-
-        (
-            n=0
-            while read line; do
-                if [[ "$line" == '};' && $n = 0 ]]; then
-                    cat ~/.config/zmk/leader.dtsi
-                    n=1
-                fi
-                echo "$line"
-            done <~/Git/zmk-config/config/include/leader.dtsi
-        ) >~/Git/zmk-config/config/include/leader.dtsi.new
-
-        mv ~/Git/zmk-config/config/include/leader.dtsi{.new,}
-    fi
-
-    cat <<EOF >~/Git/zmk/app/.clangd
-        CompileFlags:
-        Add: -Wno-unknown-warning-option
-        Remove: [-m*, -f*]
-EOF
-
+function get-dirs() {
     OLD_BASE="${1:-}"
 
     BASE="$OLD_BASE"
     BASE="${BASE%_left}"
     BASE="${BASE%_right}"
 
+    CMAKE_ARGS=()
+    BUILD_DIRS=()
+    SHIELDS=()
+
     IS_SPLIT=false
     if [[ $(find ~/Git/zmk{,-config} -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
         IS_SPLIT=true
     fi
-
-    CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspace/zmk-config/config"
-
-    CMAKE_ARGS=()
-    BUILD_DIRS=()
-    SHIELDS=()
 
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
@@ -114,11 +90,8 @@ EOF
         fi
     else
         if [[ $niceview == true ]]; then
-            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view'")
-            BUILD_DIRS+=("$BASE/nice-view")
-
-            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view_gem'")
-            BUILD_DIRS+=("$BASE/nice-view-gem")
+            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
+            BUILD_DIRS+=("$BASE/nice-view${niceview_ext:+-$niceview_ext}")
         else
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}")
             BUILD_DIRS+=("$BASE")
@@ -130,8 +103,43 @@ EOF
     if [[ $reset == true ]]; then
         BUILD_FLAGS=(-b nice_nano)
         CMAKE_ARGS=("-DSHIELD=settings_reset")
-        BUILD_DIRS=("settings-reset")
+
+        length=${#BUILD_DIRS[@]}
+        BUILD_DIRS=()
+        for ((index = 0; index < length; index++)); do
+            BUILD_DIRS+=("settings-reset")
+        done
     fi
+}
+
+function build() {
+    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi ]]; then
+        cp ~/Git/zmk-config/config/include/macros.dtsi{,.bkp}
+        cp ~/Git/zmk-config/config/include/leader.dtsi{,.bkp}
+
+        cat ~/.config/zmk/macros.dtsi >>~/Git/zmk-config/config/include/macros.dtsi
+
+        (
+            n=0
+            while read line; do
+                if [[ "$line" == '};' && $n = 0 ]]; then
+                    cat ~/.config/zmk/leader.dtsi
+                    n=1
+                fi
+                echo "$line"
+            done <~/Git/zmk-config/config/include/leader.dtsi
+        ) >~/Git/zmk-config/config/include/leader.dtsi.new
+
+        mv ~/Git/zmk-config/config/include/leader.dtsi{.new,}
+    fi
+
+    cat <<EOF >app/.clangd
+        CompileFlags:
+        Add: -Wno-unknown-warning-option
+        Remove: [-m*, -f*]
+EOF
+
+    get-dirs "$@"
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
         if ! grep "^CACHED_SNIPPET:STRING=$snippet$" "app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" &>/dev/null; then
@@ -143,11 +151,11 @@ EOF
     done
 
     if [[ $flash == true ]]; then
-        "$0" flash "${FLASH_FLAGS[@]}" "$@"
+        flash "$@"
     fi
 
     if [[ $log == true ]]; then
-        "$0" log "${LOG_FLAGS[@]}" "$@"
+        log "$@"
     fi
 }
 
@@ -166,51 +174,15 @@ function wait-for-complete() {
 export -f run wait-for-dev wait-for-complete
 
 function flash() {
-    OLD_BASE="${1:-}"
+    get-dirs "$@"
 
-    BASE="$OLD_BASE"
-    BASE="${BASE%_left}"
-    BASE="${BASE%_right}"
-
-    IS_SPLIT=false
-    if [[ $(find ~/Git/zmk{,-config} -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
-        IS_SPLIT=true
-    fi
-
-    BUILD_DIRS=()
-    SHIELDS=()
-
-    if [[ "$IS_SPLIT" == true ]]; then
-        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
-            BUILD_DIRS+=("$BASE/right")
-            SHIELDS+=("${BASE}_right")
-        fi
-
-        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
-            BUILD_DIRS+=("$BASE/left")
-            SHIELDS+=("${BASE}_left")
-        fi
-    else
-        BUILD_DIRS+=("$BASE")
-        SHIELDS+=("$BASE")
-    fi
-
-    if [[ $reset == true ]]; then
-        length=${#BUILD_DIRS[@]}
-
-        BUILD_DIRS=()
-        for ((index = 0; index < length; index++)); do
-            BUILD_DIRS+=("settings-reset")
-        done
-    fi
-
-    for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
-        mkdir -p ~/Git/zmk/tmp
+    for ((index = $((${#BUILD_DIRS[@]} - 1)); index >= 0; index--)); do
+        mkdir tmp
 
         gum spin --title "Set ${SHIELDS[$index]} to flashing mode..." -- bash -c wait-for-dev
 
-        sudo mount /dev/disk/by-label/NICENANO ~/Git/zmk/tmp
-        sudo cp ~/Git/zmk/app/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 ~/Git/zmk/tmp
+        sudo mount /dev/disk/by-label/NICENANO tmp
+        sudo cp app/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 tmp
 
         gum spin --title "Flashing ${SHIELDS[$index]}..." -- bash -c wait-for-complete
 
@@ -219,7 +191,6 @@ function flash() {
 }
 
 function log() {
-
     if [[ -n "$search" ]]; then
         if [[ "$passthrough" == true ]]; then
             RG_FLAGS+=("--passthrough")
@@ -236,7 +207,7 @@ function test() {
 }
 
 function update() {
-    run bash -c "west update"
+    run bash -c "cd ${1:-.} && west update --fetch-opt=--filter=tree:0 && west zephyr-export"
 }
 
 snippet=
@@ -248,13 +219,12 @@ search=
 passthrough=false
 
 BUILD_FLAGS=()
-FLASH_FLAGS=()
 LOG_FLAGS=()
 TEST_ARGS=()
 
 while getopts ':b:fglnoprs:v' flag; do
     case "${flag}" in
-    b) BUILD_FLAGS+=(-b "${OPTARG:-nice_nano}") ;;
+    b) board="${OPTARG:-nice_nano}" ;;
     f) flash=true ;;
     l)
         BUILD_FLAGS+=(-S zmk-usb-logging)
@@ -275,13 +245,20 @@ while getopts ':b:fglnoprs:v' flag; do
 done
 shift $((OPTIND - 1))
 
+BUILD_FLAGS+=(-b "${board:-nice_nano}")
+
 if ! docker image inspect zmk &>/dev/null; then
-    docker build -t zmk ~/Git/zmk/.devcontainer
+    docker build -t .devcontainer
 fi
 
-if [[ ! -e ~/Git/zmk/.west ]]; then
+if [[ ! -e .west ]]; then
     run bash -c "west init -l ."
     update
+fi
+
+if [[ ! -e ~/Git/zmk-config/.west ]]; then
+    run bash -c "cd /config && west init -l config/"
+    update /config
 fi
 
 $*
