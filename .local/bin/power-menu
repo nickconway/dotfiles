@@ -14,6 +14,8 @@ if pgrep -afx "qs -c caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call drawers toggle session
 elif pgrep -afx "qs -c noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call sessionMenu toggle
+elif pgrep -afx "qs -c dms.*" &>/dev/null; then
+    qs -c dms ipc call powermenu toggle
 else
     ~/.config/rofi/scripts/power-menu
 fi

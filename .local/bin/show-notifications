@@ -14,6 +14,8 @@ if pgrep -afx "qs -c caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call drawers toggle sidebar
 elif pgrep -afx "qs -c noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call notifications toggleHistory
+elif pgrep -afx "qs -c dms.*" &>/dev/null; then
+    qs -c dms ipc call notifications toggle
 else
     swaync-client -t
 fi

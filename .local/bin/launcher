@@ -14,6 +14,8 @@ if pgrep -afx "qs -c caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call drawers toggle launcher
 elif pgrep -afx "qs -c noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call launcher toggle
+elif pgrep -afx "qs -c dms.*" &>/dev/null; then
+    qs -c dms ipc call launcher toggle
 else
     rofi -show drun -config ~/.config/rofi/styles/style_2.rasi
 fi

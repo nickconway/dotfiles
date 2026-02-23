@@ -10,10 +10,12 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-if pgrep -afx "qs -c caelestia.*" &>/dev/null; then
+if pgrep -afx "qs .*caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call lock lock
-elif pgrep -afx "qs -c noctalia.*" &>/dev/null; then
+elif pgrep -afx "qs .*noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call lockScreen lock
+elif pgrep -afx "qs .*dms.*" &>/dev/null; then
+    qs -c dms ipc call lock lock
 elif ! pidof hyprlock; then
     hyprlock
 fi

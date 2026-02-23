@@ -14,6 +14,8 @@ if pgrep -afx "qs -c caelestia.*"; then
     qs -c caelestia ipc call notifs toggleDnd
 elif pgrep -afx "qs -c noctalia.*"; then
     qs -c noctalia ipc call notifications toggleDND
+elif pgrep -afx "qs -c dms.*" &>/dev/null; then
+    qs -c dms ipc call notifications toggleDoNotDisturb
 fi
 
 if pgrep -x "swaync"; then

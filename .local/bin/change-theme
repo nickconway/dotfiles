@@ -109,6 +109,8 @@ for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
     qs -c noctalia ipc call wallpaper set ~/.config/wallpaper.png $m || true
 done
 
+qs -c dms ipc call wallpaper set ~/.config/wallpaper.png || true
+
 _cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
 caelestia wallpaper -N -f ~/.config/wallpaper.png &>/dev/null || true
 
