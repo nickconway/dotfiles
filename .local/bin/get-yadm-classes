@@ -10,19 +10,40 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-CLASSES=()
-CURRENT="$(yadm config --get-all local.class)"
-
 cd ~/.config/yadm/alt
-for f in $(find .*c.*); do
-    NAME=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\1/p")
-    CLASS=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\2/p")
-    if [[ $NAME == $CLASS ]]; then
-        if [[ $# -eq 0 ]] && [[ "$CURRENT" != *"$CLASS"* ]] || [[ $# -eq 1 ]]; then
-            CLASSES+=("$CLASS")
+
+while [[ "${REPLY:-}" != "q" ]] || [[ "${REPLY:-}" == "" ]]; do
+    if [[ "${REPLY:-}" != "q" ]] && [[ "${REPLY:-}" != "" ]]; then
+        yadm config --add local.class "$REPLY"
+    fi
+
+    readarray -t CURRENT < <(yadm config --get-all local.class)
+    CLASSES=()
+
+    for f in $(find .*c.*); do
+        NAME=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\1/p")
+        CLASS=$(echo $f | sed -nr "s/\.(.*)##c\.(.*)/\2/p")
+        if [[ $NAME == $CLASS ]]; then
+            ALL_CLASSES+=("$CLASS")
+
+            if [[ ! " ${CURRENT[*]} " =~ " $CLASS " ]]; then
+                CLASSES+=("$CLASS")
+            fi
         fi
+    done
+
+    if command -v gum &>/dev/null; then
+        readarray -t SELECTED < <(gum choose --no-limit --selected "$(echo "${CURRENT[@]}" | sed 's/ /,/g')" --header "Choose classes:" "${ALL_CLASSES[@]}")
+        break
+    else
+        read -rp "Enter YADM class [$(echo "${CLASSES[@]}" | sed 's/ /, /g')] (q to quit): "
     fi
 done
-if [[ -n $CLASSES ]]; then
-    echo "${CLASSES[@]}" | sed 's/ /, /g'
-fi
+
+for C in "${SELECTED[@]}"; do
+    if ! grep -q "class = $C" "$(yadm user-config -d)/config"; then
+        yadm config --add local.class "$C"
+    fi
+done
+
+yadm alt

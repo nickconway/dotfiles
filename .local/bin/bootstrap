@@ -58,14 +58,7 @@ fi
 get-vars env ~/.config/env.example
 
 if [[ $(yadm config --get-all local.class) == "" ]]; then
-    YADM_CLASS=
-    while [[ "$YADM_CLASS" != "q" ]] || [[ "$YADM_CLASS" == "" ]]; do
-        if [[ "$YADM_CLASS" != "" ]]; then
-            yadm config --add local.class "$YADM_CLASS"
-        fi
-        read -rp "Enter YADM class [$(~/.local/bin/get-yadm-classes)] (q to quit): " YADM_CLASS
-    done
-    yadm alt
+    get-yadm-classes
 fi
 
 if [[ $(uname -n) == "steamdeck" ]]; then
