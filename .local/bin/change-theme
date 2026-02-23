@@ -81,6 +81,8 @@ else
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" || true
 fi
 
+_cp ~/.cache/wal/gradience.json ~/.config/presets/user/pywal.json
+
 _cp ~/.cache/wal/pywal.kvconfig ~/.config/Kvantum/pywal/pywal.kvconfig
 _cp ~/.cache/wal/pywal.svg ~/.config/Kvantum/pywal/pywal.svg
 kvantummanager --set pywal || true
