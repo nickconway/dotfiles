@@ -1,10 +1,11 @@
 function _gen_completions() {
-    CMD=$1
+    local CMD=$1
+
     if [[ -e ~/.config/zsh/completions/_"$CMD" ]]; then
         return
     fi
 
-    ! command -v $1 &> /dev/null && shift
+    [[ "$2" == -- ]] && shift && shift
     $* > ~/.config/zsh/completions/_"$CMD"
 }
 
@@ -26,7 +27,7 @@ _gen_completions gitleaks completion zsh
 _gen_completions fd --gen-completions zsh
 _gen_completions uv generate-shell-completion zsh
 _gen_completions uvx --generate-shell-completion zsh
-_gen_completions yadm curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm
+_gen_completions yadm -- curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm
 
 _dotnet_zsh_complete() {
     local completions=("$(dotnet complete "")")
