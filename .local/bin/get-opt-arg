@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+OPTIND=$1
+shift
+
+TOKEN=${!OPTIND}
+
+if [[ -n $TOKEN && $TOKEN != -* ]]; then
+    OPTIND=$((OPTIND + 1))
+    OPTARG=$TOKEN
+else
+    OPTARG=""
+fi
+
+echo "OPTIND='$OPTIND'"
+echo "OPTARG='$OPTARG'"
