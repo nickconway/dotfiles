@@ -10,22 +10,23 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+mkdir -p ~/.config/quickshell
 mkdir -p ~/Git
 
 cd ~/Git
 gh repo clone nickconway/quickshell || git clone https://github.com/nickconway/quickshell || true
 cd quickshell
 git pull
-git pull upstream master
+git rebase upstream master
 cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
 
 cd ~/Git
-gh repo clone nickconway/caelestia-cli || git clone https://github.com/nickconway/caelestia-cli caelestia-cli || true
+gh repo clone nickconway/caelestia-cli || git clone https://github.com/nickconway/caelestia-cli || true
 cd caelestia-cli
 git pull
-git pull upstream main
+git rebase upstream main
 if [[ -e /usr/bin/caelestia ]]; then
     sudo rm /usr/bin/caelestia
     sudo pip uninstall caelestia --break-system-packages --yes --root-user-action ignore
@@ -35,21 +36,24 @@ python -m build --wheel
 sudo python -m installer dist/*.whl
 sudo cp completions/caelestia.fish /usr/share/fish/vendor_completions.d/caelestia.fish
 
-mkdir -p ~/.config/quickshell
-cd ~/.config/quickshell
-gh repo clone nickconway/caelestia || git clone https://github.com/nickconway/caelestia.git caelestia || true
+cd ~/Git
+gh repo clone nickconway/caelestia || git clone https://github.com/nickconway/caelestia.git || true
 cd caelestia
 git pull
-git pull upstream main
+git rebase upstream main
 git fetch upstream --tags
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
 cmake --build build
 sudo cmake --install build
 
-cd ~/.config/quickshell
-gh repo clone noctalia-shell noctalia || git clone https://github.com/nickconway/noctalia-shell noctalia || true
-cd noctalia
+cd ~/Git
+gh repo clone noctalia-shell || git clone https://github.com/nickconway/noctalia-shell || true
+cd noctalia-shell
 git pull
+git rebase upstream main
+
+rm -rf ~/.config/quickshell/noctalia && cp -r ~/Git/noctalia-shell ~/.config/quickshell/noctalia
+rm -rf ~/.config/quickshell/caelestia && cp -r ~/Git/caelestia ~/.config/quickshell/caelestia
 
 for q in $(basename "$(dirname "$(qs list --all | grep Config | cut -d ':' -f 2)")" | xargs); do
     qs -c $q kill &>/dev/null

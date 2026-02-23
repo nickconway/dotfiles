@@ -54,6 +54,8 @@ function show() {
 
     if pgrep -afx "qs -c caelestia.*"; then
         TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}} - {{artist}}")"
+    elif pgrep -afx "qs -c noctalia.*"; then
+        TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}}<br>{{artist}}")"
     else
         TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}}\n{{artist}}")"
     fi
