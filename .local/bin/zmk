@@ -11,12 +11,12 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 function clean() {
-    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi.bkp ]]; then
-        mv ~/Git/zmk-config/config/include/leader.dtsi{.bkp,}
+    if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi.bkp ]]; then
+        mv "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{.bkp,}
     fi
 
-    if [[ -e ~/Git/zmk-config/config/include/macros.dtsi.bkp ]]; then
-        mv ~/Git/zmk-config/config/include/macros.dtsi{.bkp,}
+    if [[ -e "$ZMK_CONFIG_DIR"/config/include/macros.dtsi.bkp ]]; then
+        mv "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{.bkp,}
     fi
 
     [[ -e app/.clangd ]] && rm app/.clangd
@@ -33,16 +33,16 @@ trap clean ERR EXIT
 
 CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/config/config"
 
-if [[ -e ../zmk-config/extra-modules ]]; then
-    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$(ls ../zmk-config/extra-modules | while read -r M; do echo /config/extra-modules/$M; done | xargs | sed 's/ /,/g')"
+if [[ -e "$ZMK_CONFIG_DIR/extra-modules" ]]; then
+    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$(ls "$ZMK_CONFIG_DIR"/extra-modules | while read -r M; do echo /config/extra-modules/$M; done | xargs | sed 's/ /,/g')"
 fi
 
-cd ~/Git/zmk
+cd "$ZMK_DIR"
 
 function run() {
     docker run \
-        -v ~/Git/zmk:/workspace \
-        -v ~/Git/zmk-config:/config \
+        -v "${ZMK_DIR}":/workspace \
+        -v "${ZMK_CONFIG_DIR}":/config \
         -w /workspace/app \
         --rm \
         zmk "$@"
@@ -60,7 +60,7 @@ function get-dirs() {
     SHIELDS=()
 
     IS_SPLIT=false
-    if [[ $(find ~/Git/zmk{,-config} -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
+    if [[ $(find "$ZMK_DIR" "$ZMK_CONFIG_DIR" -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
         IS_SPLIT=true
     fi
 
@@ -113,11 +113,11 @@ function get-dirs() {
 }
 
 function build() {
-    if [[ -e ~/Git/zmk-config/config/include/leader.dtsi ]]; then
-        cp ~/Git/zmk-config/config/include/macros.dtsi{,.bkp}
-        cp ~/Git/zmk-config/config/include/leader.dtsi{,.bkp}
+    if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi ]]; then
+        cp "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{,.bkp}
+        cp "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{,.bkp}
 
-        cat ~/.config/zmk/macros.dtsi >>~/Git/zmk-config/config/include/macros.dtsi
+        cat ~/.config/zmk/macros.dtsi >>"$ZMK_CONFIG_DIR"/config/include/macros.dtsi
 
         (
             n=0
@@ -127,10 +127,10 @@ function build() {
                     n=1
                 fi
                 echo "$line"
-            done <~/Git/zmk-config/config/include/leader.dtsi
-        ) >~/Git/zmk-config/config/include/leader.dtsi.new
+            done <"$ZMK_CONFIG_DIR"/config/include/leader.dtsi
+        ) >"$ZMK_CONFIG_DIR"/config/include/leader.dtsi.new
 
-        mv ~/Git/zmk-config/config/include/leader.dtsi{.new,}
+        mv "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{.new,}
     fi
 
     cat <<EOF >app/.clangd
@@ -219,7 +219,6 @@ search=
 passthrough=false
 
 BUILD_FLAGS=()
-LOG_FLAGS=()
 TEST_ARGS=()
 
 while getopts ':b:fglnoprs:v' flag; do
@@ -256,7 +255,7 @@ if [[ ! -e .west ]]; then
     update
 fi
 
-if [[ ! -e ~/Git/zmk-config/.west ]]; then
+if [[ ! -e "$ZMK_CONFIG_DIR"/.west ]]; then
     run bash -c "cd /config && west init -l config/"
     update /config
 fi
