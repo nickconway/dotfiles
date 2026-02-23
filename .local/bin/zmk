@@ -114,23 +114,11 @@ function get-dirs() {
 
 function build() {
     if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi ]]; then
-        cp "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{,.bkp}
         cp "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{,.bkp}
+        cp "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{,.bkp}
 
+        cat ~/.config/zmk/leader.dtsi >>"$ZMK_CONFIG_DIR"/config/include/leader.dtsi
         cat ~/.config/zmk/macros.dtsi >>"$ZMK_CONFIG_DIR"/config/include/macros.dtsi
-
-        (
-            n=0
-            while read line; do
-                if [[ "$line" == '};' && $n = 0 ]]; then
-                    cat ~/.config/zmk/leader.dtsi
-                    n=1
-                fi
-                echo "$line"
-            done <"$ZMK_CONFIG_DIR"/config/include/leader.dtsi
-        ) >"$ZMK_CONFIG_DIR"/config/include/leader.dtsi.new
-
-        mv "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{.new,}
     fi
 
     cat <<EOF >app/.clangd
@@ -256,8 +244,8 @@ if [[ ! -e .west ]]; then
 fi
 
 if [[ ! -e "$ZMK_CONFIG_DIR"/.west ]]; then
-    run bash -c "cd /config && west init -l config/"
-    update /config
+    run bash -c "cd /config/config && west init -l ."
+    update /config/config
 fi
 
 $*
