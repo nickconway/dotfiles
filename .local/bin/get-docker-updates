@@ -10,17 +10,14 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-[[ -n $NTFY_TOKEN ]]
-
 UPDATES="$(dockcheck -n | awk "x==1 {print} /Containers with updates available:/,EOF {x=1}" | grep -v 'nextcloud-aio' | grep -v "No updates installed" | awk NF)"
 UPDATES="${UPDATES//$'\n'/ }"
-UPDATES="${UPDATES// /, }"
 
 if [[ -n "$UPDATES" ]]; then
     echo "$UPDATES"
     curl -H "Title: Docker updates available on $(uname -n)" \
         https://notifications.$SERVICES_BASE_DOMAIN/docker \
         -H "Authorization: Bearer ${NTFY_TOKEN}" \
-        -d "The following have updates available: $UPDATES" \
-        -H "Actions: http, Update Now, https://run.$SERVICES_BASE_DOMAIN/api/StartAction, method=POST, clear=true, headers.Content-Type=application/json, body='{ \"bindingId\": \"updateContainers\", \"arguments\": [{ \"name\": \"hostname\", \"value\": \"$(uname -n)\" }] }'"
+        -d "The following containers have updates available: ${UPDATES// /, }" \
+        -H "Actions: http, Update Now, https://run.$SERVICES_BASE_DOMAIN/api/StartAction, method=POST, clear=true, headers.Content-Type=application/json, body='{ \"bindingId\": \"updateContainers\", \"arguments\": [{ \"name\": \"hostname\", \"value\": \"$(uname -n)\" }, { \"name\": \"containers\", \"value\": \"$UPDATES\" }] }'"
 fi

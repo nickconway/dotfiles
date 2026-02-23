@@ -19,12 +19,18 @@ shopt -s dotglob
 CMD_INIT="$1"
 shift
 
+TARGETS=()
+
 if [[ -p /dev/stdin ]]; then
     readarray -t TARGETS
-elif [[ -n "$*" ]]; then
-    TARGETS=("${@}")
-else
-    TARGETS=(*)
+fi
+
+if [[ -n "$*" ]]; then
+    TARGETS+=("${@}")
+fi
+
+if [[ -z "${TARGETS:-}" ]]; then
+    TARGETS+=(*)
 fi
 
 TMP=$(mktemp)

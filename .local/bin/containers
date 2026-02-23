@@ -10,12 +10,24 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+function _cd() {
+    local DIR
+
+    if [[ -d "$1" ]]; then
+        DIR="$1"
+    else
+        DIR="$(docker inspect "$1" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
+    fi
+
+    cd "$DIR"
+}
+
 function start() {
     if grep -q '\- proxy$' "$DOCKER_STACK_DIR" 2>/dev/null; then
         docker network inspect proxy &>/dev/null || docker network create proxy
     fi
 
-    cd "$1"
+    _cd "$1"
 
     if [[ -e setup ]]; then
         ./setup
@@ -25,12 +37,12 @@ function start() {
 }
 
 function stop() {
-    cd "$1"
+    _cd "$1"
     docker compose stop
 }
 
 function update() {
-    cd "$1"
+    _cd "$1"
     docker compose pull
     docker compose up -d --build
 }
@@ -77,20 +89,28 @@ function unhealthy() {
     docker ps --format=json | jq -r '{Names, State, Status} | select((.State != "running") or (.Status | contains("unhealthy"))) | .Names'
 }
 
-export -f start stop update dump restore
+export -f _cd start stop update dump restore
 
-cd "${DOCKER_STACK_DIR:-~/Docker}"
+cd "${DOCKER_STACK_DIR:-"$HOME/Docker"}"
 CMD="$1"
 shift
 
+TARGETS=()
+
 if [[ -p /dev/stdin ]]; then
     readarray -t TARGETS
-elif [[ $CMD == dump ]] || [[ $CMD == restore ]]; then
+fi
+
+if [[ -n "$*" ]]; then
+    TARGETS+=("${@}")
+fi
+
+if [[ $CMD == dump ]] || [[ $CMD == restore ]]; then
     readarray -t TARGETS < <(docker ps --format '{{.Names}}' | grep -v nextcloud-aio)
-elif [[ -n "$*" ]]; then
-    TARGETS=("${@}")
-else
-    TARGETS=(*)
+fi
+
+if [[ -z "${TARGETS:-}" ]]; then
+    TARGETS+=(*)
 fi
 
 if [[ $CMD == unhealthy ]]; then
@@ -109,6 +129,6 @@ if docker ps | grep -q nextcloud-aio-mastercontainer; then
 fi
 
 if [[ $CMD == start ]] || [[ $CMD == stop ]]; then
-    readarray -t CONTAINERS < <(docker ps -qa)
+    readarray -t CONTAINERS < <(docker ps -a --format '{{ .Names }}' | grep -v nextcloud-aio)
     docker "$CMD" "${CONTAINERS[@]}" &>/dev/null
 fi
