@@ -99,20 +99,20 @@ _cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-4.0/gtk.css
 
 _cp ~/.cache/wal/vesktop.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 
-echo "\$WALLPAPER = ~/.config/wallpaper.png" >~/.config/hypr/include/wallpaper.conf
+echo "\$WALLPAPER = $IMG" >~/.config/hypr/include/wallpaper.conf
 
-hyprctl hyprpaper wallpaper ", ~/.config/wallpaper.png, " &>/dev/null || true
+hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null || true
 
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
 for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
-    qs -c noctalia ipc call wallpaper set ~/.config/wallpaper.png $m || true
+    qs -c noctalia ipc call wallpaper set "$IMG" $m || true
 done
 
-qs -c dms ipc call wallpaper set ~/.config/wallpaper.png || true
+qs -c dms ipc call wallpaper set "$IMG" || true
 
 _cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
-caelestia wallpaper -N -f ~/.config/wallpaper.png &>/dev/null || true
+caelestia wallpaper -N -f "$IMG" &>/dev/null || true
 
 timeout 1 swaync-client -rs &>/dev/null || true
 
