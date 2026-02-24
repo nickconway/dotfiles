@@ -1,5 +1,5 @@
 #+title:     Config
-#+author:    Nick Conway
+#+author:    {{ env.FULL_NAME }}
 #+email:     {{ env.EMAIL }}
 
 #+begin_src emacs-lisp
@@ -11,7 +11,7 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "Nick Conway"
+(setq user-full-name "{{ env.FULL_NAME }}"
       user-mail-address "{{ env.EMAIL }}")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
