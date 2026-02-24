@@ -106,11 +106,11 @@ hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null || true
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
 for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
-    qs -c noctalia ipc call wallpaper set "$IMG" $m || true
+    qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null || true
 done
 
-qs -c dms ipc call wallpaper set "$IMG" || true
-dms greeter sync || true
+qs -c dms ipc call wallpaper set "$IMG" &>/dev/null || true
+dms greeter sync &>/dev/null || true
 
 _cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
 caelestia wallpaper -N -f "$IMG" &>/dev/null || true
