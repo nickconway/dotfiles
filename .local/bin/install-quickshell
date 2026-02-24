@@ -53,10 +53,12 @@ git pull
 git rebase upstream main
 
 cd ~/Git
-git clone https://github.com/AvengeMedia/DankMaterialShell || true
+gh repo clone DankMaterialShell || git clone https://github.com/nickconway/DankMaterialShell || true
 cd DankMaterialShell
-cp -r quickshell ~/.config/quickshell/dms
+git pull
+git rebase upstream master
 
+rm -rf ~/.config/quickshell/dms && cp -r ~/Git/DankMaterialShell/quickshell ~/.config/quickshell/dms
 rm -rf ~/.config/quickshell/noctalia && cp -r ~/Git/noctalia-shell ~/.config/quickshell/noctalia
 rm -rf ~/.config/quickshell/caelestia && cp -r ~/Git/caelestia ~/.config/quickshell/caelestia
 
