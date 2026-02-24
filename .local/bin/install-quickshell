@@ -57,6 +57,7 @@ gh repo clone DankMaterialShell || git clone https://github.com/nickconway/DankM
 cd DankMaterialShell
 git pull
 git rebase upstream master
+sudo make install
 
 rm -rf ~/.config/quickshell/dms && cp -r ~/Git/DankMaterialShell/quickshell ~/.config/quickshell/dms
 rm -rf ~/.config/quickshell/noctalia && cp -r ~/Git/noctalia-shell ~/.config/quickshell/noctalia
