@@ -10,11 +10,11 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-if pgrep -afx "qs -c caelestia.*" &>/dev/null; then
+if pgrep -afx "qs .*caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call drawers toggle bar
-elif pgrep -afx "qs -c noctalia.*" &>/dev/null; then
+elif pgrep -afx "qs .*noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call controlCenter toggle
-elif pgrep -afx "qs -c dms.*" &>/dev/null; then
+elif pgrep -afx "qs .*dms.*" &>/dev/null; then
     qs -c dms ipc call control-center toggle
 else
     killall waybar -SIGUSR1

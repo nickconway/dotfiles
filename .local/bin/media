@@ -52,9 +52,9 @@ function show() {
     sleep .5
     URL="$("${PLAYERCTL_CMD[@]}" metadata | rg Url | nth-to-end 3 | sed "s/size=300/size=80/" || true)"
 
-    if pgrep -afx "qs -c caelestia.*"; then
+    if pgrep -afx "qs .*caelestia.*"; then
         TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}} - {{artist}}")"
-    elif pgrep -afx "qs -c noctalia.*"; then
+    elif pgrep -afx "qs .*noctalia.*"; then
         TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}}<br>{{artist}}")"
     else
         TEXT="$("${PLAYERCTL_CMD[@]}" metadata -f "{{title}}\n{{artist}}")"

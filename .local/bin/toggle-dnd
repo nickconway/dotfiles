@@ -10,11 +10,11 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-if pgrep -afx "qs -c caelestia.*"; then
+if pgrep -afx "qs .*caelestia.*"; then
     qs -c caelestia ipc call notifs toggleDnd
-elif pgrep -afx "qs -c noctalia.*"; then
+elif pgrep -afx "qs .*noctalia.*"; then
     qs -c noctalia ipc call notifications toggleDND
-elif pgrep -afx "qs -c dms.*" &>/dev/null; then
+elif pgrep -afx "qs .*dms.*" &>/dev/null; then
     qs -c dms ipc call notifications toggleDoNotDisturb
 fi
 

@@ -19,11 +19,11 @@ function error() {
 trap error ERR
 
 function caelestia-pick() {
-    if ! pgrep -afx "qs -c caelestia.*" &>/dev/null; then
+    if ! pgrep -afx "qs .*caelestia.*" &>/dev/null; then
         return 1
     fi
 
-    FILE="/tmp/caelestia-picker-$(pgrep -afx "qs -c caelestia")-coords.*"
+    FILE="/tmp/caelestia-picker-$(pgrep -afx "qs .*caelestia.*")-coords.*"
     touch "$FILE"
     qs -c caelestia ipc call picker pick &>/dev/null
     inotifywait "$FILE" &>/dev/null
