@@ -110,6 +110,7 @@ for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
 done
 
 qs -c dms ipc call wallpaper set "$IMG" || true
+dms greeter sync || true
 
 _cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
 caelestia wallpaper -N -f "$IMG" &>/dev/null || true
