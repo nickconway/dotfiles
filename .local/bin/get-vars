@@ -85,7 +85,7 @@ terraform)
 
         get-input || continue
 
-        if [[ $DEFAULT = '"'*'"' ]]; then
+        if [[ "$DEFAULT" == '"'*'"' ]]; then
             INPUT="\"$INPUT\""
         fi
 
@@ -100,13 +100,18 @@ ansible)
         fi
 
         VAR=$(echo "$LINE" | cut -d ':' -f 1)
-        PLACEHOLDER=$(echo "$LINE" | cut -d ':' -f 2-)
+        DEFAULT=$(echo "$LINE" | cut -d ':' -f 2-)
+        PLACEHOLDER="$DEFAULT"
 
         if grep -q "^$VAR:" "$OUTPUT"; then
             continue
         fi
 
         get-input || continue
+
+        if [[ "$DEFAULT" =~ '"'*'"' ]]; then
+            INPUT="\"$INPUT\""
+        fi
 
         echo "$VAR: $INPUT" >>"$OUTPUT"
     done <"$FILE"
