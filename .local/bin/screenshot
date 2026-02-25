@@ -11,8 +11,6 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 function error() {
-    pactl unload-module module-loopback &>/dev/null || true
-    pactl unload-module module-null-sink &>/dev/null || true
     notify-send "Screenshot" "An error occurred" -e
 }
 
@@ -40,8 +38,6 @@ function pick() {
     caelestia-pick
 }
 
-STOP_SCRIPT="$(which "$0-stopped")"
-
 mkdir -p "$(xdg-user-dir PICTURES)/Screenshots"
 mkdir -p "$(xdg-user-dir DOCUMENTS)/OCR"
 mkdir -p "$(xdg-user-dir VIDEOS)/Screen Recordings"
@@ -51,9 +47,8 @@ IMG="$(xdg-user-dir PICTURES)/Screenshots/$DATE.png"
 IMG_EDIT="$(xdg-user-dir PICTURES)/Screenshots/$DATE-edit.png"
 TEXT="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.txt"
 OCR_IMG="$(xdg-user-dir DOCUMENTS)/OCR/$DATE.png"
-VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mp4"
 
-SLURP_CMD=(slurp -b "$(cat .cache/wal/colors | sed '1q;d' | tr -d '#')bb" -c "$(cat .cache/wal/colors | sed '4q;d' | tr -d '#')ff" -B "$(cat .cache/wal/colors | sed '1q;d' | tr -d '#')bb" -d -w 1 -F "NotoSans")
+SLURP_CMD=(slurp -b "$(cat ~/.cache/wal/colors | sed '1q;d' | tr -d '#')bb" -c "$(cat ~/.cache/wal/colors | sed '4q;d' | tr -d '#')ff" -B "$(cat ~/.cache/wal/colors | sed '1q;d' | tr -d '#')bb" -d -w 1 -F "NotoSans")
 
 case ${1:-} in
 '')
@@ -84,45 +79,6 @@ case ${1:-} in
     sleep 0.5
     grim -o "$OUTPUT" -l 0 "$IMG"
     ;;
-
-'record')
-    if pidof gpu-screen-recorder &>/dev/null; then
-        pkill -f --signal INT gpu-screen-recorder
-        exit
-    fi
-
-    pactl load-module module-null-sink sink_name=Virtual-Speakers
-    pactl load-module module-null-sink sink_name=Combined
-    pactl load-module module-loopback sink=Virtual-Speakers source=@DEFAULT_SOURCE@.monitor
-    pactl set-source-volume Virtual-Speakers.monitor 50%
-    pactl load-module module-loopback sink=Combined source=Virtual-Speakers.monitor
-    pactl load-module module-loopback sink=Combined source=@DEFAULT_SINK@
-
-    FLAGS=(-f 60 -k hevc -a Combined.monitor -sc "$STOP_SCRIPT" -fallback-cpu-encoding yes)
-
-    case ${2:-} in
-    '')
-        OUTPUT="$(hyprctl monitors -j | jq -r ".[] | select(.focused == true) | .name")"
-        FLAGS+=(-w "$OUTPUT")
-        ;;
-
-    'region')
-        OUTPUT="$(pick -r || "${SLURP_CMD[@]}" -f "%wx%h+%x+%y")"
-        FLAGS+=(-w region -region "$OUTPUT")
-        ;;
-
-    'window')
-        OUTPUT="$(pick -r || hyprctl clients -j |
-            jq -r '.[] | select(.workspace.id | tostring | test("'"$(echo $(hyprctl monitors -j | jq ".[].activeWorkspace.id") | sed "s/ /|/g")"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
-            "${SLURP_CMD[@]}" -f "%wx%h+%x+%y")"
-        FLAGS+=(-w region -region "$OUTPUT")
-        ;;
-    esac
-
-    notify-send "Screen Recording" "Screen recording started" -e
-    gpu-screen-recorder -o "$VIDEO" "${FLAGS[@]}"
-    ;;
-
 esac
 
 if [[ -e $IMG ]]; then

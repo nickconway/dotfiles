@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+function error() {
+    pactl unload-module module-loopback &>/dev/null || true
+    pactl unload-module module-null-sink &>/dev/null || true
+    notify-send "Recording" "An error occurred" -e
+}
+
+trap error ERR
+
+function audio() {
+    ffmpeg -f alsa -i default -codec:a flac ${1:-output}.mkv
+}
+
+function term() {
+    while getopts ':h:t:p:w:' flag; do
+        case "${flag}" in
+        h) HEIGHT=$OPTARG ;;
+        t) TITLE=$OPTARG ;;
+        p) PROFILE=$OPTARG ;;
+        w) WIDTH=$OPTARG ;;
+        *) ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    NAME="${1:-out}"
+
+    [[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+    command -v svg-term &>/dev/null || npm install -g svg-term-cli
+    command -v svgembed &>/dev/null || npm install -g git+https://github.com/miraclx/svgembed
+
+    uvx asciinema rec "$NAME.cast" --overwrite
+
+    # Remove weird percent signs
+    sed -i '/"\\u001b\[1m\\u001b\[3m\%\\u001b\[23m\\u001b\[1m\\u001b\[0m/d' "$NAME.cast"
+    sed -i 's/\\u001b\[1m\\u001b\[3m\%\\u001b\[23m\\u001b\[1m\\u001b\[0m//g' "$NAME.cast"
+    sed -i "s/  */ /g" "$NAME.cast"
+
+    # Remove recording indicator
+    sed -i 's/ \\u001b\[1;31m⏺\\u001b\[0m//g' "$NAME.cast"
+
+    svg-term --out "$NAME.svg" --window --profile=${PROFILE:-Seti} --height=${HEIGHT:-20} --width=${WIDTH:-80} --term=iterm2 <"$NAME.cast"
+    svgembed -i "$NAME.svg" -o "$NAME-embed.svg" -r -f ~/.local/share/fonts/hack-nerd-font/HackNerdFontMono-Regular.ttf --hover -t "${TITLE:-$(basename "$NAME")}" --overwrite
+    rm "$NAME.svg"
+    mv "$NAME-embed.svg" "$NAME.svg"
+    command -v xdg-open &>/dev/null && xdg-open "$NAME.svg"
+}
+
+function screen() {
+    DATE="$(date +%Y-%m-%d_%H-%M-%S)"
+    VIDEO="$(xdg-user-dir VIDEOS)/Screen Recordings/$DATE.mp4"
+    STOP_SCRIPT="$(which "recording-stopped")"
+
+    SLURP_CMD=(slurp -b "$(cat ~/.cache/wal/colors | sed '1q;d' | tr -d '#')bb" -c "$(cat ~/.cache/wal/colors | sed '4q;d' | tr -d '#')ff" -B "$(cat ~/.cache/wal/colors | sed '1q;d' | tr -d '#')bb" -d -w 1 -F "NotoSans")
+
+    if pidof gpu-screen-recorder &>/dev/null; then
+        pkill -f --signal INT gpu-screen-recorder
+        exit
+    fi
+
+    pactl load-module module-null-sink sink_name=Virtual-Speakers
+    pactl load-module module-null-sink sink_name=Combined
+    pactl load-module module-loopback sink=Virtual-Speakers source=@DEFAULT_SOURCE@.monitor
+    pactl set-source-volume Virtual-Speakers.monitor 50%
+    pactl load-module module-loopback sink=Combined source=Virtual-Speakers.monitor
+    pactl load-module module-loopback sink=Combined source=@DEFAULT_SINK@
+
+    FLAGS=(-f 60 -k hevc -a Combined.monitor -sc "$STOP_SCRIPT" -fallback-cpu-encoding yes)
+
+    case ${1:-} in
+    '')
+        OUTPUT="$(hyprctl monitors -j | jq -r ".[] | select(.focused == true) | .name")"
+        FLAGS+=(-w "$OUTPUT")
+        ;;
+
+    'region')
+        OUTPUT="$(pick -r || "${SLURP_CMD[@]}" -f "%wx%h+%x+%y")"
+        FLAGS+=(-w region -region "$OUTPUT")
+        ;;
+
+    'window')
+        OUTPUT="$(pick -r || hyprctl clients -j |
+            jq -r '.[] | select(.workspace.id | tostring | test("'"$(echo $(hyprctl monitors -j | jq ".[].activeWorkspace.id") | sed "s/ /|/g")"'")) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
+            "${SLURP_CMD[@]}" -f "%wx%h+%x+%y")"
+        FLAGS+=(-w region -region "$OUTPUT")
+        ;;
+    esac
+
+    notify-send "Screen Recording" "Screen recording started" -e
+    gpu-screen-recorder -o "$VIDEO" "${FLAGS[@]}"
+}
+
+"$@"

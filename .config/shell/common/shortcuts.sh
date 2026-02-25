@@ -561,10 +561,6 @@ function reload() {
     exec "$SHELL_NAME"
 }
 
-function record-audio() {
-    ffmpeg -f alsa -i default -codec:a flac ${1:-output}.mkv
-}
-
 function repos() {
     (
         cd ~/Git || return

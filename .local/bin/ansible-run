@@ -25,6 +25,7 @@ shift $((OPTIND - 1))
 PLAYBOOK=${1:-main.yml}
 shift || true
 
+cd "$(dirname "$PLAYBOOK")"
 REQUIREMENTS="$(find-up requirements.txt)"
 
 UV_CMD=(uvx --from ansible-core)

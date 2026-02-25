@@ -63,8 +63,8 @@ case ${code} in
 11) screenshot monitor ;;
 12) screenshot window ;;
 13) screenshot ocr ;;
-14) screenshot record ;;
-15) screenshot record region ;;
+14) record screen ;;
+15) record screen region ;;
 esac
 [[ $code == 0 ]] || exit
 
@@ -73,6 +73,6 @@ $option_1) screenshot ;;
 $option_2) screenshot monitor ;;
 $option_3) screenshot window ;;
 $option_4) screenshot ocr ;;
-$option_5) screenshot record ;;
-$option_6) screenshot record region ;;
+$option_5) record screen ;;
+$option_6) record screen region ;;
 esac

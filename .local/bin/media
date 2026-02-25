@@ -82,4 +82,4 @@ function show() {
     fi
 }
 
-$* || { "${PLAYERCTL_CMD[@]}" "$@" && show; }
+"$@" || { "${PLAYERCTL_CMD[@]}" "$@" && show; }

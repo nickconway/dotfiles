@@ -248,4 +248,4 @@ if [[ ! -e "$ZMK_CONFIG_DIR"/.west ]]; then
     update /config/config
 fi
 
-$*
+"$@"
