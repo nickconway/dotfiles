@@ -10,10 +10,14 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-while getopts ':l:' flag; do
+EXTRA_ARGS=()
+while getopts ':l:t' flag; do
     case "${flag}" in
     l) HOSTS="$OPTARG" ;;
-    *) continue ;;
+    *)
+        eval "$(get-opt-arg $OPTIND "$@")"
+        EXTRA_ARGS+=("-$flag" "$OPTARG")
+        ;;
     esac
 done
 shift $((OPTIND - 1))
@@ -43,4 +47,4 @@ for C in "community.general" "ansible.posix" "community.crypto"; do
     uvx --from ansible-core ansible-galaxy collection install "$C" >/dev/null
 done
 
-"${UV_CMD[@]}" "${ANSIBLE_CMD[@]}" -l "!$(uname -n)${HOSTS:+,$HOSTS}" "$@"
+"${UV_CMD[@]}" "${ANSIBLE_CMD[@]}" -l "!$(uname -n)${HOSTS:+,$HOSTS}" "${EXTRA_ARGS[@]}" "$@"
