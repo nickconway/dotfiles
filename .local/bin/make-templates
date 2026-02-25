@@ -10,9 +10,19 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-cd
-while read -r f; do
-    echo "~/${f%%.template}:"
-    envsubst <"$HOME/$f" | tee "${f%%.template}"
+if [[ -p /dev/stdin ]]; then
+    readarray -t FILES
+fi
+
+while read -r F; do
+    FILES+=("$F")
+done < <(fd --type f --hidden '\.template$' "${1:-.}")
+shift || true
+
+FILES+=("${@}")
+
+for f in "${FILES[@]}"; do
+    echo "$f => ${f%%.template}:"
+    envsubst <"$f" | tee "${f%%.template}"
     echo
-done < <(fd --type f --hidden '\.template$' "$1")
+done

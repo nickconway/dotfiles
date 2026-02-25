@@ -257,7 +257,7 @@ function gsw() {
     fi
 }
 
-alias gus='git submodule update --recursive --remote --init && git submodule status | grep -q "^+" && gcam "Update submodules"'
+alias gus='git submodule update --recursive --remote --init && git submodule status | grep -q "^+" && gcam "Update submodules" || echo "No updates available"'
 
 function gwt() {
     WORKTREE="$(_fzf_git_worktrees)"

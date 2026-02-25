@@ -31,10 +31,11 @@ fi
 QUERY="${1:-}"
 shift || true
 
-read -ra FILES <<<"$@"
 if [[ -p /dev/stdin ]]; then
     readarray -t FILES
 fi
+
+FILES+=("$@")
 
 SELECTED="$(
     if [[ ${ALL:-} == true ]]; then
