@@ -688,7 +688,7 @@ alias | grep "^.*=.*git.*" | while read -r A; do
     l="$(cut -d = -f 1 <<<"${A/g/y}")"
     r="$(cut -d = -f 2- <<<"$A" | xargs)"
 
-    which $l &>/dev/null || eval "function $l() { (cd $(yadm user-config -d) && $r \$@) }"
+    which $l &>/dev/null || eval "function $l() { (cd \$(yadm user-config -d) && $r \$@) }"
     unset l
     unset r
 done
@@ -710,6 +710,8 @@ function yl() {
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
     SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
     ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
+    TEMPLATES_BEFORE="$(sha1sum $(yadm list -a -d -e | grep '%%template'))"
+
     RESULT="$(yadm pull "$@")"
     echo "$RESULT"
     [[ "$RESULT" == "Already up to date." ]] && return
@@ -722,6 +724,11 @@ function yl() {
     ALT_FILES_AFTER="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
     if [[ $ALT_FILES_BEFORE != $ALT_FILES_AFTER ]]; then
         yadm alt
+    fi
+
+    TEMPLATES_AFTER="$(sha1sum $(yadm list -a -d -e | grep '%%template'))"
+    if [[ $TEMPLATES_BEFORE != $TEMPLATES_AFTER ]]; then
+        yadm list -a -d -e | grep '%%template' | make-templates
     fi
 
     SHELL_FILES_AFTER="$(sha1sum ~/.config/shell/*/*)"

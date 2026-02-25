@@ -1,0 +1,1 @@
+default-host: https://notifications.$SERVICES_BASE_DOMAIN

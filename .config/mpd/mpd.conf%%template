@@ -1,4 +1,4 @@
-music_directory    "{{ env.MUSIC_DIR }}"
+music_directory    "$MUSIC_DIR"
 auto_update "yes"
 
 bind_to_address "$XDG_RUNTIME_DIR/mpd/socket"

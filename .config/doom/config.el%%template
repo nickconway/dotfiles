@@ -1,8 +1,3 @@
-#+title:     Config
-#+author:    {{ env.FULL_NAME }}
-#+email:     {{ env.EMAIL }}
-
-#+begin_src emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your *private* configuration here! Remember, you do not need to run 'doom
@@ -11,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "{{ env.FULL_NAME }}"
-      user-mail-address "{{ env.EMAIL }}")
+(setq user-full-name "$FULL_NAME"
+      user-mail-address "$EMAIL")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -168,4 +163,3 @@
  (:desc "Move focus left"
   "<M-left>" #'evil-window-left)
 )
-#+end_src

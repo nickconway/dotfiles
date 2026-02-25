@@ -1,6 +1,6 @@
 k9s:
   liveViewAutoRefresh: true
-  screenDumpDir: {{ env.HOME }}/.local/state/k9s/screen-dumps
+  screenDumpDir: $HOME/.local/state/k9s/screen-dumps
   refreshRate: 2
   maxConnRetry: 5
   readOnly: false

@@ -12,10 +12,14 @@ fi
 
 PLAYER=
 PLAYERCTL_FLAGS=(-i plasma-browser-integration)
-while getopts 'ao:' f; do
+while getopts 'ano:' f; do
     case $f in
     a)
         PLAYERCTL_FLAGS+=(-a)
+        ;;
+
+    n)
+        SHOW_NOTIFICATION=false
         ;;
     o)
         PLAYER="$OPTARG"
@@ -82,4 +86,4 @@ function show() {
     fi
 }
 
-"$@" || { "${PLAYERCTL_CMD[@]}" "$@" && show; }
+"$@" || { "${PLAYERCTL_CMD[@]}" "$@" && if [[ "${SHOW_NOTIFICATION:-}" != false ]]; then show; fi; }

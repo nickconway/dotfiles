@@ -10,4 +10,4 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-media metadata --format '󰎇   {{title}} - {{artist}}'
+media -n metadata --format '󰎇   {{title}} - {{artist}}'

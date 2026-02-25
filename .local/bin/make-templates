@@ -14,15 +14,16 @@ if [[ -p /dev/stdin ]]; then
     readarray -t FILES
 fi
 
-while read -r F; do
-    FILES+=("$F")
-done < <(fd --type f --hidden '\.template$' "${1:-.}")
-shift || true
-
 FILES+=("${@}")
 
 for f in "${FILES[@]}"; do
-    echo "$f => ${f%%.template}:"
-    envsubst <"$f" | tee "${f%%.template}"
+    if [[ ! -f "$f" ]] || [[ ! "$f" == *%%template* ]]; then
+        continue
+    fi
+
+    new_file="${f/\%\%template*/}"
+
+    echo "$f => $new_file:"
+    envsubst <"$f" >"$new_file"
     echo
 done

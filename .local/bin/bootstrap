@@ -33,6 +33,7 @@ if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
     yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
     yadm decrypt
     yadm alt
+    yadm list -a -d -e | grep '%%template' | make-templates
 
     [[ -e ~/.config/shell/common/encrypted.sh ]] && SHELL_NAME=bash . ~/.config/shell/common/encrypted.sh
     [[ -e ~/.config/shell/common/environment.sh ]] && SHELL_NAME=bash . ~/.config/shell/common/environment.sh
@@ -52,6 +53,7 @@ if command -v termux-reload-settings >/dev/null; then
     export GPG_TTY
     yadm decrypt
     yadm alt
+    yadm list -a -d -e | grep '%%template' | make-templates
     chsh -s zsh
     exit
 fi

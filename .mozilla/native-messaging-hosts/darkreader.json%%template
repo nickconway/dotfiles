@@ -1,7 +1,7 @@
 {
   "name": "darkreader",
   "description": "custom darkreader native host for syncing with pywal",
-  "path": "{{ env.HOME }}/.config/darkreader/pywal",
+  "path": "$HOME/.config/darkreader/pywal",
   "type": "stdio",
   "allowed_extensions": ["addon@darkreader.org"]
 }

@@ -3,7 +3,7 @@ Description=Zenbook Kmonad
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/sudo /usr/bin/kmonad {{ env.HOME }}/.config/kmonad/zenbook.kbd
+ExecStart=/usr/bin/sudo /usr/bin/kmonad $HOME/.config/kmonad/zenbook.kbd
 Restart=always
 
 [Install]
