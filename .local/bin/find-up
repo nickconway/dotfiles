@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+CWD="${PWD}"
+
+while [ "${CWD}" != "" ] && [ "${CWD}" != '.' ] && [ ! -e "${CWD}/${1-}" ]; do
+    CWD=${CWD%/*}
+done
+
+if [ -e "${CWD}/${1-}" ]; then
+    echo "${CWD}/${1-}"
+fi

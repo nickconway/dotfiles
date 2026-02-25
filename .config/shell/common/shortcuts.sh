@@ -119,19 +119,6 @@ alias dnb='dotnet build'
 
 alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
-function find-up() {
-    local path_
-    path_="${PWD}"
-
-    while [ "${path_}" != "" ] && [ "${path_}" != '.' ] && [ ! -e "${path_}/${1-}" ]; do
-        path_=${path_%/*}
-    done
-
-    if [ -e "${path_}/${1-}" ]; then
-        echo "${path_}/${1-}"
-    fi
-}
-
 function fn() {
     local SELECTED="$(fzft --preview="bat --color=always --style=plain {}")"
     [[ -n "$SELECTED" ]] && echo "$SELECTED" | xargs -d '\n' $EDITOR

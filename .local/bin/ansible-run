@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+while getopts ':l:' flag; do
+    case "${flag}" in
+    l) HOSTS="$OPTARG" ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+PLAYBOOK=${1:-main.yml}
+shift || true
+
+REQUIREMENTS="$(find-up requirements.txt)"
+
+UV_CMD=(uvx --from ansible-core)
+
+if [[ -n "$REQUIREMENTS" ]]; then
+    UV_CMD+=(--with-requirements "$REQUIREMENTS")
+fi
+
+ANSIBLE_CMD=(ansible-playbook "$PLAYBOOK")
+
+if grep -qr "^\$ANSIBLE_VAULT"; then
+    if ansible-vault-password &>/dev/null; then
+        ANSIBLE_CMD+=(--vault-id ~/.local/bin/ansible-vault-password)
+    else
+        ANSIBLE_CMD+=(--ask-vault-pass)
+    fi
+fi
+
+for C in "community.general" "ansible.posix" "community.crypto"; do
+    uvx --from ansible-core ansible-galaxy collection install "$C" >/dev/null
+done
+
+"${UV_CMD[@]}" "${ANSIBLE_CMD[@]}" -l "!$(uname -n)${HOSTS:+,$HOSTS}" "$@"

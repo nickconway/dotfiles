@@ -86,10 +86,6 @@ if ! command -v uv >/dev/null; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
-for C in "community.general" "ansible.posix"; do
-    uvx --from ansible-core ansible-galaxy collection install "$C" >/dev/null
-done
-
 if [[ -e "$XDG_RUNTIME_DIR" ]]; then
     if [ -S "$XDG_RUNTIME_DIR"/agent.sock ]; then
         export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/agent.sock
@@ -110,13 +106,7 @@ cd ~/Git/ansible
 git remote set-url origin git@github.com:nickconway/ansible --push
 git pull &>/dev/null
 
-cd ~/Git/ansible/bootstrap
-
-if ansible-vault-password &>/dev/null; then
-    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l 'localhost' $@
-else
-    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --ask-vault-pass -l 'localhost' $@
-fi
+ansible-run -l localhost ~/Git/ansible/bootstrap/main.yml "$@"
 
 if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null

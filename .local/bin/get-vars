@@ -17,17 +17,16 @@ fi
 
 function get-input() {
     local PROMPT=${1:-"Enter a value for $VAR"}
-    local PLACEHOLDER=$(eval echo ${PLACEHOLDER})
-    local INPUT
+    PLACEHOLDER=$(eval echo ${PLACEHOLDER})
 
     if command -v gum &>/dev/null; then
-        INPUT="$(gum input --header "$PROMPT" --placeholder "$PLACEHOLDER" </dev/tty)"
+        INPUT="$(gum input --header "$PROMPT" --placeholder "$PLACEHOLDER" </dev/tty)" || return 1
     else
-        read -r -p "$PROMPT: " INPUT </dev/tty
+        read -r -p "$PROMPT (default '$PLACEHOLDER'): " INPUT </dev/tty
     fi
 
     INPUT="${INPUT:-$PLACEHOLDER}"
-    eval "echo $INPUT"
+    INPUT="$(eval "echo $INPUT")"
 }
 
 case $1 in
@@ -39,6 +38,11 @@ env)
 terraform)
     FILE=${2:-variable.tf}
     OUTPUT=${3:-terraform.tfvars}
+    ;;
+
+ansible)
+    FILE=${2:-vars.example.yml}
+    OUTPUT=${3:-vars.yml}
     ;;
 esac
 
@@ -60,10 +64,9 @@ env)
             if env | grep -q "^$VAR="; then
                 INPUT="$(env | (grep "^$VAR=" || true) | cut -d '=' -f 2-)"
             else
-                INPUT="$(get-input)"
-                INPUT="${INPUT:-$PLACEHOLDER}"
-                INPUT="$(eval "echo $INPUT")"
+                get-input || continue
             fi
+
             eval "$STATEMENT=\"$INPUT\""
             echo "$STATEMENT=\"$INPUT\"" >>"$OUTPUT"
         fi
@@ -80,8 +83,7 @@ terraform)
             continue
         fi
 
-        INPUT="$(get-input)"
-        INPUT="${INPUT:-$PLACEHOLDER}"
+        get-input || continue
 
         if [[ $DEFAULT = '"'*'"' ]]; then
             INPUT="\"$INPUT\""
@@ -89,5 +91,24 @@ terraform)
 
         echo "$VAR = $INPUT" >>"$OUTPUT"
     done < <(grep '^variable' "$FILE")
+    ;;
+
+ansible)
+    while read -r LINE; do
+        if [[ -z "$LINE" ]]; then
+            continue
+        fi
+
+        VAR=$(echo "$LINE" | cut -d ':' -f 1)
+        PLACEHOLDER=$(echo "$LINE" | cut -d ':' -f 2-)
+
+        if grep -q "^$VAR:" "$OUTPUT"; then
+            continue
+        fi
+
+        get-input || continue
+
+        echo "$VAR: $INPUT" >>"$OUTPUT"
+    done <"$FILE"
     ;;
 esac
