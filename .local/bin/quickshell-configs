@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+function choose() {
+    SELECTED="$(find ~/.config/quickshell -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzft --border-label " Choose QuickShell Config ")"
+    [[ -n "$SELECTED" ]] && echo "$SELECTED" >~/.config/quickshell/config
+}
+
+function spawn() {
+    killall qs || true
+    CONFIG="$(cat ~/.config/quickshell/config)"
+
+    if [[ "$CONFIG" == dms ]]; then
+        CMD=(dms run)
+    else
+        CMD=(qs -c "$CONFIG")
+    fi
+
+    "${CMD[@]}" "$@"
+}
+
+"$@"

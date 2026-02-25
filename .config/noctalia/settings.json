@@ -434,7 +434,7 @@
         "screenUnlock": "",
         "session": "",
         "startup": "",
-        "wallpaperChange": ""
+        "wallpaperChange": "change-theme \"$1\""
     },
     "location": {
         "analogClockInCalendar": false,
@@ -619,7 +619,7 @@
     },
     "wallpaper": {
         "automationEnabled": false,
-        "directory": "~/.config",
+        "directory": "~/Pictures/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
         "favorites": [

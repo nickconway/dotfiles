@@ -36,11 +36,14 @@ while getopts 'lm:rR8' flag; do
     *) ;;
     esac
 done
+shift $((OPTIND - 1))
 
 if [[ "$reload" == "true" ]]; then
     INPUT="$(cat ~/.cache/wal/wal)"
 elif [[ "$random" == "true" ]]; then
     INPUT="$WALLPAPER_DIR"
+elif [[ -n "${1:-}" ]]; then
+    INPUT="$1"
 else
     INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi
