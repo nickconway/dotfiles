@@ -26,10 +26,11 @@ PLAYBOOK=${1:-main.yml}
 shift || true
 
 cd "$(dirname "$PLAYBOOK")"
-REQUIREMENTS="$(find-up requirements.txt)"
+get-vars ansible
 
 UV_CMD=(uvx --from ansible-core)
 
+REQUIREMENTS="$(find-up requirements.txt)"
 if [[ -n "$REQUIREMENTS" ]]; then
     UV_CMD+=(--with-requirements "$REQUIREMENTS")
 fi

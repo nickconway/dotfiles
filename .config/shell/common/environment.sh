@@ -47,7 +47,7 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 export PATH=~/.local/bin:$PATH
 
-[[ -n "${TTY:-}" ]] && export GPG_TTY=$TTY
+export GPG_TTY=${TTY:-$(tty)}
 
 export HOSTNAME="$(uname -n)"
 
@@ -84,6 +84,9 @@ export FZF_DEFAULT_OPTS='--cycle -m --pointer=▶ --preview-window down,border-t
     --gutter " "
 '
 
+command -v rg &>/dev/null && export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
+command -v fd &>/dev/null && export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy
 export FZF_CTRL_R_OPTS="
@@ -92,6 +95,7 @@ export FZF_CTRL_R_OPTS="
   --preview 'echo {}' --preview-window 3:wrap
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
+
 command -v pbcopy &>/dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'"
 command -v wl-copy &>/dev/null && export FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'"
 
@@ -178,3 +182,27 @@ export GUM_CONFIRM_PROMPT_FOREGROUND=$GUM_CHOOSE_HEADER_FOREGROUND
 export GUM_CONFIRM_SELECTED_BACKGROUND=$GUM_CHOOSE_SELECTED_FOREGROUND
 
 export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
+
+if command -v nvim &>/dev/null; then
+    export EDITOR="nvim"
+    export VISUAL="nvim"
+
+    export MANPAGER="nvim --clean \
+        -c 'runtime ftplugin/man.vim' \
+        -c 'set laststatus=0' \
+        -c 'set showtabline=0' \
+        -c 'set nonumber norelativenumber' \
+        -c 'set nocul noshowcmd noruler noshowmode' \
+        +Man!"
+elif command -v bat &>/dev/null; then
+    export MANPAGER="sh -c 'col -bx | bat \
+        --language=man \
+        --style=plain \
+        --theme=TwoDark \
+        --paging=always'"
+elif command -v bat &>/dev/null; then
+    export MANPAGER='/bin/bash -c "vim -MRn -c \"set buftype=nofile showtabline=0 ft=man ts=8 nomod nolist norelativenumber nonu noma\" -c \"normal L\" -c \"nmap q :qa<CR>\"</dev/tty <(col -b)"'
+
+else
+    export MANPAGER="less -s +M +Gg"
+fi

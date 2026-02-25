@@ -1,5 +1,11 @@
-if [[ -n "$DEBUGRC" ]]; then
-  zmodload zsh/zprof
+[[ $- != *i* ]] && return
+
+[[ -e ~/.config/zsh/zsh-defer/zsh-defer.plugin.zsh ]] && autoload -Uz ~/.config/zsh/zsh-defer/zsh-defer
+
+if [[ -n "$DEBUG_MODE" ]]; then
+    zmodload zsh/datetime
+    _startup_timer=$EPOCHREALTIME
+    zmodload zsh/zprof
 fi
 
 export SHELL_NAME=zsh
@@ -10,17 +16,9 @@ for f in ~/.config/shell/common/*; do
 done
 
 for f in ~/.config/shell/"$SHELL_NAME"/*; do
-    source $f
+    zsh-defer source $f || source $f
 done
 
-if [[ -n "$DEBUGRC" ]]; then
-  zprof
+if [[ -n "$DEBUG_MODE" ]]; then
+    zprof > ~/.zproflog
 fi
-
-# pnpm
-export PNPM_HOME="/home/nick/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

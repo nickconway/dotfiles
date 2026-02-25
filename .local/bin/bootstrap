@@ -44,8 +44,9 @@ if command -v termux-reload-settings >/dev/null; then
     mkdir -p ~/.zsh
     cd ~/.config/zsh
     [[ -e ~/.config/zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions
-    [[ -e ~/.config/zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions.git
-    [[ -e ~/.config/zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+    [[ -e ~/.config/zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions
+    [[ -e ~/.config/zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting
+    [[ -e ~/.config/zsh/zsh-defer ]] || git clone https://github.com/romkatv/zsh-defer
     cd ~
     GPG_TTY=$(tty)
     export GPG_TTY

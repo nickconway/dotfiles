@@ -1,3 +1,42 @@
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt INC_APPEND_HISTORY
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
+
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_MINUS
+
+setopt EXTENDED_GLOB
+setopt AUTO_PARAM_SLASH
+setopt GLOB_COMPLETE
+setopt HASH_LIST_ALL
+setopt GLOB_DOTS
+unsetopt NOMATCH
+
+setopt INTERACTIVE_COMMENTS
+
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+ZSH_AUTOSUGGEST_IGNORE_WIDGETS=(
+    orig-\*
+    beep
+    run-help
+    set-local-history
+    which-command
+    yank
+    yank-pop
+)
+
+export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+
 function _gen_completions() {
     local CMD=$1
 
@@ -11,6 +50,8 @@ function _gen_completions() {
 
 [[ -d ~/.config/zsh/zsh-completions ]] && fpath=(~/.config/zsh/zsh-completions/src $fpath)
 [[ -d /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+
+typeset -gU path fpath
 
 mkdir -p ~/.config/zsh/completions
 fpath=(~/.config/zsh/completions $fpath)
@@ -37,24 +78,31 @@ _dotnet_zsh_complete() {
         return
     fi
 
-    _values '=' $(xargs <<< $completions)
+    _values = $(xargs <<< $completions)
 }
 
-autoload -Uz compinit && compinit
-command -v dotnet &>/dev/null && compdef _dotnet_zsh_complete dotnet
+_comp_options+=(globdots)
 
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_IGNORE_SPACE
-setopt INC_APPEND_HISTORY
-setopt SHARE_HISTORY
+COMP_DUMP="$HOME/.zcompdump"
 
-setopt AUTO_CD
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
-setopt PUSHD_MINUS
+if [[ ! -f "$COMP_DUMP" || -n "$COMP_DUMP"(#qN.mh+24) ]]; then
+    zsh-defer compinit -i -u -d "$COMP_DUMP"
+    touch "$COMP_DUMP"
+else
+    zsh-defer compinit -C -d "$COMP_DUMP"
+fi
 
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+if [[ ! -f "$COMP_DUMP.zwc" || "$COMP_DUMP" -nt "$COMP_DUMP.zwc" ]]; then
+    zcompile "$COMP_DUMP" &!
+fi
+
+command -v dotnet &>/dev/null && zsh-defer compdef _dotnet_zsh_complete dotnet
+
+mkdir -p "$HOME/.cache/zsh"
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.cache/zsh"
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 if [[ -e ~/.config/zsh/fzf-tab/fzf-tab.zsh ]]; then

@@ -10,10 +10,17 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-    export DEBUG_MODE
-fi
+function clean() {
+    if [[ "${ENCRYPTED:-}" == true ]]; then
+        if ansible-vault-password &>/dev/null; then
+            ansible-vault encrypt "$OUTPUT" --vault-id ~/.local/bin/ansible-vault-password >/dev/null
+        else
+            ansible-vault encrypt "$OUTPUT" --ask-vault-pass >/dev/null
+        fi
+    fi
+}
+
+trap clean ERR EXIT
 
 function get-input() {
     local PROMPT=${1:-"Enter a value for $VAR"}
@@ -94,6 +101,15 @@ terraform)
     ;;
 
 ansible)
+    if grep -q "^\$ANSIBLE_VAULT" "$OUTPUT"; then
+        ENCRYPTED=true
+        if ansible-vault-password &>/dev/null; then
+            ansible-vault decrypt "$OUTPUT" --vault-id ~/.local/bin/ansible-vault-password >/dev/null
+        else
+            ansible-vault decrypt "$OUTPUT" --ask-vault-pass >/dev/null
+        fi
+    fi
+
     while read -r LINE; do
         if [[ -z "$LINE" ]]; then
             continue

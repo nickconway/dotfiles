@@ -501,30 +501,19 @@ function lg() {
     fi
 }
 
+nvm_triggers=(nvm node npm npx pnpm yarn)
+
 function lazynvm() {
-    unset -f nvm node npm npx
+    unset -f "${nvm_triggers[@]}"
     [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh
 }
 
-function nvm() {
-    lazynvm
-    nvm $@
-}
-
-function node() {
-    lazynvm
-    node $@
-}
-
-function npm() {
-    lazynvm
-    npm $@
-}
-
-function npx() {
-    lazynvm
-    npx $@
-}
+for cmd in "${nvm_triggers[@]}"; do
+    eval "function $cmd() {
+        lazynvm
+        npm \"\$@\"
+    }"
+done
 
 alias monitor-mic='pactl list | grep -q module-loopback && pactl unload-module module-loopback || pactl load-module module-loopback source=@DEFAULT_SINK@'
 alias mods='mods --theme base16'
@@ -666,7 +655,7 @@ alias v="$EDITOR"
 
 function venv() {
     if [[ ! -e .venv ]]; then
-        uv venv $*
+        uv venv "$@"
     fi
     source .venv/bin/activate
 }

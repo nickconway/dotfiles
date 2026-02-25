@@ -113,3 +113,67 @@ bindkey -M viins '\C-x\C-e' edit-command-line
 bindkey "^[m" copy-prev-shell-word
 
 bindkey -M viins ' ' magic-space                               # [Space] - don't do history expansion
+
+toggle-sudo-prefix() {
+    if [[ -z $BUFFER ]]; then
+        LBUFFER="sudo $(fc -ln -1)"
+    elif [[ $BUFFER == sudo\ * ]]; then
+        LBUFFER="${LBUFFER#sudo }"
+    else
+        LBUFFER="sudo $LBUFFER"
+    fi
+}
+zle -N toggle-sudo-prefix
+bindkey -M viins '\e\e' toggle-sudo-prefix
+
+function expand-alias() {
+    local word="${LBUFFER##* }"
+
+    if alias "$word" >/dev/null 2>&1; then
+        zle _expand_alias
+    fi
+
+    zle self-insert
+}
+zle -N expand-alias
+# bindkey -M viins ' ' expand-alias
+
+toggle-job() {
+    if [[ ${#BUFFER} -eq 0 ]]; then
+        BUFFER="fg"
+        zle accept-line
+    else
+        zle push-input
+        zle clear-screen
+    fi
+}
+zle -N toggle-job
+bindkey -M viins '\C-z' toggle-job
+
+if [[ "$OSTYPE" == darwin* ]]; then
+    _copy_cmd_list=(pbcopy)
+elif (( $+commands[wl-copy] )); then
+    _copy_cmd_list=(wl-copy)
+elif (( $+commands[xclip] )); then
+    _copy_cmd_list=(xclip -selection clipboard)
+elif (( $+commands[xsel] )); then
+    _copy_cmd_list=(xsel --clipboard --input)
+elif (( $+commands[clip.exe] )); then
+    _copy_cmd_list=(clip.exe)
+fi
+
+copy-buffer-to-clipboard() {
+    emulate -L zsh
+
+    [[ -z "$BUFFER" ]] && return
+
+    if (( ${#_copy_cmd_list} == 0 )); then
+        zle -M "Error: No clipboard utility found."
+        return 1
+    fi
+
+    print -rn -- "$BUFFER" | "${_copy_cmd_list[@]}"
+    zle -M "✓ Copied buffer to clipboard"
+}
+zle -N copy-buffer-to-clipboard
+bindkey -M viins '^[c^[c' copy-buffer-to-clipboard
