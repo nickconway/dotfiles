@@ -47,13 +47,13 @@ cmake --build build
 sudo cmake --install build
 
 cd ~/Git
-gh repo clone noctalia-shell || git clone https://github.com/nickconway/noctalia-shell || true
+gh repo clone nickconway/noctalia-shell || git clone https://github.com/nickconway/noctalia-shell || true
 cd noctalia-shell
 git pull
 git rebase upstream main
 
 cd ~/Git
-gh repo clone DankMaterialShell || git clone https://github.com/nickconway/DankMaterialShell || true
+gh repo clone nickconway/DankMaterialShell || git clone https://github.com/nickconway/DankMaterialShell || true
 cd DankMaterialShell
 git pull
 git rebase upstream master
