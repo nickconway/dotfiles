@@ -16,6 +16,10 @@ fi
 
 FILES+=("${@}")
 
+if [[ -z "${FILES:-}" || "${#FILES}" -eq 0 ]]; then
+    readarray -t FILES < <(fd --hidden '%%')
+fi
+
 for f in "${FILES[@]}"; do
     if [[ ! -f "$f" ]] || [[ ! "$f" == *%%template* ]]; then
         continue
@@ -25,5 +29,4 @@ for f in "${FILES[@]}"; do
 
     echo "$f => $new_file:"
     envsubst <"$f" >"$new_file"
-    echo
 done
