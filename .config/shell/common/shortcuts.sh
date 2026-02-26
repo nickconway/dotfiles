@@ -700,9 +700,6 @@ function ya() {
 alias y="yadm status"
 alias yalt="yadm alt"
 alias yb='yadm bootstrap'
-alias ycl="yadm config --get-all local.class"
-alias ycla="yadm config --add local.class"
-alias yclu="yadm config --unset-all local.class"
 alias ydec="yadm decrypt"
 alias yenc="yadm encrypt"
 
