@@ -50,7 +50,7 @@ while read -r FILE; do
     APP="$(basename "$(dirname "$FILE")")"
     echo "$FILE -> $APP"
     if [[ -e "$DOCKER_STACK_DIR/$APP" ]]; then
-        rsync -abhruvz "docker/compose/$APP/" "$DOCKER_STACK_DIR/$APP"
+        rsync -abhruvz --backup-dir ".rsync-backup" "docker/compose/$APP/" "$DOCKER_STACK_DIR/$APP"
         (
             cd "$DOCKER_STACK_DIR/$APP"
             docker compose up -d
