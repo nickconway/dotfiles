@@ -112,15 +112,29 @@ _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
 
 if [[ ${noctalia:-false} == true ]]; then
     for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
-        qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null || true
+        qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null ||
+            {
+                FILE="$HOME/.cache/noctalia/wallpapers.json"
+                jq ".wallpapers[\"$m\"]=\"i\"" "$FILE" > "$FILE.new" &&
+                    mv "$FILE"{.new,}
+            }
     done
 fi
 
-qs -c dms ipc call wallpaper set "$IMG" &>/dev/null || true
+qs -c dms ipc call wallpaper set "$IMG" &>/dev/null ||
+    {
+        FILE="$HOME/.local/state/DankMaterialShell/session.json"
+        jq ".wallpaperPath=\"$IMG\"" "$FILE" >"$FILE.new" &&
+            mv "$FILE"{.new,}
+    }
 dms greeter sync &>/dev/null || true
 
 _cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
-caelestia wallpaper -N -f "$IMG" &>/dev/null || true
+caelestia wallpaper -N -f "$IMG" &>/dev/null ||
+    {
+        echo "$IMG" >~/.local/state/caelestia/wallpaper/path.txt
+        ln -sf "$IMG" ~/.local/state/caelestia/wallpaper/current
+    }
 
 timeout 1 swaync-client -rs &>/dev/null || true
 
