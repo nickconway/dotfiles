@@ -30,6 +30,7 @@ while getopts 'lm:rR8' flag; do
     case "${flag}" in
     l) light=true ;;
     m) METHOD="$OPTARG" ;;
+    n) noctalia=true ;;
     r) random=true ;;
     R) reload=true ;;
     8) eight=true ;;
@@ -108,9 +109,12 @@ hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null || true
 
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
-for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
-    qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null || true
-done
+
+if [[ ${noctalia:-false} == true ]]; then
+    for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
+        qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null || true
+    done
+fi
 
 qs -c dms ipc call wallpaper set "$IMG" &>/dev/null || true
 dms greeter sync &>/dev/null || true

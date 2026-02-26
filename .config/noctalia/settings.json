@@ -434,7 +434,7 @@
         "screenUnlock": "",
         "session": "",
         "startup": "",
-        "wallpaperChange": "change-theme \"$1\""
+        "wallpaperChange": "change-theme -n \"$1\""
     },
     "location": {
         "analogClockInCalendar": false,
