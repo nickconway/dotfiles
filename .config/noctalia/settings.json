@@ -376,7 +376,7 @@
         "compactLockScreen": false,
         "dimmerOpacity": 0,
         "enableLockScreenCountdown": true,
-        "enableShadows": true,
+        "enableShadows": false,
         "forceBlackScreenCorners": false,
         "iRadiusRatio": 1,
         "keybinds": {
