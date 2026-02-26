@@ -53,7 +53,8 @@ export HOSTNAME="$(uname -n)"
 
 if command -v termux-reload-settings >/dev/null; then
     export XDG_RUNTIME_DIR=$HOME/.termux
-elif [[ -e ~/Library/Caches/TemporaryItems ]]; then
+elif [[ "$OSTYPE" == darwin* ]]; then
+    mkdir -p ~/Library/Caches/TemporaryItems
     export XDG_RUNTIME_DIR=~/Library/Caches/TemporaryItems
 else
     export XDG_RUNTIME_DIR=/run/user/$(id -u)
