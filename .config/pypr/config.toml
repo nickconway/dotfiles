@@ -4,6 +4,7 @@ plugins = [
  "fetch_client_menu",
  "lost_windows",
  "magnify",
+ "gamemode",
  "layout_center",
  "scratchpads",
  "shift_monitors",
@@ -14,3 +15,7 @@ plugins = [
 [magnify]
 factor = 2
 duration = 10
+
+[gamemode]
+auto = true
+patterns = ["steam_app_*", "gamescope*", "lutris_*"]
