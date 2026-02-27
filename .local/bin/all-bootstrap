@@ -22,15 +22,8 @@ ssh-add -L | grep -q "$(cat ~/.ssh/id_ed25519.pub)" || ssh-add ~/.ssh/id_ed25519
 
 cd ~/Git/ansible
 git pull &>/dev/null
-cd ~/Git/ansible/bootstrap
 
-if command -v termux-reload-settings >/dev/null; then
-    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --ask-vault-pass -l '!localhost' $@
-elif ansible-vault-password &>/dev/null; then
-    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --vault-id ~/.local/bin/ansible-vault-password -l "!$(uname -n)" $@
-else
-    uvx --with-requirements ../requirements.txt --from ansible-core ansible-playbook main.yml --ask-vault-pass -l "!$(uname -n)" $@
-fi
+ansible-run ~/Git/ansible/bootstrap/main.yml "$@"
 
 if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Provisioning complete" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null

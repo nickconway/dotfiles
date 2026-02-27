@@ -33,21 +33,6 @@ function atuin-fix() {
 }
 
 alias awsp='export AWS_PROFILE="$(grep "\[" ~/.aws/credentials | cut -c 2- | rev | cut -c 2- | rev | fzft)"'
-function bootstrap() {
-    if command -v systemd-inhibit &>/dev/null; then
-        systemd-inhibit --why "Bootstrapping" -- bootstrap $@
-    else
-        bootstrap $@
-    fi
-}
-
-function all-bootstrap() {
-    if command -v systemd-inhibit &>/dev/null; then
-        systemd-inhibit --why "Bootstrapping" -- all-bootstrap $@
-    else
-        all-bootstrap $@
-    fi
-}
 
 alias nf='fastfetch'
 alias pf='fastfetch'
