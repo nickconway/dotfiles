@@ -460,7 +460,8 @@
         "poweroff"
       ],
       "hibernate": [
-        "hyprsleep"
+        "systemctl",
+        "suspend"
       ],
       "reboot": [
         "systemctl",

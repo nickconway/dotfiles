@@ -93,9 +93,9 @@ run_cmd() {
     elif [[ "$1" == '--opt2' ]]; then
         confirm_run 'hyprctl dispatch exit'
     elif [[ "$1" == '--opt3' ]]; then
-        confirm_run 'hyprsleep'
+        confirm_run 'systemctl suspend'
     elif [[ "$1" == '--opt4' ]]; then
-        confirm_run 'hyprsleep'
+        confirm_run 'systemctl suspend'
     elif [[ "$1" == '--opt5' ]]; then
         confirm_run 'systemctl reboot'
     elif [[ "$1" == '--opt6' ]]; then
