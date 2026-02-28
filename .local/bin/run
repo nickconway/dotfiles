@@ -36,7 +36,7 @@ for D in "${TARGETS[@]}"; do
     cmd=("$(envsubst <<<"$CMD_INIT")")
 
     if command -v gum &>/dev/null; then
-        CMD=(gum spin --title "${cmd[@]}" -- bash -c "{ ${cmd[@]}; } &> $TMP")
+        CMD=(gum spin --title "${cmd[@]}" -- bash -ilc "{ ${cmd[@]}; } &> $TMP")
     else
         CMD=("(${cmd[@]}) &> $TMP")
     fi
