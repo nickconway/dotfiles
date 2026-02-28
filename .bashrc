@@ -1,5 +1,3 @@
-[[ $- != *i* ]] && return
-
 export SHELL_NAME=bash
 export SHELL="$(which "$SHELL_NAME")"
 
