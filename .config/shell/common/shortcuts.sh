@@ -669,7 +669,7 @@ alias xx='tmux switch-client -l && tmux kill-session'
 
 eval "$(declare -f | sed -n '/^g.*\(\) {/ , /^}$/p' | sed 's/^g/y/' | sed 's/) {$/) {\n(cd $(yadm user-config -d)/g' | sed 's/^}$/)\n}/g')"
 
-alias | grep "^.*=.*git.*" | while read -r A; do
+alias | sed 's/^alias //' | grep "^.*=.*git.*" | while read -r A; do
     l="$(cut -d = -f 1 <<<"${A/g/y}")"
     r="$(cut -d = -f 2- <<<"$A" | xargs)"
 
