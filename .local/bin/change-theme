@@ -110,16 +110,14 @@ hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null || true
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
 
-if [[ ${noctalia:-false} == true ]]; then
-    for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
-        qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null ||
-            {
-                FILE="$HOME/.cache/noctalia/wallpapers.json"
-                jq ".wallpapers[\"$m\"]=\"i\"" "$FILE" > "$FILE.new" &&
-                    mv "$FILE"{.new,}
-            }
-    done
-fi
+for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
+    [[ ${noctalia:-false} == true ]] || qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null ||
+        {
+            FILE="$HOME/.cache/noctalia/wallpapers.json"
+            jq ".wallpapers[\"$m\"]=\"i\"" "$FILE" >"$FILE.new" &&
+                mv "$FILE"{.new,}
+        }
+done
 
 qs -c dms ipc call wallpaper set "$IMG" &>/dev/null ||
     {
