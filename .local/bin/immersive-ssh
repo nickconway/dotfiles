@@ -29,7 +29,7 @@ if [[ -z $SELECTED ]]; then
     exit 1
 fi
 
-if [[ -n $TMUX ]]; then
+if [[ -n ${TMUX:-} ]]; then
     PANE_PID="$(tmux display -p '#{pane_pid}')"
     S_FILE="${PREFIX:-}/tmp/tmux-$PANE_PID"
     (
@@ -69,7 +69,7 @@ else
     ssh $SELECTED || true
 fi
 
-if [[ -n $TMUX ]]; then
+if [[ -n ${TMUX:-} ]]; then
     if ps -p $(cat "$S_FILE") &>/dev/null; then
         kill $(cat "$S_FILE")
     fi
@@ -79,7 +79,7 @@ if [[ -n $PORT ]] && pgrep "nc -l -p $PORT" -f &>/dev/null; then
     kill $(pgrep "nc -l -p $PORT" -f) &>/dev/null
 fi
 
-if [[ -n $TMUX ]]; then
+if [[ -n ${TMUX:-} ]]; then
     tmux set status on
     tmux bind C-Space send-prefix
     tmux set prefix C-Space
