@@ -35,10 +35,10 @@ for D in "${TARGETS[@]}"; do
     export D
     cmd=("$(envsubst <<<"$CMD_INIT")")
 
+    CMD=(bash -lc "{ ${cmd[@]}; } &> $TMP")
+
     if command -v gum &>/dev/null; then
-        CMD=(gum spin --title "${cmd[@]}" -- bash -ilc "{ ${cmd[@]}; } &> $TMP")
-    else
-        CMD=("(${cmd[@]}) &> $TMP")
+        CMD=(gum spin --title "${cmd[@]}" -- "${CMD[@]}")
     fi
 
     if ("${CMD[@]}"); then

@@ -19,6 +19,10 @@ function _cd() {
         DIR="$(docker inspect "$1" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
     fi
 
+    if [[ -z "$DIR" ]]; then
+        return 1
+    fi
+
     cd "$DIR"
 }
 
@@ -27,7 +31,7 @@ function start() {
         docker network inspect proxy &>/dev/null || docker network create proxy
     fi
 
-    _cd "$1"
+    _cd "$1" || return 1
 
     if [[ -e setup ]]; then
         ./setup
@@ -37,14 +41,13 @@ function start() {
 }
 
 function stop() {
-    _cd "$1"
+    _cd "$1" || return 1
     docker compose stop
 }
 
 function update() {
-    _cd "$1"
-    docker compose pull
-    docker compose up -d --build
+    _cd "$1" || return 1
+    docker compose up -d --pull=always --build
 }
 
 function dump() {
