@@ -27,6 +27,6 @@ for f in "${FILES[@]}"; do
 
     new_file="${f/\%\%template*/}"
 
-    echo "$f => $new_file:"
+    echo "$f => $new_file"
     envsubst <"$f" >"$new_file"
 done
