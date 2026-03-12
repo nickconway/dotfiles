@@ -5,6 +5,8 @@ return {
             lua = { "stylua" },
             python = { "black" },
             sh = { "shfmt" },
+            html = { "prettierd", "prettier" },
+            htmlangular = { "prettierd", "prettier" },
             javascript = { "prettierd", "prettier" },
             typescript = { "prettierd", "prettier" },
         },
