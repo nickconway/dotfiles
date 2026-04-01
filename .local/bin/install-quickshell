@@ -17,7 +17,8 @@ cd ~/Git
 gh repo clone nickconway/quickshell || git clone https://github.com/nickconway/quickshell || true
 cd quickshell
 git pull
-git rebase upstream master
+git fetch upstream
+git rebase upstream
 cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
@@ -26,7 +27,8 @@ cd ~/Git
 gh repo clone nickconway/caelestia-cli || git clone https://github.com/nickconway/caelestia-cli || true
 cd caelestia-cli
 git pull
-git rebase upstream main
+git fetch upstream
+git rebase upstream
 if [[ -e /usr/bin/caelestia ]]; then
     sudo rm /usr/bin/caelestia
     sudo pip uninstall caelestia --break-system-packages --yes --root-user-action ignore
@@ -40,7 +42,8 @@ cd ~/Git
 gh repo clone nickconway/caelestia || git clone https://github.com/nickconway/caelestia.git || true
 cd caelestia
 git pull
-git rebase upstream main
+git fetch upstream
+git rebase upstream
 git fetch upstream --tags
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
 cmake --build build
@@ -50,13 +53,15 @@ cd ~/Git
 gh repo clone nickconway/noctalia-shell || git clone https://github.com/nickconway/noctalia-shell || true
 cd noctalia-shell
 git pull
-git rebase upstream main
+git fetch upstream
+git rebase upstream
 
 cd ~/Git
 gh repo clone nickconway/DankMaterialShell || git clone https://github.com/nickconway/DankMaterialShell || true
 cd DankMaterialShell
 git pull
-git rebase upstream master
+git fetch upstream
+git rebase upstream
 sudo make install
 
 rm -rf ~/.config/quickshell/dms && cp -r ~/Git/DankMaterialShell/quickshell ~/.config/quickshell/dms
