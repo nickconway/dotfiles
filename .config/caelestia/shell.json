@@ -352,8 +352,8 @@
       },
       {
         "command": [
-          "systemctl",
-          "poweroff"
+          "system",
+          "shutdown"
         ],
         "dangerous": true,
         "description": "Shutdown the system",
@@ -363,7 +363,7 @@
       },
       {
         "command": [
-          "systemctl",
+          "system",
           "reboot"
         ],
         "dangerous": true,
@@ -456,15 +456,15 @@
         ""
       ],
       "shutdown": [
-        "systemctl",
-        "poweroff"
+        "system",
+        "shutdown"
       ],
       "hibernate": [
         "systemctl",
         "suspend"
       ],
       "reboot": [
-        "systemctl",
+        "system",
         "reboot"
       ]
     },

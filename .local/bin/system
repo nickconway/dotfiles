@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+CMD="${1:-}"
+MSG="${2:-}"
+
+case "$CMD" in
+logout)
+    if (pgrep Hyprland && command -v hyprshutdown) &>/dev/null; then
+        CMD=
+    else
+        CMD="loginctl terminate-session"
+    fi
+    ;;
+esac
+
+if (pgrep Hyprland && command -v hyprshutdown) &>/dev/null; then
+    HCMD=(hyprshutdown) # --vt 2
+
+    if [[ -n "$CMD" ]]; then
+        HCMD+=(-p "$CMD")
+    fi
+
+    if [[ -n "$MSG" ]]; then
+        HCMD+=(-t "$MSG")
+    fi
+
+    ${HCMD[*]}
+else
+    ${CMD[*]}
+fi

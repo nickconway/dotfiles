@@ -16,12 +16,13 @@ VAL=
 CAELESTIA=$(pgrep -afx "qs .*caelestia.*" || echo "")
 NOCTALIA=$(pgrep -afx "qs .*noctalia.*" || echo "")
 
-case ${1:-} in
-ALL)
-    ALL=true
-    shift
-    ;;
-esac
+while getopts 'a' flag; do
+    case "${flag}" in
+    a) ALL=true ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
 
 case ${1:-} in
 set)
@@ -36,7 +37,7 @@ lower)
     VAL="${2:-1%}-"
     ;;
 
-show)
+show | get)
     SHOW=true
     NAME="${2:-}"
     ;;

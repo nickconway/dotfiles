@@ -3,6 +3,6 @@
 Version=1.0
 Terminal=true
 Type=Application
-Name=Boot Windows
-Exec=boot windows
-Icon=windows
+Name=BIOS
+Exec=boot 'uefi firmware settings'
+Icon=bios

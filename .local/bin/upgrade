@@ -33,7 +33,7 @@ systemd-inhibit --why "Upgrading" topgrade -y --no-retry || true
 NOTIFICATION_TITLE="Upgrade"
 TERM_PROMPTS="Y,n"
 NOTIFICATION_PROMPTS="Yes,No"
-ACTIONS="systemctl reboot,true"
+ACTIONS="system reboot,true"
 
 if [[ -e /var/run/reboot-required ]]; then
     TEXT="A reboot is required. Would you like to reboot now?"
