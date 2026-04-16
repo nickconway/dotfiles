@@ -59,11 +59,13 @@ touch "$OUTPUT"
 case $1 in
 env)
     while read -r LINE; do
-        if [[ -z "$LINE" ]]; then
+        STATEMENT="$(echo "$LINE" | cut -d '=' -f 1 | sed 's/#.*//')"
+
+        if [[ -z "$STATEMENT" ]]; then
+            echo "$LINE" >>"$OUTPUT"
             continue
         fi
 
-        STATEMENT="$(echo "$LINE" | cut -d '=' -f 1)"
         VAR="$(echo "$STATEMENT" | awk '{ print $NF }')"
         PLACEHOLDER="$(echo "$LINE" | cut -d '=' -f 2- | envsubst | xargs)"
 
