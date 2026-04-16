@@ -16,7 +16,7 @@ VAL=
 CAELESTIA=$(pgrep -afx "qs .*caelestia.*" || echo "")
 NOCTALIA=$(pgrep -afx "qs .*noctalia.*" || echo "")
 
-while getopts 'a' flag; do
+while getopts ':a' flag; do
     case "${flag}" in
     a) ALL=true ;;
     *) continue ;;

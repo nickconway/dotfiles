@@ -10,9 +10,22 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+while getopts ':t:' flag; do
+    case "${flag}" in
+    t) OG_TITLE="$OPTARG" ;;
+    *) continue ;;
+    esac
+done
+shift $((OPTIND - 1))
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 RESET='\033[0m'
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    export GUM_SPIN_SHOW_OUTPUT=true
+    export GUM_SPIN_SHOW_STDOUT=true
+fi
 
 shopt -s dotglob
 
@@ -33,18 +46,19 @@ TMP=$(mktemp)
 
 for D in "${TARGETS[@]}"; do
     export D
-    cmd=("$(envsubst <<<"$CMD_INIT")")
+    INNER_CMD=("$(envsubst <<<"$CMD_INIT")")
+    TITLE="$(envsubst <<<"${OG_TITLE:-}")"
 
-    CMD=(bash -lc "{ ${cmd[@]}; } &> $TMP")
+    CMD=("$SHELL" -lc "export DEBUG_MODE=${DEBUG_MODE:-} && { ${INNER_CMD[@]}; } | tee $TMP")
 
     if command -v gum &>/dev/null; then
-        CMD=(gum spin --title "${cmd[@]}" -- "${CMD[@]}")
+        CMD=(gum spin --title "${TITLE:-${INNER_CMD[@]}}" -- "${CMD[@]}")
     fi
 
     if ("${CMD[@]}"); then
-        echo -e "$GREEN$RESET ${cmd[*]}"
+        echo -e "$GREEN$RESET ${TITLE:-${INNER_CMD[@]}}"
     else
-        echo -e "$RED$RESET ${cmd[*]}"
+        echo -e "$RED$RESET ${TITLE:-${INNER_CMD[@]}}"
 
         if [[ -n "$(cat "$TMP")" ]]; then
             echo -e $RED-----------------------------------------------------------$RESET

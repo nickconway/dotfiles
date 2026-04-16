@@ -26,12 +26,20 @@ function _cd() {
     cd "$DIR"
 }
 
-function start() {
+function _start() {
     if grep -q '\- proxy$' "$DOCKER_STACK_DIR" 2>/dev/null; then
         docker network inspect proxy &>/dev/null || docker network create proxy
     fi
 
     _cd "$1" || return 1
+
+    yq '.services[].volumes' compose.yml | sed 's/^- //' | sed 's/\.\///' | cut -d ':' -f 1 | while read -r P; do
+        P="$(echo "$P" | envsubst)"
+
+        if [[ "$P" != *'.'* ]] && [[ "$P" != null ]]; then
+            mkdir -p "$P"
+        fi
+    done
 
     if [[ -e setup ]]; then
         ./setup
@@ -40,17 +48,17 @@ function start() {
     docker compose up -d --build
 }
 
-function stop() {
+function _stop() {
     _cd "$1" || return 1
     docker compose stop
 }
 
-function update() {
+function _update() {
     _cd "$1" || return 1
     docker compose up -d --pull=always --build
 }
 
-function dump() {
+function _dump() {
     CONTAINER=$1
     cd "$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
 
@@ -69,7 +77,7 @@ function dump() {
     fi
 }
 
-function restore() {
+function _restore() {
     CONTAINER=$1
     cd "$(docker inspect "$CONTAINER" | jq -r '.[].Config.Labels["com.docker.compose.project.working_dir"]')"
 
@@ -91,8 +99,6 @@ function restore() {
 function unhealthy() {
     docker ps --format=json | jq -r '{Names, State, Status} | select((.State != "running") or (.Status | contains("unhealthy"))) | .Names'
 }
-
-export -f _cd start stop update dump restore
 
 cd "${DOCKER_STACK_DIR:-"$HOME/Docker"}"
 CMD="$1"
@@ -116,12 +122,12 @@ if [[ -z "${TARGETS:-}" ]]; then
     TARGETS+=(*)
 fi
 
-if [[ $CMD == unhealthy ]]; then
-    $CMD
+if type "$CMD" &>/dev/null; then
+    "$CMD" $*
     exit
+else
+    run -t "$(basename "$0") $CMD \$D" "$(basename "$0") _$CMD \$D" "${TARGETS[@]}"
 fi
-
-run "$CMD \$D" "${TARGETS[@]}"
 
 if docker ps | grep -q nextcloud-aio-mastercontainer; then
     if [[ $CMD == start ]]; then

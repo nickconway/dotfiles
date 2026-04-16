@@ -10,8 +10,8 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-function apply() {
-    cd "$1"
+function _apply() {
+    cd "$1" || return 1
 
     if [[ -e setup ]]; then
         ./setup
@@ -21,8 +21,6 @@ function apply() {
         kubectl apply -f <(envsubst <"$f")
     done
 }
-
-export -f apply
 
 cd "${K8S_MANIFEST_DIR:-~/Kubernetes}"
 CMD="$1"
@@ -36,4 +34,9 @@ else
     TARGETS=(*)
 fi
 
-run "$CMD \$D" "${TARGETS[@]}"
+if type "$CMD" &>/dev/null; then
+    "$CMD" $*
+    exit
+else
+    run -t "$(basename "$0") $CMD \$D" "$(basename "$0") _$CMD \$D" "${TARGETS[@]}"
+fi
