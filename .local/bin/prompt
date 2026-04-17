@@ -32,26 +32,29 @@ function term() {
 
         if [[ -z "${REPLY:-}" ]]; then
             IDX="$DEFAULT_ACTION"
-            return
         else
             for ((i = 0; i < ${#TERM_PROMPTS_ARR[@]}; i++)); do
                 if [[ "$REPLY" == "${NOTIFICATION_PROMPTS_ARR[$i]}" ]] || [[ "$(echo "${TERM_PROMPTS_ARR[$i]}" | tr '[:upper:]' '[:lower:]')" == "$(echo "$REPLY" | tr '[:upper:]' '[:lower:]')" ]]; then
                     IDX=$i
-                    return
+                    break
                 fi
             done
         fi
     done
+
+    eval "${ACTIONS_ARR[${IDX:-$DEFAULT_ACTION}]}"
 }
 
 function gui() {
+    i=0
     declare -a NOTIFICATION_PROMPTS_FLAGS=()
     for A in "${NOTIFICATION_PROMPTS_ARR[@]}"; do
         NOTIFICATION_PROMPTS_FLAGS+=("--action")
-        NOTIFICATION_PROMPTS_FLAGS+=("$A")
+        NOTIFICATION_PROMPTS_FLAGS+=("${ACTIONS_ARR[i]}=$A")
+        i=$((i + 1))
     done
 
-    IDX="$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical -t 0)"
+    eval "$(notify-send "$NOTIFICATION_TITLE" "$TEXT" "${NOTIFICATION_PROMPTS_FLAGS[@]}" -u critical -t 0)"
 }
 
 if [[ -n ${PROMPT_TERM:-} ]]; then
@@ -63,5 +66,3 @@ elif [[ -t 0 ]]; then
 elif [[ ! -t 0 ]]; then
     gui
 fi
-
-eval "${ACTIONS_ARR[${IDX:-$DEFAULT_ACTION}]}"

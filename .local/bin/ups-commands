@@ -12,19 +12,18 @@ fi
 
 echo "Monitoring UPS Status..."
 
-while true; do
-    COMMAND="$(journalctl -t ups -n0 -f | while read -r c; do
-        echo $c | rev | cut -d ':' -f 1 | rev | xargs
-        break
-    done)"
-    echo "$COMMAND"
+journalctl -t ups -n 0 -f | while read -r COMMAND; do
+    COMMAND="$(rev <<<"$COMMAND" | cut -d ':' -f 1 | rev | xargs)"
+
+    echo "Received: $COMMAND"
+
     case "$COMMAND" in
     ONLINE)
         touch /tmp/ups-online
         notify-send "UPS Status" "UPS Switched to Main Power" -h string:synchronous:ups -e
         ;;
     ONBATT)
-        eval "$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e -t 0 -u critical --action "[[ -e /tmp/ups-online ]] || sudo systemctl poweroff")" &
+        eval "$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e -t 0 -u critical --action "[[ -e /tmp/ups-online ]] || sudo systemctl poweroff=Shutdown")"
         ;;
     esac
 done
