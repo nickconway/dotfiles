@@ -23,7 +23,7 @@ journalctl -t ups -n 0 -f | while read -r COMMAND; do
         notify-send "UPS Status" "UPS Switched to Main Power" -h string:synchronous:ups -e
         ;;
     ONBATT)
-        eval "$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e -t 0 -u critical --action "[[ -e /tmp/ups-online ]] || system poweroff=Shutdown")"
+        eval "$(notify-send "UPS Status" "UPS Switched to Battery Power" -h string:synchronous:ups -e -t 0 -u critical --action "[[ -e /tmp/ups-online ]] || system shutdown=Shutdown")"
         ;;
     esac
 done
