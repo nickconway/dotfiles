@@ -14,7 +14,7 @@ done
 [[ -e ~/.config/zsh/zsh-defer/zsh-defer.plugin.zsh ]] && autoload -Uz ~/.config/zsh/zsh-defer/zsh-defer
 
 for f in ~/.config/shell/"$SHELL_NAME"/*; do
-    zsh-defer source $f || source $f
+    source $f
 done
 
 if [[ -n "$DEBUG_MODE" ]]; then
