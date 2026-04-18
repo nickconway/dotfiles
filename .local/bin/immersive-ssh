@@ -50,7 +50,7 @@ if command -v ss &>/dev/null; then
         fi
     done
 
-    if [[ -n ${TMUX:-} ]] && [[ -n $PORT ]]; then
+    if [[ -n ${TMUX:-} ]] && [[ -n ${PORT:-} ]]; then
         (
             while true; do
                 (nc -l -p "$PORT" | wl-copy) &>/dev/null || true
@@ -60,7 +60,7 @@ if command -v ss &>/dev/null; then
         )
     fi
 
-    if [[ -n $PORT ]]; then
+    if [[ -n ${PORT:-} ]]; then
         ssh -R $PORT:localhost:$PORT $SELECTED || true
     else
         ssh $SELECTED || true
@@ -75,7 +75,7 @@ if [[ -n ${TMUX:-} ]]; then
     fi
 fi
 
-if [[ -n $PORT ]] && pgrep "nc -l -p $PORT" -f &>/dev/null; then
+if [[ -n ${PORT:-} ]] && pgrep "nc -l -p $PORT" -f &>/dev/null; then
     kill $(pgrep "nc -l -p $PORT" -f) &>/dev/null
 fi
 
