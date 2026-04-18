@@ -22,7 +22,7 @@ IFS="," read -ra NOTIFICATION_PROMPTS_ARR <<<"$NOTIFICATION_PROMPTS"
 IFS="," read -ra ACTIONS_ARR <<<"$ACTIONS"
 
 function term() {
-    while true; do
+    while [[ -z ${IDX:-} ]]; do
         if command -v gum &>/dev/null; then
             REPLY="$(gum choose --header "$TEXT" "${NOTIFICATION_PROMPTS_ARR[@]}")"
         else
