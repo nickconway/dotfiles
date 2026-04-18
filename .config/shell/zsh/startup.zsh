@@ -4,6 +4,6 @@ if [[ -n "$HOMEBREW_PREFIX" ]]; then
     done
 fi
 
-for f in ~/.config/zsh/*/*.zsh; do
+for f in ~/.config/zsh/{,*}/*.zsh; do
     source "$f"
 done
