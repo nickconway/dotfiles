@@ -67,8 +67,8 @@ command -v brew >/dev/null && export HOMEBREW_PREFIX="$(brew --prefix)"
 export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
 [[ -n ${HOMEBREW_PREFIX:-} ]] && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
 
-export VISUAL="$(which nvim)"
-export EDITOR="$(which nvim)"
+export VISUAL=nvim
+export EDITOR=nvim
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [[ -n ${HOMEBREW_PREFIX:-} ]] && [[ -e "$HOMEBREW_PREFIX/opt/nvm" ]] && export NVM_DIR=$HOMEBREW_PREFIX/opt/nvm
@@ -113,10 +113,10 @@ else
 fi
 
 export GIT_AUTHOR_NAME="${FULL_NAME:-}"
-export GIT_AUTHOR_EMAIL="$EMAIL"
+export GIT_AUTHOR_EMAIL="${EMAIL:-}"
 
 export GIT_COMMITTER_NAME="${FULL_NAME:-}"
-export GIT_COMMITTER_EMAIL="$EMAIL"
+export GIT_COMMITTER_EMAIL="${EMAIL:-}"
 
 export ATUIN_USER="$USER"
 
@@ -132,7 +132,7 @@ export TEXMFHOME="$HOME/.local/share/texmf"
 
 [ -s ~/.bun/_bun ] && source ~/.bun/_bun
 
-export GPG_EMAIL="$EMAIL"
+export GPG_EMAIL="${EMAIL:-}"
 export DOCKER_STACK_DIR="$HOME/Docker"
 export GITEA_USER="$USER"
 
