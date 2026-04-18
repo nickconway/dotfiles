@@ -112,10 +112,10 @@ else
     export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
 fi
 
-export GIT_AUTHOR_NAME="$FULL_NAME"
+export GIT_AUTHOR_NAME="${FULL_NAME:-}"
 export GIT_AUTHOR_EMAIL="$EMAIL"
 
-export GIT_COMMITTER_NAME="$FULL_NAME"
+export GIT_COMMITTER_NAME="${FULL_NAME:-}"
 export GIT_COMMITTER_EMAIL="$EMAIL"
 
 export ATUIN_USER="$USER"
