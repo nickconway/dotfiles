@@ -139,4 +139,4 @@ timeout 1 swaync-client -rs &>/dev/null || true
 gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal
 
 fastfetch
-eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 -r=Random" --action "$0  -R=Reload")"
+eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 -r=Random" --action "$0 -R=Reload")"
