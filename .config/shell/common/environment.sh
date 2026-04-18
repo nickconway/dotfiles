@@ -118,7 +118,7 @@ export GIT_AUTHOR_EMAIL="${EMAIL:-}"
 export GIT_COMMITTER_NAME="${FULL_NAME:-}"
 export GIT_COMMITTER_EMAIL="${EMAIL:-}"
 
-export ATUIN_USER="$USER"
+export ATUIN_USER="${USER:-}"
 
 export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc-2.0
 
@@ -134,7 +134,7 @@ export TEXMFHOME="$HOME/.local/share/texmf"
 
 export GPG_EMAIL="${EMAIL:-}"
 export DOCKER_STACK_DIR="$HOME/Docker"
-export GITEA_USER="$USER"
+export GITEA_USER="${USER:-}"
 
 command -v brew >/dev/null && eval "$($(brew --prefix)/bin/brew shellenv)"
 command -v starship >/dev/null && eval "$(starship init $SHELL_NAME)"
