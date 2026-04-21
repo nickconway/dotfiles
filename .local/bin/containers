@@ -34,7 +34,7 @@ function _start() {
     _cd "$1" || return 1
 
     yq '.services[].volumes' compose.yml | sed 's/^- //' | sed 's/\.\///' | cut -d ':' -f 1 | while read -r P; do
-        P="$(echo "$P" | xargs | envsubst)"
+        P="$(echo "$P" | tr -d '"' | tr -d "'" | envsubst)"
 
         if [[ "$P" != *'.'* ]] && [[ "$P" != null ]]; then
             mkdir -p "$P"
