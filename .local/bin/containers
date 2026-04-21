@@ -137,7 +137,7 @@ if docker ps | grep -q nextcloud-aio-mastercontainer; then
     fi
 fi
 
-if [[ $CMD == start ]] || [[ $CMD == stop ]]; then
+if [[ -z "$*" ]] && { [[ $CMD == start ]] || [[ $CMD == stop ]]; }; then
     readarray -t CONTAINERS < <(docker ps -a --format '{{ .Names }}' | grep -v nextcloud-aio)
     docker "$CMD" "${CONTAINERS[@]}" &>/dev/null
 fi
