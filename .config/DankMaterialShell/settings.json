@@ -454,7 +454,12 @@
         "memUsage",
         "notificationButton",
         "battery",
-        "controlCenterButton"
+        {
+          "id": "controlCenterButton",
+          "enabled": true,
+          "showAudioPercent": true,
+          "showMicIcon": true
+        }
       ],
       "spacing": 4,
       "innerPadding": 4,
