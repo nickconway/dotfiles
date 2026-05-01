@@ -34,7 +34,7 @@ trap clean ERR EXIT
 CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/config/config"
 
 if [[ -e "$ZMK_CONFIG_DIR/extra-modules" ]]; then
-    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$(ls "$ZMK_CONFIG_DIR"/extra-modules | while read -r M; do echo /config/extra-modules/$M; done | xargs | sed 's/ /,/g')"
+    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$(find "$ZMK_CONFIG_DIR"/extra-modules | while read -r M; do echo /config/extra-modules/$M; done | xargs | sed 's/ /,/g')"
 fi
 
 cd "$ZMK_DIR"
