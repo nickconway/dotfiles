@@ -53,6 +53,11 @@ function _stop() {
     docker compose stop
 }
 
+function _down() {
+    _cd "$1" || return 1
+    docker compose down
+}
+
 function _update() {
     _cd "$1" || return 1
     docker compose up -d --pull=always --build
