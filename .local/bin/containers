@@ -33,19 +33,43 @@ function _start() {
 
     _cd "$1" || return 1
 
-    yq '.services[].volumes' compose.yml | sed 's/^- //' | sed 's/\.\///' | cut -d ':' -f 1 | while read -r P; do
-        P="$(echo "$P" | tr -d '"' | tr -d "'" | envsubst)"
-
-        if [[ "$P" != *'.'* ]] && [[ "$P" != null ]]; then
-            mkdir -p "$P"
+    (
+        if [[ -e .env ]]; then
+            source <(
+                while read -r line; do
+                    if grep -q '^export'; then
+                        echo $line
+                    else
+                        echo "export $line"
+                    fi
+                done <.env
+            )
         fi
-    done
+
+        yq '.services[].volumes' compose.yml | sed 's/^- //' | sed 's/\.\///' | cut -d ':' -f 1 | while read -r P; do
+            P="$(if grep ':' <<<"$P"; then
+                echo "$P" | tr -d '"' | tr -d "'" | envsubst
+            fi)"
+
+            if [[ -n "$P" ]] && [[ "$P" != *'.'* ]] && [[ "$P" != null ]] && [[ ! -e "$P" ]]; then
+                mkdir -p "$P"
+            fi
+        done
+    ) || true
 
     if [[ -e setup ]]; then
         ./setup
     fi
 
     docker compose up -d --build
+}
+
+function _status() {
+    _cd "$1" || return 1
+    if [[ $(docker compose ps | wc -l) -eq 1 ]]; then
+        echo "$1 not up"
+        exit 1
+    fi
 }
 
 function _stop() {
@@ -134,15 +158,15 @@ else
     run -t "$(basename "$0") $CMD \$D" "$(basename "$0") _$CMD \$D" "${TARGETS[@]}"
 fi
 
-if docker ps | grep -q nextcloud-aio-mastercontainer; then
-    if [[ $CMD == start ]]; then
-        docker exec -it nextcloud-aio-mastercontainer sudo -u www-data php /var/www/docker-aio/php/src/Cron/StartContainers.php
-    elif [[ $CMD == stop ]]; then
-        docker exec -it nextcloud-aio-mastercontainer sudo -u www-data php /var/www/docker-aio/php/src/Cron/StopContainers.php
-    fi
-fi
-
 if [[ -z "$*" ]] && { [[ $CMD == start ]] || [[ $CMD == stop ]]; }; then
+    if docker ps | grep -q nextcloud-aio-mastercontainer; then
+        if [[ $CMD == start ]]; then
+            docker exec -it nextcloud-aio-mastercontainer sudo -u www-data php /var/www/docker-aio/php/src/Cron/StartContainers.php
+        elif [[ $CMD == stop ]]; then
+            docker exec -it nextcloud-aio-mastercontainer sudo -u www-data php /var/www/docker-aio/php/src/Cron/StopContainers.php
+        fi
+    fi
+
     readarray -t CONTAINERS < <(docker ps -a --format '{{ .Names }}' | grep -v nextcloud-aio)
     docker "$CMD" "${CONTAINERS[@]}" &>/dev/null
 fi

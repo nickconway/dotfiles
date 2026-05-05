@@ -49,7 +49,7 @@ for D in "${TARGETS[@]}"; do
     INNER_CMD=("$(envsubst <<<"$CMD_INIT")")
     TITLE="$(envsubst <<<"${OG_TITLE:-}")"
 
-    CMD=("$SHELL" -lc "export DEBUG_MODE=${DEBUG_MODE:-} && { ${INNER_CMD[@]}; } | tee $TMP")
+    CMD=("$SHELL" -lc "export DEBUG_MODE=${DEBUG_MODE:-} && { ${INNER_CMD[@]}; } &> $TMP")
 
     if command -v gum &>/dev/null; then
         CMD=(gum spin --title "${TITLE:-${INNER_CMD[@]}}" -- "${CMD[@]}")
