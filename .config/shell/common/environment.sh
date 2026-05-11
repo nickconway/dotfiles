@@ -34,6 +34,9 @@ if [[ -e ~/.local/go/go ]]; then
     export PATH="$GOROOT"/bin:$PATH
 fi
 
+export ASDF_DATA_DIR="/$HOME/.asdf"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+
 export GOPATH=~/.local/go/packages
 export PATH="$GOPATH"/bin:$PATH
 
