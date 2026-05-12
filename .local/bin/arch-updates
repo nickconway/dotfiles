@@ -30,7 +30,7 @@ esac
 
 # If the parameter is "update", update all services
 if [ "$1" = "update" ]; then
-    hyprworkspace special update
+    hyprctl dispatch 'hl.dsp.focus({ workspace = "special:update" })'
 fi
 
 # If there aren't any parameters, return the total number of updates

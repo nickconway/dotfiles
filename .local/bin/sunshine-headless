@@ -12,10 +12,10 @@ fi
 
 if [[ "$1" == "disable" ]]; then
     hyprctl reload
-    hyprctl keyword monitor Sunshine,disable
 elif [[ "$1" == "enable" ]]; then
     for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v sunshine); do
-        hyprctl keyword monitor "$m,disabled"
+        hyprctl eval "hl.monitor({ output = '$m', disabled = true })"
     done
-    hyprctl keyword monitor Sunshine,3840x2160@60,auto,1
+
+    hyprctl eval 'hl.monitor({ output = "Sunshine", mode = "3840x2160@120" })'
 fi

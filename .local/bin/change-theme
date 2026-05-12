@@ -84,6 +84,8 @@ else
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" || true
 fi
 
+_cp ~/.cache/wal/colors-hyprland.lua ~/.config/hypr/include/colors.lua
+
 _cp ~/.cache/wal/gradience.json ~/.config/presets/user/pywal.json
 
 _cp ~/.cache/wal/pywal.kvconfig ~/.config/Kvantum/pywal/pywal.kvconfig
@@ -119,7 +121,7 @@ for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
         }
 done
 
-qs -c dms ipc call wallpaper set "$IMG" &>/dev/null ||
+dms ipc call wallpaper set "$IMG" &>/dev/null ||
     {
         FILE="$HOME/.local/state/DankMaterialShell/session.json"
         jq ".wallpaperPath=\"$IMG\"" "$FILE" >"$FILE.new" &&

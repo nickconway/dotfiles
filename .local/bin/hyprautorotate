@@ -77,12 +77,11 @@ function rotate() {
             PLACEMENT=0x0
         fi
 
-        hyprctl --batch keyword monitor "$NAME, ${WIDTH}x${HEIGHT}@${REFRESH}, $PLACEMENT, $SCALE, transform, $NEW_TRANSFORM, bitdepth, 10" >/dev/null
+        hyprctl eval "hl.monitor({ output = '$NAME', mode = '${WIDTH}x${HEIGHT}@${REFRESH}', position = '$PLACEMENT', scale = '$SCALE', transform = '$NEW_TRANSFORM', bitdepth = 10 })" >/dev/null
         notify-send -e Auto-Rotate "$NAME set to $ORIENTATION" -h string:synchronous:auto-rotate-$NAME
     done < <(hyprctl monitors -j | jq -rc ".[]")
 
-    hyprctl keyword input:touchdevice:transform "$NEW_TRANSFORM" >/dev/null
-    hyprctl keyword input:tablet:transform "$NEW_TRANSFORM" >/dev/null
+    hyprctl eval "hl.config({ input = { touchdevice = { transform = $NEW_TRANSFORM }, tablet = { transform = $NEW_TRANSFORM } } })"
 }
 
 export -f rotate

@@ -15,7 +15,7 @@ if pgrep -afx "qs .*caelestia.*" &>/dev/null; then
 elif pgrep -afx "qs .*noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call notifications toggleHistory
 elif pgrep -afx "qs .*dms.*" &>/dev/null; then
-    qs -c dms ipc call notifications toggle
+    dms ipc call notifications toggle
 else
     swaync-client -t
 fi

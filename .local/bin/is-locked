@@ -12,7 +12,7 @@ fi
 
 if { pgrep -afx "qs .*caelestia.*" &>/dev/null && [[ $(qs -c caelestia ipc call lock isLocked) == true ]]; } ||
     { pgrep -afx "qs .*noctalia.*" &>/dev/null && [[ $(qs -c noctalia ipc call lockScreen isLocked) == true ]]; } ||
-    { pgrep -afx "qs .*dms.*" &>/dev/null && [[ $(qs -c dms ipc call lock isLocked) == true ]]; } ||
+    { pgrep -afx "qs .*dms.*" &>/dev/null && [[ $(dms ipc call lock isLocked) == true ]]; } ||
     pidof hyprlock; then
     echo true
     exit 0
