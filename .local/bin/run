@@ -56,9 +56,9 @@ for D in "${TARGETS[@]}"; do
     fi
 
     if ("${CMD[@]}"); then
-        echo -e "$GREEN$RESET ${TITLE:-${INNER_CMD[@]}}"
+        echo -e "${GREEN}$RESET ${TITLE:-${INNER_CMD[@]}}"
     else
-        echo -e "$RED$RESET ${TITLE:-${INNER_CMD[@]}}"
+        echo -e "${RED}$RESET ${TITLE:-${INNER_CMD[@]}}"
 
         if [[ -n "$(cat "$TMP")" ]]; then
             echo -e $RED-----------------------------------------------------------$RESET

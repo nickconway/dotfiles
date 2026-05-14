@@ -22,9 +22,9 @@ function load-venv() {
     local venv_path
     venv_path="$(find-up .venv || find-up venv)"
 
-    if [[ -n "${venv_path}" ]] && [[ -z "${VIRTUAL_ENV}" ]]; then
+    if [[ -n "${venv_path}" ]] && [[ -z "${VIRTUAL_ENV:-}" ]]; then
         source "${venv_path}/bin/activate"
-    elif [[ -z "${venv_path}" ]] && [[ -n "${VIRTUAL_ENV}" ]]; then
+    elif [[ -z "${venv_path}" ]] && [[ -n "${VIRTUAL_ENV:-}" ]]; then
         deactivate
     fi
 }
