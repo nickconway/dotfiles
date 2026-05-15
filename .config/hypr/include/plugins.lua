@@ -10,9 +10,9 @@ if hl.plugin.darkwindow ~= nil then
         introduces_transparency = true,
     })
 
-    hl.plugin.darkwindow.load_shader("grayscale", {
-        path = "~/.config/hypr/shaders/grayscale.glsl",
-        args = "scale=1",
-        introduces_transparency = false,
-    })
+    -- hl.plugin.darkwindow.load_shader("grayscale", {
+    --     path = "~/.config/hypr/shaders/grayscale.glsl",
+    --     args = "scale=1",
+    --     introduces_transparency = false,
+    -- })
 end
