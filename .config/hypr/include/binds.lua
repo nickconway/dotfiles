@@ -4,9 +4,8 @@ Bind = function(keys, action, opts)
     hl.bind(table.concat(keys, " + "), action, opts or {})
 end
 
-if hl.plugin.darkwindow ~= nil and BackgroundRed then
-    Bind(
-        { MainMod, "SHIFT", "O" },
+Bind({ MainMod, "SHIFT", "O" }, function()
+    if hl.plugin.darkwindow and BackgroundRed and BackgroundGreen and BackgroundBlue then
         hl.plugin.darkwindow.dsp_shade({
             shader = "multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=["
                 .. BackgroundRed
@@ -17,8 +16,10 @@ if hl.plugin.darkwindow ~= nil and BackgroundRed then
                 .. "] bg[1]=[0 0 0]",
             window = "activewindow",
         })
-    )
-end
+    else
+        hl.notification.create({ text = "Darkwindow plugin not setup", timeout = 5000 })
+    end
+end)
 
 Bind({ MainMod, "Return" }, hl.dsp.exec_cmd("TMUX_AUTO_SESSION=y kitty"))
 

@@ -1,0 +1,49 @@
+Run = function(fn)
+    local f = io.popen(fn)
+    if f == nil then
+        return ""
+    end
+    local out = f:read("l")
+    f:close()
+    return out
+end
+
+if Run("hostnamectl hostname") == "desktop" then
+    Bind({ MainMod, "B" }, hl.dsp.focus({ window = "chromium" }))
+    Bind({ MainMod, "T" }, hl.dsp.focus({ window = "kitty" }))
+    Bind({ MainMod, "D" }, hl.dsp.focus({ window = "flatpak run dev.vencord.Vesktop" }))
+    Bind({ MainMod, "M" }, hl.dsp.focus({ window = "thunderbird" }))
+    Bind({ MainMod, "F" }, hl.dsp.focus({ window = "feishin" }))
+
+    hl.workspace_rule({ workspace = "1", monitor = "DP-1", default = true })
+    hl.workspace_rule({ workspace = "2", monitor = "DP-2", default = true })
+    hl.workspace_rule({ workspace = "3", monitor = "DP-3", default = true })
+
+    hl.on("hyprland.start", function()
+        hl.exec_cmd("[workspace 1 silent] chromium")
+        hl.exec_cmd("[workspace 2 silent] kitty")
+        hl.exec_cmd("[workspace 2 silent] flatpak run dev.vencord.Vesktop")
+        hl.exec_cmd("[workspace 2 silent] thunderbird-beta")
+        hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
+        hl.exec_cmd("[workspace 3 silent] chromium --app='https://messages.google.com/web'")
+        hl.exec_cmd("[workspace 3 silent] flatpak run app.bluebubbles.BlueBubbles")
+        hl.exec_cmd("[workspace 3 silent] chromium --app='https://x.com'")
+    end)
+elseif Run("hostnamectl hostname") == "laptop" then
+    Bind({ MainMod, "B" }, hl.dsp.focus({ workspace = "1" }))
+    Bind({ MainMod, "T" }, hl.dsp.focus({ workspace = "2" }))
+    Bind({ MainMod, "D" }, hl.dsp.focus({ workspace = "3" }))
+    Bind({ MainMod, "X" }, hl.dsp.focus({ workspace = "4" }))
+    Bind({ MainMod, "M" }, hl.dsp.focus({ workspace = "5" }))
+    Bind({ MainMod, "F" }, hl.dsp.focus({ workspace = "6" }))
+
+    hl.workspace_rule({ workspace = "1", on_created_empty = "chromium" })
+    hl.workspace_rule({ workspace = "2", on_created_empty = "kitty" })
+    hl.workspace_rule({ workspace = "3", on_created_empty = "flatpak run dev.vencord.Vesktop" })
+    hl.workspace_rule({
+        workspace = "4",
+        on_created_empty = "chromium --app='https://messages.google.com/web' & flatpak run app.bluebubbles.BlueBubbles",
+    })
+    hl.workspace_rule({ workspace = "5", on_created_empty = "thunderbird-beta" })
+    hl.workspace_rule({ workspace = "6", on_created_empty = "feishin --ozone-platform-hint=auto" })
+end

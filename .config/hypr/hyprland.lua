@@ -14,10 +14,9 @@ else
     file:close()
 end
 
-require("include.colors")
-
 require("include.animations")
 require("include.binds")
+require("include.colors")
 require("include.config")
 require("include.env")
 require("include.gestures")
