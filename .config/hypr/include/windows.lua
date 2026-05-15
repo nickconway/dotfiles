@@ -1,8 +1,20 @@
--- if BackgroundRed then
--- hl.window_rule({ match = { title = "^(Picture in picture)$" }, darkwindow:shade "none"})
--- hl.window_rule({ match = { class = "^(feh)$" }, darkwindow:shade "none"})
--- hl.window_rule({ match = { fullscreen = "false" }, darkwindow:shade multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=[$backgroundRed $backgroundGreen $backgroundBlue] bg[1]=[0 0 0]})
--- end
+if hl.plugin.darkwindow ~= nil then
+    hl.window_rule({ match = { title = "^(Picture in picture)$" }, ["darkwindow:shade"] = "none" })
+    hl.window_rule({ match = { class = "^(feh)$" }, ["darkwindow:shade"] = "none" })
+
+    if BackgroundRed then
+        hl.window_rule({
+            match = { fullscreen = "false" },
+            ["darkwindow:shade"] = "multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=["
+                .. BackgroundRed
+                .. " "
+                .. BackgroundGreen
+                .. " "
+                .. BackgroundBlue
+                .. "] bg[1]=[0 0 0]",
+        })
+    end
+end
 
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.window_rule({ match = { class = ".*" }, idle_inhibit = "fullscreen" })

@@ -4,12 +4,19 @@ Bind = function(keys, action, opts)
     hl.bind(table.concat(keys, " + "), action, opts or {})
 end
 
-if BackgroundRed then
+if hl.plugin.darkwindow ~= nil and BackgroundRed then
     Bind(
         { MainMod, "SHIFT", "O" },
-        hl.dsp.event(
-            "darkwindow:shadeactive, multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=[$backgroundRed $backgroundGreen $backgroundBlue] bg[1]=[0 0 0]"
-        )
+        hl.plugin.darkwindow.dsp_shade({
+            shader = "multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=["
+                .. BackgroundRed
+                .. " "
+                .. BackgroundGreen
+                .. " "
+                .. BackgroundBlue
+                .. "] bg[1]=[0 0 0]",
+            window = "activewindow",
+        })
     )
 end
 
