@@ -39,7 +39,7 @@ Bind({ "ALT", "SPACE" }, hl.dsp.exec_cmd("launcher"))
 
 Bind({ MainMod, "R" }, hl.dsp.exec_cmd("toggle bit-depth"))
 
-Bind({ MainMod, "P" }, hl.dsp.exec_cmd("RBW_PROFILE=hyprland nohup picker password &>/dev/null"))
+Bind({ MainMod, "P" }, hl.dsp.exec_cmd("RBW_PROFILE=gui nohup picker password &>/dev/null"))
 
 Bind({ MainMod, "SUPER_L" }, hl.dsp.exec_cmd("toggle bar"))
 Bind({ MainMod, "SUPER_R" }, hl.dsp.exec_cmd("toggle bar"))
