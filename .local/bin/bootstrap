@@ -101,17 +101,17 @@ else
     eval "$(ssh-agent)"
 fi
 
-mkdir -p ~/Git
+mkdir -p "$PROJECT_DIR"
 
-if ! [[ -e ~/Git/ansible ]]; then
-    git clone https://github.com/nickconway/ansible ~/Git/ansible &>/dev/null
+if ! [[ -e "$PROJECT_DIR"/ansible ]]; then
+    git clone https://github.com/nickconway/ansible "$PROJECT_DIR"/ansible &>/dev/null
 fi
 
-cd ~/Git/ansible
+cd "$PROJECT_DIR"/ansible
 git remote set-url origin git@github.com:nickconway/ansible --push
 git pull &>/dev/null
 
-ansible-run -l localhost ~/Git/ansible/bootstrap/main.yml "$@"
+ansible-run -l localhost "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
 
 if [[ -n $NTFY_TOKEN ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null

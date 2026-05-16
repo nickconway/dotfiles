@@ -26,12 +26,12 @@ while getopts "i:" arg; do
 done
 shift $((OPTIND - 1))
 
-if [[ ! -e ~/Git/homelab ]]; then
-    git clone https://github.com/nickconway/homelab ~/Git/homelab --recurse-submodules
+if [[ ! -e "$PROJECT_DIR"/homelab ]]; then
+    git clone https://github.com/nickconway/homelab "$PROJECT_DIR"/homelab --recurse-submodules
     NEW=true
 fi
 
-cd ~/Git/homelab
+cd "$PROJECT_DIR"/homelab
 git remote set-url origin https://github.com/nickconway/homelab
 git remote set-url origin git@github.com:nickconway/homelab --push
 

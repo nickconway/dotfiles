@@ -11,9 +11,9 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 mkdir -p ~/.config/quickshell
-mkdir -p ~/Git
+mkdir -p "$PROJECT_DIR"
 
-cd ~/Git
+cd "$PROJECT_DIR"
 gh repo clone nickconway/quickshell || git clone https://github.com/nickconway/quickshell || true
 cd quickshell
 git pull
@@ -21,7 +21,7 @@ cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
 cmake --build build
 sudo cmake --install build
 
-cd ~/Git
+cd "$PROJECT_DIR"
 gh repo clone nickconway/caelestia-cli || git clone https://github.com/nickconway/caelestia-cli || true
 cd caelestia-cli
 git pull
@@ -34,7 +34,7 @@ python -m build --wheel
 sudo python -m installer dist/*.whl
 sudo cp completions/caelestia.fish /usr/share/fish/vendor_completions.d/caelestia.fish
 
-cd ~/Git
+cd "$PROJECT_DIR"
 gh repo clone nickconway/caelestia || git clone https://github.com/nickconway/caelestia.git || true
 cd caelestia
 git pull
@@ -43,20 +43,20 @@ cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
 cmake --build build
 sudo cmake --install build
 
-cd ~/Git
+cd "$PROJECT_DIR"
 gh repo clone nickconway/noctalia-shell || git clone https://github.com/nickconway/noctalia-shell || true
 cd noctalia-shell
 git pull
 
-cd ~/Git
+cd "$PROJECT_DIR"
 gh repo clone nickconway/DankMaterialShell || git clone https://github.com/nickconway/DankMaterialShell || true
 cd DankMaterialShell
 git pull
 sudo make install
 
-rm -rf ~/.config/quickshell/dms && cp -r ~/Git/DankMaterialShell/quickshell ~/.config/quickshell/dms
-rm -rf ~/.config/quickshell/noctalia && cp -r ~/Git/noctalia-shell ~/.config/quickshell/noctalia
-rm -rf ~/.config/quickshell/caelestia && cp -r ~/Git/caelestia ~/.config/quickshell/caelestia
+rm -rf ~/.config/quickshell/dms && cp -r "$PROJECT_DIR"/DankMaterialShell/quickshell ~/.config/quickshell/dms
+rm -rf ~/.config/quickshell/noctalia && cp -r "$PROJECT_DIR"/noctalia-shell ~/.config/quickshell/noctalia
+rm -rf ~/.config/quickshell/caelestia && cp -r "$PROJECT_DIR"/caelestia ~/.config/quickshell/caelestia
 
 for q in $(basename "$(dirname "$(qs list --all | grep Config | cut -d ':' -f 2)")" | xargs); do
     qs -c $q kill &>/dev/null

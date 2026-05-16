@@ -538,7 +538,7 @@ function reload() {
 function repos() {
     (
         set -euo pipefail
-        cd ~/Git || return
+        cd "$PROJECT_DIR" || return
         gh repo list --json name -q ".[].name" | run "gh repo $*"
         curl -fsSL -H "Authorization: token $GITEA_TOKEN" "https://git.$SERVICES_BASE_DOMAIN/api/v1/user/repos?page=1&limit=10000" | jq -r '.[].ssh_url' | run "git $*"
     )

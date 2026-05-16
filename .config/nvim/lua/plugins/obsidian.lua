@@ -13,8 +13,8 @@ return {
         "BufReadPre " .. os.getenv("NOTES_DIR") .. "/**.md",
         "BufNewFile " .. os.getenv("NOTES_DIR") .. "/**.md",
 
-        "BufReadPre " .. vim.fn.expand("~") .. "/Git/blog/**.md",
-        "BufNewFile " .. vim.fn.expand("~") .. "/Git/blog/**.md",
+        "BufReadPre " .. os.getenv("PROJECT_DIR") .. "/blog/**.md",
+        "BufNewFile " .. os.getenv("PROJECT_DIR") .. "/blog/**.md",
     },
     dependencies = {
         "nvim-lua/plenary.nvim",
@@ -34,7 +34,7 @@ return {
             },
             {
                 name = "Blog",
-                path = "~/Git/blog",
+                path = os.getenv("PROJECT_DIR") .. "/blog",
             },
         },
         daily_notes = {
