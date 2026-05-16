@@ -42,7 +42,7 @@ function rotate() {
             continue
         fi
 
-        PLACEMENT=$(grep $NAME ~/.config/hypr/include/monitors.conf | grep -o 'auto\S*' | tr -d ,)
+        PLACEMENT=$(grep $NAME ~/.config/hypr/include/monitors.lua | grep -o 'auto\S*' | tr -d ,)
 
         case "$ORIENTATION" in
         left-up)

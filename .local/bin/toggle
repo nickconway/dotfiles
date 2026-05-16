@@ -34,12 +34,12 @@ bit-depth)
             BITDEPTH=8
         fi
 
-        if ! grep -q "$MONITOR" ~/.config/hypr/include/monitors.conf; then
+        if ! grep -q "$MONITOR" ~/.config/hypr/include/monitors.lua; then
             continue
         fi
 
-        K="$(grep "$MONITOR" ~/.config/hypr/include/monitors.conf | sed -r "s/bitdepth, \w+/bitdepth, $BITDEPTH/" | sed 's/monitor = //' | xargs)"
-        hyprctl --batch "keyword monitor $K"
+        K="$(grep "^hl.monitor.*$MONITOR" ~/.config/hypr/include/monitors.lua | sed -r "s/bitdepth = \w+/bitdepth = $BITDEPTH/")"
+        hyprctl eval "$K"
         notify-send -e "Set $MONITOR to bitdepth of $BITDEPTH" -h string:synchronous:bitdepth-"$MONITOR"
     done
     ;;
@@ -69,7 +69,7 @@ dnd)
 scaling)
     shift
 
-    config_file="$HOME/.config/hypr/include/monitors.conf"
+    config_file="$HOME/.config/hypr/include/monitors.lua"
 
     monitor_config=$(sed -n '1p' "$config_file" | cut -d ' ' -f 3-)
     primay_monitor=$(echo "$monitor_config" | awk '{print $1}' | tr -d ",")
