@@ -10,6 +10,42 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+function get-board() {
+    if [[ -z "${board}" ]]; then
+        board="$(
+            (
+                cd "$ZMK_CONFIG_DIR/.."
+                yq '.board.name' $(fd board.yml)
+                yq '.include[].board' $(fd build.yaml)
+            ) | grep '\w' | sort | uniq | fzf
+        )"
+    fi
+
+    BUILD_FLAGS+=(-b "${board}")
+}
+
+function get-shield() {
+    if [[ -z "${shield}" ]]; then
+        shield="$(
+            (
+                cd $ZMK_DIR/app/boards/shields && fd --type d
+                cd $ZMK_CONFIG_DIR/config/boards/shields && fd --type d
+            ) | tr -d '/' | sort | uniq | fzf
+        )"
+    fi
+}
+
+function get-modules() {
+    if [[ -e "$ZMK_CONFIG_DIR/extra-modules" ]] && [[ -z "${modules:-}" ]]; then
+        modules="$(
+            cd "$ZMK_CONFIG_DIR"/extra-modules
+            fd --type d --max-depth 1 | tr -d '/' | fzf | while read -r M; do
+                echo /config/extra-modules/$M
+            done | xargs | sed 's/ /,/g'
+        )"
+    fi
+}
+
 function clean() {
     if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi.bkp ]]; then
         mv "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{.bkp,}
@@ -33,10 +69,6 @@ trap clean ERR EXIT
 
 CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/config/config"
 
-if [[ -e "$ZMK_CONFIG_DIR/extra-modules" ]]; then
-    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$(find "$ZMK_CONFIG_DIR"/extra-modules | while read -r M; do echo /config/extra-modules/$M; done | xargs | sed 's/ /,/g')"
-fi
-
 cd "$ZMK_DIR"
 
 function run() {
@@ -49,7 +81,7 @@ function run() {
 }
 
 function get-dirs() {
-    OLD_BASE="${1:-}"
+    OLD_BASE="${shield:-}"
 
     BASE="$OLD_BASE"
     BASE="${BASE%_left}"
@@ -68,10 +100,10 @@ function get-dirs() {
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
             if [[ $niceview == true ]]; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
-                BUILD_DIRS+=("$BASE/nice-view${niceview_ext:+-$niceview_ext}/left")
+                BUILD_DIRS+=("$board/$BASE/nice-view${niceview_ext:+-$niceview_ext}/left")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_left")
-                BUILD_DIRS+=("$BASE/left")
+                BUILD_DIRS+=("$board/$BASE/left")
             fi
 
             SHIELDS+=("${BASE}_left")
@@ -80,10 +112,10 @@ function get-dirs() {
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
             if [[ $niceview == true ]]; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
-                BUILD_DIRS+=("$BASE/nice-view${niceview_ext:+-$niceview_ext}/right")
+                BUILD_DIRS+=("$board/$BASE/nice-view${niceview_ext:+-$niceview_ext}/right")
             else
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_right")
-                BUILD_DIRS+=("$BASE/right")
+                BUILD_DIRS+=("$board/$BASE/right")
             fi
 
             SHIELDS+=("${BASE}_right")
@@ -91,17 +123,17 @@ function get-dirs() {
     else
         if [[ $niceview == true ]]; then
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
-            BUILD_DIRS+=("$BASE/nice-view${niceview_ext:+-$niceview_ext}")
+            BUILD_DIRS+=("$board/$BASE/nice-view${niceview_ext:+-$niceview_ext}")
         else
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}")
-            BUILD_DIRS+=("$BASE")
+            BUILD_DIRS+=("$board/$BASE")
         fi
 
         SHIELDS+=("$BASE")
     fi
 
     if [[ $reset == true ]]; then
-        BUILD_FLAGS=(-b nice_nano)
+        BUILD_FLAGS=(-b "$board")
         CMAKE_ARGS=("-DSHIELD=settings_reset")
 
         length=${#BUILD_DIRS[@]}
@@ -127,6 +159,8 @@ function build() {
         Remove: [-m*, -f*]
 EOF
 
+    get-board
+    get-shield
     get-dirs "$@"
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
@@ -137,14 +171,6 @@ EOF
         run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
         gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "run west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
     done
-
-    if [[ $flash == true ]]; then
-        flash "$@"
-    fi
-
-    if [[ $log == true ]]; then
-        log "$@"
-    fi
 }
 
 function wait-for-dev() {
@@ -162,6 +188,8 @@ function wait-for-complete() {
 export -f run wait-for-dev wait-for-complete
 
 function flash() {
+    get-board
+    get-shield
     get-dirs "$@"
 
     for ((index = $((${#BUILD_DIRS[@]} - 1)); index >= 0; index--)); do
@@ -179,11 +207,7 @@ function flash() {
 }
 
 function log() {
-    if [[ -n "$search" ]]; then
-        if [[ "$passthrough" == true ]]; then
-            RG_FLAGS+=("--passthrough")
-        fi
-
+    if [[ -n "${RG_FLAGS:-}" ]]; then
         (sudo tio /dev/ttyACM0) </dev/tty | rg "${RG_FLAGS[@]}"
     else
         (sudo tio /dev/ttyACM0) </dev/tty
@@ -191,31 +215,37 @@ function log() {
 }
 
 function test() {
-    run bash -xc "${TEST_ARGS[*]} west test tests/${1:-}"
+    run bash -xc "${TEST_ARGS[*]} west test tests/${shield}"
 }
 
 function update() {
     run bash -c "cd ${1:-.} && west update --fetch-opt=--filter=tree:0 && west zephyr-export"
 }
 
+board=
+modules=
+shield=
 snippet=
-flash=false
-log=false
 niceview=false
 reset=false
-search=
-passthrough=false
 
 BUILD_FLAGS=()
 TEST_ARGS=()
 
-while getopts ':b:fglnoprs:v' flag; do
+while getopts ':b:g:lmnoprs:v' flag; do
     case "${flag}" in
-    b) board="${OPTARG:-nice_nano}" ;;
-    f) flash=true ;;
+    b) board="${OPTARG}" ;;
+    g) RG_FLAGS+=(-i "$OPTARG") ;;
     l)
         BUILD_FLAGS+=(-S zmk-usb-logging)
-        log=true
+        ;;
+    m)
+        eval "$(get-opt-arg $OPTIND "$@")"
+        if [[ -n "$OPTARG" ]]; then
+            modules="/config/extra-modules/$OPTARG"
+        else
+            modules="$(get-modules)"
+        fi
         ;;
     n)
         eval "$(get-opt-arg $OPTIND "$@")"
@@ -224,18 +254,20 @@ while getopts ':b:fglnoprs:v' flag; do
         ;;
     o) RG_FLAGS+=(--passthrough) ;;
     p) BUILD_FLAGS+=(-p) ;;
-    s) RG_FLAGS+=(-i "$OPTARG") ;;
     r) reset=true ;;
+    s) shield="$OPTARG" ;;
     v) TEST_ARGS+=("ZMK_TESTS_VERBOSE=y") ;;
     *) continue ;;
     esac
 done
 shift $((OPTIND - 1))
 
-BUILD_FLAGS+=(-b "${board:-nice_nano}")
+if [[ -n "$modules" ]]; then
+    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$modules"
+fi
 
 if ! docker image inspect zmk &>/dev/null; then
-    docker build -t .devcontainer
+    docker build .devcontainer -t zmk
 fi
 
 if [[ ! -e .west ]]; then
@@ -248,4 +280,6 @@ if [[ ! -e "$ZMK_CONFIG_DIR"/.west ]]; then
     update /config/config
 fi
 
-"$@"
+for c in "$@"; do
+    "$c"
+done
