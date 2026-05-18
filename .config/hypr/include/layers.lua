@@ -33,3 +33,7 @@ hl.layer_rule({ match = { namespace = "noctalia-background-.*$" }, ignore_alpha 
 hl.layer_rule({ match = { namespace = "dms.*" }, blur = true })
 hl.layer_rule({ match = { namespace = "dms.*" }, blur_popups = true })
 hl.layer_rule({ match = { namespace = "dms.*" }, ignore_alpha = 0.4 })
+
+hl.layer_rule({ match = { namespace = "vicinae" }, blur = true })
+hl.layer_rule({ match = { namespace = "vicinae" }, blur_popups = true })
+hl.layer_rule({ match = { namespace = "vicinae" }, ignore_alpha = 0 })

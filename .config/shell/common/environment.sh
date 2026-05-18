@@ -82,7 +82,7 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 export TMUXP_CONFIGDIR=$HOME/.config/tmuxp/
 
-export FZF_DEFAULT_OPTS='--reverse --min-height 20 --cycle -m --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(80%|20%|hidden|)"
+export FZF_DEFAULT_OPTS='--tmux --reverse --min-height 20 --cycle -m --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(80%|20%|hidden|)"
     --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up --bind ctrl-a:select-all
     --color=fg:7,fg+:15,bg:-1,bg+:-1,gutter:-1,info:11,prompt:10,spinner:12,pointer:14,marker:13,border:7,header:9,label:7,hl:10
     --gutter " "
@@ -127,7 +127,7 @@ export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc-2.0
 
 command -v dircolors &>/dev/null && eval "$(dircolors)"
 
-export JUST_CHOOSER='fzft --preview="just --color always --show {}"'
+export JUST_CHOOSER='fzf --preview="just --color always --show {}"'
 
 export TESSDATA_PREFIX=~/.local/share/tessdata
 
@@ -150,7 +150,7 @@ command -v atuin >/dev/null && eval "$(atuin init $SHELL_NAME --disable-up-arrow
 command -v direnv &>/dev/null && export DIRENV_LOG_FORMAT=$'\033[95m󰓴 \033[94m%s\033[0m' && eval "$(direnv hook $SHELL_NAME)"
 
 _fzf_git_fzf() {
-    fzft \
+    fzf \
         --border \
         --tmux center,80% \
         --preview-window='right,50%,border-left' \

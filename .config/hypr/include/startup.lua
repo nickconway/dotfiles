@@ -24,6 +24,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("LOG=y install-yeetmouse")
     hl.exec_cmd("localsend --hidden")
     hl.exec_cmd("mic-inhibit")
+    hl.exec_cmd("vicinae server")
 
     hl.exec_cmd("hyprautorotate")
     hl.exec_cmd("zenbook-duo-auto-brightness")

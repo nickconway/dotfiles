@@ -16,7 +16,7 @@ function pick() {
     fi
 
     if [[ -t 0 ]]; then
-        CMD=(fzft "${FZF_FLAGS[@]}")
+        CMD=(fzf "${FZF_FLAGS[@]}")
     else
         CMD=(rofi "${ROFI_FLAGS[@]}")
     fi

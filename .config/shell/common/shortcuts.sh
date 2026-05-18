@@ -16,7 +16,7 @@ alias 8='cd -8'
 alias 9='cd -9'
 
 alias a='ansible'
-alias ah='ansible-doc --list | awk "{print \$1}" | fzft --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
+alias ah='ansible-doc --list | awk "{print \$1}" | fzf --preview "ansible-doc {1}" --preview-window=right:70% | xargs ansible-doc'
 alias ap='ansible-playbook'
 alias apl='ansible-playbook --limit localhost'
 alias av='ansible-vault'
@@ -32,7 +32,7 @@ function atuin-fix() {
     atuin sync
 }
 
-alias awsp='export AWS_PROFILE="$(grep "\[" ~/.aws/credentials | cut -c 2- | rev | cut -c 2- | rev | fzft)"'
+alias awsp='export AWS_PROFILE="$(grep "\[" ~/.aws/credentials | cut -c 2- | rev | cut -c 2- | rev | fzf)"'
 
 alias nf='fastfetch'
 alias pf='fastfetch'
@@ -66,7 +66,7 @@ function dr() {
     if [[ $# -gt 0 ]]; then
         docker restart $@
     else
-        local SELECTED=$(docker ps -a --format {{.Names}} | fzft --prompt=" > ")
+        local SELECTED=$(docker ps -a --format {{.Names}} | fzf --prompt=" > ")
         [[ -z $SELECTED ]] || docker restart $SELECTED
     fi
 }
@@ -105,7 +105,7 @@ alias dnb='dotnet build'
 alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
 function fn() {
-    local SELECTED="$(fzft --preview="bat --color=always --style=plain {}")"
+    local SELECTED="$(fzf --preview="bat --color=always --style=plain {}")"
     [[ -n "$SELECTED" ]] && echo "$SELECTED" | xargs -d '\n' $EDITOR
 }
 
@@ -179,7 +179,7 @@ function ggp() {
 function gi() {
     if [[ $# -eq 0 ]]; then
         local GI_TYPE="$(curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n" |
-            fzft --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
+            fzf --preview="curl -sfLw '\n' https://www.toptal.com/developers/gitignore/api/{} | bat -l 'Git Ignore' --color=always --style=plain")"
     else
         local GI_TYPE="$(echo $@ | sed "s/ /,/g")"
     fi
@@ -264,7 +264,7 @@ function gwta() {
 }
 
 function grl() {
-    git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzft --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" |
+    git reflog --format='%Cred%h - %C(blue)%gd%C(auto)%d %Creset%gs' --color | fzf --min-height=20 --border --tmux center,80% --preview-window='right,50%,border-left' --reverse --ansi --border-label ' Reflogs ' --preview "git show --color=always {3} | delta" "$@" |
         awk '{print $3}'
 }
 
@@ -272,7 +272,7 @@ function ghc() {
     mkdir -p $PROJECT_DIR
     (
         cd $PROJECT_DIR
-        GH_FORCE_TTY=100% gh repo list | tail -n +5 | fzft --tmux center,80% --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --border-label " Clone GitHub Repo " --preview-window down | awk '{print $1}' | xargs gh repo clone
+        GH_FORCE_TTY=100% gh repo list | tail -n +5 | fzf --tmux center,80% --ansi --preview 'GH_FORCE_TTY=100% gh repo view {1}' --border-label " Clone GitHub Repo " --preview-window down | awk '{print $1}' | xargs gh repo clone
     )
 }
 
@@ -281,11 +281,11 @@ function ghpr() {
         echo "Not inside a git repository"
         return
     fi
-    GH_FORCE_TTY=100% gh pr list -L 1000 | tail -n +5 | fzft --tmux center,80% --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --border-label " Checkout PR " --preview-window down | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | tail -n +5 | fzf --tmux center,80% --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --border-label " Checkout PR " --preview-window down | awk '{print $1}' | xargs gh pr checkout
 }
 
 function ghprm() {
-    GH_FORCE_TTY=100% gh pr list -L 1000 | tail -n +5 | fzft --tmux center,80% --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --border-label " Merge PR " --preview-window down | awk '{print $1}' | xargs gh pr checkout
+    GH_FORCE_TTY=100% gh pr list -L 1000 | tail -n +5 | fzf --tmux center,80% --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --border-label " Merge PR " --preview-window down | awk '{print $1}' | xargs gh pr checkout
     gsw -
     gm -
 }
@@ -562,7 +562,7 @@ function sci() {
 
 function tldr() {
     if [[ $# -eq 0 ]]; then
-        ~/.cargo/bin/tldr --list | fzft --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs ~/.cargo/bin/tldr --color=always
+        ~/.cargo/bin/tldr --list | fzf --preview 'tldr {1} --color=always' --preview-window=right:70% | xargs ~/.cargo/bin/tldr --color=always
         return
     fi
     ~/.cargo/bin/tldr $@
@@ -600,7 +600,7 @@ function tl() {
     if [[ $# -gt 0 ]]; then
         SELECTED="$1"
     else
-        SELECTED=$(tmuxp ls | fzft --preview "bat --color=always --style=plain ~/.config/tmuxp/{}.yaml")
+        SELECTED=$(tmuxp ls | fzf --preview "bat --color=always --style=plain ~/.config/tmuxp/{}.yaml")
     fi
     test -n "$SELECTED" && TMUXP_START_DIR="$PWD" TMUXP_SESSION_NAME=$(basename "$PWD" | tr . _) tmuxp load "$SELECTED" -y >/dev/null
 }

@@ -34,6 +34,7 @@ application/zip=org.gnome.Nautilus.desktop
 x-scheme-handler/opendeck=opendeck-handler.desktop
 x-scheme-handler/openaction=opendeck-handler.desktop
 x-scheme-handler/streamdeck=opendeck-handler.desktop
+x-scheme-handler/discord=vesktop.desktop
 
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird Beta-UQFEP3.desktop;userapp-Thunderbird Beta-LQLHT2.desktop;

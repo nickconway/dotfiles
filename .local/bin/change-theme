@@ -103,6 +103,7 @@ _cp ~/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof
 _cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-3.0/gtk.css
 _cp ~/.config/wal/templates/colors-gtk.css ~/.config/gtk-4.0/gtk.css
 
+_cp ~/.cache/wal/vesktop.css ~/.config/vesktop/themes/pywal.theme.css
 _cp ~/.cache/wal/vesktop.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
 
 echo "\$WALLPAPER = $IMG" >~/.config/hypr/include/wallpaper.conf

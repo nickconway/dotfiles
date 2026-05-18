@@ -42,7 +42,7 @@ SELECTED="$(
         "${RG_CMD[@]}" --color=never "$QUERY" "${FILES[@]}"
     else
         RG_CMD+=('{q}' "${FILES[@]}")
-        fzft --ansi --disabled --query "$QUERY" \
+        fzf --ansi --disabled --query "$QUERY" \
             --bind "start:reload:${RG_CMD[*]} || true" \
             --bind "change:reload:sleep 0.1; ${RG_CMD[*]} || true" \
             --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~  ]] &&

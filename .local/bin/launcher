@@ -10,7 +10,9 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-if pgrep -afx "qs .*caelestia.*" &>/dev/null; then
+if pgrep -af "vicinae-server" &>/dev/null; then
+    vicinae toggle
+elif pgrep -afx "qs .*caelestia.*" &>/dev/null; then
     qs -c caelestia ipc call drawers toggle launcher
 elif pgrep -afx "qs .*noctalia.*" &>/dev/null; then
     qs -c noctalia ipc call launcher toggle

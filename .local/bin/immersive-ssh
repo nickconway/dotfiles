@@ -22,7 +22,7 @@ else
         echo "$KNOWN_HOSTS"
         echo "$TAILSCALE_HOSTS"
         echo "$TAILSCALE_WSL_HOSTS"
-    ) | sort | uniq | awk NF | fzft --prompt=" > " --border-label ' SSH ')
+    ) | sort | uniq | awk NF | fzf --prompt=" > " --border-label ' SSH ')
 fi
 
 if [[ -z $SELECTED ]]; then

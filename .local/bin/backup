@@ -43,7 +43,7 @@ function create() {
 function restore() {
     [[ -e "$BORG_REPO" ]]
 
-    ARCHIVE="$(borg list | fzft --tac | awk '{print $1}')"
+    ARCHIVE="$(borg list | fzf --tac | awk '{print $1}')"
     echo Restoring "$ARCHIVE"
     borg extract --debug --progress ::"$ARCHIVE" "${@}"
 }
