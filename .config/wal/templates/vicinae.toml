@@ -14,7 +14,7 @@ border = "#2a241c"
 
 [colors.main_window]
 border = "#2a241c"
-footer = { background = "colors.core.secondary_background" }
+footer = {{ background = "colors.core.secondary_background" }
 
 [colors.settings_window]
 border = "#2a241c"
@@ -53,8 +53,8 @@ border_error = "#b9543b"
 [colors.button.primary]
 background = "#1c1d23"
 foreground = "{foreground}"
-hover = { background = "#bb1c1d23" }
-focus = { outline = "colors.core.accent" }
+hover = {{ background = "#bb1c1d23" }
+focus = {{ outline = "colors.core.accent" }
 
 [colors.list.item.hover]
 foreground = "{foreground}"

@@ -87,8 +87,8 @@ fi
 
 _cp ~/.cache/wal/colors-hyprland.lua ~/.config/hypr/include/colors.lua
 
-mkdir -p ~/.config/vicinae/themes
-_cp ~/.cache/wal/vicinae.toml ~/.config/vicinae/themes/pywal.toml
+_cp ~/.cache/wal/vicinae.toml ~/.local/share/vicinae/themes/pywal.toml
+vicinae theme set pywal &>/dev/null || true
 
 _cp ~/.cache/wal/gradience.json ~/.config/presets/user/pywal.json
 
