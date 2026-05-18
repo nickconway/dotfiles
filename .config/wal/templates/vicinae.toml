@@ -1,0 +1,79 @@
+[meta]
+name = "Vicinae Pywal"
+description = "Pywal Vicinae"
+variant = "dark"
+inherits = "vicinae-dark"
+
+[colors.core]
+accent = "{color1}"
+accent_foreground = "{background}"
+background = "{background}"
+foreground = "{foreground}"
+secondary_background = "#15161b"
+border = "#2a241c"
+
+[colors.main_window]
+border = "#2a241c"
+footer = { background = "colors.core.secondary_background" }
+
+[colors.settings_window]
+border = "#2a241c"
+
+[colors.accents]
+blue = "#2f6fed"
+green = "#3a9c61"
+magenta = "#bc8cff"
+orange = "#f0883e"
+red = "#b9543b"
+yellow = "#c9a76e"
+cyan = "#18a5b3"
+purple = "#bc8cff"
+
+# For now, shortcuts cannot have their own dedicated background
+[colors.shortcut]
+border = "colors.core.border"
+
+[colors.text]
+default = "colors.core.foreground"
+muted = "#a8a29e"
+danger = "#b9543b"
+success = "#3a9c61"
+placeholder = "#78716c"
+selection = { background = "{color1}", foreground = "{background}" }
+
+[colors.text.links]
+default = "#c9a76e"
+visited = "#bc8cff"
+
+[colors.input]
+border = "#2a241c"
+border_focus = "{color1}"
+border_error = "#b9543b"
+
+[colors.button.primary]
+background = "#1c1d23"
+foreground = "{foreground}"
+hover = { background = "#bb1c1d23" }
+focus = { outline = "colors.core.accent" }
+
+[colors.list.item.hover]
+foreground = "{foreground}"
+secondary_foreground = "{foreground}"
+
+[colors.list.item.selection]
+background = "#1c1d23"
+foreground = "{foreground}"
+secondary_background = "#1c1d23"
+secondary_foreground = "{foreground}"
+
+[colors.grid.item]
+background = "#15161b"
+hover = { outline = "{foreground}" }
+selection = { outline = "{foreground}" }
+
+[colors.scrollbars]
+background = "#2a241c"
+
+[colors.loading]
+bar = "{color1}"
+spinner = "{foreground}"
