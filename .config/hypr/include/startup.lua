@@ -23,7 +23,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("steam -silent")
     hl.exec_cmd("LOG=y install-yeetmouse")
     hl.exec_cmd("localsend --hidden")
-    hl.exec_cmd("mic-inhibit")
     hl.exec_cmd("vicinae server")
 
     hl.exec_cmd("hyprautorotate")
