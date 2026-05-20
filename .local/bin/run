@@ -10,7 +10,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-eval "$(get-options "-t,--title:OG_TITLE='\$ARG'" -- "$@")"
+eval "$(get-options "-t, --title: OG_TITLE='\$ARG'" -- "$@")"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

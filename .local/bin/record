@@ -23,7 +23,7 @@ function audio() {
 }
 
 function term() {
-    eval "$(get-options "-h,--height:HEIGHT='\$ARG'" "-t,--title:TITLE='\$ARG'" "-p,--profile:PROFILE='\$ARG'" "-w,--width:WIDTH='\$ARG'" -- "$@")"
+    eval "$(get-options "-h, --height: HEIGHT='\$ARG'" "-t, --title: TITLE='\$ARG'" "-p, --profile: PROFILE='\$ARG'" "-w, --width: WIDTH='\$ARG'" -- "$@")"
 
     NAME="${ARGS[0]:-out}"
 

@@ -16,7 +16,7 @@ VAL=
 CAELESTIA=$(pgrep -afx "qs .*caelestia.*" || echo "")
 NOCTALIA=$(pgrep -afx "qs .*noctalia.*" || echo "")
 
-eval "$(get-options "-a,--all:ALL=true" -- "$@")"
+eval "$(get-options "-a, --all: ALL=true" -- "$@")"
 
 case ${ARGS[0]:-} in
 set)

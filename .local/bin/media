@@ -13,7 +13,7 @@ fi
 PLAYER=
 PLAYERCTL_FLAGS=(-i plasma-browser-integration)
 
-eval "$(get-options "-a,--all:PLAYERCTL_FLAGS+=(-a)" "-n,--no-notification:NO_NOTIFICATION=true" "-o,--player:PLAYER='\$ARG'" -- "$@")"
+eval "$(get-options "-a, --all: PLAYERCTL_FLAGS+=(-a)" "-n, --no-notification: NO_NOTIFICATION=true" "-o, --player: PLAYER='\$ARG'" -- "$@")"
 
 if [[ -n $PLAYER ]]; then
     PLAYERCTL_FLAGS+=(-p "$PLAYER")

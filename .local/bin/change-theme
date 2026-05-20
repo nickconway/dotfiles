@@ -27,12 +27,12 @@ eight=
 
 METHOD=lighten
 
-OPTS_STRING=("-l,--light:light=true")
-OPTS_STRING+=("-m,--method:light='\$ARG'")
-OPTS_STRING+=("-n,--noctalia:noctalia=true")
-OPTS_STRING+=("-r,--random:random=true")
-OPTS_STRING+=("-R,--reload:reload=true")
-OPTS_STRING+=("-8,--eight:eight=true")
+OPTS_STRING+=("-l, --light: light=true")
+OPTS_STRING+=("-m, --method: light='\$ARG'")
+OPTS_STRING+=("-n, --noctalia: noctalia=true")
+OPTS_STRING+=("-r, --random: random=true")
+OPTS_STRING+=("-R, --reload: reload=true")
+OPTS_STRING+=("-8, --eight: eight=true")
 
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 

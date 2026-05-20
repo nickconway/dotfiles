@@ -23,7 +23,7 @@ fi
 
 F=c
 
-eval "$(get-options "-f,--force:F=" -- "$@")"
+eval "$(get-options "-f, --force: F=" -- "$@")"
 
 FIND="${ARGS[0]}"
 REPLACE="${ARGS[1]}"

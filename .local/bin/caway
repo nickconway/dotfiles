@@ -28,7 +28,7 @@ BARS=8
 FRAMERATE=60
 EQUILIZER=1
 
-eval "$(get-options "-b,--bars:BARS='\$ARG" "-f,--frames:FRAMERATE='\$ARG'" "-e,--no-eq:EQUILIZER=0" "-h,--help:usage" -- "$@")"
+eval "$(get-options "-b, --bars: BARS='\$ARG" "-f, --frames: FRAMERATE='\$ARG'" "-e, --no-eq: EQUILIZER=0" "-h, --help: usage" -- "$@")"
 
 bar="▁▂▃▄▅▆▇█"
 dict="s/;//g;"

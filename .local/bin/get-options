@@ -27,7 +27,7 @@ for F in "${OPTS_ARR[@]}"; do
     ACTION="$(cut -d ':' -f 2- <<<"$F")"
     IFS=',' read -ra FL <<<"$OPTS"
     for L in "${FL[@]}"; do
-        FLAGS+=("$L:$ACTION")
+        FLAGS+=("$(sed 's/^\s\+//' <<<"$L"):$(sed 's/^\s\+//' <<<"$ACTION")")
     done
 done
 

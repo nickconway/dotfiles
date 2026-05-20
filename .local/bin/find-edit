@@ -10,7 +10,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-eval "$(get-options "-a,--all:ALL=true" -- "$@")"
+eval "$(get-options "-a, --all: ALL=true" -- "$@")"
 
 rm -f /tmp/rg-fzf-{r,f}
 

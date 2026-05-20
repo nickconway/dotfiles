@@ -18,7 +18,7 @@ function clean() {
     done
 }
 
-eval "$(get-options "-i,--id:HEALTHCHECK_ID='\$ARG'" -- "$@")"
+eval "$(get-options "-i, --id: HEALTHCHECK_ID='\$ARG'" -- "$@")"
 
 if [[ ! -e "$PROJECT_DIR"/homelab ]]; then
     git clone https://github.com/nickconway/homelab "$PROJECT_DIR"/homelab --recurse-submodules

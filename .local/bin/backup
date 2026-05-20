@@ -57,7 +57,7 @@ function talos() {
 }
 
 trap clean EXIT ERR
-eval "$(get-options "-i,--id:HEALTHCHECK_ID='\$ARG'" -- "$@")"
+eval "$(get-options "-i, --id: HEALTHCHECK_ID='\$ARG'" -- "$@")"
 
 export BORG_EXIT_CODES=modern
 DATE=$(date +"%d-%b-%Y-%H-%M-%S")
