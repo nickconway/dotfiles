@@ -129,6 +129,7 @@ if [[ -e ~/.config/zsh/fzf-tab/fzf-tab.zsh ]]; then
     zstyle ':fzf-tab:*eza*' accept-line enter
 
     zstyle ':fzf-tab:*' switch-group '<' '>'
+    zstyle ':fzf-tab:*' use-fzf-default-opts yes
 fi
 
 set -o vi

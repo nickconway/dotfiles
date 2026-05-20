@@ -10,13 +10,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-while getopts 'a' flag; do
-    case "${flag}" in
-    a) ALL=true ;;
-    *) continue ;;
-    esac
-done
-shift $((OPTIND - 1))
+eval "$(get-options "-a,--all:ALL=true" -- "$@")"
 
 rm -f /tmp/rg-fzf-{r,f}
 
@@ -28,14 +22,13 @@ else
     RG_CMD+=("'!{**/node_modules/*,**/.github/*,**/.git/*}'")
 fi
 
-QUERY="${1:-}"
-shift || true
+QUERY="${ARGS[0]:-}"
 
 if [[ -p /dev/stdin ]]; then
     readarray -t FILES
 fi
 
-FILES+=("$@")
+FILES+=("${ARGS[@]:1}")
 
 SELECTED="$(
     if [[ ${ALL:-} == true ]]; then
@@ -62,21 +55,24 @@ SELECTED="$(
 
 COMMANDS=()
 FILES=()
+
 while read -r LINE; do
     FILE=$(echo $LINE | awk -F ':' '{print $1}')
     ROW=$(echo $LINE | awk -F ':' '{print $2}')
     COL=$(echo $LINE | awk -F ':' '{print $3}')
     COORDS="${ROW}G${COL}|"
 
+    for F in "${FILES[@]}"; do
+        if [[ "$FILE" == "$F" ]]; then
+            FILE=
+        fi
+    done
+
     if [[ ! -e "$FILE" ]]; then
         continue
     fi
 
-    if [[ "${FILES[*]}" == *"$FILE"* ]]; then
-        continue
-    fi
-
-    COMMAND="execute 'e $FILE | +normal $COORDS'"
+    COMMAND="execute \"e $FILE | normal $COORDS\""
     COMMAND="${COMMAND//\#/\\#}"
     COMMAND="${COMMAND//\%/\\%}"
 

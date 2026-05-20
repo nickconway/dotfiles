@@ -18,13 +18,7 @@ function clean() {
     done
 }
 
-while getopts "i:" arg; do
-    case $arg in
-    i) HEALTHCHECK_ID=$OPTARG ;;
-    *) continue ;;
-    esac
-done
-shift $((OPTIND - 1))
+eval "$(get-options "-i,--id:HEALTHCHECK_ID='\$ARG'" -- "$@")"
 
 if [[ ! -e "$PROJECT_DIR"/homelab ]]; then
     git clone https://github.com/nickconway/homelab "$PROJECT_DIR"/homelab --recurse-submodules

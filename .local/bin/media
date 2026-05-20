@@ -12,25 +12,12 @@ fi
 
 PLAYER=
 PLAYERCTL_FLAGS=(-i plasma-browser-integration)
-while getopts 'ano:' f; do
-    case $f in
-    a)
-        PLAYERCTL_FLAGS+=(-a)
-        ;;
 
-    n)
-        SHOW_NOTIFICATION=false
-        ;;
-    o)
-        PLAYER="$OPTARG"
-        PLAYERCTL_FLAGS+=(-p "$PLAYER")
-        ;;
-    *) continue ;;
-    esac
-done
-shift $((OPTIND - 1))
+eval "$(get-options "-a,--all:PLAYERCTL_FLAGS+=(-a)" "-n,--no-notification:NO_NOTIFICATION=true" "-o,--player:PLAYER='\$ARG'" -- "$@")"
 
-if [[ -z $PLAYER ]] && [[ -e /tmp/current-player ]]; then
+if [[ -n $PLAYER ]]; then
+    PLAYERCTL_FLAGS+=(-p "$PLAYER")
+elif [[ -z $PLAYER ]] && [[ -e /tmp/current-player ]]; then
     PLAYER="$(cat /tmp/current-player)"
 elif [[ -z $PLAYER ]]; then
     PLAYER="$(playerctl -l | head -n 1)"
@@ -86,4 +73,12 @@ function show() {
     fi
 }
 
-"$@" || { "${PLAYERCTL_CMD[@]}" "$@" && if [[ "${SHOW_NOTIFICATION:-}" != false ]]; then show; fi; }
+if type "${ARGS[0]:-}" &>/dev/null; then
+    "${ARGS[@]}"
+else
+    "${PLAYERCTL_CMD[@]}" "${ARGS[@]}"
+
+    if [[ -z "${NO_NOTIFICATION:-}" ]]; then
+        show
+    fi
+fi

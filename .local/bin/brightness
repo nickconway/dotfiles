@@ -16,30 +16,24 @@ VAL=
 CAELESTIA=$(pgrep -afx "qs .*caelestia.*" || echo "")
 NOCTALIA=$(pgrep -afx "qs .*noctalia.*" || echo "")
 
-while getopts ':a' flag; do
-    case "${flag}" in
-    a) ALL=true ;;
-    *) continue ;;
-    esac
-done
-shift $((OPTIND - 1))
+eval "$(get-options "-a,--all:ALL=true" -- "$@")"
 
-case ${1:-} in
+case ${ARGS[0]:-} in
 set)
-    VAL="$2"
+    VAL="${ARGS[1]}"
     ;;
 
 raise)
-    VAL="+${2:-1%}"
+    VAL="+${ARGS[1]:-1%}"
     ;;
 
 lower)
-    VAL="${2:-1%}-"
+    VAL="${ARGS[1]:-1%}-"
     ;;
 
 show | get)
     SHOW=true
-    NAME="${2:-}"
+    NAME="${ARGS[1]:-}"
     ;;
 esac
 
@@ -61,7 +55,7 @@ else
     if [[ -z ${NAME:-} ]]; then
         BRIGHTNESS=$(brightnessctl -m | awk -F ',' '{print $4}')
     else
-        BRIGHTNESS=$(brightnessctl -m -d "$2" | awk -F ',' '{print $4}')
+        BRIGHTNESS=$(brightnessctl -m -d "${ARGS[1]}" | awk -F ',' '{print $4}')
     fi
 
     BRIGHTNESS="$(echo $BRIGHTNESS | rev | cut -c 2- | rev)"

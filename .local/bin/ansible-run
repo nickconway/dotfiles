@@ -10,38 +10,30 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-EXTRA_ARGS=()
-while getopts ':l:t' flag; do
-    case "${flag}" in
-    l) HOSTS="$OPTARG" ;;
-    *)
-        eval "$(get-opt-arg $OPTIND "$@")"
-        EXTRA_ARGS+=("-$flag" "$OPTARG")
-        ;;
-    esac
-done
-shift $((OPTIND - 1))
+eval "$(get-options "-l,--hosts:HOSTS='\$ARG'" -- "$@")"
 
-PLAYBOOK=${1:-main.yml}
-shift || true
+if command -v systemd-inhibit &>/dev/null; then
+    CMD+=(systemd-inhibit)
+fi
 
+PLAYBOOK="${ARGS[0]:-main.yml}"
 cd "$(dirname "$PLAYBOOK")"
 get-vars ansible
 
-UV_CMD=(uvx --from ansible-core)
-
+CMD+=(uvx --from ansible-core)
 REQUIREMENTS="$(find-up requirements.txt)"
+
 if [[ -n "$REQUIREMENTS" ]]; then
-    UV_CMD+=(--with-requirements "$REQUIREMENTS")
+    CMD+=(--with-requirements "$REQUIREMENTS")
 fi
 
-ANSIBLE_CMD=(ansible-playbook "$PLAYBOOK")
+CMD+=(-- ansible-playbook "$PLAYBOOK")
 
 if grep -qr "^\$ANSIBLE_VAULT"; then
     if ansible-vault-password &>/dev/null; then
-        ANSIBLE_CMD+=(--vault-id ~/.local/bin/ansible-vault-password)
+        CMD+=(--vault-id ~/.local/bin/ansible-vault-password)
     else
-        ANSIBLE_CMD+=(--ask-vault-pass)
+        CMD+=(--ask-vault-pass)
     fi
 fi
 
@@ -49,8 +41,7 @@ for C in "community.general" "ansible.posix" "community.crypto"; do
     uvx --from ansible-core ansible-galaxy collection install "$C" >/dev/null
 done
 
-if command -v systemd-inhibit &>/dev/null; then
-    systemd-inhibit "${UV_CMD[@]}" "${ANSIBLE_CMD[@]}" -l "!$(uname -n)${HOSTS:+,$HOSTS}" "${EXTRA_ARGS[@]}" "$@"
-else
-    "${UV_CMD[@]}" "${ANSIBLE_CMD[@]}" -l "!$(uname -n)${HOSTS:+,$HOSTS}" "${EXTRA_ARGS[@]}" "$@"
-fi
+CMD+=("${ARGS[@]:1}")
+CMD+=(-l "!$(uname -n)${HOSTS:+,$HOSTS}")
+
+"${CMD[@]}"

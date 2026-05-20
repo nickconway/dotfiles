@@ -23,21 +23,13 @@ fi
 
 F=c
 
-while getopts 'f' flag; do
-    case "${flag}" in
-    f) F= ;;
-    *) continue ;;
-    esac
-done
-shift $((OPTIND - 1))
+eval "$(get-options "-f,--force:F=" -- "$@")"
 
-FIND="$1"
-REPLACE="$2"
+FIND="${ARGS[0]}"
+REPLACE="${ARGS[1]}"
+SEARCH=("${ARGS[@]:2}")
 
-shift
-shift
-
-read -ra FILES < <(rg --smart-case -l "$FIND" "${*:-.}" | xargs)
+read -ra FILES < <(rg --smart-case -l "$FIND" "${SEARCH[@]}" | xargs)
 
 if [[ -n "${FILES:-}" ]] && [[ ${#FILES} -gt 0 ]]; then
     CMD=(

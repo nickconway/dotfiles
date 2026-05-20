@@ -71,7 +71,7 @@ CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/config/config"
 
 cd "$ZMK_DIR"
 
-function run() {
+function zmk-run() {
     docker run \
         -v "${ZMK_DIR}":/workspace \
         -v "${ZMK_CONFIG_DIR}":/config \
@@ -168,8 +168,8 @@ EOF
             BUILD_FLAGS+=(-p)
         fi
 
-        run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
-        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "run west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
+        zmk-run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
+        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "zmk-run west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
     done
 }
 
@@ -185,7 +185,7 @@ function wait-for-complete() {
     done
 }
 
-export -f run wait-for-dev wait-for-complete
+export -f zmk-run wait-for-dev wait-for-complete
 
 function flash() {
     get-board
@@ -215,14 +215,15 @@ function log() {
 }
 
 function test() {
-    run bash -xc "${TEST_ARGS[*]} west test tests/${shield}"
+    zmk-run bash -xc "${TEST_ARGS[*]} west test tests/${shield}"
 }
 
 function update() {
-    run bash -c "cd ${1:-.} && west update --fetch-opt=--filter=tree:0 && west zephyr-export"
+    zmk-run bash -c "cd ${1:-.} && west update --fetch-opt=--filter=tree:0 && west zephyr-export"
 }
 
 board=
+module_flag=
 modules=
 shield=
 snippet=
@@ -232,35 +233,21 @@ reset=false
 BUILD_FLAGS=()
 TEST_ARGS=()
 
-while getopts ':b:g:lmnoprs:v' flag; do
-    case "${flag}" in
-    b) board="${OPTARG}" ;;
-    g) RG_FLAGS+=(-i "$OPTARG") ;;
-    l)
-        BUILD_FLAGS+=(-S zmk-usb-logging)
-        ;;
-    m)
-        eval "$(get-opt-arg $OPTIND "$@")"
-        if [[ -n "$OPTARG" ]]; then
-            modules="/config/extra-modules/$OPTARG"
-        else
-            modules="$(get-modules)"
-        fi
-        ;;
-    n)
-        eval "$(get-opt-arg $OPTIND "$@")"
-        niceview=true
-        niceview_ext=$OPTARG
-        ;;
-    o) RG_FLAGS+=(--passthrough) ;;
-    p) BUILD_FLAGS+=(-p) ;;
-    r) reset=true ;;
-    s) shield="$OPTARG" ;;
-    v) TEST_ARGS+=("ZMK_TESTS_VERBOSE=y") ;;
-    *) continue ;;
-    esac
-done
-shift $((OPTIND - 1))
+OPTS_STRING+=("-b,--board:board='\$ARG'")
+OPTS_STRING+=("-g,--search:RG_FLAGS+=(-i '\$ARG')")
+OPTS_STRING+=("-l,--log:BUILD_FLAGS+=(-S zmk-usb-logging)")
+OPTS_STRING+=("-m,--modules:module_flag=true\; modules='\$ARG'")
+OPTS_STRING+=("-n,--nice-view:niceview=true\; niceview_ext='\$ARG'")
+OPTS_STRING+=("-o,--passthrough,--passthru:RG_FLAGS+=(--passthrough)")
+OPTS_STRING+=("-p,--pristine:BUILD_FLAGS+=(-p)")
+OPTS_STRING+=("-r,--reset:reset=true")
+OPTS_STRING+=("-s,--shield:shield='\$ARG'")
+OPTS_STRING+=("-v,--verbose:TEST_ARGS+=('ZMK_TESTS_VERBOSE=y')")
+eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
+
+if [[ -n "$module_flag" ]] && [[ -z "$modules" ]]; then
+    get-modules
+fi
 
 if [[ -n "$modules" ]]; then
     CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$modules"
@@ -271,15 +258,15 @@ if ! docker image inspect zmk &>/dev/null; then
 fi
 
 if [[ ! -e .west ]]; then
-    run bash -c "west init -l ."
+    zmk-run bash -c "west init -l ."
     update
 fi
 
 if [[ ! -e "$ZMK_CONFIG_DIR"/.west ]]; then
-    run bash -c "cd /config/config && west init -l ."
+    zmk-run bash -c "cd /config/config && west init -l ."
     update /config/config
 fi
 
-for c in "$@"; do
+for c in "${ARGS[@]}"; do
     "$c"
 done

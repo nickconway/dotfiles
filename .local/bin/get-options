@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+for ARG in "$@"; do
+    if [[ "$ARG" == -- ]]; then
+        shift
+        break
+    fi
+    OPTS_ARR+=("$ARG")
+    shift
+done
+
+ARGS=()
+FLAGS=()
+
+for F in "${OPTS_ARR[@]}"; do
+    OPTS="$(cut -d ':' -f 1 <<<"$F")"
+    ACTION="$(cut -d ':' -f 2- <<<"$F")"
+    IFS=',' read -ra FL <<<"$OPTS"
+    for L in "${FL[@]}"; do
+        FLAGS+=("$L:$ACTION")
+    done
+done
+
+function opt-arg() {
+    IND=$(($1 + 1))
+    shift
+
+    TOKEN=${!IND:-}
+
+    if [[ -n $TOKEN && $TOKEN != -* ]]; then
+        echo "$TOKEN"
+    fi
+}
+
+i=1
+while [[ $i -le $# ]]; do
+    FOUND=
+
+    for F in "${FLAGS[@]}"; do
+        OPT=$(cut -d ':' -f 1 <<<"$F")
+        ACTION=$(cut -d ':' -f 2 <<<"$F")
+
+        if [[ "${!i}" == "$OPT" ]]; then
+            OPT_ARG="$(if grep -q '$ARG' <<<"$ACTION"; then opt-arg $i "$@"; fi)"
+            echo "${ACTION//\$ARG/$OPT_ARG}"
+            FOUND=true
+
+            if [[ -n "$OPT_ARG" ]]; then
+                i=$((i + 1))
+            fi
+
+            break
+        fi
+    done
+
+    if [[ -z "$FOUND" ]]; then
+        ARGS+=("${!i}")
+    fi
+
+    i=$((i + 1))
+done
+
+if [[ "${#ARGS[@]}" -gt 0 ]]; then
+    echo -n 'ARGS+=('
+    for a in "${ARGS[@]}"; do
+        echo -n "'$a' "
+    done
+    echo ')'
+fi

@@ -20,32 +20,28 @@ function _cp() {
 
 export YAZI_CONFIG_HOME=~/.config/yazi/wal
 
-reload='false'
-random='false'
-light='false'
-eight='false'
+reload=
+random=
+light=
+eight=
 
 METHOD=lighten
 
-while getopts 'lm:rR8' flag; do
-    case "${flag}" in
-    l) light=true ;;
-    m) METHOD="$OPTARG" ;;
-    n) noctalia=true ;;
-    r) random=true ;;
-    R) reload=true ;;
-    8) eight=true ;;
-    *) ;;
-    esac
-done
-shift $((OPTIND - 1))
+OPTS_STRING=("-l,--light:light=true")
+OPTS_STRING+=("-m,--method:light='\$ARG'")
+OPTS_STRING+=("-n,--noctalia:noctalia=true")
+OPTS_STRING+=("-r,--random:random=true")
+OPTS_STRING+=("-R,--reload:reload=true")
+OPTS_STRING+=("-8,--eight:eight=true")
+
+eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 
 if [[ "$reload" == "true" ]]; then
     INPUT="$(cat ~/.cache/wal/wal)"
 elif [[ "$random" == "true" ]]; then
-    INPUT="$WALLPAPER_DIR"
-elif [[ -n "${1:-}" ]]; then
-    INPUT="$1"
+    INPUT="$WALLPAPER_DIR-"
+elif [[ -n "${ARGS[0]:-}" ]]; then
+    INPUT="${ARGS[0]}"
 else
     INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
 fi

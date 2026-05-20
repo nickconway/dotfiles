@@ -23,18 +23,9 @@ function audio() {
 }
 
 function term() {
-    while getopts ':h:t:p:w:' flag; do
-        case "${flag}" in
-        h) HEIGHT=$OPTARG ;;
-        t) TITLE=$OPTARG ;;
-        p) PROFILE=$OPTARG ;;
-        w) WIDTH=$OPTARG ;;
-        *) ;;
-        esac
-    done
-    shift $((OPTIND - 1))
+    eval "$(get-options "-h,--height:HEIGHT='\$ARG'" "-t,--title:TITLE='\$ARG'" "-p,--profile:PROFILE='\$ARG'" "-w,--width:WIDTH='\$ARG'" -- "$@")"
 
-    NAME="${1:-out}"
+    NAME="${ARGS[0]:-out}"
 
     [[ -n "${NVM_DIR:-}" ]] && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 

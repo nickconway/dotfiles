@@ -10,13 +10,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-while getopts ':t:' flag; do
-    case "${flag}" in
-    t) OG_TITLE="$OPTARG" ;;
-    *) continue ;;
-    esac
-done
-shift $((OPTIND - 1))
+eval "$(get-options "-t,--title:OG_TITLE='\$ARG'" -- "$@")"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -29,14 +23,13 @@ fi
 
 shopt -s dotglob
 
-CMD_INIT="$1"
-shift
+CMD_INIT="${ARGS[0]}"
 
 if [[ -p /dev/stdin ]]; then
     readarray -t TARGETS
 fi
 
-TARGETS+=("${@}")
+TARGETS+=("${ARGS[@]:1}")
 
 if [[ -z "${TARGETS:-}" ]]; then
     TARGETS+=(*)
