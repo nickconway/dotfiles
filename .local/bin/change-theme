@@ -41,7 +41,7 @@ eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 if [[ "$reload" == "true" ]]; then
     INPUT="$(cat ~/.cache/wal/wal)"
 elif [[ "$random" == "true" ]]; then
-    INPUT="$WALLPAPER_DIR-"
+    INPUT="$WALLPAPER_DIR"
 elif [[ -n "${ARGS[0]:-}" ]]; then
     INPUT="${ARGS[0]}"
 else
