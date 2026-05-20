@@ -10,6 +10,10 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+if [[ -e ~/.env ]]; then
+    source ~/.env
+fi
+
 function _cp() {
     if [[ ! -e "$1" ]]; then return; fi
     local DIR
@@ -17,8 +21,6 @@ function _cp() {
     mkdir -p "$DIR" || sudo mkdir -p "$DIR"
     cp "${@}" &>/dev/null || sudo cp "${@}"
 }
-
-export YAZI_CONFIG_HOME=~/.config/yazi/wal
 
 reload=
 random=
@@ -43,7 +45,7 @@ elif [[ "$random" == "true" ]]; then
 elif [[ -n "${ARGS[0]:-}" ]]; then
     INPUT="${ARGS[0]}"
 else
-    INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && yazi --chooser-file /tmp/wallpaper && cat /tmp/wallpaper)"
+    INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | vicinae dmenu -p "Choose a wallpaper")"
 fi
 
 WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT")

@@ -52,7 +52,7 @@ Bind({ MainMod, "P" }, hl.dsp.exec_cmd("RBW_PROFILE=gui nohup picker password &>
 Bind({ MainMod, "SUPER_L" }, hl.dsp.exec_cmd("toggle bar"))
 Bind({ MainMod, "SUPER_R" }, hl.dsp.exec_cmd("toggle bar"))
 
-Bind({ MainMod, "SHIFT", "C" }, hl.dsp.workspace.toggle_special("theme"))
+Bind({ MainMod, "SHIFT", "C" }, hl.dsp.exec_cmd("change-theme"))
 Bind({ MainMod, "Grave" }, hl.dsp.workspace.toggle_special("scratch"))
 Bind({ MainMod, "SHIFT", "U" }, hl.dsp.workspace.toggle_special("update"))
 
