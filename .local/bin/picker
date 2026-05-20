@@ -59,6 +59,21 @@ if [[ -p /dev/stdin ]]; then
 fi
 
 case ${1:-} in
+all)
+    if pgrep -af "vicinae-server" &>/dev/null; then
+        vicinae toggle
+    elif pgrep -afx "qs .*caelestia.*" &>/dev/null; then
+        qs -c caelestia ipc call drawers toggle launcher
+    elif pgrep -afx "qs .*noctalia.*" &>/dev/null; then
+        qs -c noctalia ipc call launcher toggle
+    elif pgrep -afx "qs .*dms.*" &>/dev/null; then
+        dms ipc call launcher toggle
+    else
+        rofi -show drun -config ~/.config/rofi/styles/style_2.rasi
+    fi
+    exit
+    ;;
+
 clipboard)
     LIST=$(mktemp)
     cliphist list >$LIST

@@ -43,7 +43,7 @@ end)
 Bind({ MainMod, "M" }, hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"))
 Bind({ MainMod, "SHIFT", "M" }, hl.dsp.exec_cmd("~/.config/rofi/scripts/music-menu"))
 
-Bind({ "ALT", "SPACE" }, hl.dsp.exec_cmd("launcher"))
+Bind({ "ALT", "SPACE" }, hl.dsp.exec_cmd("picker all"))
 
 Bind({ MainMod, "R" }, hl.dsp.exec_cmd("toggle bit-depth"))
 

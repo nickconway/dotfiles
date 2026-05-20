@@ -5,7 +5,7 @@ variant = "dark"
 inherits = "vicinae-dark"
 
 [colors.core]
-accent = "{color1}"
+accent = "{color9}"
 accent_foreground = "{background}"
 background = "{background}"
 foreground = "{foreground}"
@@ -39,7 +39,7 @@ muted = "#a8a29e"
 danger = "#b9543b"
 success = "#3a9c61"
 placeholder = "{background.lighten(50%)}"
-selection = { background = "{color1}", foreground = "{background}" }
+selection = { background = "{color9}", foreground = "{background}" }
 
 [colors.text.links]
 default = "#c9a76e"
@@ -47,7 +47,7 @@ visited = "#bc8cff"
 
 [colors.input]
 border = "{background}"
-border_focus = "{color1}"
+border_focus = "{color9}"
 border_error = "#b9543b"
 
 [colors.button.primary]
@@ -75,5 +75,5 @@ selection = { outline = "{foreground}" }
 background = "{background}"
 
 [colors.loading]
-bar = "{color1}"
+bar = "{color9}"
 spinner = "{foreground}"
