@@ -215,7 +215,7 @@ function log() {
 }
 
 function test() {
-    zmk-run bash -xc "${TEST_ARGS[*]} west test tests/${shield}"
+    zmk-run bash -xc "${TEST_ARGS[*]} west test tests/${1:-}"
 }
 
 function update() {
@@ -236,8 +236,8 @@ TEST_ARGS=()
 OPTS_STRING+=("-b, --board: board='\$ARG'")
 OPTS_STRING+=("-g, --search: RG_FLAGS+=(-i '\$ARG')")
 OPTS_STRING+=("-l, --log: BUILD_FLAGS+=(-S zmk-usb-logging)")
-OPTS_STRING+=("-m, --modules: module_flag=true\; modules='\$ARG'")
-OPTS_STRING+=("-n, --nice-view: niceview=true\; niceview_ext='\$ARG'")
+OPTS_STRING+=("-m, --modules: module_flag=true; modules='\$ARG'")
+OPTS_STRING+=("-n, --nice-view: niceview=true; niceview_ext='\$ARG'")
 OPTS_STRING+=("-o, --passthrough, --passthru: RG_FLAGS+=(--passthrough)")
 OPTS_STRING+=("-p, --pristine: BUILD_FLAGS+=(-p)")
 OPTS_STRING+=("-r, --reset: reset=true")
@@ -268,5 +268,5 @@ if [[ ! -e "$ZMK_CONFIG_DIR"/.west ]]; then
 fi
 
 for c in "${ARGS[@]}"; do
-    "$c"
+    $c
 done
