@@ -22,6 +22,22 @@ hl.env("HYPRCURSOR_THEME", "BreezeX-Dark-hyprcursor")
 
 hl.env("GTK2_RC_FILES", "~/.config/gtk-2.0/gtkrc-2.0")
 
+local file = io.popen("lspci | grep -i 'vga.*nvidia'")
+NVIDIA = file and file:read("*a") ~= "" or false
+
+local colors_file_path = os.getenv("HOME") .. "/.config/hypr/include/colors.lua"
+file = io.open(colors_file_path, "r")
+
+if file == nil then
+    file = io.open(colors_file_path, "w")
+    if file ~= nil then
+        file:write('Color0Alpha = ""', "\n", 'Color2 = ""', "\n", 'Color3 = ""', "\n", 'BackgroundRed = ""')
+        file:close()
+    end
+else
+    file:close()
+end
+
 if NVIDIA then
     hl.env("LIBVA_DRIVER_NAME", "nvidia")
     hl.env("GBM_BACKEND", "nvidia-drm")
