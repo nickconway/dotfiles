@@ -66,33 +66,6 @@ dnd)
     fi
     ;;
 
-scaling)
-    shift
-
-    config_file="$HOME/.config/hypr/include/monitors.lua"
-
-    monitor_config=$(sed -n '1p' "$config_file" | cut -d ' ' -f 3-)
-    primay_monitor=$(echo "$monitor_config" | awk '{print $1}' | tr -d ",")
-    config_scale=$(echo "$monitor_config" | awk '{print $4}' | tr -d ",")
-
-    old_scale="$(hyprctl monitors -j | jq -r ".[] | select(.name == \"$primay_monitor\") | .scale")"
-
-    if [[ -z "${1:-}" ]] && [[ "$old_scale" == "1.00" ]]; then
-        new_scale=$config_scale
-    elif [[ "${1:-}" == "config" ]]; then
-        new_scale=$config_scale
-    elif [[ "${1:-}" == "1" ]]; then
-        new_scale=1.00
-    else
-        new_scale=1.00
-    fi
-
-    if [[ "$new_scale" != "$old_scale" ]]; then
-        new_config="$(echo "$monitor_config" | sed "s/\S\+,/$new_scale,/4")"
-        hyprctl keyword monitor "$new_config"
-    fi
-    ;;
-
 zenbook-screen)
     shift
 
@@ -100,10 +73,10 @@ zenbook-screen)
     export HYPRLAND_INSTANCE_SIGNATURE=$(ls $XDG_RUNTIME_DIR/hypr/ 2>/dev/null | head -n1)
 
     if [[ $1 == off ]]; then
-        hyprctl keyword monitor "eDP-2,disabled"
+        hyprctl eval 'hl.monitor({ output = "eDP-2", disabled = true })'
         notify-send -e -h string:synchronous:zenbook-screen "Zenbook" "Second screen disabled"
     else
-        hyprctl keyword monitor "eDP-2,2880x1800@120,auto-down,1.6,bitdepth,10"
+        hyprctl eval 'hl.monitor({ output = "eDP-2", disabled = false, mode = "preferred", position = "auto-down", scale = "1.6", bitdepth = 10 })'
         notify-send -e -h string:synchronous:zenbook-screen "Zenbook" "Second screen enabled"
     fi
     ;;
