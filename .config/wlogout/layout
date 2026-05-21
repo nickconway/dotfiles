@@ -6,25 +6,25 @@
 }
 {
     "label" : "shutdown",
-    "action" : "system shutdown",
+    "action" : "shutdown",
     "text" : "Shutdown",
     "keybind" : "s"
 }
 {
     "label" : "reboot",
-    "action" : "system reboot",
+    "action" : "systemctl reboot",
     "text" : "Reboot",
     "keybind" : "r"
 }
 {
     "label" : "logout",
-    "action" : "system logout",
+    "action" : "loginctl terminate-session",
     "text" : "Logout",
     "keybind" : "e"
 }
 {
     "label" : "sleep",
-    "action" : "systemctl suspend",
+    "action" : "systemctl sleep",
     "text" : "Sleep",
     "keybind" : "p"
 }

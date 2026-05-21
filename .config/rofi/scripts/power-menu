@@ -91,15 +91,15 @@ run_cmd() {
     if [[ "$1" == '--opt1' ]]; then
         loginctl lock-session
     elif [[ "$1" == '--opt2' ]]; then
-        confirm_run 'system logout'
+        confirm_run 'loginctl terminate-session'
     elif [[ "$1" == '--opt3' ]]; then
-        confirm_run 'systemctl suspend'
+        confirm_run 'systemctl sleep'
     elif [[ "$1" == '--opt4' ]]; then
-        confirm_run 'systemctl suspend'
+        confirm_run 'systemctl sleep'
     elif [[ "$1" == '--opt5' ]]; then
-        confirm_run 'system reboot'
+        confirm_run 'systemctl reboot'
     elif [[ "$1" == '--opt6' ]]; then
-        confirm_run 'system shutdown'
+        confirm_run 'shutdown'
     fi
 }
 

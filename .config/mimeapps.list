@@ -35,6 +35,7 @@ x-scheme-handler/opendeck=opendeck-handler.desktop
 x-scheme-handler/openaction=opendeck-handler.desktop
 x-scheme-handler/streamdeck=opendeck-handler.desktop
 x-scheme-handler/discord=vesktop.desktop
+x-scheme-handler/net.thunderbird=userapp-Thunderbird Beta-FZP5O3.desktop
 
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird Beta-UQFEP3.desktop;userapp-Thunderbird Beta-LQLHT2.desktop;
@@ -49,3 +50,4 @@ x-scheme-handler/webcal=userapp-Thunderbird Beta-401CP3.desktop;userapp-Thunderb
 x-scheme-handler/webcals=userapp-Thunderbird Beta-401CP3.desktop;userapp-Thunderbird Beta-OLYMT2.desktop;
 audio/vnd.wave=mpv.desktop;
 application/zip=org.gnome.Nautilus.desktop;
+x-scheme-handler/net.thunderbird=userapp-Thunderbird Beta-FZP5O3.desktop;
