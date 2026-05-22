@@ -89,3 +89,8 @@ hl.window_rule({ match = { class = "^(com.gabm.satty)$" }, float = true })
 hl.window_rule({ match = { class = "^(com.gabm.satty)$" }, keep_aspect_ratio = true })
 
 hl.window_rule({ match = { modal = "true" }, float = true })
+
+hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })

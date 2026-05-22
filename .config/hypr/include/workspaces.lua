@@ -8,6 +8,9 @@ Run = function(fn)
     return out
 end
 
+hl.workspace_rule({ workspace = "w[tv1]s[false]", gaps_out = 0, gaps_in = 0 })
+hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
+
 if Run("hostnamectl hostname") == "desktop" then
     Bind({ MainMod, "B" }, hl.dsp.focus({ window = "chromium" }))
     Bind({ MainMod, "T" }, hl.dsp.focus({ window = "kitty" }))
