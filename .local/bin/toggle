@@ -23,32 +23,11 @@ bar)
     fi
     ;;
 
-bit-depth)
-    hyprctl monitors -j | jq -r ".[] | .name, .currentFormat" | xargs -n2 echo | while read -r LINE; do
-        MONITOR="$(echo "$LINE" | awk '{print $1}')"
-        FORMAT="$(echo "$LINE" | awk '{print $2}')"
-
-        if [[ "$FORMAT" == "XRGB8888" ]]; then
-            BITDEPTH=10
-        else
-            BITDEPTH=8
-        fi
-
-        if ! grep -q "$MONITOR" ~/.config/hypr/include/monitors.lua; then
-            continue
-        fi
-
-        K="$(grep "^hl.monitor.*$MONITOR" ~/.config/hypr/include/monitors.lua | sed -r "s/bitdepth = \w+/bitdepth = $BITDEPTH/")"
-        hyprctl eval "$K"
-        notify-send -e "Set $MONITOR to bitdepth of $BITDEPTH" -h string:synchronous:bitdepth-"$MONITOR"
-    done
-    ;;
-
 deck-hyprland)
     unset LD_PRELOAD
     xhost +si:localuser:$USER
     sudo chown -f -R $USER:$USER /tmp/.X11-unix
-    /home/deck/.local/bin/distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" -- Hyprland
+    $HOME/.local/bin/distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" -- Hyprland
     ;;
 
 dnd)
