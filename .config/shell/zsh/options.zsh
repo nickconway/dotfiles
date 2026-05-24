@@ -40,7 +40,7 @@ export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 function _gen_completions() {
     local CMD=$1
 
-    if [[ -e ~/.config/zsh/completions/_"$CMD" ]]; then
+    if command -v "$CMD" &>/dev/null && [[ -e ~/.config/zsh/completions/_"$CMD" ]]; then
         return
     fi
 
@@ -69,17 +69,7 @@ _gen_completions fd --gen-completions zsh
 _gen_completions uv generate-shell-completion zsh
 _gen_completions uvx --generate-shell-completion zsh
 _gen_completions yadm -- curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm
-
-_dotnet_zsh_complete() {
-    local completions=("$(dotnet complete "")")
-
-    if [ -z "${completions[*]}" ]; then
-        _arguments '*::arguments: _normal'
-        return
-    fi
-
-    _values = $(xargs <<< $completions)
-}
+_gen_completions dotnet completions script zsh
 
 _comp_options+=(globdots)
 
@@ -95,8 +85,6 @@ fi
 if [[ ! -f "$COMP_DUMP.zwc" || "$COMP_DUMP" -nt "$COMP_DUMP.zwc" ]]; then
     zcompile "$COMP_DUMP" &!
 fi
-
-command -v dotnet &>/dev/null && zsh-defer compdef _dotnet_zsh_complete dotnet
 
 mkdir -p "$HOME/.cache/zsh"
 zstyle ':completion:*' use-cache on
