@@ -40,7 +40,7 @@ export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 function _gen_completions() {
     local CMD=$1
 
-    if command -v "$CMD" &>/dev/null && [[ -e ~/.config/zsh/completions/_"$CMD" ]]; then
+    if ! command -v "$CMD" &>/dev/null || [[ -e ~/.config/zsh/completions/_"$CMD" ]]; then
         return
     fi
 
