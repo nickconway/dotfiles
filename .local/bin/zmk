@@ -110,18 +110,18 @@ function get-dirs() {
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left ${shields[*]:1}'")
-            BUILD_DIRS+=("$board/$BASE/left/$(echo ${shields[*]:1} | sed 's/ /_/g')")
+            BUILD_DIRS+=("$board/$BASE/left/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
             SHIELDS+=("${BASE}_left")
         fi
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
             CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right ${shields[*]:1}'")
-            BUILD_DIRS+=("$board/$BASE/right/$(echo ${shields[*]:1} | sed 's/ /_/g')")
+            BUILD_DIRS+=("$board/$BASE/right/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
             SHIELDS+=("${BASE}_right")
         fi
     else
         CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} ${shields[*]:1}'")
-        BUILD_DIRS+=("$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')")
+        BUILD_DIRS+=("$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
         SHIELDS+=("$BASE")
     fi
 }
@@ -193,9 +193,9 @@ function flash() {
 
 function log() {
     if [[ -n "${RG_FLAGS:-}" ]]; then
-        (sudo tio /dev/ttyACM0) </dev/tty | rg "${RG_FLAGS[@]}"
+        (sudo tio $tty_dev) </dev/tty | rg "${RG_FLAGS[@]}"
     else
-        (sudo tio /dev/ttyACM0) </dev/tty
+        (sudo tio $tty_dev) </dev/tty
     fi
 }
 
@@ -211,6 +211,7 @@ board=
 disk=sda
 shields=()
 snippet=
+tty_dev=/dev/ttyACM0
 
 BUILD_FLAGS=()
 TEST_ARGS=()
@@ -222,6 +223,7 @@ OPTS_STRING+=("-o, --passthrough, --passthru: RG_FLAGS+=(--passthrough)")
 OPTS_STRING+=("-p, --pristine: BUILD_FLAGS+=(-p)")
 OPTS_STRING+=("-s, --shield: shields+=(\$ARG)")
 OPTS_STRING+=("-v, --verbose: TEST_ARGS+=('ZMK_TESTS_VERBOSE=y')")
+OPTS_STRING+=("-y, --tty: tty_dev='\$ARG'")
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 
 if ! docker image inspect zmk &>/dev/null; then
