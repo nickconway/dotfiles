@@ -170,6 +170,8 @@ function flash() {
     get-shield
     get-dirs "$@"
 
+    export disk
+
     for ((index = $((${#BUILD_DIRS[@]} - 1)); index >= 0; index--)); do
         mkdir tmp
 
