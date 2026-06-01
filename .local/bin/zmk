@@ -10,6 +10,11 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    export GUM_SPIN_SHOW_OUTPUT=true
+    export GUM_SPIN_SHOW_STDOUT=true
+fi
+
 function get-board() {
     if [[ -z "${board}" ]]; then
         board="$(
@@ -142,7 +147,7 @@ EOF
     get-dirs "$@"
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
-        if ! grep "^CACHED_SNIPPET:STRING=$snippet$" "app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" &>/dev/null; then
+        if ! grep -q "^CACHED_SNIPPET:STRING=$snippet$" "app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" 2>/dev/null; then
             BUILD_FLAGS+=(-p)
         fi
 
@@ -212,7 +217,7 @@ TEST_ARGS=()
 
 OPTS_STRING+=("-b, --board: board='\$ARG'")
 OPTS_STRING+=("-g, --search: RG_FLAGS+=(-i '\$ARG')")
-OPTS_STRING+=("-l, --log: BUILD_FLAGS+=(-S zmk-usb-logging)")
+OPTS_STRING+=("-l, --log: BUILD_FLAGS+=(-S zmk-usb-logging); snippet=zmk-usb-logging")
 OPTS_STRING+=("-o, --passthrough, --passthru: RG_FLAGS+=(--passthrough)")
 OPTS_STRING+=("-p, --pristine: BUILD_FLAGS+=(-p)")
 OPTS_STRING+=("-s, --shield: shields+=(\$ARG)")
