@@ -21,17 +21,19 @@ function get-board() {
         )"
     fi
 
-    BUILD_FLAGS+=(-b "${board}")
+    BUILD_FLAGS+=(-b "${board%//zmk}//zmk")
 }
 
 function get-shield() {
-    if [[ -z "${shield}" ]]; then
-        shield="$(
-            (
-                cd $ZMK_DIR/app/boards/shields && fd --type d
-                cd $ZMK_CONFIG_DIR/config/boards/shields && fd --type d
-            ) | tr -d '/' | sort | uniq | fzf
-        )"
+    if [[ -z "${shields:-}" ]]; then
+        shields+=(
+            $(
+                (
+                    cd $ZMK_DIR/app/boards/shields && fd --type d
+                    cd $ZMK_CONFIG_DIR/config/boards/shields && fd --type d
+                ) | tr -d '/' | sort | uniq | fzf | xargs
+            )
+        )
     fi
 }
 
@@ -39,10 +41,14 @@ function get-modules() {
     if [[ -e "$ZMK_CONFIG_DIR/extra-modules" ]] && [[ -z "${modules:-}" ]]; then
         modules="$(
             cd "$ZMK_CONFIG_DIR"/extra-modules
-            fd --type d --max-depth 1 | tr -d '/' | fzf | while read -r M; do
+            fd --type d --max-depth 1 | tr -d '/' | while read -r M; do
                 echo /config/extra-modules/$M
-            done | xargs | sed 's/ /,/g'
+            done | xargs | sed 's/ /;/g'
         )"
+
+        if [[ -n "$modules" ]]; then
+            CMAKE_BASE+=" -DZMK_EXTRA_MODULES='$modules'"
+        fi
     fi
 }
 
@@ -81,7 +87,7 @@ function zmk-run() {
 }
 
 function get-dirs() {
-    OLD_BASE="${shield:-}"
+    OLD_BASE="${shields[0]}"
 
     BASE="$OLD_BASE"
     BASE="${BASE%_left}"
@@ -98,49 +104,20 @@ function get-dirs() {
 
     if [[ "$IS_SPLIT" == true ]]; then
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
-            if [[ $niceview == true ]]; then
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
-                BUILD_DIRS+=("$board/$BASE/nice-view${niceview_ext:+-$niceview_ext}/left")
-            else
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_left")
-                BUILD_DIRS+=("$board/$BASE/left")
-            fi
-
+            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left ${shields[*]:1}'")
+            BUILD_DIRS+=("$board/$BASE/left/$(echo ${shields[*]:1} | sed 's/ /_/g')")
             SHIELDS+=("${BASE}_left")
         fi
 
         if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
-            if [[ $niceview == true ]]; then
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
-                BUILD_DIRS+=("$board/$BASE/nice-view${niceview_ext:+-$niceview_ext}/right")
-            else
-                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}_right")
-                BUILD_DIRS+=("$board/$BASE/right")
-            fi
-
+            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right ${shields[*]:1}'")
+            BUILD_DIRS+=("$board/$BASE/right/$(echo ${shields[*]:1} | sed 's/ /_/g')")
             SHIELDS+=("${BASE}_right")
         fi
     else
-        if [[ $niceview == true ]]; then
-            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} nice_view_adapter nice_view${niceview_ext:+_$niceview_ext}'")
-            BUILD_DIRS+=("$board/$BASE/nice-view${niceview_ext:+-$niceview_ext}")
-        else
-            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD=${BASE}")
-            BUILD_DIRS+=("$board/$BASE")
-        fi
-
+        CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} ${shields[*]:1}'")
+        BUILD_DIRS+=("$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')")
         SHIELDS+=("$BASE")
-    fi
-
-    if [[ $reset == true ]]; then
-        BUILD_FLAGS=(-b "$board")
-        CMAKE_ARGS=("-DSHIELD=settings_reset")
-
-        length=${#BUILD_DIRS[@]}
-        BUILD_DIRS=()
-        for ((index = 0; index < length; index++)); do
-            BUILD_DIRS+=("settings-reset")
-        done
     fi
 }
 
@@ -159,6 +136,7 @@ function build() {
         Remove: [-m*, -f*]
 EOF
 
+    get-modules
     get-board
     get-shield
     get-dirs "$@"
@@ -174,13 +152,13 @@ EOF
 }
 
 function wait-for-dev() {
-    while [[ ! -e /dev/disk/by-label/NICENANO ]]; do
+    while [[ ! -e /dev/$disk ]]; do
         true
     done
 }
 
 function wait-for-complete() {
-    while [[ -e /dev/disk/by-label/NICENANO ]]; do
+    while [[ -e /dev/$disk ]]; do
         true
     done
 }
@@ -197,7 +175,7 @@ function flash() {
 
         gum spin --title "Set ${SHIELDS[$index]} to flashing mode..." -- bash -c wait-for-dev
 
-        sudo mount /dev/disk/by-label/NICENANO tmp
+        sudo mount /dev/$disk tmp
         sudo cp app/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 tmp
 
         gum spin --title "Flashing ${SHIELDS[$index]}..." -- bash -c wait-for-complete
@@ -223,12 +201,9 @@ function update() {
 }
 
 board=
-module_flag=
-modules=
-shield=
+disk=sda
+shields=()
 snippet=
-niceview=false
-reset=false
 
 BUILD_FLAGS=()
 TEST_ARGS=()
@@ -236,22 +211,11 @@ TEST_ARGS=()
 OPTS_STRING+=("-b, --board: board='\$ARG'")
 OPTS_STRING+=("-g, --search: RG_FLAGS+=(-i '\$ARG')")
 OPTS_STRING+=("-l, --log: BUILD_FLAGS+=(-S zmk-usb-logging)")
-OPTS_STRING+=("-m, --modules: module_flag=true; modules='\$ARG'")
-OPTS_STRING+=("-n, --nice-view: niceview=true; niceview_ext='\$ARG'")
 OPTS_STRING+=("-o, --passthrough, --passthru: RG_FLAGS+=(--passthrough)")
 OPTS_STRING+=("-p, --pristine: BUILD_FLAGS+=(-p)")
-OPTS_STRING+=("-r, --reset: reset=true")
-OPTS_STRING+=("-s, --shield: shield='\$ARG'")
+OPTS_STRING+=("-s, --shield: shields+=(\$ARG)")
 OPTS_STRING+=("-v, --verbose: TEST_ARGS+=('ZMK_TESTS_VERBOSE=y')")
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
-
-if [[ -n "$module_flag" ]] && [[ -z "$modules" ]]; then
-    get-modules
-fi
-
-if [[ -n "$modules" ]]; then
-    CMAKE_BASE+=" -DZMK_EXTRA_MODULES=$modules"
-fi
 
 if ! docker image inspect zmk &>/dev/null; then
     docker build .devcontainer -t zmk
