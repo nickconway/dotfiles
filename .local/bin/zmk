@@ -17,13 +17,7 @@ fi
 
 function get-board() {
     if [[ -z "${board}" ]]; then
-        board="$(
-            (
-                cd "$ZMK_CONFIG_DIR/.."
-                yq '.board.name' $(fd board.yml)
-                yq '.include[].board' $(fd build.yaml)
-            ) | grep '\w' | sort | uniq | fzf
-        )"
+        board="$(yq '.type + " " + .id' $(fd .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR/extra-modules 2>/dev/null) | grep -v '\---' | grep '^board' | sed 's/\/\/zmk//' | sed 's/^board //' | sort | uniq | fzf)"
     fi
 
     BUILD_FLAGS+=(-b "${board%//zmk}//zmk")
@@ -34,9 +28,9 @@ function get-shield() {
         shields+=(
             $(
                 (
-                    cd $ZMK_DIR/app/boards/shields && fd --type d
-                    cd $ZMK_CONFIG_DIR/config/boards/shields && fd --type d
-                ) | tr -d '/' | sort | uniq | fzf | xargs
+                    yq '.type + " " + .id' $(fd .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR/extra-modules 2>/dev/null) | grep -v '\---' | grep '^shield' | sed 's/\/\/zmk//' | sed 's/^shield //'
+                    rg --no-filename -o 'shields_list_contains,\w*' $ZMK_DIR $ZMK_CONFIG_DIR/extra-modules | sed 's/shields_list_contains,//' | grep -v '^$'
+                ) | sort | uniq | fzf
             )
         )
     fi
