@@ -194,6 +194,7 @@ function log() {
 }
 
 function test() {
+    zmk-run west config build.cmake-args -- ""
     zmk-run bash -xc "${TEST_ARGS[*]} west test tests/${1:-}"
 }
 
