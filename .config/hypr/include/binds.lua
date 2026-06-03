@@ -70,27 +70,27 @@ Bind({ MainMod, "S" }, hl.dsp.exec_cmd("~/.config/rofi/scripts/screenshot-menu")
 Bind({ MainMod, "C" }, hl.dsp.exec_cmd("picker color"))
 
 Bind({ "XF86AudioLowerVolume" }, hl.dsp.exec_cmd("volume lower"), { locked = true, repeating = true })
-Bind({ "F2" }, hl.dsp.exec_cmd("volume lower"), {locked = true, repeating = true})
-Bind({ MainMod, "SHIFT", "down" }, hl.dsp.exec_cmd("volume lower"), {locked = true, repeating = true})
+Bind({ "F2" }, hl.dsp.exec_cmd("volume lower"), { locked = true, repeating = true })
+Bind({ MainMod, "SHIFT", "down" }, hl.dsp.exec_cmd("volume lower"), { locked = true, repeating = true })
 
-Bind({ "XF86AudioRaiseVolume" }, hl.dsp.exec_cmd("volume raise"), {locked = true, repeating = true})
-Bind({ "F3" }, hl.dsp.exec_cmd("volume raise"), {locked = true, repeating = true})
-Bind({ MainMod, "SHIFT", "up" }, hl.dsp.exec_cmd("volume raise"), {locked = true, repeating = true})
+Bind({ "XF86AudioRaiseVolume" }, hl.dsp.exec_cmd("volume raise"), { locked = true, repeating = true })
+Bind({ "F3" }, hl.dsp.exec_cmd("volume raise"), { locked = true, repeating = true })
+Bind({ MainMod, "SHIFT", "up" }, hl.dsp.exec_cmd("volume raise"), { locked = true, repeating = true })
 
 Bind({ "XF86AudioMute" }, hl.dsp.exec_cmd("volume mute"))
 Bind({ "F1" }, hl.dsp.exec_cmd("volume mute"))
 
-Bind({ "XF86AudioPlay" }, hl.dsp.exec_cmd("media play-pause"), {locked = true})
-Bind({ "XF86AudioNext" }, hl.dsp.exec_cmd("media next"), {locked = true})
-Bind({ "XF86AudioPrev" }, hl.dsp.exec_cmd("media previous"), {locked = true})
+Bind({ "XF86AudioPlay" }, hl.dsp.exec_cmd("media play-pause"), { locked = true })
+Bind({ "XF86AudioNext" }, hl.dsp.exec_cmd("media next"), { locked = true })
+Bind({ "XF86AudioPrev" }, hl.dsp.exec_cmd("media previous"), { locked = true })
 
-Bind({ "XF86MonBrightnessUp" }, hl.dsp.exec_cmd("brightness raise"), {locked = true, repeating = true})
-Bind({ "F6" }, hl.dsp.exec_cmd("brightness raise"), {locked = true, repeating = true})
-Bind({ MainMod, "ALT", "up" }, hl.dsp.exec_cmd("brightness raise"), {locked = true, repeating = true})
+Bind({ "XF86MonBrightnessUp" }, hl.dsp.exec_cmd("brightness raise"), { locked = true, repeating = true })
+Bind({ "F6" }, hl.dsp.exec_cmd("brightness raise"), { locked = true, repeating = true })
+Bind({ MainMod, "ALT", "up" }, hl.dsp.exec_cmd("brightness raise"), { locked = true, repeating = true })
 
-Bind({ "XF86MonBrightnessDown" }, hl.dsp.exec_cmd("brightness lower"), {locked = true, repeating = true})
-Bind({ "F5" }, hl.dsp.exec_cmd("brightness lower"), {locked = true, repeating = true})
-Bind({ MainMod, "ALT", "down" }, hl.dsp.exec_cmd("brightness lower"), {locked = true, repeating = true})
+Bind({ "XF86MonBrightnessDown" }, hl.dsp.exec_cmd("brightness lower"), { locked = true, repeating = true })
+Bind({ "F5" }, hl.dsp.exec_cmd("brightness lower"), { locked = true, repeating = true })
+Bind({ MainMod, "ALT", "down" }, hl.dsp.exec_cmd("brightness lower"), { locked = true, repeating = true })
 
 Bind({ MainMod, "left" }, hl.dsp.focus({ direction = "left" }))
 Bind({ MainMod, "right" }, hl.dsp.focus({ direction = "right" }))
@@ -139,10 +139,10 @@ local workspace = function(ws)
     end
 end
 
-Bind({ MainMod, "CTRL", "left" }, workspace("previous"))
-Bind({ MainMod, "CTRL", "right" }, workspace("next"))
-Bind({ MainMod, "SHIFT", "CTRL", "left" }, hl.dsp.focus({ workspace = "-1" }))
-Bind({ MainMod, "SHIFT", "CTRL", "right" }, hl.dsp.focus({ workspace = "+1" }))
+Bind({ MainMod, "SHIFT", "CTRL", "left" }, workspace("previous"))
+Bind({ MainMod, "SHIFT", "CTRL", "right" }, workspace("next"))
+Bind({ MainMod, "CTRL", "left" }, hl.dsp.focus({ workspace = "r-1" }))
+Bind({ MainMod, "CTRL", "right" }, hl.dsp.focus({ workspace = "r+1" }))
 
 Bind({ MainMod, "mouse_down" }, hl.dsp.focus({ workspace = "e+1" }))
 Bind({ MainMod, "mouse_up" }, hl.dsp.focus({ workspace = "e-1" }))
