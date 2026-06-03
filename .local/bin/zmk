@@ -38,12 +38,15 @@ function get-shield() {
 
 function get-modules() {
     if [[ -e "$ZMK_CONFIG_DIR/extra-modules" ]] && [[ -z "${modules:-}" ]]; then
-        modules="$(
-            cd "$ZMK_CONFIG_DIR"/extra-modules
-            fd --type d --max-depth 1 | tr -d '/' | while read -r M; do
-                echo /config/extra-modules/$M
-            done | xargs | sed 's/ /;/g'
-        )"
+        PREFIX="$ZMK_CONFIG_DIR"
+
+        if [[ -n ${DOCKER:-} ]]; then
+            PREFIX="/workspaces/zmk-config"
+        fi
+
+        modules="$(yq '.manifest.projects[].path' $(fd west.yml $ZMK_CONFIG_DIR{,/extra-modules}) | grep -v '\---' | grep -v null | while read -r p; do
+            echo "$PREFIX/$p"
+        done | xargs | sed 's/ /;/g')"
 
         if [[ -n "$modules" ]]; then
             CMAKE_BASE+=" -DZMK_EXTRA_MODULES='$modules'"
@@ -60,8 +63,6 @@ function clean() {
         mv "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{.bkp,}
     fi
 
-    [[ -e app/.clangd ]] && rm app/.clangd
-
     if [[ -e tmp ]]; then
         if mountpoint -q tmp; then
             sudo umount tmp
@@ -72,55 +73,46 @@ function clean() {
 
 trap clean ERR EXIT
 
-CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/config/config"
-
-cd "$ZMK_DIR"
-
-function zmk-run() {
-    docker run \
-        -v "${ZMK_DIR}":/workspace \
-        -v "${ZMK_CONFIG_DIR}":/config \
-        -w /workspace/app \
-        --rm \
-        zmk "$@"
-}
+CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspaces/zmk-config"
 
 function get-dirs() {
-    OLD_BASE="${shields[0]}"
-
-    BASE="$OLD_BASE"
-    BASE="${BASE%_left}"
-    BASE="${BASE%_right}"
-
     CMAKE_ARGS=()
     BUILD_DIRS=()
     SHIELDS=()
-
     IS_SPLIT=false
-    if [[ $(find "$ZMK_DIR" "$ZMK_CONFIG_DIR" -name ${BASE}_left.conf | wc -l) -gt 0 ]]; then
-        IS_SPLIT=true
-    fi
+
+    OLD_BASE="${shields[0]}"
+
+    BASE="$OLD_BASE"
+
+    for e in dongle left right; do
+        BASE="${BASE%_"$e"}"
+    done
+
+    for e in dongle left right; do
+        if find "$ZMK_DIR" "$ZMK_CONFIG_DIR/extra-modules" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q .; then
+            IS_SPLIT=true
+        fi
+    done
 
     if [[ "$IS_SPLIT" == true ]]; then
-        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_left" ]]; then
-            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_left ${shields[*]:1}'")
-            BUILD_DIRS+=("$board/$BASE/left/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
-            SHIELDS+=("${BASE}_left")
-        fi
-
-        if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_right" ]]; then
-            CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_right ${shields[*]:1}'")
-            BUILD_DIRS+=("$board/$BASE/right/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
-            SHIELDS+=("${BASE}_right")
-        fi
+        for e in dongle left right; do
+            if find "$ZMK_DIR" "$ZMK_CONFIG_DIR/extra-modules" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q . && { [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_${e}" ]]; }; then
+                CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_${e} ${shields[*]:1}'")
+                BUILD_DIRS+=("${DOCKER:+docker/}$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}/$e")
+                SHIELDS+=("${BASE}_$e")
+            fi
+        done
     else
         CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} ${shields[*]:1}'")
-        BUILD_DIRS+=("$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
+        BUILD_DIRS+=("${DOCKER:+docker/}$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
         SHIELDS+=("$BASE")
     fi
 }
 
 function build() {
+    cd "$ZMK_DIR"
+
     if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi ]]; then
         cp "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{,.bkp}
         cp "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{,.bkp}
@@ -129,25 +121,37 @@ function build() {
         cat ~/.config/zmk/macros.dtsi >>"$ZMK_CONFIG_DIR"/config/include/macros.dtsi
     fi
 
-    cat <<EOF >app/.clangd
-        CompileFlags:
-        Add: -Wno-unknown-warning-option
-        Remove: [-m*, -f*]
-EOF
-
     get-modules
     get-board
     get-shield
     get-dirs "$@"
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
-        if ! grep -q "^CACHED_SNIPPET:STRING=$snippet$" "app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" 2>/dev/null; then
+        if ! grep -q "^CACHED_SNIPPET:STRING=$snippet$" "$ZMK_DIR/app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" 2>/dev/null; then
             BUILD_FLAGS+=(-p)
         fi
 
-        zmk-run west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
-        gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "zmk-run west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
+        cd "$ZMK_DIR"
+        uvx west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
+
+        cd "$ZMK_DIR/app"
+
+        if [[ -z ${DOCKER:-} ]]; then
+            gum spin --title "Building ${SHIELDS[$index]}" -- west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}
+        else
+            gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "docker-run west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
+        fi
     done
+}
+
+function docker-run() {
+    docker run \
+        -u $UID \
+        -v "${ZMK_DIR}":/workspaces/zmk \
+        -v "${ZMK_CONFIG_DIR}":/workspaces/zmk-config \
+        -w /workspaces/zmk/app \
+        --rm \
+        zmk "$@"
 }
 
 function wait-for-dev() {
@@ -162,7 +166,7 @@ function wait-for-complete() {
     done
 }
 
-export -f zmk-run wait-for-dev wait-for-complete
+export -f docker-run wait-for-dev wait-for-complete
 
 function flash() {
     get-board
@@ -177,7 +181,7 @@ function flash() {
         gum spin --title "Set ${SHIELDS[$index]} to flashing mode..." -- bash -c wait-for-dev
 
         sudo mount /dev/$disk tmp
-        sudo cp app/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 tmp
+        sudo cp $ZMK_DIR/app/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 tmp
 
         gum spin --title "Flashing ${SHIELDS[$index]}..." -- bash -c wait-for-complete
 
@@ -194,12 +198,25 @@ function log() {
 }
 
 function test() {
-    zmk-run west config build.cmake-args -- ""
-    zmk-run bash -xc "${TEST_ARGS[*]} west test tests/${1:-}"
+    cd "$ZMK_DIR/app"
+    uvx west config build.cmake-args -- ""
+    "${TEST_ARGS[@]}" uvx west test tests/${1:-}
+}
+
+function _update() {
+    cd $1
+
+    if [[ ! -e .west ]]; then
+        uvx west init -l $2
+    fi
+
+    uvx west update --fetch-opt=--filter=tree:0
+    uvx west zephyr-export
 }
 
 function update() {
-    zmk-run bash -c "cd ${1:-.} && west update --fetch-opt=--filter=tree:0 && west zephyr-export"
+    _update $ZMK_CONFIG_DIR config
+    _update $ZMK_DIR app
 }
 
 board=
@@ -221,18 +238,12 @@ OPTS_STRING+=("-v, --verbose: TEST_ARGS+=('ZMK_TESTS_VERBOSE=y')")
 OPTS_STRING+=("-y, --tty: tty_dev='\$ARG'")
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 
+if [[ -z "${ZMK_DIR:-}" ]]; then
+    ZMK_DIR="$ZMK_CONFIG_DIR/zmk"
+fi
+
 if ! docker image inspect zmk &>/dev/null; then
-    docker build .devcontainer -t zmk
-fi
-
-if [[ ! -e .west ]]; then
-    zmk-run bash -c "west init -l ."
-    update
-fi
-
-if [[ ! -e "$ZMK_CONFIG_DIR"/.west ]]; then
-    zmk-run bash -c "cd /config/config && west init -l ."
-    update /config/config
+    docker build $ZMK_DIR/.devcontainer -t zmk
 fi
 
 for c in "${ARGS[@]}"; do
