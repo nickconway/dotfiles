@@ -17,7 +17,10 @@ fi
 
 function get-board() {
     if [[ -z "${board}" ]]; then
-        board="$(yq '.type + " " + .id' $(fd .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR/extra-modules 2>/dev/null) | grep -v '\---' | grep '^board' | sed 's/\/\/zmk//' | sed 's/^board //' | sort | uniq | fzf)"
+        board="$(
+            yq 'select(.type == "board") | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR) | grep -v '\---' |
+                sed 's/\/\/zmk//' | sort | uniq | fzf
+        )"
     fi
 
     BUILD_FLAGS+=(-b "${board%//zmk}//zmk")
@@ -28,12 +31,41 @@ function get-shield() {
         shields+=(
             $(
                 (
-                    yq '.type + " " + .id' $(fd .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR/extra-modules 2>/dev/null) | grep -v '\---' | grep '^shield' | sed 's/\/\/zmk//' | sed 's/^shield //'
-                    rg --no-filename -o 'shields_list_contains,\w*' $ZMK_DIR $ZMK_CONFIG_DIR/extra-modules | sed 's/shields_list_contains,//' | grep -v '^$'
-                ) | sort | uniq | fzf
+                    yq 'select(.type == "shield") | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR)
+                    yq 'select(.type == "shield") | .siblings[]' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR)
+                    rg --no-filename --no-ignore -o 'shields_list_contains,\w*' | sed 's/shields_list_contains,//'
+                ) | grep . | grep -v '\---' | sort | uniq | fzf
             )
         )
     fi
+}
+
+function _get_west_files() {
+    (
+        yq '.manifest.projects[] | select(.path and .import) | .path + "/" + .import' $1
+        yq '.manifest.projects[] | select(.path == null and .import) | .name + "/" + .import' $1
+    ) | grep -v '^zmk'
+}
+
+function _get_modules() {
+    (
+        yq '.manifest.projects[] | select(.path) | .path' $1
+        yq '.manifest.projects[] | select(.path == null) | .name' $1
+    ) | grep -v '^zmk' | while read -r M; do
+        if [[ -e $ZMK_CONFIG_DIR/$M ]]; then
+            echo "$PREFIX/$M"
+        fi
+    done
+}
+
+function _get_all_modules() {
+    _get_modules $1
+
+    _get_west_files $1 | while read -r f; do
+        _get_all_modules $f
+    done
+
+    return 0
 }
 
 function get-modules() {
@@ -44,9 +76,7 @@ function get-modules() {
             PREFIX="/workspaces/zmk-config"
         fi
 
-        modules="$(yq '.manifest.projects[].path' $(fd west.yml $ZMK_CONFIG_DIR{,/extra-modules}) | grep -v '\---' | grep -v null | while read -r p; do
-            echo "$PREFIX/$p"
-        done | xargs | sed 's/ /;/g')"
+        modules="$(_get_all_modules $ZMK_CONFIG_DIR/config/west.yml | xargs | sed 's/ /;/g')"
 
         if [[ -n "$modules" ]]; then
             CMAKE_BASE+=" -DZMK_EXTRA_MODULES='$modules'"
@@ -88,16 +118,16 @@ function get-dirs() {
     done
 
     for e in dongle left right; do
-        if find "$ZMK_DIR" "$ZMK_CONFIG_DIR/extra-modules" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q .; then
+        if find "$ZMK_DIR" "$ZMK_CONFIG_DIR" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q .; then
             IS_SPLIT=true
         fi
     done
 
     if [[ "$IS_SPLIT" == true ]]; then
         for e in dongle left right; do
-            if find "$ZMK_DIR" "$ZMK_CONFIG_DIR/extra-modules" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q . && { [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_${e}" ]]; }; then
+            if find "$ZMK_DIR" "$ZMK_CONFIG_DIR" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q . && { [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_${e}" ]]; }; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_${e} ${shields[*]:1}'")
-                BUILD_DIRS+=("${DOCKER:+docker/}$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}/$e")
+                BUILD_DIRS+=("${DOCKER:+docker/}$board/$BASE/$e/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
                 SHIELDS+=("${BASE}_$e")
             fi
         done
@@ -117,8 +147,6 @@ function build() {
         CMAKE_BASE+=" -DZMK_CONFIG=/workspaces/zmk-config/config"
     fi
 
-    cd "$ZMK_DIR"
-
     if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi ]]; then
         cp "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{,.bkp}
         cp "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{,.bkp}
@@ -127,20 +155,25 @@ function build() {
         cat ~/.config/zmk/macros.dtsi >>"$ZMK_CONFIG_DIR"/config/include/macros.dtsi
     fi
 
+    cd "$ZMK_CONFIG_DIR"
+
     get-modules
     get-board
     get-shield
     get-dirs "$@"
+
+    cd "$ZMK_DIR/app"
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
         if ! grep -q "^CACHED_SNIPPET:STRING=$snippet$" "$ZMK_DIR/app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" 2>/dev/null; then
             BUILD_FLAGS+=(-p)
         fi
 
-        cd "$ZMK_DIR"
-        uvx west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
+        if ! grep -q "^ZMK_EXTRA_MODULES:UNINITIALIZED=$modules$" "$ZMK_DIR/app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" 2>/dev/null; then
+            BUILD_FLAGS+=(-p)
+        fi
 
-        cd "$ZMK_DIR/app"
+        uvx west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
 
         if [[ -z ${DOCKER:-} ]]; then
             gum spin --title "Building ${SHIELDS[$index]}" -- west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}
@@ -210,7 +243,7 @@ function test() {
     if [[ -z ${DOCKER:-} ]]; then
         "${TEST_ARGS[@]}" uvx west test tests/${1:-}
     else
-    docker-run bash -c "${TEST_ARGS[*]} west test tests/${1:-}"
+        docker-run bash -c "${TEST_ARGS[*]} west test tests/${1:-}"
     fi
 }
 
