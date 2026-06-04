@@ -73,7 +73,13 @@ function clean() {
 
 trap clean ERR EXIT
 
-CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZMK_CONFIG=/workspaces/zmk-config"
+CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+
+if [[ -z ${DOCKER:-} ]]; then
+    CMAKE_BASE="-DZMK_CONFIG=$ZMK_CONFIG_DIR/config"
+else
+    CMAKE_BASE="-DZMK_CONFIG=/workspaces/zmk-config/config"
+fi
 
 function get-dirs() {
     CMAKE_ARGS=()
@@ -229,6 +235,7 @@ BUILD_FLAGS=()
 TEST_ARGS=()
 
 OPTS_STRING+=("-b, --board: board='\$ARG'")
+OPTS_STRING+=("-d, --docker: DOCKER=true")
 OPTS_STRING+=("-g, --search: RG_FLAGS+=(-i '\$ARG')")
 OPTS_STRING+=("-l, --log: BUILD_FLAGS+=(-S zmk-usb-logging); snippet=zmk-usb-logging")
 OPTS_STRING+=("-o, --passthrough, --passthru: RG_FLAGS+=(--passthrough)")
