@@ -17,8 +17,13 @@ fi
 
 function get-board() {
     if [[ -z "${board}" ]]; then
+        REQ="$(
+            yq "select(.type == \"shield\" and (.id == \"${shields[0]}\" or .siblings[] | contains(\"${shields[0]}\"))) | .requires | join(\" \")" $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR) |
+                grep -v '\---' | sort | uniq
+        )"
+
         board="$(
-            yq 'select(.type == "board") | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR) | grep -v '\---' |
+            yq 'select(.type == "board" and .exposes[] | contains("'$REQ'")) | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR) | grep -v '\---' |
                 sed 's/\/\/zmk//' | sort | uniq | fzf
         )"
     fi
@@ -158,8 +163,8 @@ function build() {
     cd "$ZMK_CONFIG_DIR"
 
     get-modules
-    get-board
     get-shield
+    get-board
     get-dirs "$@"
 
     cd "$ZMK_DIR/app"
@@ -208,8 +213,8 @@ function wait-for-complete() {
 export -f docker-run wait-for-dev wait-for-complete
 
 function flash() {
-    get-board
     get-shield
+    get-board
     get-dirs "$@"
 
     export disk
