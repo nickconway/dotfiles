@@ -206,7 +206,12 @@ function log() {
 function test() {
     cd "$ZMK_DIR/app"
     uvx west config build.cmake-args -- ""
-    "${TEST_ARGS[@]}" uvx west test tests/${1:-}
+
+    if [[ -z ${DOCKER:-} ]]; then
+        "${TEST_ARGS[@]}" uvx west test tests/${1:-}
+    else
+    docker-run bash -c "${TEST_ARGS[*]} west test tests/${1:-}"
+    fi
 }
 
 function _update() {
