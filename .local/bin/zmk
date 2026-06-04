@@ -179,7 +179,7 @@ function build() {
     get-board
     get-dirs "$@"
 
-    cd "$ZMK_DIR/app"
+    cd "$ZMK_DIR"
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
         for query in "^CACHED_SNIPPET:STRING=$snippet$" "^ZMK_EXTRA_MODULES:UNINITIALIZED=$modules$" "^APPLICATION_SOURCE_DIR:PATH=$SOURCE_PATH$"; do
@@ -192,9 +192,10 @@ function build() {
         west config build.cmake-args -- "${CMAKE_ARGS[$index]}"
 
         if [[ -z ${DOCKER:-} ]]; then
-            gum spin --title "Building ${SHIELDS[$index]}" -- west build ${BUILD_FLAGS[*]} -d $SOURCE_PATH/build/${BUILD_DIRS[$index]}
+            source $ZMK_DIR/.venv/bin/activate
+            gum spin --title "Building ${SHIELDS[$index]}" -- west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}
         else
-            gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "docker-run west build ${BUILD_FLAGS[*]} -d $SOURCE_PATH/build/${BUILD_DIRS[$index]}"
+            gum spin --title "Building ${SHIELDS[$index]}" -- bash -c "docker-run west build ${BUILD_FLAGS[*]} -d build/${BUILD_DIRS[$index]}"
         fi
     done
 }
@@ -204,7 +205,7 @@ function docker-run() {
         -u $UID \
         -v "${ZMK_DIR}":/workspace/zmk \
         -v "${ZMK_CONFIG_DIR}":/workspace/config \
-        -w /workspace/zmk/app \
+        -w /workspace/zmk \
         --rm \
         zmk "$@"
 }
@@ -221,8 +222,6 @@ function wait-for-complete() {
     done
 }
 
-export -f docker-run wait-for-dev wait-for-complete
-
 function flash() {
     get-shield
     get-board
@@ -236,7 +235,7 @@ function flash() {
         gum spin --title "Set ${SHIELDS[$index]} to flashing mode..." -- bash -c wait-for-dev
 
         sudo mount /dev/$disk tmp
-        sudo cp $ZMK_DIR/app/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 tmp
+        sudo cp $ZMK_DIR/build/${BUILD_DIRS[$index]}/zephyr/zmk.uf2 tmp
 
         gum spin --title "Flashing ${SHIELDS[$index]}..." -- bash -c wait-for-complete
 
@@ -277,17 +276,32 @@ function _update() {
 
     west update --fetch-opt=--filter=tree:0
     west zephyr-export
+
+    if [[ ! -e .venv ]]; then
+        uv venv
+    fi
+    uv pip install $(west packages pip)
 }
 
 function update() {
-    _update $ZMK_CONFIG_DIR config
-
-    if [[ $ZMK_DIR == $ZMK_CONFIG_DIR/zmk ]]; then
-        mv $ZMK_CONFIG_DIR/.west{,.backup}
-        _update $ZMK_DIR app
-        mv $ZMK_CONFIG_DIR/.west{.backup,}
-    fi
+    gum spin --title "Updating $ZMK_CONFIG_DIR" -- bash -c "_update $ZMK_CONFIG_DIR config"
+    mv $ZMK_CONFIG_DIR/.west{,.backup}
+    gum spin --title "Updating $ZMK_DIR" -- bash -c "_update $ZMK_DIR app"
+    mv $ZMK_CONFIG_DIR/.west{.backup,}
 }
+
+function install-zephyr() {
+    cd $(mktemp -d)
+    wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/zephyr-sdk-$1_linux-x86_64.tar.xz
+    wget -O - https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/sha256.sum | shasum --check --ignore-missing
+
+    tar xvf zephyr-sdk-${1}_linux-x86_64.tar.xz
+    cd zephyr-sdk-$1
+    ./setup.sh
+    cd ..
+}
+
+export -f docker-run wait-for-dev wait-for-complete _update
 
 board=
 disk=sda
