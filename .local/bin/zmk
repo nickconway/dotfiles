@@ -73,14 +73,6 @@ function clean() {
 
 trap clean ERR EXIT
 
-CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-
-if [[ -z ${DOCKER:-} ]]; then
-    CMAKE_BASE="-DZMK_CONFIG=$ZMK_CONFIG_DIR/config"
-else
-    CMAKE_BASE="-DZMK_CONFIG=/workspaces/zmk-config/config"
-fi
-
 function get-dirs() {
     CMAKE_ARGS=()
     BUILD_DIRS=()
@@ -117,6 +109,14 @@ function get-dirs() {
 }
 
 function build() {
+    CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+
+    if [[ -z ${DOCKER:-} ]]; then
+        CMAKE_BASE+=" -DZMK_CONFIG=$ZMK_CONFIG_DIR/config"
+    else
+        CMAKE_BASE+=" -DZMK_CONFIG=/workspaces/zmk-config/config"
+    fi
+
     cd "$ZMK_DIR"
 
     if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi ]]; then
