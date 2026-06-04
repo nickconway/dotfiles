@@ -4,6 +4,7 @@ if command -v steamos-update >/dev/null; then
     fi
 else
     export PATH="$HOME/.local/bin:$HOME/.config/fzf/bin:$PATH"
+    export PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$PATH"
     export FZF_DEFAULT_OPTS='--tmux --reverse --min-height 20 --cycle -m --pointer=▶ --preview-window down,border-top --bind "ctrl-/:change-preview-window(80%|20%|hidden|)"
         --bind ctrl-d:preview-half-page-down --bind ctrl-u:preview-half-page-up --bind ctrl-a:select-all
         --color=fg:7,fg+:15,bg:-1,bg+:-1,gutter:-1,info:11,prompt:10,spinner:12,pointer:14,marker:13,border:7,header:9,label:7,hl:10
