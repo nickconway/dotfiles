@@ -104,6 +104,12 @@ function clean() {
         fi
         rmdir tmp
     fi
+
+    if [[ -n ${TPID:-} ]]; then
+        kill $TPID
+    fi
+
+    rm -f /tmp/zmk.log
 }
 
 trap clean ERR EXIT
@@ -234,11 +240,16 @@ function flash() {
 }
 
 function log() {
-    if [[ -n "${RG_FLAGS:-}" ]]; then
-        (sudo tio $tty_dev) </dev/tty | rg "${RG_FLAGS[@]}"
-    else
-        (sudo tio $tty_dev) </dev/tty
-    fi
+    (
+        if [[ -n "${RG_FLAGS:-}" ]]; then
+            sudo tio $tty_dev | rg "${RG_FLAGS[@]}"
+        else
+            sudo tio $tty_dev
+        fi
+    ) &>/tmp/zmk.log &
+    disown
+    TPID=$!
+    tail -f /tmp/zmk.log
 }
 
 function test() {
