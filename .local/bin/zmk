@@ -38,7 +38,7 @@ function get-shield() {
                 (
                     yq 'select(.type == "shield") | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR)
                     yq 'select(.type == "shield") | .siblings[]' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR)
-                    rg --no-filename --no-ignore -o 'shields_list_contains,\w*' | sed 's/shields_list_contains,//'
+                    rg --no-filename --no-ignore -o 'shields_list_contains,\w*' $ZMK_DIR $ZMK_CONFIG_DIR | sed 's/shields_list_contains,//'
                 ) | rg . | rg -v '\---' | sort | uniq | fzf
             )
         )
