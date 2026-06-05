@@ -19,11 +19,11 @@ function get-board() {
     if [[ -z "${board}" ]]; then
         REQ="$(
             yq "select(.type == \"shield\" and (.id == \"${shields[0]}\" or .siblings[] | contains(\"${shields[0]}\"))) | .requires | join(\" \")" $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR) |
-                grep -v '\---' | sort | uniq
+                rg -v '\---' | sort | uniq
         )"
 
         board="$(
-            yq 'select(.type == "board" and .exposes[] | contains("'$REQ'")) | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR) | grep -v '\---' |
+            yq 'select(.type == "board" and .exposes[] | contains("'$REQ'")) | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR) | rg -v '\---' |
                 sed 's/\/\/zmk//' | sort | uniq | fzf
         )"
     fi
@@ -39,7 +39,7 @@ function get-shield() {
                     yq 'select(.type == "shield") | .id' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR)
                     yq 'select(.type == "shield") | .siblings[]' $(fd --no-ignore .zmk.yml $ZMK_DIR $ZMK_CONFIG_DIR)
                     rg --no-filename --no-ignore -o 'shields_list_contains,\w*' | sed 's/shields_list_contains,//'
-                ) | grep . | grep -v '\---' | sort | uniq | fzf
+                ) | rg . | rg -v '\---' | sort | uniq | fzf
             )
         )
     fi
@@ -49,14 +49,14 @@ function _get_west_files() {
     (
         yq '.manifest.projects[] | select(.path and .import) | .path + "/" + .import' $1
         yq '.manifest.projects[] | select(.path == null and .import) | .name + "/" + .import' $1
-    ) | grep -v '^zmk'
+    ) | rg -v '^zmk'
 }
 
 function _get_modules() {
     (
         yq '.manifest.projects[] | select(.path) | .path' $1
         yq '.manifest.projects[] | select(.path == null) | .name' $1
-    ) | grep -v '^zmk' | while read -r M; do
+    ) | rg -v '^zmk' | while read -r M; do
         if [[ -e $ZMK_CONFIG_DIR/$M ]]; then
             echo "$PREFIX/$M"
         fi
@@ -106,12 +106,6 @@ function clean() {
         rmdir tmp
     fi
 
-    if [[ -n ${TPID:-} ]]; then
-        kill $TPID
-    fi
-
-    rm -f /tmp/zmk.log
-
     if [[ -e $ZMK_CONFIG_DIR/.west.backup ]]; then
         mv $ZMK_CONFIG_DIR/.west{.backup,}
     fi
@@ -120,10 +114,17 @@ function clean() {
 trap clean ERR EXIT
 
 function get-dirs() {
+    if [[ -z ${DOCKER:-} ]]; then
+        CMAKE_BASE+=" -DZMK_CONFIG=$ZMK_CONFIG_DIR/config"
+        SOURCE_PATH="$ZMK_DIR/app"
+    else
+        CMAKE_BASE+=" -DZMK_CONFIG=/workspace/config/config"
+        SOURCE_PATH="/workspace/zmk/app"
+    fi
+
     CMAKE_ARGS=()
     BUILD_DIRS=()
     SHIELDS=()
-    IS_SPLIT=false
 
     OLD_BASE="${shields[0]}"
 
@@ -134,20 +135,18 @@ function get-dirs() {
     done
 
     for e in dongle left right; do
-        if find "$ZMK_DIR" "$ZMK_CONFIG_DIR" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q .; then
+        if fd --no-ignore "^${BASE}_${e}.overlay$" "$ZMK_DIR" "$ZMK_CONFIG_DIR" 2>/dev/null | rg -q .; then
             IS_SPLIT=true
-        fi
-    done
-
-    if [[ "$IS_SPLIT" == true ]]; then
-        for e in dongle left right; do
-            if find "$ZMK_DIR" "$ZMK_CONFIG_DIR" -name ${BASE}_${e}.overlay 2>/dev/null | grep -q . && { [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_${e}" ]]; }; then
+            if [[ "$OLD_BASE" == "$BASE" ]] || [[ "$OLD_BASE" == *"_${e}" ]]; then
                 CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE}_${e} ${shields[*]:1}'")
                 BUILD_DIRS+=("$board/$BASE/$e/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
                 SHIELDS+=("${BASE}_$e")
             fi
-        done
-    else
+        fi
+    done
+
+    if [[ -z "${IS_SPLIT:-}" ]]; then
+        echo not split
         CMAKE_ARGS+=("$CMAKE_BASE -DSHIELD='${BASE} ${shields[*]:1}'")
         BUILD_DIRS+=("$board/$BASE/$(echo ${shields[*]:1} | sed 's/ /_/g')${snippet:+_$snippet}")
         SHIELDS+=("$BASE")
@@ -155,18 +154,6 @@ function get-dirs() {
 }
 
 function build() {
-    CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-
-    if [[ -z ${DOCKER:-} ]]; then
-        CMAKE_BASE+=" -DZMK_CONFIG=$ZMK_CONFIG_DIR/config"
-        SOURCE_PATH="$ZMK_DIR/app"
-    else
-        CMAKE_BASE+=" -DZMK_CONFIG=/workspace/config/config"
-        SOURCE_PATH="/workspace/zmk/app"
-    fi
-
-    BUILD_FLAGS+=(-s "$SOURCE_PATH")
-
     if [[ -e "$ZMK_CONFIG_DIR"/config/include/leader.dtsi ]]; then
         cp "$ZMK_CONFIG_DIR"/config/include/leader.dtsi{,.bkp}
         cp "$ZMK_CONFIG_DIR"/config/include/macros.dtsi{,.bkp}
@@ -180,11 +167,13 @@ function build() {
     get-board
     get-dirs "$@"
 
+    BUILD_FLAGS+=(-s "$SOURCE_PATH")
+
     cd "$ZMK_DIR"
 
     for ((index = 0; index < ${#BUILD_DIRS[@]}; index++)); do
         for query in "^CACHED_SNIPPET:STRING=$snippet$" "^ZMK_EXTRA_MODULES:UNINITIALIZED=$modules$" "^APPLICATION_SOURCE_DIR:PATH=$SOURCE_PATH$"; do
-            if ! grep -q "$query" "$ZMK_DIR/app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" 2>/dev/null; then
+            if ! rg -q "$query" "$ZMK_DIR/app/build/${BUILD_DIRS[$index]}/CMakeCache.txt" 2>/dev/null; then
                 BUILD_FLAGS+=(-p)
                 break
             fi
@@ -245,16 +234,11 @@ function flash() {
 }
 
 function log() {
-    (
-        if [[ -n "${RG_FLAGS:-}" ]]; then
-            sudo tio $tty_dev | rg "${RG_FLAGS[@]}"
-        else
-            sudo tio $tty_dev
-        fi
-    ) &>/tmp/zmk.log &
-    disown
-    TPID=$!
-    tail -f /tmp/zmk.log
+    if [[ -n "${RG_FLAGS:-}" ]]; then
+        sudo tio $tty_dev | rg "${RG_FLAGS[@]}"
+    else
+        sudo tio $tty_dev
+    fi
 }
 
 function test() {
@@ -310,6 +294,7 @@ shields=()
 snippet=
 tty_dev=/dev/ttyACM0
 
+CMAKE_BASE="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 BUILD_FLAGS=()
 TEST_ARGS=()
 
