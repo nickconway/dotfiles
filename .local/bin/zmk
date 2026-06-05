@@ -75,6 +75,7 @@ function _get_all_modules() {
 
 function get-modules() {
     if [[ -e "$ZMK_CONFIG_DIR/extra-modules" ]] && [[ -z "${modules:-}" ]]; then
+        cd "$ZMK_CONFIG_DIR"
         PREFIX="$ZMK_CONFIG_DIR"
 
         if [[ -n ${DOCKER:-} ]]; then
