@@ -155,3 +155,76 @@ Bind({ MainMod, "SHIFT", "mouse:273" }, hl.dsp.window.resize(), { mouse = true }
 Bind({ MainMod, "U" }, hl.dsp.exec_cmd("pypr fetch_client_menu"))
 Bind({ MainMod, "SHIFT", "Z" }, hl.dsp.exec_cmd("pypr zoom ++0.5"))
 Bind({ MainMod, "Z" }, hl.dsp.exec_cmd("pypr zoom"))
+
+local StartX = 0
+local StartY = 0
+local IsDragging = false
+
+local function cloneStart()
+    local cursor = hl.get_cursor_pos()
+    if not cursor then
+        return
+    end
+
+    StartX = cursor.x
+    StartY = cursor.y
+    IsDragging = true
+end
+
+local function cloneEnd()
+    if not IsDragging then
+        return
+    end
+    IsDragging = false
+
+    local cursor = hl.get_cursor_pos()
+    if not cursor then
+        return
+    end
+
+    local monitor = hl.get_monitor_at_cursor().position
+    local x = math.min(StartX, cursor.x) - monitor.x
+    local y = math.min(StartY, cursor.y) - monitor.y
+    local w = math.abs(StartX - cursor.x)
+    local h = math.abs(StartY - cursor.y)
+
+    hl.dispatch(hl.dsp.exec_cmd("kitty", { float = true, move = { x, y }, size = { w, h } }))
+end
+
+Bind({ MainMod, "ALT", "mouse:272" }, cloneStart, { description = "Start dragging a kitty", mouse = true })
+Bind({ MainMod, "ALT", "mouse:272" }, cloneEnd, { description = "End dragging a kitty", mouse = true, release = true })
+
+Bind({ MainMod, "SHIFT", "T" }, function()
+    local ws = hl.get_active_workspace()
+
+    if not ws then
+        return
+    end
+
+    local new_layout = ws.tiled_layout == "dwindle" and "scrolling" or "dwindle"
+
+    hl.workspace_rule({
+        layout = new_layout,
+        workspace = tostring(ws.id),
+        no_rounding = true,
+        gaps_out = 0,
+        gaps_in = 0,
+    })
+
+    hl.notification.create({
+        text = " 󱂬    Workspace layout set to " .. new_layout,
+        duration = 5000,
+        icon = 5,
+    })
+end)
+
+Bind({ "mouse:274" }, function()
+    local active = hl.get_active_window()
+
+    if active ~= nil and active.title:match("[Pp]icture[ -]in[ -][Pp]icture") then
+        hl.dispatch(hl.dsp.window.drag())
+    end
+end, {
+    mouse = true,
+    non_consuming = true,
+})

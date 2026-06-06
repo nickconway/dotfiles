@@ -1,5 +1,5 @@
 if hl.plugin.darkwindow ~= nil then
-    hl.window_rule({ match = { title = "^(Picture in picture)$" }, ["darkwindow:shade"] = "none" })
+    hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, ["darkwindow:shade"] = "none" })
     hl.window_rule({ match = { class = "^(feh)$" }, ["darkwindow:shade"] = "none" })
 
     if BackgroundRed then
@@ -45,15 +45,15 @@ hl.window_rule({
     opacity = "1.0 override 1.0 override",
 })
 
-hl.window_rule({ match = { title = "^(Picture(-| )in(-| )[Pp]icture)$" }, float = true })
-hl.window_rule({ match = { title = "^(Picture(-| )in(-| )[Pp]icture)$" }, pin = true })
-hl.window_rule({ match = { title = "^(Picture(-| )in(-| )[Pp]icture)$" }, opacity = "1.0 override" })
+hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, float = true })
+hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, pin = true })
+hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, opacity = "1.0 override" })
 hl.window_rule({
-    match = { title = "^(Picture(-| )in(-| )[Pp]icture)$" },
+    match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" },
     move = { "(monitor_w - window_w - 30)", "(monitor_h - window_h-30)" },
 })
-hl.window_rule({ match = { title = "^(Picture(-| )in(-| )[Pp]icture)$" }, no_initial_focus = true })
-hl.window_rule({ match = { title = "^(Picture(-| )in(-| )[Pp]icture)$" }, keep_aspect_ratio = true })
+hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, no_initial_focus = true })
+hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, keep_aspect_ratio = true })
 
 hl.window_rule({ match = { title = "^(Discord Popout)$" }, float = true })
 hl.window_rule({ match = { title = "^(Discord Popout)$" }, pin = true })
