@@ -50,3 +50,11 @@ elseif Run("hostnamectl hostname") == "laptop" then
     hl.workspace_rule({ workspace = "5", on_created_empty = "thunderbird-beta" })
     hl.workspace_rule({ workspace = "6", on_created_empty = "feishin --ozone-platform-hint=auto" })
 end
+
+hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false })
+
+hl.on("window.kill", function()
+    if hl.get_active_workspace() == "name:game" and hl.get_windows({ workspace = "name:game" }) then
+        hl.dispatch(hl.dsp.workspace(hl.get_last_workspace("1")))
+    end
+end)

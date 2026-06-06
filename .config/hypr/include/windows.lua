@@ -94,3 +94,12 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border
 hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, rounding = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
+
+for _, c in ipairs({ "steam_app_.*", "gamescope.*", "lutris_.*" }) do
+    hl.window_rule({
+        workspace = "name:game",
+        match = {
+            class = c,
+        },
+    })
+end
