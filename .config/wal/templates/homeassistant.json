@@ -10,7 +10,7 @@
         },
         {
             "name": "office_flow_plus",
-            "color": [{color15.saturate(100).rgb}]
+            "color": [{color14.saturate(100).rgb}]
         }
     ]
 }

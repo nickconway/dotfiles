@@ -35,6 +35,7 @@ OPTS_STRING+=("-n, --noctalia: noctalia=true")
 OPTS_STRING+=("-r, --random: random=true")
 OPTS_STRING+=("-R, --reload: reload=true")
 OPTS_STRING+=("-8, --eight: eight=true")
+OPTS_STRING+=("-g, --generate-only: generate_only=true")
 
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 
@@ -62,6 +63,10 @@ if command -v gum &>/dev/null; then
     gum spin --title "Generating colors" -- "${WAL_CMD[@]}"
 else
     "${WAL_CMD[@]}"
+fi
+
+if [[ -n ${generate_only:-} ]]; then
+    exit
 fi
 
 IMG="$(cat ~/.cache/wal/wal)"
@@ -145,12 +150,7 @@ timeout 1 swaync-client -rs &>/dev/null || true
 
 gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal
 
-while read -r line; do
-    curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
-        -d '{ "entity_id": "light.'"$(cut -d ' ' -f 1 <<<$line)"'", "rgb_color": '"$(cut -d ' ' -f 2 <<<$line)"' }' \
-        https://home.$SERVICES_BASE_DOMAIN/api/services/light/turn_on -o /dev/null
-done < <(cat .cache/wal/homeassistant.json | jq -rc '.lights[] | .name + " " + (.color | tostring)')
-
+homeassistant-pywal
 openrgb-pywal
 
 fastfetch
