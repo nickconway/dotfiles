@@ -151,5 +151,7 @@ while read -r line; do
         https://home.conway.dev/api/services/light/turn_on -o /dev/null
 done < <(cat .cache/wal/homeassistant.json | jq -rc '.lights[] | .name + " " + (.color | tostring)')
 
+openrgb-pywal
+
 fastfetch
 eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0  -r=Random" --action "$0 -R=Reload")"
