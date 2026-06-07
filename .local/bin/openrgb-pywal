@@ -47,7 +47,7 @@ with open(Path(os.getenv("HOME")) / ".cache/wal/colors.json") as f:
 
 for dev in client.devices:
     for zone in dev.zones:
-        color = data.get("colors").get(f"color{random.randint(9, 15)}")
+        color = data.get("colors").get(f"color{random.randint(9, 14)}")
         color = saturate(color, 1)
         color = RGBColor.fromHEX(color)
         zone.set_color(color)
