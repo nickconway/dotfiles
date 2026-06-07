@@ -20,9 +20,11 @@
   "hyprlandLayoutGapsOverride": -1,
   "hyprlandLayoutRadiusOverride": -1,
   "hyprlandLayoutBorderSize": -1,
+  "hyprlandResizeOnBorder": false,
   "mangoLayoutGapsOverride": -1,
   "mangoLayoutRadiusOverride": -1,
   "mangoLayoutBorderSize": -1,
+  "mangoTrackpadNaturalScrolling": true,
   "firstDayOfWeek": -1,
   "showWeekNumber": false,
   "use24HourClock": false,
@@ -85,13 +87,15 @@
   "controlCenterShowAudioIcon": true,
   "controlCenterShowAudioPercent": false,
   "controlCenterShowVpnIcon": true,
-  "controlCenterShowBrightnessIcon": false,
-  "controlCenterShowBrightnessPercent": false,
-  "controlCenterShowMicIcon": false,
+  "controlCenterShowBrightnessIcon": true,
+  "controlCenterShowBrightnessPercent": true,
+  "controlCenterShowMicIcon": true,
   "controlCenterShowMicPercent": true,
   "controlCenterShowBatteryIcon": false,
   "controlCenterShowPrinterIcon": false,
   "controlCenterShowScreenSharingIcon": true,
+  "controlCenterShowIdleInhibitorIcon": true,
+  "controlCenterShowDoNotDisturbIcon": true,
   "showPrivacyButton": true,
   "privacyShowMicIcon": false,
   "privacyShowCameraIcon": false,
@@ -136,6 +140,16 @@
       "id": "darkMode",
       "enabled": true,
       "width": 50
+    },
+    {
+      "id": "doNotDisturb",
+      "enabled": true,
+      "width": 50
+    },
+    {
+      "id": "idleInhibitor",
+      "enabled": true,
+      "width": 50
     }
   ],
   "showWorkspaceIndex": true,
@@ -147,6 +161,7 @@
   "maxWorkspaceIcons": 3,
   "workspaceAppIconSizeOffset": 0,
   "groupWorkspaceApps": true,
+  "groupActiveWorkspaceApps": false,
   "workspaceFollowFocus": true,
   "showOccupiedWorkspacesOnly": true,
   "reverseScrolling": false,
@@ -168,6 +183,7 @@
   "audioWheelScrollAmount": 5,
   "clockCompactMode": false,
   "focusedWindowCompactMode": false,
+  "focusedWindowSize": 1,
   "runningAppsCompactMode": true,
   "barMaxVisibleApps": 0,
   "barMaxVisibleRunningApps": 0,
@@ -179,6 +195,7 @@
   "appsDockEnlargePercentage": 125,
   "appsDockIconSizePercentage": 100,
   "keyboardLayoutNameCompactMode": false,
+  "keyboardLayoutNameShowIcon": false,
   "runningAppsCurrentWorkspace": true,
   "runningAppsGroupByApp": false,
   "runningAppsCurrentMonitor": false,
@@ -188,6 +205,7 @@
   "lockDateFormat": "",
   "greeterRememberLastSession": true,
   "greeterRememberLastUser": true,
+  "greeterAutoLogin": false,
   "greeterEnableFprint": false,
   "greeterEnableU2f": false,
   "greeterWallpaperPath": "",
@@ -208,8 +226,11 @@
   "appLauncherGridColumns": 4,
   "spotlightCloseNiriOverview": true,
   "rememberLastQuery": false,
+  "rememberLastMode": true,
   "spotlightSectionViewModes": {},
-  "appDrawerSectionViewModes": {},
+  "appDrawerSectionViewModes": {
+    "apps": "list"
+  },
   "niriOverviewOverlayEnabled": true,
   "dankLauncherV2Size": "compact",
   "dankLauncherV2BorderEnabled": false,
@@ -217,9 +238,11 @@
   "dankLauncherV2BorderColor": "primary",
   "dankLauncherV2ShowFooter": true,
   "dankLauncherV2UnloadOnClose": true,
-  "dankLauncherV2IncludeFilesInAll": false,
-  "dankLauncherV2IncludeFoldersInAll": false,
+  "dankLauncherV2IncludeFilesInAll": true,
+  "dankLauncherV2IncludeFoldersInAll": true,
+  "launcherUseOverlayLayer": true,
   "launcherStyle": "full",
+  "spotlightBarShowModeChips": true,
   "useAutoLocation": true,
   "weatherEnabled": true,
   "networkPreference": "auto",
@@ -278,7 +301,7 @@
   "batteryProfileName": "",
   "batteryPostLockMonitorTimeout": 0,
   "batteryChargeLimit": 100,
-  "lockBeforeSuspend": false,
+  "lockBeforeSuspend": true,
   "loginctlLockIntegration": true,
   "fadeToLockEnabled": true,
   "fadeToLockGracePeriod": 5,
@@ -336,9 +359,9 @@
   "showDock": true,
   "dockAutoHide": true,
   "dockSmartAutoHide": false,
-  "dockHideOnFullscreen": true,
+  "dockUseOverlayLayer": true,
   "dockGroupByApp": false,
-  "dockRestoreSpecialWorkspaceOnClick": false,
+  "dockRestoreSpecialWorkspaceOnClick": true,
   "dockOpenOnOverview": false,
   "dockPosition": 1,
   "dockSpacing": 4,
@@ -392,6 +415,7 @@
   "notificationTimeoutNormal": 10000,
   "notificationTimeoutCritical": 0,
   "notificationCompactMode": false,
+  "notificationDedupeEnabled": true,
   "notificationPopupPosition": 0,
   "notificationAnimationSpeed": 1,
   "notificationCustomAnimationDuration": 400,
@@ -596,6 +620,9 @@
   "builtInPluginSettings": {
     "dms_settings_search": {
       "trigger": "?"
+    },
+    "dms_clipboard_search": {
+      "trigger": "cb"
     }
   },
   "clipboardEnterToPaste": false,
@@ -615,7 +642,6 @@
   "frameCloseGaps": true,
   "frameLauncherEmergeSide": "bottom",
   "frameLauncherArcExtender": false,
-  "frameUseSpotlightLauncher": false,
   "frameMode": "connected",
   "configVersion": 11
 }
