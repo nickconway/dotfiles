@@ -48,7 +48,7 @@ Bind({ MainMod, "SHIFT", "O" }, function()
     end
 end)
 
-Bind({ MainMod, "Return" }, hl.dsp.exec_cmd("TMUX_AUTO_SESSION=y kitty --single-instance"))
+Bind({ MainMod, "Return" }, hl.dsp.exec_cmd("TMUX_AUTO_SESSION=y kitty"))
 
 Bind({ MainMod, "Q" }, hl.dsp.window.close())
 Bind({ MainMod, "E" }, hl.dsp.exec_cmd("nautilus -w"))
@@ -237,7 +237,7 @@ local function cloneEnd()
     local w = math.abs(StartX - cursor.x)
     local h = math.abs(StartY - cursor.y)
 
-    hl.dispatch(hl.dsp.exec_cmd("kitty --single-instance", { float = true, move = { x, y }, size = { w, h } }))
+    hl.dispatch(hl.dsp.exec_cmd("kitty", { float = true, move = { x, y }, size = { w, h } }))
 end
 
 Bind({ MainMod, "ALT", "mouse:272" }, cloneStart, { description = "Start dragging a kitty", mouse = true })
