@@ -168,6 +168,10 @@ alias gcp='git cherry-pick'
 alias gd='git diff'
 alias gds='git diff --staged'
 
+function gec() {
+    gd --name-only "$@" | xargs $EDITOR
+}
+
 function ggp() {
     if [[ -n $1 ]]; then
         git push origin HEAD:refs/for/$1
@@ -691,6 +695,10 @@ alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
 alias ydec="yadm decrypt"
 alias yenc="yadm encrypt"
+
+function yec() {
+    yd --name-only "$@" | xargs $EDITOR
+}
 
 function yl() {
     YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"

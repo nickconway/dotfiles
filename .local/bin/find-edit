@@ -23,6 +23,7 @@ else
 fi
 
 QUERY="${ARGS[0]:-}"
+echo "$QUERY" >/tmp/rg-fzf-query
 
 if [[ -p /dev/stdin ]]; then
     readarray -t FILES
@@ -37,7 +38,7 @@ SELECTED="$(
         RG_CMD+=('{q}' "${FILES[@]}")
         fzf --ansi --disabled --query "$QUERY" \
             --bind "start:reload:${RG_CMD[*]} || true" \
-            --bind "change:reload:sleep 0.1; ${RG_CMD[*]} || true" \
+            --bind "change:reload:echo {q} > /tmp/rg-fzf-query; sleep 0.1; ${RG_CMD[*]} || true" \
             --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~  ]] &&
                                 echo "rebind(change)+change-prompt( > )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
                                 echo "unbind(change)+change-prompt( > )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
@@ -85,4 +86,4 @@ while read -r LINE; do
 done <<<"$SELECTED"
 
 echo "Opening ${#FILES[@]} file(s)"
-"$EDITOR" -c "${COMMANDS[*]}" -c bfirst
+"$EDITOR" -c "${COMMANDS[*]}" -c bfirst -c "let @/ = '$(cat /tmp/rg-fzf-query)'"
