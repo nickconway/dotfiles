@@ -8,6 +8,7 @@ return {
             html = { "prettierd", "prettier" },
             htmlangular = { "prettierd", "prettier" },
             javascript = { "prettierd", "prettier" },
+            json = { "prettierd", "prettier" },
             typescript = { "prettierd", "prettier" },
         },
         default_format_opts = {

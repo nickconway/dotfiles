@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+if [[ -z ${URL:-} ]]; then
+    URL="$(cat $HOME/.zen/*/taskbartabs/taskbartabs.json | jq -r ".taskbarTabs[] | .startUrl" | fzf)"
+fi
+
+FILE="$(cat $HOME/.zen/*/taskbartabs/taskbartabs.json | jq -r ".taskbarTabs[] | select(.startUrl == \"$URL\") | .shortcutRelativePath")"
+
+if [[ -z "$FILE" ]]; then
+    zen-browser -taskbar-tab $(uuidgen) -new-window "$URL"
+else
+    dex "$HOME/.local/share/applications/$FILE"
+fi
