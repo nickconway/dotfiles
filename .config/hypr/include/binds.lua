@@ -48,11 +48,11 @@ Bind({ MainMod, "SHIFT", "O" }, function()
     end
 end)
 
-Bind({ MainMod, "Return" }, hl.dsp.exec_cmd("TMUX_AUTO_SESSION=y kitty"))
+Bind({ MainMod, "Return" }, hl.dsp.exec_cmd("TMUX_AUTO_SESSION=y kitty --single-instance"))
 
 Bind({ MainMod, "Q" }, hl.dsp.window.close())
 Bind({ MainMod, "E" }, hl.dsp.exec_cmd("nautilus -w"))
-Bind({ MainMod, "SHIFT", "B" }, hl.dsp.exec_cmd("chromium"))
+Bind({ MainMod, "SHIFT", "B" }, hl.dsp.exec_cmd("zen-browser"))
 Bind({ MainMod, "SHIFT", "F" }, hl.dsp.window.float())
 Bind({ "ALT", "Tab" }, hl.dsp.exec_cmd("rofi -show window -config ~/.config/rofi/styles/style_2.rasi"))
 Bind({ MainMod, "SHIFT", "P" }, hl.dsp.window.pseudo())
@@ -223,7 +223,7 @@ local function cloneEnd()
     local w = math.abs(StartX - cursor.x)
     local h = math.abs(StartY - cursor.y)
 
-    hl.dispatch(hl.dsp.exec_cmd("kitty", { float = true, move = { x, y }, size = { w, h } }))
+    hl.dispatch(hl.dsp.exec_cmd("kitty --single-instance", { float = true, move = { x, y }, size = { w, h } }))
 end
 
 Bind({ MainMod, "ALT", "mouse:272" }, cloneStart, { description = "Start dragging a kitty", mouse = true })

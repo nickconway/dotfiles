@@ -13,7 +13,7 @@ hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
 
 if Run("hostnamectl hostname") == "desktop" then
-    Bind({ MainMod, "B" }, hl.dsp.focus({ window = "chromium" }))
+    Bind({ MainMod, "B" }, hl.dsp.focus({ window = "zen-browser" }))
     Bind({ MainMod, "T" }, hl.dsp.focus({ window = "kitty" }))
     Bind({ MainMod, "D" }, hl.dsp.focus({ window = "vesktop" }))
     Bind({ MainMod, "M" }, hl.dsp.focus({ window = "thunderbird" }))
@@ -24,8 +24,8 @@ if Run("hostnamectl hostname") == "desktop" then
     hl.workspace_rule({ workspace = "3", monitor = "DP-2", default = true })
 
     hl.on("hyprland.start", function()
-        hl.exec_cmd("[workspace 1 silent] chromium")
-        hl.exec_cmd("[workspace 2 silent] kitty")
+        hl.exec_cmd("[workspace 1 silent] zen-browser")
+        hl.exec_cmd("[workspace 2 silent] kitty --single-instance")
         hl.exec_cmd("[workspace 2 silent] vesktop")
         hl.exec_cmd("[workspace 2 silent] thunderbird-beta")
         hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
@@ -41,8 +41,8 @@ elseif Run("hostnamectl hostname") == "laptop" then
     Bind({ MainMod, "M" }, hl.dsp.focus({ workspace = "5" }))
     Bind({ MainMod, "F" }, hl.dsp.focus({ workspace = "6" }))
 
-    hl.workspace_rule({ workspace = "1", on_created_empty = "chromium" })
-    hl.workspace_rule({ workspace = "2", on_created_empty = "kitty" })
+    hl.workspace_rule({ workspace = "1", on_created_empty = "zen-browser" })
+    hl.workspace_rule({ workspace = "2", on_created_empty = "kitty --single-instance" })
     hl.workspace_rule({ workspace = "3", on_created_empty = "vesktop" })
     hl.workspace_rule({
         workspace = "4",
