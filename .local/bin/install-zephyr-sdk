@@ -10,15 +10,12 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-DIR=~/.zephyr-sdk.tmp
-
-mkdir $DIR
-cd $DIR
-wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/zephyr-sdk-$1_linux-x86_64.tar.xz
+cd /opt
+sudo wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/zephyr-sdk-$1_linux-x86_64.tar.xz
 wget -O - https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/sha256.sum | shasum --check --ignore-missing
 
-tar xf zephyr-sdk-${1}_linux-x86_64.tar.xz
+sudo tar xf zephyr-sdk-${1}_linux-x86_64.tar.xz
+sudo rm zephyr-sdk-${1}_linux-x86_64.tar.xz
+
 cd zephyr-sdk-$1
-./setup.sh
-cd
-rm -r $DIR
+sudo ./setup.sh
