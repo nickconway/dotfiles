@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from openrgb.utils import ModeData
 import sys
 from openrgb.utils import RGBColor
 import os
@@ -51,6 +52,11 @@ for dev in client.devices:
         color = saturate(color, 1)
         color = RGBColor.fromHEX(color)
         zone.set_color(color)
+
+    mode = dev.modes[dev.active_mode]
+    mode.brightness = mode.brightness_max
+
+    dev.set_mode(mode)
     dev.save_mode()
 
 client.save_profile("pywal")
