@@ -96,16 +96,20 @@ Bind({ MainMod, "SHIFT", "S" }, hl.dsp.exec_cmd("screenshot monitor"))
 Bind({ MainMod, "S" }, hl.dsp.exec_cmd("~/.config/rofi/scripts/screenshot-menu"))
 Bind({ MainMod, "C" }, hl.dsp.exec_cmd("picker color"))
 
-Bind({ "XF86AudioLowerVolume" }, hl.dsp.exec_cmd("volume lower"), { locked = true, repeating = true })
-Bind({ "F2" }, hl.dsp.exec_cmd("volume lower"), { locked = true, repeating = true })
-Bind({ MainMod, "SHIFT", "down" }, hl.dsp.exec_cmd("volume lower"), { locked = true, repeating = true })
+Bind({ "XF86AudioLowerVolume" }, hl.dsp.exec_cmd("media -a volume lower"), { locked = true, repeating = true })
+Bind({ "SHIFT", "XF86AudioLowerVolume" }, hl.dsp.exec_cmd("media volume lower"), { locked = true, repeating = true })
 
-Bind({ "XF86AudioRaiseVolume" }, hl.dsp.exec_cmd("volume raise"), { locked = true, repeating = true })
-Bind({ "F3" }, hl.dsp.exec_cmd("volume raise"), { locked = true, repeating = true })
-Bind({ MainMod, "SHIFT", "up" }, hl.dsp.exec_cmd("volume raise"), { locked = true, repeating = true })
+Bind({ "F2" }, hl.dsp.exec_cmd("media -a volume lower"), { locked = true, repeating = true })
+Bind({ MainMod, "SHIFT", "down" }, hl.dsp.exec_cmd("media -a volume lower"), { locked = true, repeating = true })
 
-Bind({ "XF86AudioMute" }, hl.dsp.exec_cmd("volume mute"))
-Bind({ "F1" }, hl.dsp.exec_cmd("volume mute"))
+Bind({ "XF86AudioRaiseVolume" }, hl.dsp.exec_cmd("media -a volume raise"), { locked = true, repeating = true })
+Bind({ "SHIFT", "XF86AudioRaiseVolume" }, hl.dsp.exec_cmd("media volume raise"), { locked = true, repeating = true })
+
+Bind({ "F3" }, hl.dsp.exec_cmd("media -a volume raise"), { locked = true, repeating = true })
+Bind({ MainMod, "SHIFT", "up" }, hl.dsp.exec_cmd("media volume raise"), { locked = true, repeating = true })
+
+Bind({ "XF86AudioMute" }, hl.dsp.exec_cmd("media -a volume mute"))
+Bind({ "F1" }, hl.dsp.exec_cmd("media -a volume mute"))
 
 Bind({ "XF86AudioPlay" }, hl.dsp.exec_cmd("media play-pause"), { locked = true })
 Bind({ "XF86AudioNext" }, hl.dsp.exec_cmd("media next"), { locked = true })

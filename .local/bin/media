@@ -13,7 +13,7 @@ fi
 PLAYER=
 PLAYERCTL_FLAGS=(-i plasma-browser-integration)
 
-eval "$(get-options "-a, --all: PLAYERCTL_FLAGS+=(-a)" "-n, --no-notification: NO_NOTIFICATION=true" "-o, --player: PLAYER='\$ARG'" -- "$@")"
+eval "$(get-options "-a, --all: PLAYERCTL_FLAGS+=(-a); ALL=true" "-n, --no-notification: NO_NOTIFICATION=true" "-o, --player: PLAYER='\$ARG'" -- "$@")"
 
 if [[ -n $PLAYER ]]; then
     PLAYERCTL_FLAGS+=(-p "$PLAYER")
@@ -23,7 +23,7 @@ elif [[ -z $PLAYER ]]; then
     PLAYER="$(playerctl -l | head -n 1)"
 fi
 
-PLAYER="$(echo "$PLAYER" | sed 's/org.mpris.MediaPlayer2.//g')"
+PLAYER="${PLAYER//org.mpris.MediaPlayer2./}"
 
 if [[ "$PLAYER" == plasma-browser-integration ]]; then
     exit 1
@@ -71,6 +71,46 @@ function show() {
         "${PLAYERCTL_CMD[@]}" "$ACTION"
         "$0" show
     fi
+}
+
+function all-volume() {
+    case ${1:-} in
+    show)
+        notify-send "Current volume: $(pamixer --get-volume)%" -h string:synchronous:audio -h int:value:$(pamixer --get-volume) -e
+        ;;
+
+    raise)
+        pamixer -u
+        pamixer -i ${2:-1}
+        ;;
+
+    lower)
+        pamixer -u
+        pamixer -d ${2:-1}
+        ;;
+
+    mute)
+        pamixer -t
+        ;;
+    esac
+}
+
+function volume() {
+    if [[ -n ${ALL:-} ]]; then
+        all-volume "${ARGS[@]:1}"
+        return
+    fi
+
+    case ${1:-} in
+    show)
+        VOL=$(cut -f 1 -d . <<<$(echo "$(playerctl volume) * 100" | bc))
+        notify-send "Current volume: $VOL%" -h string:synchronous:audio -h int:value:$VOL -e
+        ;;
+
+    raise) ARG=0.05+ ;;
+    lower) ARG=0.05- ;;
+    esac
+    "${PLAYERCTL_CMD[@]}" volume "$ARG"
 }
 
 if type "${ARGS[0]:-}" &>/dev/null; then
