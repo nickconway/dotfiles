@@ -161,7 +161,17 @@ Bind({ MainMod, "SHIFT", "9" }, hl.dsp.window.move({ workspace = "9" }))
 Bind({ MainMod, "SHIFT", "0" }, hl.dsp.window.move({ workspace = "10" }))
 
 local workspace = function(ws)
-    local one_monitor = os.execute("[[ $(hyprctl monitors -j | jq -r '.[].id' | wc -l) -eq 1 ]]")
+    hl.exec_cmd(
+        "(if [[ $(hyprctl monitors -j | jq -r '.[].id' | wc -l) -eq 1 ]]; then echo true; else echo false; fi) > /tmp/hyprland-one-monitor"
+    )
+
+    local file = io.open("/tmp/hyprland-one-monitor")
+
+    if not file then
+        return
+    end
+
+    local one_monitor = (file:read() == "true")
 
     if ws == "next" and one_monitor then
         return hl.dsp.focus({ workspace = "e+1" })
