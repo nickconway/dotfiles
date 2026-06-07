@@ -276,7 +276,7 @@
     "exec": "waybar-expand wall",
     "return-type": "json",
     // "interval": 1,
-    "on-click": "change-theme -r",
+    "on-click": "LOG=y change-theme -r",
   },
   "custom/clipboard": {
     "format": "{}",

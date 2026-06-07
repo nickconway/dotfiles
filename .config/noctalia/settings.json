@@ -440,7 +440,7 @@
         "screenUnlock": "",
         "session": "",
         "startup": "",
-        "wallpaperChange": "change-theme -n \"$1\""
+        "wallpaperChange": "LOG=y change-theme -n \"$1\""
     },
     "location": {
         "analogClockInCalendar": false,
