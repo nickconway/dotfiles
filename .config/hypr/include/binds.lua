@@ -1,5 +1,32 @@
 MainMod = "SUPER"
 
+local function focus_group_aware(direction)
+    local win = hl.get_active_window()
+
+    if not win then
+        hl.dispatch(hl.dsp.focus({ direction = direction }))
+        return
+    end
+
+    local group = win.group
+
+    if group then
+        if direction == "left" then
+            if group.current_index > 1 then
+                hl.dispatch(hl.dsp.group.prev())
+                return
+            end
+        elseif direction == "right" then
+            if group.current_index < group.size then
+                hl.dispatch(hl.dsp.group.next())
+                return
+            end
+        end
+    end
+
+    hl.dispatch(hl.dsp.focus({ direction = direction }))
+end
+
 Bind = function(keys, action, opts)
     hl.bind(table.concat(keys, " + "), action, opts or {})
 end
@@ -92,10 +119,18 @@ Bind({ "XF86MonBrightnessDown" }, hl.dsp.exec_cmd("brightness lower"), { locked 
 Bind({ "F5" }, hl.dsp.exec_cmd("brightness lower"), { locked = true, repeating = true })
 Bind({ MainMod, "ALT", "down" }, hl.dsp.exec_cmd("brightness lower"), { locked = true, repeating = true })
 
-Bind({ MainMod, "left" }, hl.dsp.focus({ direction = "left" }))
-Bind({ MainMod, "right" }, hl.dsp.focus({ direction = "right" }))
-Bind({ MainMod, "up" }, hl.dsp.focus({ direction = "up" }))
-Bind({ MainMod, "down" }, hl.dsp.focus({ direction = "down" }))
+Bind({ MainMod, "left" }, function()
+    focus_group_aware("left")
+end)
+Bind({ MainMod, "right" }, function()
+    focus_group_aware("right")
+end)
+Bind({ MainMod, "up" }, function()
+    focus_group_aware("up")
+end)
+Bind({ MainMod, "down" }, function()
+    focus_group_aware("down")
+end)
 
 Bind({ MainMod, "SHIFT", "left" }, hl.dsp.focus({ workspace = "m-1" }))
 Bind({ MainMod, "SHIFT", "right" }, hl.dsp.focus({ workspace = "m+1" }))

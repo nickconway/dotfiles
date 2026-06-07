@@ -59,3 +59,9 @@ hl.on("window.kill", function()
         hl.dispatch(hl.dsp.workspace(hl.get_last_workspace("1")))
     end
 end)
+
+hl.on("workspace.active", function()
+    if hl.get_active_special_workspace() then
+        hl.dispatch(hl.dsp.workspace.toggle_special())
+    end
+end)
