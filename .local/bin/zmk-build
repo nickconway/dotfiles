@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+function clean() {
+    for f in ~/.config/zmk/*.dtsi; do
+        if [[ -e "$ZMK_CONFIG_DIR"/config/include/$(basename $f).bkp ]]; then
+            mv "$ZMK_CONFIG_DIR"/config/include/$(basename $f){.bkp,}
+        fi
+    done
+}
+
+trap clean ERR EXIT
+
+for f in ~/.config/zmk/*.dtsi; do
+    if [[ -e "$ZMK_CONFIG_DIR"/config/include/$(basename $f) ]]; then
+        cp "$ZMK_CONFIG_DIR"/config/include/$(basename $f){,.bkp}
+        cat ~/.config/zmk/$(basename $f) >>"$ZMK_CONFIG_DIR"/config/include/$(basename $f)
+    fi
+done
+
+zmk build "$@"
