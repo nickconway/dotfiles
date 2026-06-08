@@ -172,6 +172,10 @@ function gec() {
     gd --name-only "$@" | xargs $EDITOR
 }
 
+function gecu() {
+    (gd --name-only "$@" && git ls-files -o --exclude-standard) | xargs $EDITOR
+}
+
 function ggp() {
     if [[ -n $1 ]]; then
         git push origin HEAD:refs/for/$1
@@ -697,7 +701,7 @@ alias ydec="yadm decrypt"
 alias yenc="yadm encrypt"
 
 function yec() {
-    yd --name-only "$@" | xargs $EDITOR
+    (cd && yd --name-only "$@" | xargs $EDITOR)
 }
 
 function yl() {
