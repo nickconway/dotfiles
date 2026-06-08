@@ -104,6 +104,8 @@ alias dnb='dotnet build'
 
 alias er='systemctl --user restart pipewire pipewire-pulse && flatpak kill com.github.wwmm.easyeffects && flatpak run com.github.wwmm.easyeffects --gapplication-service &> /dev/null &!'
 
+alias f='find-edit'
+
 function fn() {
     local SELECTED="$(fzf --preview="bat --color=always --style=plain {}")"
     [[ -n "$SELECTED" ]] && echo "$SELECTED" | xargs -d '\n' $EDITOR

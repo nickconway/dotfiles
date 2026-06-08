@@ -10,7 +10,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-eval "$(get-options "-a, --all: ALL=true" -- "$@")"
+eval "$(get-options "-a, --all: ALL=true" "-n, --no-ignore: NO_IGNORE=true" -- "$@")"
 
 rm -f /tmp/rg-fzf-{r,f}
 
@@ -20,6 +20,10 @@ if [[ ${ALL:-} == true ]]; then
     RG_CMD+=("!{**/node_modules/*,**/.github/*,**/.git/*}")
 else
     RG_CMD+=("'!{**/node_modules/*,**/.github/*,**/.git/*}'")
+fi
+
+if [[ ${NO_IGNORE:-} == true ]]; then
+    RG_CMD+=("--no-ignore")
 fi
 
 QUERY="${ARGS[0]:-}"
@@ -85,5 +89,7 @@ while read -r LINE; do
     FILES+=("$FILE")
 done <<<"$SELECTED"
 
+ESCAPED_QUERY="$(cat /tmp/rg-fzf-query | sed 's/\([(|)]\)/\\\1/g')"
+
 echo "Opening ${#FILES[@]} file(s)"
-"$EDITOR" -c "${COMMANDS[*]}" -c bfirst -c "let @/ = '$(cat /tmp/rg-fzf-query)'"
+"$EDITOR" -c "${COMMANDS[*]}" -c bfirst -c "let @/ = '$ESCAPED_QUERY'"
