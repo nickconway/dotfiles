@@ -54,9 +54,9 @@ end
 
 hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false })
 
-hl.on("window.kill", function()
-    if hl.get_active_workspace() == "name:game" and hl.get_windows({ workspace = "name:game" }) then
-        hl.dispatch(hl.dsp.workspace(hl.get_last_workspace("1")))
+hl.on("window.destroy", function()
+    if hl.get_active_workspace().name == "game" and (hl.get_active_workspace().windows == 0) then
+        hl.dispatch(hl.dsp.focus({ workspace = hl.get_last_workspace() }))
     end
 end)
 
