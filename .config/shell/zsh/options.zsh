@@ -70,6 +70,7 @@ _gen_completions uv generate-shell-completion zsh
 _gen_completions uvx --generate-shell-completion zsh
 _gen_completions yadm -- curl -sSL https://raw.githubusercontent.com/yadm-dev/yadm/refs/heads/develop/completion/zsh/_yadm
 _gen_completions dotnet completions script zsh
+_gen_completions zmk --show-completion
 
 _comp_options+=(globdots)
 
