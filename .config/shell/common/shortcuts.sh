@@ -175,7 +175,7 @@ function gec() {
 }
 
 function gecu() {
-    (gd --name-only "$@" && git ls-files -o --exclude-standard) | xargs $EDITOR
+    (gd --name-only "$@" && git ls-files -o --exclude-standard "$@") | xargs $EDITOR
 }
 
 function ggp() {
