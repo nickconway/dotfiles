@@ -31,7 +31,7 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
-        require("vim.hl").on_yank({ timeout = 50 })
+        vim.hl.hl_op({ timeout = 50 })
         vim.cmd("!nc-send-clipboard")
     end,
     group = vim.api.nvim_create_augroup("highlight-on-yank", { clear = true }),
@@ -89,15 +89,10 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
     group = vim.api.nvim_create_augroup("autosession", { clear = true }),
     nested = true,
     callback = function()
-        if
-            os.getenv("AUTOSESSION_DISABLED") ~= nil
-            or vim.fn.argv ~= ""
-            or vim.fn.argc() ~= 0
-            or vim.g.started_with_stdin
-        then
-            require("persistence").stop()
-        else
+        if os.getenv("AUTOSESSION_DISABLED") == nil and #vim.v.argv == 2 and vim.g.started_with_stdin == nil then
             require("persistence").load()
+        else
+            require("persistence").stop()
         end
     end,
 })
