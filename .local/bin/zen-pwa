@@ -10,7 +10,9 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-if [[ -z ${URL:-} ]]; then
+URL="${1:-}"
+
+if [[ -z $URL ]]; then
     URL="$(cat $HOME/.zen/*/taskbartabs/taskbartabs.json | jq -r ".taskbarTabs[] | .startUrl" | fzf)"
 fi
 
