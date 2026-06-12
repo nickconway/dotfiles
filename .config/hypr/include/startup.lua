@@ -29,7 +29,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("zenbook-duo-auto-brightness")
 
     hl.exec_cmd("bitwarden")
-    hl.exec_cmd("openrgb --startminimized")
+    hl.exec_cmd("openrgb --startminimized --server")
 
     hl.exec_cmd("LOG=y ups-commands")
 
