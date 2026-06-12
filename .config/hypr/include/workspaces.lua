@@ -56,12 +56,12 @@ hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false })
 
 hl.on("window.destroy", function()
     if hl.get_active_workspace().name == "game" and (hl.get_active_workspace().windows == 0) then
-        hl.dispatch(hl.dsp.focus({ workspace = hl.get_last_workspace() }))
+        hl.dispatch(hl.dsp.focus({ workspace = hl.get_last_workspace(hl.get_active_monitor()) }))
     end
 end)
 
 hl.on("workspace.active", function()
     if hl.get_active_special_workspace() then
-        hl.dispatch(hl.dsp.workspace.toggle_special())
+        hl.dispatch(hl.dsp.workspace.toggle_special({}))
     end
 end)
