@@ -1,7 +1,4 @@
 if hl.plugin.darkwindow ~= nil then
-    hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, ["darkwindow:shade"] = "none" })
-    hl.window_rule({ match = { class = "^(feh)$" }, ["darkwindow:shade"] = "none" })
-
     if BackgroundRed then
         hl.window_rule({
             match = { fullscreen = "false" },
@@ -14,6 +11,23 @@ if hl.plugin.darkwindow ~= nil then
                 .. "] bg[1]=[0 0 0]",
         })
     end
+
+    hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, ["darkwindow:shade"] = "none" })
+    hl.window_rule({ match = { class = "^(feh)$" }, ["darkwindow:shade"] = "none" })
+
+    hl.window_rule({
+        match = { content = "video" },
+        opacity = "1.0 override 1.0 override",
+        ["darkwindow:shade"] = "none",
+    })
+
+    hl.window_rule({
+        match = {
+            title = ".*(YouTube|Twitch|Netflix|Prime Video).*",
+        },
+        opacity = "1.0 override 1.0 override",
+        ["darkwindow:shade"] = "none",
+    })
 end
 
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
