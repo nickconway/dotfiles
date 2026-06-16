@@ -223,20 +223,20 @@ return {
             end,
             desc = "Find Config File",
         },
-        {
-            "<leader>ff",
-            function()
-                Snacks.picker.smart()
-            end,
-            desc = "Find Files",
-        },
-        {
-            "<leader>fl",
-            function()
-                Snacks.picker.grep()
-            end,
-            desc = "Grep",
-        },
+        -- {
+        --     "<leader>ff",
+        --     function()
+        --         Snacks.picker.smart()
+        --     end,
+        --     desc = "Find Files",
+        -- },
+        -- {
+        --     "<leader>fl",
+        --     function()
+        --         Snacks.picker.grep()
+        --     end,
+        --     desc = "Grep",
+        -- },
         {
             "<leader>fh",
             function()
