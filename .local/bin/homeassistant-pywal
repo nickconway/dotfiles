@@ -10,6 +10,10 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+if [[ ! -e ~/.cache/wal/homeassistant.json ]]; then
+    exit
+fi
+
 source $HOME/.config/shell/common/encrypted.sh
 
 while read -r line; do
@@ -17,3 +21,16 @@ while read -r line; do
         -d '{ "entity_id": "light.'"$(cut -d ' ' -f 1 <<<$line)"'", "rgb_color": '"$(cut -d ' ' -f 2 <<<$line)"' }' \
         https://home.conway.dev/api/services/light/turn_on -o /dev/null
 done < <(cat ~/.cache/wal/homeassistant.json | jq -rc '.lights[] | .name + " " + (.color | tostring)')
+
+entities="[$(
+    while read -r line; do
+        if [[ -n "$line" ]]; then
+            echo "\"light.$line\""
+        fi
+    done < <(cat ~/.cache/wal/homeassistant.json | jq -rc '.lights[].name') | xargs -I '{}' echo -n "\"{}\", "
+)]"
+entities="${entities//, \]/\]}"
+
+curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
+    -d '{ "scene_id": "pywal", "snapshot_entities": '"$entities"' }' \
+    https://home.conway.dev/api/services/scene/create -o /dev/null
