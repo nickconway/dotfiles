@@ -16,3 +16,23 @@ if hl.plugin.darkwindow ~= nil then
     --     introduces_transparency = false,
     -- })
 end
+
+if pcall(function()
+    require("lua/plugins/hyprvim")
+end) then
+    require("lua/plugins/hyprvim").setup({
+        keymaps = {},
+        notifications = {
+            all = true,
+        },
+        which_key = {
+            enabled = true,
+            delay_ms = 0,
+            vim_delay_ms = 300,
+            position = "bottom-center",
+            auto_show = {
+                disabled = nil,
+            },
+        },
+    })
+end

@@ -49,7 +49,7 @@ else
     INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | vicinae dmenu -p "Choose a wallpaper")"
 fi
 
-WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT")
+WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a 0.7)
 
 if [[ "$eight" == false ]]; then
     WAL_CMD+=(--cols16 "${METHOD:-lighten}")
@@ -95,6 +95,7 @@ else
 fi
 
 _cp ~/.cache/wal/colors-hyprland.lua ~/.config/hypr/include/colors.lua
+_cp ~/.cache/wal/hyprvim.conf ~/.config/hyprvim/theme.conf
 
 _cp ~/.cache/wal/vicinae.toml ~/.local/share/vicinae/themes/pywal.toml
 vicinae theme set pywal &>/dev/null || true

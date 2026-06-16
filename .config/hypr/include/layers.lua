@@ -37,3 +37,7 @@ hl.layer_rule({ match = { namespace = "dms.*" }, ignore_alpha = 0.4 })
 hl.layer_rule({ match = { namespace = "vicinae" }, blur = true })
 hl.layer_rule({ match = { namespace = "vicinae" }, blur_popups = true })
 hl.layer_rule({ match = { namespace = "vicinae" }, ignore_alpha = 0 })
+
+hl.layer_rule({ match = { namespace = "hyprvim-whichkey" }, blur = true })
+hl.layer_rule({ match = { namespace = "hyprvim-whichkey" }, blur_popups = true })
+hl.layer_rule({ match = { namespace = "hyprvim-whichkey" }, ignore_alpha = 0.5 })
