@@ -22,6 +22,7 @@ function _cp() {
     cp "${@}" &>/dev/null || sudo cp "${@}"
 }
 
+alpha=0.7
 reload=
 random=
 light=
@@ -29,6 +30,7 @@ eight=
 
 METHOD=lighten
 
+OPTS_STRING+=("-a, --alpha: alpha='\$ARG'")
 OPTS_STRING+=("-l, --light: light=true")
 OPTS_STRING+=("-m, --method: light='\$ARG'")
 OPTS_STRING+=("-n, --noctalia: noctalia=true")
@@ -49,7 +51,7 @@ else
     INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | vicinae dmenu -p "Choose a wallpaper")"
 fi
 
-WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a 0.7)
+WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a "$alpha")
 
 if [[ "$eight" == false ]]; then
     WAL_CMD+=(--cols16 "${METHOD:-lighten}")
