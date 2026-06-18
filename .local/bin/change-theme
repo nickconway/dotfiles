@@ -25,7 +25,7 @@ function _cp() {
 alpha=0.5
 
 if [[ -e ~/.cache/wal/colors.json ]]; then
-    alpha=$(cat .cache/wal/colors.json | jq .alpha)
+    alpha=$(cat .cache/wal/colors.json | jq -r .alpha)
 fi
 
 reload=
