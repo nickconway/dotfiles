@@ -22,7 +22,12 @@ function _cp() {
     cp "${@}" &>/dev/null || sudo cp "${@}"
 }
 
-alpha=0.7
+alpha=0.5
+
+if [[ -e ~/.cache/wal/colors.json ]]; then
+    alpha=$(cat .cache/wal/colors.json | jq .alpha)
+fi
+
 reload=
 random=
 light=
@@ -163,4 +168,4 @@ homeassistant-pywal
 openrgb-pywal
 
 fastfetch
-eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0  -r=Random" --action "$0 -R=Reload")"
+eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 --random=Random" --action "$0 --reload=Reload")"
