@@ -77,8 +77,6 @@ if [[ -n ${generate_only:-} ]]; then
 fi
 
 IMG="$(cat ~/.cache/wal/wal)"
-kitten icat "$IMG" || true
-
 _cp "$IMG" ~/.config/wallpaper
 
 if [[ "$IMG" == *".png" ]]; then
@@ -88,12 +86,13 @@ else
     magick ~/.config/wallpaper{,.png}
 fi
 
-magick "$IMG" -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb
-magick "$IMG" -strip -thumbnail 500x500^ -gravity center -extent 500x500 ~/.cache/wal/wal.sqre
-magick "$IMG" -strip -scale 10% -blur 0x3 -resize 100% ~/.cache/wal/wal.blur
-magick ~/.cache/wal/wal.sqre \( -size 500x500 xc:white -fill "rgba(0,0,0,0.7)" -draw "polygon 400,500 500,500 500,0 450,0" -fill black -draw "polygon 500,500 500,0 450,500" \) -alpha Off -compose CopyOpacity -composite ~/.cache/wal/wal.png
-
-mv ~/.cache/wal/wal.png ~/.cache/wal/wal.quad
+magick "$IMG" -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb &
+(
+    magick "$IMG" -strip -thumbnail 500x500^ -gravity center -extent 500x500 ~/.cache/wal/wal.sqre &&
+        magick ~/.cache/wal/wal.sqre \( -size 500x500 xc:white -fill "rgba(0,0,0,0.7)" -draw "polygon 400,500 500,500 500,0 450,0" -fill black -draw "polygon 500,500 500,0 450,500" \) -alpha Off -compose CopyOpacity -composite ~/.cache/wal/wal.png &&
+        mv ~/.cache/wal/wal.png ~/.cache/wal/wal.quad
+) &
+magick "$IMG" -strip -scale 10% -blur 0x3 -resize 100% ~/.cache/wal/wal.blur &
 
 if [[ $light == true ]]; then
     gsettings set org.gnome.desktop.interface color-scheme "prefer-light" || true
@@ -160,12 +159,14 @@ caelestia wallpaper -N -f "$IMG" &>/dev/null ||
         ln -sf "$IMG" ~/.local/state/caelestia/wallpaper/current
     }
 
-timeout 1 swaync-client -rs &>/dev/null || true
+if pgrep swaync &>/dev/null; then
+    swaync-client -rs &>/dev/null
+fi
 
 gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal
 
 homeassistant-pywal
-openrgb-pywal
+openrgb-pywal &
 
 fastfetch
 eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 --random=Random" --action "$0 --reload=Reload")"
