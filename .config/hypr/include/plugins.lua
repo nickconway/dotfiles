@@ -17,11 +17,19 @@ if hl.plugin.darkwindow ~= nil then
     -- })
 end
 
-if pcall(function()
-    require("lua/plugins/hyprvim")
-end) then
-    require("lua/plugins/hyprvim").setup({
-        keymaps = {},
+if pcall(require, "lua/plugins/hyprvim") then
+    local hyprvim = require("lua/plugins/hyprvim")
+
+    hyprvim.setup({
+        keymaps = {
+            NORMAL = {
+                {
+                    MainMod .. " + SPACE",
+                    hl.dsp.submap("LEADER"),
+                    { desc = "+Leader" },
+                },
+            },
+        },
         notifications = {
             all = true,
         },
@@ -31,8 +39,14 @@ end) then
             vim_delay_ms = 300,
             position = "bottom-center",
             auto_show = {
-                disabled = nil,
+                enabled = { "NORMAL", "VISUAL", "V-LINE", "INSERT", "LEADER" },
             },
         },
     })
+
+    hl.define_submap("LEADER", "NORMAL", function()
+        Bind("SPACE", hyprvim.whichkey.toggle)
+        Bind("Q", hl.dsp.window.kill(), { desc = "Kill Window" })
+        Bind("catchall", function() end)
+    end)
 end
