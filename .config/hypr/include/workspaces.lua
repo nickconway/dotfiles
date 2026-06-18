@@ -29,9 +29,9 @@ if Run("hostnamectl hostname") == "desktop" then
         hl.exec_cmd("[workspace 2 silent] vesktop")
         hl.exec_cmd("[workspace 2 silent] thunderbird-beta")
         hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
-        hl.exec_cmd("[workspace 3 silent] zen-pwa 'https://messages.google.com/web'")
-        hl.exec_cmd("[workspace 3 silent] zen-pwa 'https://bluebubbles.app/web/'")
-        hl.exec_cmd("[workspace 3 silent] zen-pwa 'https://x.com'")
+        hl.exec_cmd("[workspace 3 silent] chromium --app='https://messages.google.com/web'")
+        hl.exec_cmd("[workspace 3 silent] chromium --app='https://bluebubbles.app/web/'")
+        hl.exec_cmd("[workspace 3 silent] chromium --app='https://x.com'")
     end)
 elseif Run("hostnamectl hostname") == "laptop" then
     Bind({ MainMod, "B" }, hl.dsp.focus({ workspace = "1" }))
@@ -46,7 +46,7 @@ elseif Run("hostnamectl hostname") == "laptop" then
     hl.workspace_rule({ workspace = "3", on_created_empty = "vesktop" })
     hl.workspace_rule({
         workspace = "4",
-        on_created_empty = "zen-pwa 'https://messages.google.com/web' & zen-pwa 'https://bluebubbles.app/web/'",
+        on_created_empty = "chromium --app='https://messages.google.com/web' & chromium --app='https://bluebubbles.app/web/'",
     })
     hl.workspace_rule({ workspace = "5", on_created_empty = "thunderbird-beta" })
     hl.workspace_rule({ workspace = "6", on_created_empty = "feishin --ozone-platform-hint=auto" })
