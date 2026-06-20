@@ -58,7 +58,7 @@ SELECTED="$(
 
 [[ -n "$SELECTED" ]]
 
-SELECTED="$(sort -u -t : -k 1,1 <<<"$SELECTED" | grep -v "binary file matches")"
+SELECTED="$(sort -u -t : -k 1,1 <<<"$SELECTED" | grep -v "binary file matches" 2>/dev/null)"
 
 COMMANDS=()
 FILES=()
