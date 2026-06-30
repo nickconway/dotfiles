@@ -83,7 +83,19 @@ Bind({ MainMod, "SHIFT", "C" }, hl.dsp.exec_cmd("LOG=y change-theme"))
 Bind({ MainMod, "Grave" }, hl.dsp.workspace.toggle_special("scratch"))
 Bind({ MainMod, "SHIFT", "U" }, hl.dsp.workspace.toggle_special("update"))
 
-Bind({ MainMod, "O" }, hl.dsp.exec_cmd("hyprctl dispatch overview:toggle"))
+Bind({ MainMod, "O" }, function()
+    local ws = hl.get_active_workspace()
+
+    if not ws then
+        return
+    end
+
+    if ws.tiled_layout == "scrolling" then
+        hl.plugin.scrolloverview.overview("toggle")
+    else
+        hl.dsp.exec_cmd("hyprctl dispatch overview:toggle")
+    end
+end)
 
 Bind({ MainMod, "N" }, hl.dsp.exec_cmd("show-notifications"))
 
