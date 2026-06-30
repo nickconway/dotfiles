@@ -281,6 +281,7 @@ Bind({ MainMod, "SHIFT", "T" }, function()
         layout = new_layout,
         workspace = tostring(ws.id),
         no_rounding = true,
+        border_size = 0,
         gaps_out = 0,
         gaps_in = 0,
     })
