@@ -139,14 +139,14 @@ hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding
 
 local game_classes = { "steam_app_.*", "gamescope.*", "lutris_.*" }
 
--- for _, c in ipairs(game_classes) do
---     hl.window_rule({
---         workspace = "name:game",
---         match = {
---             class = c,
---         },
---     })
--- end
+for _, c in ipairs(game_classes) do
+    hl.window_rule({
+        workspace = "name:game",
+        match = {
+            class = c,
+        },
+    })
+end
 
 hl.on("window.active", function()
     for _, w in ipairs(hl.get_windows()) do
