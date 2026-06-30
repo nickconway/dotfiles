@@ -117,3 +117,56 @@ for _, c in ipairs({ "steam_app_.*", "gamescope.*", "lutris_.*" }) do
         },
     })
 end
+
+hl.on("window.active", function(window)
+    local ws = hl.get_active_workspace()
+    if ws == nil or ws.tiled_layout ~= "scrolling" then
+        return
+    end
+
+    if
+        window == nil
+        or window.floating
+        or window.workspace == nil
+        or window.layout == nil
+        or window.layout.name ~= "scrolling"
+        or window.layout.column == nil
+    then
+        return
+    end
+
+    local max_index = 0
+    local column_index = window.layout.column.index
+
+    for _, w in ipairs(hl.get_windows({ workspace = ws })) do
+        if
+            not w.floating
+            and w.workspace ~= nil
+            and w.workspace.id == w.workspace.id
+            and w.layout ~= nil
+            and w.layout.name == "scrolling"
+            and w.layout.column ~= nil
+        then
+            if w.layout.column.index > max_index then
+                max_index = w.layout.column.index
+            end
+        end
+    end
+
+    if column_index > 0 and column_index ~= max_index then
+        hl.config({ scrolling = { focus_fit_method = 0 } })
+    else
+        hl.config({ scrolling = { focus_fit_method = 1 } })
+    end
+
+    -- Handles cursor warping shennanigans with centered floating windows
+    local cursor = hl.get_cursor_pos()
+    if cursor ~= nil then
+        hl.dispatch(hl.dsp.layout("focus l"))
+        hl.dispatch(hl.dsp.layout("focus r"))
+        hl.dispatch(hl.dsp.cursor.move({
+            x = cursor.x,
+            y = cursor.y,
+        }))
+    end
+end)
