@@ -49,13 +49,12 @@ zenbook-screen)
     shift
 
     export XDG_RUNTIME_DIR="/run/user/$(id -u $USER)"
-    export HYPRLAND_INSTANCE_SIGNATURE=$(ls $XDG_RUNTIME_DIR/hypr/ 2>/dev/null | head -n1)
 
     if [[ $1 == off ]]; then
-        hyprctl eval 'hl.monitor({ output = "eDP-2", disabled = true })'
+        hyprctl --instance 0 eval 'hl.monitor({ output = "eDP-2", disabled = true })'
         notify-send -e -h string:synchronous:zenbook-screen "Zenbook" "Second screen disabled"
     else
-        hyprctl eval 'hl.monitor({ output = "eDP-2", disabled = false, mode = "preferred", position = "auto-down", scale = "1.6", bitdepth = 10 })'
+        hyprctl --instance 0 eval 'hl.monitor({ output = "eDP-2", disabled = false, mode = "preferred", position = "auto-down", scale = "1.6", bitdepth = 10 })'
         notify-send -e -h string:synchronous:zenbook-screen "Zenbook" "Second screen enabled"
     fi
     ;;
