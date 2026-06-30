@@ -1,3 +1,31 @@
+local function toggle_game_mode(mode)
+    local options = {
+        general = {
+            gaps_in = 0,
+            gaps_out = 0,
+            border_size = 0,
+        },
+
+        animations = {
+            enabled = false,
+        },
+
+        decoration = {
+            shadow = { enabled = false },
+            blur = { enabled = false },
+            rounding = 0,
+        },
+    }
+
+    local current_mode = (hl.get_config("animations.enabled") == false)
+
+    if mode == true and current_mode == false then
+        hl.config(options)
+    elseif mode == false and current_mode == true then
+        hl.exec_cmd("hyprctl reload")
+    end
+end
+
 if hl.plugin.darkwindow ~= nil then
     if BackgroundRed then
         hl.window_rule({
@@ -109,14 +137,29 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, roundi
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
 
-for _, c in ipairs({ "steam_app_.*", "gamescope.*", "lutris_.*" }) do
-    hl.window_rule({
-        workspace = "name:game",
-        match = {
-            class = c,
-        },
-    })
-end
+local game_classes = { "steam_app_.*", "gamescope.*", "lutris_.*" }
+
+-- for _, c in ipairs(game_classes) do
+--     hl.window_rule({
+--         workspace = "name:game",
+--         match = {
+--             class = c,
+--         },
+--     })
+-- end
+
+hl.on("window.active", function()
+    for _, w in ipairs(hl.get_windows()) do
+        for _, c in ipairs(game_classes) do
+            if w.class:match(c) then
+                toggle_game_mode(true)
+                return
+            end
+        end
+    end
+
+    toggle_game_mode(false)
+end)
 
 hl.on("window.active", function(window)
     local ws = hl.get_active_workspace()

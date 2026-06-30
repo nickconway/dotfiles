@@ -27,6 +27,18 @@ local function focus_group_aware(direction)
     hl.dispatch(hl.dsp.focus({ direction = direction }))
 end
 
+local function zoom(offset)
+    local current = hl.get_config("cursor.zoom_factor")
+
+    if offset ~= nil then
+        current = current + offset
+    else
+        current = current == 1 and 1.5 or 1
+    end
+
+    hl.config({ cursor = { zoom_factor = current } })
+end
+
 Bind = function(keys, action, opts)
     hl.bind(type(keys) == "table" and table.concat(keys, " + ") or keys, action, opts or {})
 end
@@ -213,9 +225,10 @@ Bind({ MainMod, "SHIFT", "mouse:272" }, hl.dsp.window.resize(), { mouse = true }
 Bind({ MainMod, "mouse:273" }, hl.dsp.window.resize(), { mouse = true })
 Bind({ MainMod, "SHIFT", "mouse:273" }, hl.dsp.window.resize(), { mouse = true })
 
-Bind({ MainMod, "U" }, hl.dsp.exec_cmd("pypr fetch_client_menu"))
-Bind({ MainMod, "SHIFT", "Z" }, hl.dsp.exec_cmd("pypr zoom ++0.5"))
-Bind({ MainMod, "Z" }, hl.dsp.exec_cmd("pypr zoom"))
+Bind({ MainMod, "Z" }, zoom)
+Bind({ MainMod, "SHIFT", "Z" }, function()
+    zoom(0.5)
+end)
 
 local StartX = 0
 local StartY = 0
