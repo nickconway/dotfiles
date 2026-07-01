@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+eval "$(
+    get-options \
+        "-p, --popup: popup=true" \
+        "-g, --global: global=true" \
+        "-w, --width: width='\$ARG'" \
+        "-h, --height: height='\$ARG'" \
+        -- \
+        "$@"
+)"
+
+if [[ -n $popup ]]; then
+    if tmux display -p '#S' | grep -q Popup; then
+        tmux detach
+    else
+        session=$(tmux display -p '#S')
+        path=$(tmux display -p '#{pane_current_path}')
+        name="Popup"
+
+        if [[ -z "${global:-}" ]]; then
+            name="$session $name"
+        fi
+
+        tmux popup -b rounded -T " $name " -w ${width:-80%} -h ${height:-80%} -E "tmux new -As '$name' -c '$path'"
+    fi
+    exit
+fi

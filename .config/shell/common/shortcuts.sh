@@ -171,11 +171,18 @@ alias gd='git diff'
 alias gds='git diff --staged'
 
 function gec() {
-    gd --name-only "$@" | xargs $EDITOR
+    {
+        gd --name-only "$@"
+        gd --staged --name-only "$@"
+    } | xargs $EDITOR
 }
 
 function gecu() {
-    (gd --name-only "$@" && git ls-files -o --exclude-standard "$@") | xargs $EDITOR
+    {
+        gd --name-only "$@"
+        gd --staged --name-only "$@"
+        git ls-files -o --exclude-standard "$@"
+    } | xargs $EDITOR
 }
 
 function ggp() {
@@ -703,7 +710,10 @@ alias ydec="yadm decrypt"
 alias yenc="yadm encrypt"
 
 function yec() {
-    (cd && yd --name-only "$@" | xargs $EDITOR)
+    (cd && {
+        yd --name-only "$@"
+        yd --staged --name-only "$@"
+    } | xargs $EDITOR)
 }
 
 function yl() {
