@@ -66,7 +66,7 @@ if tmux list-panes -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; t
     tmux break-pane -s "$pane" -t ${session}_minimized_
 elif tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
     pane="$(tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}")"
-    tmux join-pane -s "$pane" -l ${height:-25%} "${ARGS[@]}"
+    tmux join-pane -s "$pane" -l ${height:-25%}
 else
     new_pane="$(tmux split -l ${height:-25%} -P -c "$path" "${ARGS[@]}")"
     tmux select-pane -t "$new_pane" -T "$name"
