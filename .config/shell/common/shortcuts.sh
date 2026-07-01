@@ -605,6 +605,7 @@ alias tls='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 alias tmuxconf='$EDITOR ~/.config/tmux/tmux.conf'
+alias ts='tmux-scratch'
 
 function t() {
     tmux-sessionizer ${1:-${PWD}}

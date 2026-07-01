@@ -16,23 +16,58 @@ eval "$(
         "-g, --global: global=true" \
         "-w, --width: width='\$ARG'" \
         "-h, --height: height='\$ARG'" \
+        "--window: window=true" \
+        "-t, --title: title='\$ARG'" \
         -- \
         "$@"
 )"
 
-if [[ -n $popup ]]; then
+session=$(tmux display -p '#S')
+path=$(tmux display -p '#{pane_current_path}')
+name="${title:-Scratch}"
+
+if [[ -z "${global:-}" ]]; then
+    name="$session $name"
+fi
+
+if [[ -n ${popup:-} ]]; then
     if tmux display -p '#S' | grep -q Popup; then
         tmux detach
     else
-        session=$(tmux display -p '#S')
-        path=$(tmux display -p '#{pane_current_path}')
-        name="Popup"
+        name="${title:-Popup}"
 
         if [[ -z "${global:-}" ]]; then
             name="$session $name"
         fi
 
-        tmux popup -b rounded -T " $name " -w ${width:-80%} -h ${height:-80%} -E "tmux new -As '$name' -c '$path'"
+        tmux popup -b rounded -T " $name " -w ${width:-80%} -h ${height:-80%} -E "tmux new -As '$name' -c '$path' ${ARGS[*]}"
     fi
     exit
+fi
+
+if [[ -n ${window:-} ]]; then
+    if tmux list-windows -F '#{window_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
+        window="$(tmux list-panes -a -F '#{window_id}' -f "#{==:#{pane_title},$name}")"
+        tmux new-session -ds ${session}_minimized_ &>/dev/null || true
+        tmux move-window -s "$window" -t ${session}_minimized_
+    elif tmux list-windows -a -F '#{window_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
+        window="$(tmux list-panes -a -F '#{window_id}' -f "#{==:#{pane_title},$name}")"
+        tmux move-window -s "$window" -t "$(tmux display '#{window_id}')"
+    else
+        new_pane="$(tmux new-window -P -F "#{pane_id}" -c "$path" "${ARGS[@]}")"
+        tmux select-pane -t "$new_pane" -T "$name"
+    fi
+    exit
+fi
+
+if tmux list-panes -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
+    pane="$(tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}")"
+    tmux new-session -ds ${session}_minimized_ &>/dev/null || true
+    tmux break-pane -s "$pane" -t ${session}_minimized_
+elif tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
+    pane="$(tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}")"
+    tmux join-pane -s "$pane" -l ${height:-25%} "${ARGS[@]}"
+else
+    new_pane="$(tmux split -l ${height:-25%} -P -c "$path" "${ARGS[@]}")"
+    tmux select-pane -t "$new_pane" -T "$name"
 fi

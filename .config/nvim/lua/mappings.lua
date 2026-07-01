@@ -31,10 +31,6 @@ map("n", "<leader>cr", function()
     local cmd
     local window
 
-    if not run_commands[vim.bo.filetype] then
-        return
-    end
-
     if type(run_commands[vim.bo.filetype]) == "string" then
         cmd = run_commands[vim.bo.filetype]
     elseif type(run_commands[vim.bo.filetype]) == "function" then
@@ -44,11 +40,12 @@ map("n", "<leader>cr", function()
         window = run_commands[vim.bo.filetype]["window"]
     end
 
-    if window == true then
-        vim.cmd("silent !tmux-run -w '" .. cmd .. "'")
-    else
-        vim.cmd("silent !tmux-run '" .. cmd .. "'")
-    end
+    local command = "silent !tmux-scratch"
+    command = command .. (window == true and " --window" or "")
+    command = command .. " -f"
+    command = command .. " " .. (cmd ~= nil and cmd or "")
+
+    vim.cmd(command)
 end, "Run Code")
 
 map("n", "<Home>", "^")

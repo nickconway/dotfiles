@@ -198,6 +198,8 @@ if command -v nvim &>/dev/null; then
         -c 'set showtabline=0' \
         -c 'set nonumber norelativenumber' \
         -c 'set nocul noshowcmd noruler noshowmode' \
+        -c 'highlight Normal ctermbg=none guibg=none' \
+        -c 'highlight NormalFloat ctermbg=none guibg=none' \
         +Man!"
 elif command -v bat &>/dev/null; then
     export MANPAGER="sh -c 'col -bx | bat \
