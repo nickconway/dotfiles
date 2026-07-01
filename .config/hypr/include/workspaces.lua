@@ -8,6 +8,15 @@ Run = function(fn)
     return out
 end
 
+local focus = function(class, cmd)
+    local window = hl.get_windows({ class = class, workspace = hl.get_active_workspace() })[1]
+    if window ~= nil then
+        hl.dispatch(hl.dsp.focus({ window = window }))
+    else
+        hl.exec_cmd(cmd or class)
+    end
+end
+
 hl.workspace_rule({ workspace = "w[tv1]s[false]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
@@ -21,13 +30,23 @@ hl.workspace_rule({
     no_border = true,
 })
 
-if Run("hostnamectl hostname") == "desktop" then
-    Bind({ MainMod, "B" }, hl.dsp.focus({ window = "zen-browser" }))
-    Bind({ MainMod, "T" }, hl.dsp.focus({ window = "kitty" }))
-    Bind({ MainMod, "D" }, hl.dsp.focus({ window = "vesktop" }))
-    Bind({ MainMod, "M" }, hl.dsp.focus({ window = "thunderbird" }))
-    Bind({ MainMod, "F" }, hl.dsp.focus({ window = "feishin" }))
+Bind({ MainMod, "B" }, function()
+    focus("zen")
+end)
+Bind({ MainMod, "T" }, function()
+    focus("kitty")
+end)
+Bind({ MainMod, "D" }, function()
+    focus("vesktop")
+end)
+Bind({ MainMod, "M" }, function()
+    focus("thunderbird", "thunderbird-beta")
+end)
+Bind({ MainMod, "F" }, function()
+    focus("feishin")
+end)
 
+if Run("hostnamectl hostname") == "desktop" then
     hl.workspace_rule({ workspace = "1", monitor = "DP-1", default = true })
     hl.workspace_rule({ workspace = "2", monitor = "DP-3", default = true })
     hl.workspace_rule({ workspace = "3", monitor = "DP-2", default = true })
@@ -51,22 +70,17 @@ elseif Run("hostnamectl hostname") == "laptop" then
         no_rounding = true,
         no_border = true,
     })
-    Bind({ MainMod, "B" }, hl.dsp.focus({ workspace = "1" }))
-    Bind({ MainMod, "T" }, hl.dsp.focus({ workspace = "2" }))
-    Bind({ MainMod, "D" }, hl.dsp.focus({ workspace = "3" }))
-    Bind({ MainMod, "X" }, hl.dsp.focus({ workspace = "4" }))
-    Bind({ MainMod, "M" }, hl.dsp.focus({ workspace = "5" }))
-    Bind({ MainMod, "F" }, hl.dsp.focus({ workspace = "6" }))
 
-    hl.workspace_rule({ workspace = "1", on_created_empty = "zen-browser" })
-    hl.workspace_rule({ workspace = "2", on_created_empty = "kitty" })
-    hl.workspace_rule({ workspace = "3", on_created_empty = "vesktop" })
-    hl.workspace_rule({
-        workspace = "4",
-        on_created_empty = "chromium --app='https://messages.google.com/web' & chromium --app='https://bluebubbles.app/web/'",
-    })
-    hl.workspace_rule({ workspace = "5", on_created_empty = "thunderbird-beta" })
-    hl.workspace_rule({ workspace = "6", on_created_empty = "feishin --ozone-platform-hint=auto" })
+    hl.on("hyprland.start", function()
+        hl.exec_cmd("zen-browser")
+        hl.exec_cmd("kitty")
+        hl.exec_cmd("vesktop")
+        hl.exec_cmd("thunderbird-beta")
+        hl.exec_cmd("feishin --ozone-platform-hint=auto --password-store='kwallet6'")
+        hl.exec_cmd("chromium --app='https://messages.google.com/web'")
+        hl.exec_cmd("chromium --app='https://bluebubbles.app/web/'")
+        hl.exec_cmd("chromium --app='https://x.com'")
+    end)
 end
 
 hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false })
