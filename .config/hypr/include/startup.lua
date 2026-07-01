@@ -29,7 +29,7 @@ hl.on("hyprland.start", function()
 
     hl.exec_cmd("bitwarden")
     hl.exec_cmd("openrgb --startminimized --server")
-    hl.exec_cmd("opendeck")
+    hl.exec_cmd("opendeck --hide")
 
     hl.exec_cmd("LOG=y ups-commands")
 
