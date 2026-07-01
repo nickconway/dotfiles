@@ -14,15 +14,15 @@ fi
 theme=~/.config/rofi/styles/applets.rasi
 
 # Theme Elements
-status="$(media status)"
-loop_status="$(media loop)"
-shuffle_status="$(media shuffle)"
+status="$(media -n status)"
+loop_status="$(media -n loop)"
+shuffle_status="$(media -n shuffle)"
 if [[ -z "$status" ]]; then
     prompt='Offline'
     mesg="Nothing is Playing"
 else
-    prompt="$(media metadata -f "{{artist}}" | sed "s/&/&amp;/g")"
-    mesg="$(media metadata -f "{{title}}" | sed "s/&/&amp;/g") :: $(media metadata -f "{{album}}" | sed "s/&/&amp;/g")"
+    prompt="$(media -n metadata -f "{{artist}}" | sed "s/&/&amp;/g")"
+    mesg="$(media -n metadata -f "{{title}}" | sed "s/&/&amp;/g") :: $(media -n metadata -f "{{album}}" | sed "s/&/&amp;/g")"
 fi
 
 list_col='6'
