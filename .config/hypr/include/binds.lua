@@ -305,3 +305,7 @@ end, {
     mouse = true,
     non_consuming = true,
 })
+
+Bind("switch:on:Lid Switch", function()
+    hl.exec_cmd("systemctl suspend")
+end, { locked = true })
