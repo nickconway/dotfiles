@@ -1,32 +1,23 @@
 return {
     "nvim-neorg/neorg",
-    enabled = function()
-        local f = io.open(os.getenv("HOME") .. "/.work", "r")
-        if f ~= nil then
-            f:close()
-            return false
-        end
-        return true
-    end,
     dependencies = {
-        "vhyrro/luarocks.nvim",
-        priority = 1000,
-        config = true,
+        "nvim-neorg/tree-sitter-norg",
+        "nvim-neorg/tree-sitter-norg-meta",
     },
-    config = function()
-        require("neorg").setup({
-            load = {
-                ["core.defaults"] = {}, -- Loads default behaviour
-                ["core.concealer"] = {}, -- Adds pretty icons to your documents
-                ["core.dirman"] = { -- Manages Neorg workspaces
-                    config = {
-                        workspaces = {
-                            notes = "~/Documents/Notes",
-                        },
+    lazy = false,
+    version = "*",
+    opts = {
+        load = {
+            ["core.defaults"] = {}, -- Loads default behaviour
+            ["core.concealer"] = {}, -- Adds pretty icons to your documents
+            ["core.dirman"] = { -- Manages Neorg workspaces
+                config = {
+                    workspaces = {
+                        notes = "~/Documents/Notes",
                     },
-                    default_workspace = "notes",
                 },
+                default_workspace = "notes",
             },
-        })
-    end,
+        },
+    },
 }
