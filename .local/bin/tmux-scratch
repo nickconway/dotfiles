@@ -48,8 +48,8 @@ fi
 if [[ -n ${window:-} ]]; then
     if tmux list-windows -F '#{window_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
         window="$(tmux list-panes -a -F '#{window_id}' -f "#{==:#{pane_title},$name}")"
-        tmux new-session -ds ${session}_minimized_ &>/dev/null || true
-        tmux move-window -s "$window" -t ${session}_minimized_
+        tmux new-session -ds "${session}_minimized_" &>/dev/null || true
+        tmux move-window -s "$window" -t "${session}_minimized_"
     elif tmux list-windows -a -F '#{window_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
         window="$(tmux list-panes -a -F '#{window_id}' -f "#{==:#{pane_title},$name}")"
         tmux move-window -s "$window" -t "$(tmux display '#{window_id}')"
@@ -62,8 +62,8 @@ fi
 
 if tmux list-panes -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
     pane="$(tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}")"
-    tmux new-session -ds ${session}_minimized_ &>/dev/null || true
-    tmux break-pane -s "$pane" -t ${session}_minimized_
+    tmux new-session -ds "${session}_minimized_" &>/dev/null || true
+    tmux break-pane -s "$pane" -t "${session}_minimized_"
 elif tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
     pane="$(tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}")"
     tmux join-pane -s "$pane" -l ${height:-25%}
