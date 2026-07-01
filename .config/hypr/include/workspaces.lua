@@ -31,7 +31,7 @@ hl.workspace_rule({
 })
 
 Bind({ MainMod, "B" }, function()
-    focus("zen")
+    focus("zen", "zen-browser")
 end)
 Bind({ MainMod, "T" }, function()
     focus("kitty")
