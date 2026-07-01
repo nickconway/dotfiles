@@ -1,13 +1,3 @@
-Run = function(fn)
-    local f = io.popen(fn)
-    if f == nil then
-        return ""
-    end
-    local out = f:read("l")
-    f:close()
-    return out
-end
-
 local focus = function(class, cmd)
     local window = hl.get_windows({ class = class, workspace = hl.get_active_workspace() })[1]
     if window ~= nil then
