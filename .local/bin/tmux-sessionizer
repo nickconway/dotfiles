@@ -14,9 +14,9 @@ command() (
     [[ -n "$(tmux display -p '#{client_last_session}')" ]] && tmux display -p '#{client_last_session}'
 
     if [[ -n "$(tmux display -p '#{client_last_session}')" ]]; then
-        tmux list-sessions -F "#S" | grep -v "^$(tmux display -p '#{client_last_session}')$" | grep -v "^$(tmux display-message -p '#S')$" | grep -v Popup
+        tmux list-sessions -F "#S" | grep -v "^$(tmux display -p '#{client_last_session}')$" | grep -v "^$(tmux display-message -p '#S')$" | grep -v Popup | grep -v _minimized_
     else
-        tmux list-sessions -F "#S" | grep -v "^$(tmux display-message -p '#S')$" | grep -v Popup
+        tmux list-sessions -F "#S" | grep -v "^$(tmux display-message -p '#S')$" | grep -v Popup | grep -v _minimized_
     fi
 
     tmux display-message -p '#S'
