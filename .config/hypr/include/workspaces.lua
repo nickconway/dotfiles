@@ -12,6 +12,15 @@ hl.workspace_rule({ workspace = "w[tv1]s[false]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
 
+hl.workspace_rule({
+    workspace = "m[0]s[false]",
+    layout = "scrolling",
+    gaps_out = 0,
+    gaps_in = 0,
+    no_rounding = true,
+    no_border = true,
+})
+
 if Run("hostnamectl hostname") == "desktop" then
     Bind({ MainMod, "B" }, hl.dsp.focus({ window = "zen-browser" }))
     Bind({ MainMod, "T" }, hl.dsp.focus({ window = "kitty" }))
@@ -34,6 +43,14 @@ if Run("hostnamectl hostname") == "desktop" then
         hl.exec_cmd("[workspace 3 silent] chromium --app='https://x.com'")
     end)
 elseif Run("hostnamectl hostname") == "laptop" then
+    hl.workspace_rule({
+        workspace = "s[false]",
+        layout = "scrolling",
+        gaps_out = 0,
+        gaps_in = 0,
+        no_rounding = true,
+        no_border = true,
+    })
     Bind({ MainMod, "B" }, hl.dsp.focus({ workspace = "1" }))
     Bind({ MainMod, "T" }, hl.dsp.focus({ workspace = "2" }))
     Bind({ MainMod, "D" }, hl.dsp.focus({ workspace = "3" }))
