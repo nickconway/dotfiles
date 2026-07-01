@@ -23,6 +23,7 @@ hl.workspace_rule({
 Bind({ MainMod, "B" }, function()
     focus("zen", "zen-browser")
 end)
+
 Bind({ MainMod, "T" }, function()
     focus("kitty")
 end)
@@ -35,43 +36,6 @@ end)
 Bind({ MainMod, "F" }, function()
     focus("feishin")
 end)
-
-if Run("hostnamectl hostname") == "desktop" then
-    hl.workspace_rule({ workspace = "1", monitor = "DP-1", default = true })
-    hl.workspace_rule({ workspace = "2", monitor = "DP-3", default = true })
-    hl.workspace_rule({ workspace = "3", monitor = "DP-2", default = true })
-
-    hl.on("hyprland.start", function()
-        hl.exec_cmd("[workspace 1 silent] zen-browser")
-        hl.exec_cmd("[workspace 2 silent] kitty")
-        hl.exec_cmd("[workspace 2 silent] vesktop")
-        hl.exec_cmd("[workspace 2 silent] thunderbird-beta")
-        hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
-        hl.exec_cmd("[workspace 3 silent] chromium --app='https://messages.google.com/web'")
-        hl.exec_cmd("[workspace 3 silent] chromium --app='https://bluebubbles.app/web/'")
-        hl.exec_cmd("[workspace 3 silent] chromium --app='https://x.com'")
-    end)
-elseif Run("hostnamectl hostname") == "laptop" then
-    hl.workspace_rule({
-        workspace = "s[false]",
-        layout = "scrolling",
-        gaps_out = 0,
-        gaps_in = 0,
-        no_rounding = true,
-        no_border = true,
-    })
-
-    hl.on("hyprland.start", function()
-        hl.exec_cmd("zen-browser")
-        hl.exec_cmd("kitty")
-        hl.exec_cmd("vesktop")
-        hl.exec_cmd("thunderbird-beta")
-        hl.exec_cmd("feishin --ozone-platform-hint=auto --password-store='kwallet6'")
-        hl.exec_cmd("chromium --app='https://messages.google.com/web'")
-        hl.exec_cmd("chromium --app='https://bluebubbles.app/web/'")
-        hl.exec_cmd("chromium --app='https://x.com'")
-    end)
-end
 
 hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false })
 

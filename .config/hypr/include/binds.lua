@@ -44,11 +44,10 @@ Bind = function(keys, action, opts)
 end
 
 Run = function(cmd)
-    hl.exec_cmd("(" .. cmd .. ") &> /tmp/hyprland-exec")
-    local file = io.open("/tmp/hyprland-exec")
+    local file = io.popen(cmd)
 
     if file then
-        return file:read("*a")
+        return file:read("*a"):match("^%s*(.-)%s*$")
     end
 end
 
@@ -198,8 +197,11 @@ Bind({ MainMod, "SHIFT", "9" }, hl.dsp.window.move({ workspace = "9" }))
 Bind({ MainMod, "SHIFT", "0" }, hl.dsp.window.move({ workspace = "10" }))
 
 local workspace = function(ws)
-    local one_monitor =
-        Run("if [[ $(hyprctl monitors -j | jq -r '.[].id' | wc -l) -eq 1 ]]; then echo true; else echo false; fi")
+    hl.exec_cmd(
+        "if [[ $(hyprctl monitors -j | jq -r '.[].id' | wc -l) -eq 1 ]]; then echo > /tmp/hyprland-one-monitor; fi"
+    )
+    local file = io.open("/tmp/hyprland-one-monitor")
+    local one_monitor = file ~= nil
 
     if ws == "next" and one_monitor then
         return hl.dsp.focus({ workspace = "e+1" })

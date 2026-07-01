@@ -12,3 +12,5 @@ require("include.specials")
 require("include.startup")
 require("include.windows")
 require("include.workspaces")
+
+require("include." .. Run("hostnamectl hostname"))
