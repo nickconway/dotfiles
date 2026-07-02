@@ -860,7 +860,6 @@ if command -v xdg-open &>/dev/null; then
     }
 fi
 
-alias yay='systemd-inhibit --why Yay yay'
 alias yaconf='yay -Pg'
 alias yaclean='yay -Sc'
 alias yaclr='yay -Scc'
@@ -881,3 +880,5 @@ alias yamir='yay -Syy'
 alias yaupd="yay -Sy"
 
 alias shell-debug='time DEBUGRC=1 '$SHELL_NAME' -i -c exit'
+
+alias si='systemd-inhibit'
