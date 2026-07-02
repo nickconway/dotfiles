@@ -51,6 +51,19 @@ Run = function(cmd)
     end
 end
 
+Focus = function(class, cmd)
+    for _, m in ipairs(hl.get_monitors()) do
+        local window = hl.get_windows({ class = class, workspace = hl.get_active_workspace(m) })[1]
+
+        if window ~= nil then
+            hl.dispatch(hl.dsp.focus({ window = window }))
+            return
+        end
+    end
+
+    hl.exec_cmd(cmd or class)
+end
+
 Bind({ MainMod, "SHIFT", "O" }, function()
     if hl.plugin.darkwindow and BackgroundRed and BackgroundGreen and BackgroundBlue then
         hl.plugin.darkwindow.dsp_shade({
@@ -231,6 +244,9 @@ Bind({ MainMod, "Z" }, zoom)
 Bind({ MainMod, "SHIFT", "Z" }, function()
     zoom(0.5)
 end)
+Bind({ MainMod, "ALT", "Z" }, function()
+    zoom(-0.5)
+end)
 
 local StartX = 0
 local StartY = 0
@@ -309,3 +325,20 @@ end, {
 Bind("switch:on:Lid Switch", function()
     hl.exec_cmd("systemctl suspend")
 end, { locked = true })
+
+Bind({ MainMod, "B" }, function()
+    Focus("zen", "zen-browser")
+end)
+
+Bind({ MainMod, "T" }, function()
+    Focus("kitty")
+end)
+Bind({ MainMod, "D" }, function()
+    Focus("vesktop")
+end)
+Bind({ MainMod, "M" }, function()
+    Focus("thunderbird", "thunderbird-beta")
+end)
+Bind({ MainMod, "F" }, function()
+    Focus("feishin")
+end)
