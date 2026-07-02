@@ -100,7 +100,7 @@ Bind({ MainMod, "CTRL", "SHIFT", "P" }, function()
     hl.dsp.exec_cmd("caelestia resizer pip")
 end)
 
-Bind({ MainMod, "M" }, hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"))
+Bind({ MainMod, "ALT", "M" }, hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"))
 Bind({ MainMod, "SHIFT", "M" }, hl.dsp.exec_cmd("~/.config/rofi/scripts/music-menu"))
 
 Bind({ "ALT", "SPACE" }, hl.dsp.exec_cmd("picker all"))
@@ -132,7 +132,7 @@ end)
 
 Bind({ MainMod, "N" }, hl.dsp.exec_cmd("show-notifications"))
 
-Bind({ MainMod, "D" }, hl.dsp.exec_cmd("wayscriber --active"))
+Bind({ MainMod, "ALT", "D" }, hl.dsp.exec_cmd("wayscriber --active"))
 Bind({ MainMod, "SHIFT", "D" }, hl.dsp.exec_cmd("toggle dnd"))
 
 Bind({ MainMod, "V" }, hl.dsp.exec_cmd("nohup picker clipboard &> /dev/null"))
@@ -337,7 +337,7 @@ Bind({ MainMod, "D" }, function()
     Focus("vesktop")
 end)
 Bind({ MainMod, "M" }, function()
-    Focus("thunderbird", "thunderbird-beta")
+    Focus("thunderbird-beta")
 end)
 Bind({ MainMod, "F" }, function()
     Focus("feishin")
