@@ -14,6 +14,7 @@ eval "$(
     get-options \
         "-r, --reset: reset=true" \
         "-p, --progress: progress=true" \
+        "--raw: raw=true" \
         -- \
         "$@"
 )"
@@ -23,7 +24,13 @@ DIR="${ARGS[0]:-.}"
 if [[ -n "${progress:-}" ]]; then
     scanned=$(cat "$DIR/.scan-log" | wc -l)
     total=$(cat "$DIR/.files" | wc -l)
-    echo "$(bc -l <<<"result = $scanned / $total * 100; scale = 2; result / 1")%"
+
+    if [[ -z ${raw:-} ]]; then
+        echo "$(bc -l <<<"result = $scanned / $total * 100; scale = 0; result / 1")%"
+    else
+        bc -l <<<"result = $scanned / $total * 100; scale = 0; result / 1"
+    fi
+
     exit
 fi
 
