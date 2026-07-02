@@ -23,7 +23,7 @@ DIR="${ARGS[0]:-.}"
 if [[ -n "${progress:-}" ]]; then
     scanned=$(cat "$DIR/.scan-log" | wc -l)
     total=$(cat "$DIR/.files" | wc -l)
-    echo "$(echo "scale=2; $scanned / $total" | bc | tr -d .)%"
+    echo "$(bc -l <<<"result = $scanned / $total * 100; scale = 2; result / 1")%"
     exit
 fi
 
