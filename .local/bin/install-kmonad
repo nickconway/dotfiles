@@ -10,11 +10,9 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-sudo groupadd uinput || echo "group already exists"
-sudo usermod -aG input,uinput $USER
+groupadd uinput || echo "group already exists"
+usermod -aG input,uinput $USER
 
-sudo bash -c 'cat << EOF > /usr/lib/udev/rules.d/60-kmonad.rules
-KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
-EOF'
-sudo modprobe uinput
-sudo udevadm control --reload-rules && sudo udevadm trigger
+echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' >/usr/lib/udev/rules.d/60-kmonad.rules
+modprobe uinput
+udevadm control --reload-rules && udevadm trigger

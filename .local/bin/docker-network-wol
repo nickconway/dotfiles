@@ -12,13 +12,13 @@ fi
 
 DOCKER_NETWORK="$1"
 
-sudo sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
-echo '# Disable the setting to ignore echo broadcasts' | sudo tee /etc/sysctl.d/97-docker-broadcast.conf
-echo 'net.ipv4.icmp_echo_ignore_broadcasts=0' | sudo tee -a /etc/sysctl.d/97-docker-broadcast.conf
+sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
+echo '# Disable the setting to ignore echo broadcasts' | tee /etc/sysctl.d/97-docker-broadcast.conf
+echo 'net.ipv4.icmp_echo_ignore_broadcasts=0' | tee -a /etc/sysctl.d/97-docker-broadcast.conf
 
-sudo sysctl -w net.ipv4.conf.all.bc_forwarding=1
-echo '# Enabling broadcast forwarding for "all" interfaces' | sudo tee -a /etc/sysctl.d/97-docker-broadcast.conf
-echo 'net.ipv4.conf.all.bc_forwarding=1' | sudo tee -a /etc/sysctl.d/97-docker-broadcast.conf
+sysctl -w net.ipv4.conf.all.bc_forwarding=1
+echo '# Enabling broadcast forwarding for "all" interfaces' | tee -a /etc/sysctl.d/97-docker-broadcast.conf
+echo 'net.ipv4.conf.all.bc_forwarding=1' | tee -a /etc/sysctl.d/97-docker-broadcast.conf
 
 subnet=$(docker network inspect "$DOCKER_NETWORK" | jq --raw-output .[0].IPAM.Config[0].Subnet)
 
@@ -29,10 +29,10 @@ if [ ! -z $subnet ]; then
     if [ ! -z $interface ]; then
         echo "Got interface $interface"
 
-        sudo sysctl -w net.ipv4.conf.${interface}.bc_forwarding=1
-        echo '# Check the setting value to check we are substituting correctly' | sudo tee -a /etc/sysctl.d/97-docker-broadcast.conf
-        echo "net.ipv4.conf.${interface}.bc_forwarding=1" | sudo tee -a /etc/sysctl.d/97-docker-broadcast.conf
-        sudo sysctl -p /etc/sysctl.d/97-docker-broadcast.conf
+        sysctl -w net.ipv4.conf.${interface}.bc_forwarding=1
+        echo '# Check the setting value to check we are substituting correctly' | tee -a /etc/sysctl.d/97-docker-broadcast.conf
+        echo "net.ipv4.conf.${interface}.bc_forwarding=1" | tee -a /etc/sysctl.d/97-docker-broadcast.conf
+        sysctl -p /etc/sysctl.d/97-docker-broadcast.conf
     else
         echo "Could not determine the network interface for $subnet"
     fi

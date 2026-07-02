@@ -10,5 +10,4 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-yay -S --needed --noconfirm sunshine
-setcap cap_sys_admin+p "$(readlink -f "$(which sunshine)")"
+sudo env "HOME=$HOME" "PATH=$PATH" "$@"

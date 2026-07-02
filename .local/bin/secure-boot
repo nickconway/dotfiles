@@ -10,14 +10,14 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-sudo sbctl create-keys
-read -p "Are you dual booting Windows? [y/N] " DB
+sbctl create-keys
+read -rp "Are you dual booting Windows? [y/N] " DB
 if [[ $DB == "y" || $DB == "Y" ]]; then
     echo "Also enrolling microsoft keys..."
-    sudo grub-install --target=x86_64-efi --efi-directory /boot --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
-    sudo sbctl enroll-keys --microsoft
+    grub-install --target=x86_64-efi --efi-directory /boot --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
+    sbctl enroll-keys --microsoft
 else
-    sudo sbctl enroll-keys
+    sbctl enroll-keys
 fi
-sudo sbctl verify 2>&1 | tail -n +2 | awk '{print $2}' | while read LINE; do sudo sbctl sign -s $LINE; done
-sudo sbctl sign-all
+sbctl verify 2>&1 | tail -n +2 | awk '{print $2}' | while read -r LINE; do sbctl sign -s $LINE; done
+sbctl sign-all

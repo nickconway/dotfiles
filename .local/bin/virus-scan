@@ -10,23 +10,27 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-sudo freshclam
+eval "$(get-options "-r, --reset: reset=true" -- "$@")"
 
-echo "Finding new files..."
+DIR="${ARGS[0]:-.}"
 
-if [[ -e .scan ]]; then
-    sudo bash -c "find \"${1:-.}\" -type f -cnewer .scan > .files"
+freshclam
+
+if [[ -e "$DIR/.scan" && -z "${reset:-}" ]]; then
+    echo "Finding new files..."
+    find "$DIR" -type f -cnewer "$DIR/.scan" &>"$DIR/.files"
 else
-    sudo bash -c "find \"${1:-.}\" -type f > .files"
+    echo "Getting files..."
+    find "$DIR" -type f &>"$DIR/.files"
 fi
 
 echo "Scanning files..."
 
-touch .scan
-systemd-inhibit sudo clamscan -i --file-list .files 2>/dev/null >.scan-log || true
-cat .scan-log
+touch "$DIR/.scan"
+clamscan -i --file-list "$DIR/.files" &>"$DIR/.scan-log" || true
+cat "$DIR/.scan-log"
 
-if grep -q "Infected files: [^0]" .scan-log; then
+if grep -q "Infected files: [^0]" "$DIR/.scan-log"; then
     notifiy-send "Virus Scan" "Infected files found" -u critical
     curl -fsSL -d "Infected files found" "https://notifications.$SERVICES_BASE_DOMAIN/notifications" -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 fi

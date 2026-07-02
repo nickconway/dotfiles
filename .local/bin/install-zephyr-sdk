@@ -11,11 +11,11 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 cd /opt
-sudo wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/zephyr-sdk-$1_linux-x86_64.tar.xz
+wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/zephyr-sdk-$1_linux-x86_64.tar.xz
 wget -O - https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/sha256.sum | shasum --check --ignore-missing
 
-sudo tar xf zephyr-sdk-${1}_linux-x86_64.tar.xz
-sudo rm zephyr-sdk-${1}_linux-x86_64.tar.xz
+tar xf zephyr-sdk-${1}_linux-x86_64.tar.xz
+rm zephyr-sdk-${1}_linux-x86_64.tar.xz
 
 cd zephyr-sdk-$1
-sudo ./setup.sh
+./setup.sh

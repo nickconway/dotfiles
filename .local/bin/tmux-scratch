@@ -18,6 +18,7 @@ eval "$(
         "-h, --height: height='\$ARG'" \
         "--window: window=true" \
         "-t, --title: title='\$ARG'" \
+        "-f, --full: full=true" \
         -- \
         "$@"
 )"
@@ -66,8 +67,8 @@ if tmux list-panes -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; t
     tmux break-pane -s "$pane" -t "${session}_minimized_"
 elif tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}" | grep -q .; then
     pane="$(tmux list-panes -a -F '#{pane_id}' -f "#{==:#{pane_title},$name}")"
-    tmux join-pane -s "$pane" -l ${height:-25%}
+    tmux join-pane -s "$pane" -l ${height:-25%} "${full:+-f}"
 else
-    new_pane="$(tmux split -l ${height:-25%} -P -c "$path" "${ARGS[@]}")"
+    new_pane="$(tmux split -l ${height:-25%} -P -c "$path" "${full:+-f}" "${ARGS[@]}")"
     tmux select-pane -t "$new_pane" -T "$name"
 fi

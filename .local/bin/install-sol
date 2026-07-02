@@ -10,15 +10,15 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-mkdir -p ~/.local/sol
+mkdir -p $HOME/.local/sol
 wget https://github.com/SR-G/sleep-on-lan/releases/download/1.1.1-RELEASE/SleepOnLAN-1.1.1-RELEASE.zip
 
-mv SleepOnLAN-1.1.1-RELEASE.zip .local/sol
-cd .local/sol
+mv SleepOnLAN-1.1.1-RELEASE.zip $HOME/.local/sol
+cd $HOME/.local/sol
 unzip ./SleepOnLAN-1.1.1-RELEASE.zip
 rm ./SleepOnLAN-1.1.1-RELEASE.zip
 
-sudo bash -c "cat << EOF > /etc/systemd/system/sleep-on-lan.service
+cat <<EOF >/etc/systemd/system/sleep-on-lan.service
 [Unit]
 Description=sleep-on-lan
 StartLimitIntervalSec=500
@@ -31,8 +31,7 @@ RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
-EOF"
+EOF
 
-sudo systemctl daemon-reload
-
-sudo systemctl enable --now sleep-on-lan
+systemctl daemon-reload
+systemctl enable --now sleep-on-lan
