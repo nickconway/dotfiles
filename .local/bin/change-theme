@@ -43,6 +43,7 @@ OPTS_STRING+=("-r, --random: random=true")
 OPTS_STRING+=("-R, --reload: reload=true")
 OPTS_STRING+=("-8, --eight: eight=true")
 OPTS_STRING+=("-g, --generate-only: generate_only=true")
+OPTS_STRING+=("-N, --no-notification: no_notification=true")
 
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 
@@ -99,6 +100,8 @@ if [[ $light == true ]]; then
 else
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" || true
 fi
+
+_cp ~/.cache/wal/colors.sh ~/.config/shell/common/colors.sh
 
 _cp ~/.cache/wal/colors-hyprland.lua ~/.config/hypr/include/colors.lua
 _cp ~/.cache/wal/hyprvim.conf ~/.config/hyprvim/theme.conf
@@ -169,4 +172,7 @@ homeassistant-pywal
 openrgb-pywal &
 
 fastfetch
-eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 --random=Random" --action "$0 --reload=Reload")"
+
+if [[ -z ${no_notification:-} ]]; then
+    eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 --random=Random" --action "$0 --reload=Reload")"
+fi
