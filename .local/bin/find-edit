@@ -10,11 +10,11 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-eval "$(get-options "-a, --all: ALL=true" "-n, --no-ignore: NO_IGNORE=true" -- "$@")"
+eval "$(get-options "-a, --all: ALL=true" "-n, --no-ignore: NO_IGNORE=true" "-c, --case-sensitive: CASE_SENSITIVE=true" -- "$@")"
 
 rm -f /tmp/rg-fzf-{r,f}
 
-RG_CMD=(rg --column --line-number --no-heading --color=always --smart-case --hidden --with-filename -g)
+RG_CMD=(rg --column --line-number --no-heading --color=always --hidden --with-filename -g)
 
 if [[ ${ALL:-} == true ]]; then
     RG_CMD+=("!{**/node_modules/*,**/.github/*,**/.git/*}")
@@ -24,6 +24,10 @@ fi
 
 if [[ ${NO_IGNORE:-} == true ]]; then
     RG_CMD+=("--no-ignore")
+fi
+
+if [[ ${CASE_SENSITIVE:-} != true ]]; then
+    RG_CMD+=("--smart-case")
 fi
 
 QUERY="${ARGS[0]:-}"
