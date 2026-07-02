@@ -40,3 +40,7 @@ sleep 3
 curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
     -d '{ "scene_id": "pywal", "snapshot_entities": '"$entities"' }' \
     https://home.conway.dev/api/services/scene/create -o /dev/null
+
+curl -sSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
+    -d '{ "entity_id": "scene.pywal" }' \
+    https://home.conway.dev/api/services/scene/turn_on -o /dev/null
