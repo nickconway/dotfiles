@@ -41,7 +41,7 @@ echo "Scanning files..."
 
 touch "$DIR/.scan"
 clamscan --file-list "$DIR/.files" 2>"$DIR/.scan-error-log" >"$DIR/.scan-log" || true
-cat "$DIR/.scan-log"
+tail "$DIR/.scan-log"
 
 if grep -q "Infected files: [^0]" "$DIR/.scan-log"; then
     notifiy-send "Virus Scan" "Infected files found" -u critical
