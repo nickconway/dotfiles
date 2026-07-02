@@ -538,10 +538,10 @@ function npa() {
     eval $@
     if [[ $? -eq 0 ]]; then
         curl -d "$ARGS finished successfully" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
-        command -v notify-send &>/dev/null && notify-send "$ARGS finished successfully"
+        command -v notify-send &>/dev/null && notify-send Command "$ARGS finished successfully"
     else
         curl -d "$ARGS failed" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
-        command -v notify-send &>/dev/null && notify-send "$ARGS failed"
+        command -v notify-send &>/dev/null && notify-send Command "$ARGS failed"
     fi
 }
 
