@@ -10,9 +10,22 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-eval "$(get-options "-r, --reset: reset=true" -- "$@")"
+eval "$(
+    get-options \
+        "-r, --reset: reset=true" \
+        "-p, --progress: progress=true" \
+        -- \
+        "$@"
+)"
 
 DIR="${ARGS[0]:-.}"
+
+if [[ -n "${progress:-}" ]]; then
+    scanned=$(cat "$DIR/.scan-log" | wc -l)
+    total=$(cat "$DIR/.files" | wc -l)
+    echo "$((scanned / total))%"
+    exit
+fi
 
 freshclam
 
@@ -27,7 +40,7 @@ fi
 echo "Scanning files..."
 
 touch "$DIR/.scan"
-clamscan -i --file-list "$DIR/.files" &>"$DIR/.scan-log" || true
+clamscan --file-list "$DIR/.files" 2>"$DIR/.scan-error-log" >"$DIR/.scan-log" || true
 cat "$DIR/.scan-log"
 
 if grep -q "Infected files: [^0]" "$DIR/.scan-log"; then
