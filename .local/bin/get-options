@@ -56,6 +56,20 @@ while [[ $i -le $# ]]; do
             fi
 
             break
+        elif [[ "${!i}" != --* && "${!i}" == -* ]]; then
+            OPTS="${!i:1}"
+
+            for ((j = 0; j < ${#OPTS}; j++)); do
+                if [[ "${OPTS:$j:1}" == "${OPT:1}" ]]; then
+                    OPT_ARG="$(if grep -q '$ARG' <<<"$ACTION"; then opt-arg $i "$@"; fi)"
+                    echo "${ACTION//\$ARG/$OPT_ARG}"
+                    FOUND=true
+
+                    if [[ -n "$OPT_ARG" ]]; then
+                        i=$((i + 1))
+                    fi
+                fi
+            done
         fi
     done
 
