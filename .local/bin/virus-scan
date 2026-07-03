@@ -10,30 +10,41 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
+function wait-for-scan() {
+    if [[ -n "${progress:-}" ]]; then
+        while kill -0 $pid 2>/dev/null; do
+            scanned=$(cat "$DIR/.scan-log" | wc -l)
+            total=$(cat "$DIR/.files" | wc -l)
+            expr="result = $scanned / $total * 100; scale = 2; result / 1"
+
+            if [[ -z ${raw:-} ]]; then
+                echo "$(bc -l <<<"$expr")%"
+            else
+                bc -l <<<"$expr"
+            fi
+
+            sleep 0.5
+        done | ~/Projects/gum/gum progress --no-show-percentage
+    else
+        while kill -0 $pid 2>/dev/null; do
+            sleep 0.5
+        done
+    fi
+
+}
+
+export -f wait-for-scan
+
 eval "$(
     get-options \
         "-r, --reset: reset=true" \
-        "-p, --progress: progress=true" \
+        "-p, --progress: export progress=true" \
         "--raw: raw=true" \
         -- \
         "$@"
 )"
 
-DIR="${ARGS[0]:-.}"
-
-if [[ -n "${progress:-}" ]]; then
-    scanned=$(cat "$DIR/.scan-log" | wc -l)
-    total=$(cat "$DIR/.files" | wc -l)
-    expr="result = $scanned / $total * 100; scale = 2; result / 1"
-
-    if [[ -z ${raw:-} ]]; then
-        echo "$(bc -l <<<"$expr")%"
-    else
-        bc -l <<<"$expr"
-    fi
-
-    exit
-fi
+export DIR="${ARGS[0]:-.}"
 
 freshclam
 
@@ -45,15 +56,23 @@ else
     find "$DIR" -type f &>"$DIR/.files"
 fi
 
-echo "Scanning files..."
+function clean() {
+    kill $pid 2>/dev/null || true
+    rm "$DIR"/.scan{,-error}-log
+}
 
 touch "$DIR/.scan"
-clamscan --file-list "$DIR/.files" 2>"$DIR/.scan-error-log" >"$DIR/.scan-log" || true
+
+set +m
+clamscan --file-list "$DIR/.files" 2>"$DIR/.scan-error-log" >"$DIR/.scan-log" &
+export pid=$!
+trap clean EXIT
+gum spin --title "Scanning files..." --show-output --show-stdout --show-error --show-stderr -- bash -c wait-for-scan
+set -m
+
 tail "$DIR/.scan-log"
 
 if grep -q "Infected files: [^0]" "$DIR/.scan-log"; then
     notify-send "Virus Scan" "Infected files found" -u critical
     curl -fsSL -d "Infected files found" "https://notifications.$SERVICES_BASE_DOMAIN/notifications" -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 fi
-
-rm "$DIR/.scan-log"
