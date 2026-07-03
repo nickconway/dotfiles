@@ -24,7 +24,7 @@ function wait-for-scan() {
             fi
 
             sleep 0.5
-        done | ~/Projects/gum/gum progress --no-show-percentage
+        done | gum progress --no-show-percentage
     else
         while kill -0 $pid 2>/dev/null; do
             sleep 0.5
