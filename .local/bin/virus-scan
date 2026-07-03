@@ -17,14 +17,9 @@ function wait-for-scan() {
             total=$(cat "$DIR/.files" | wc -l)
             expr="result = $scanned / $total * 100; scale = 2; result / 1"
 
-            if [[ -z ${raw:-} ]]; then
-                echo "$(bc -l <<<"$expr")%"
-            else
-                bc -l <<<"$expr"
-            fi
-
+            bc -l <<<"$expr"
             sleep 0.5
-        done | gum progress --no-show-percentage
+        done | gum progress --no-show-percentage --title "Scanning..."
     else
         while kill -0 $pid 2>/dev/null; do
             sleep 0.5
@@ -33,13 +28,10 @@ function wait-for-scan() {
 
 }
 
-export -f wait-for-scan
-
 eval "$(
     get-options \
         "-r, --reset: reset=true" \
-        "-p, --progress: export progress=true" \
-        "--raw: raw=true" \
+        "-p, --progress: progress=true" \
         -- \
         "$@"
 )"
@@ -67,7 +59,7 @@ set +m
 clamscan --file-list "$DIR/.files" 2>"$DIR/.scan-error-log" >"$DIR/.scan-log" &
 export pid=$!
 trap clean EXIT
-gum spin --title "Scanning files..." --show-output --show-stdout --show-error --show-stderr -- bash -c wait-for-scan
+wait-for-scan
 set -m
 
 tail "$DIR/.scan-log"
