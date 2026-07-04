@@ -25,8 +25,9 @@ function wait-for-scan() {
             sleep 0.5
         done
     fi
-
 }
+
+export -f wait-for-scan
 
 eval "$(
     get-options \
@@ -59,7 +60,12 @@ set +m
 clamscan --file-list "$DIR/.files" 2>"$DIR/.scan-error-log" >"$DIR/.scan-log" &
 export pid=$!
 trap clean EXIT
-wait-for-scan
+
+if [[ -n "${progress:-}" ]]; then
+    wait-for-scan
+else
+    gum spin --title "Scanning..." -- bash -c wait-for-scan
+fi
 set -m
 
 tail "$DIR/.scan-log"
