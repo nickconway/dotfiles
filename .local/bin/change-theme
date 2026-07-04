@@ -168,7 +168,7 @@ fi
 
 gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal
 
-homeassistant-pywal
+homeassistant-pywal &
 openrgb-pywal &
 
 fastfetch
