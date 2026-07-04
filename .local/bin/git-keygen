@@ -16,9 +16,9 @@ if command -v termux-info &>/dev/null; then
     NAME=termux
 else
     if command -v systemd-detect-virt >/dev/null && [[ "$(systemd-detect-virt)" == "wsl" ]]; then
-        NAME=$(uname -n)-wsl
+        NAME=$HOSTNAME-wsl
     else
-        NAME=$(uname -n)
+        NAME=$HOSTNAME
     fi
 fi
 

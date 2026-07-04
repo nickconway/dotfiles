@@ -10,7 +10,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
     set -x
 fi
 
-FILE="$HOME/.cache/wal/homeassistant-$(uname -n).json"
+FILE="$HOME/.cache/wal/homeassistant-$HOSTNAME.json"
 
 if [[ ! -e "$FILE" ]]; then
     exit

@@ -42,6 +42,6 @@ for C in "community.general" "ansible.posix" "community.crypto"; do
 done
 
 CMD+=("${ARGS[@]:1}")
-CMD+=(-l "!$(uname -n)${HOSTS:+,$HOSTS}")
+CMD+=(-l "!$HOSTNAME${HOSTS:+,$HOSTS}")
 
 "${CMD[@]}"

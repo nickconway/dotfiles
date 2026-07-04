@@ -624,7 +624,7 @@ function tl() {
 }
 
 function tu() {
-    if [[ "$(uname -r)" == *"WSL"* ]]; then
+    if [[ $KERNEL == *"WSL"* ]]; then
         TS_COMMAND="tailscale.exe"
         TS_FLAGS="up --unattended --accept-routes=true --authkey $VPN_KEY"
     else
@@ -632,7 +632,7 @@ function tu() {
         TS_FLAGS="up --ssh --accept-routes=true --operator=$(whoami) --authkey $VPN_KEY"
     fi
 
-    if [[ $(uname -n) == "steamdeck" ]]; then
+    if [[ $HOSTNAME == "steamdeck" ]]; then
         TS_FLAGS+=" --advertise-tags=tag:client,tag:server"
     elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
         TS_FLAGS+=" --advertise-tags=tag:work"
@@ -718,32 +718,25 @@ function yec() {
 }
 
 function yl() {
-    YADM_ARCHIVE_BEFORE="$(sha1sum ~/.local/share/yadm/archive)"
-    SHELL_FILES_BEFORE="$(sha1sum ~/.config/shell/*/*)"
-    ALT_FILES_BEFORE="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
-    TEMPLATES_BEFORE="$(sha1sum $(yadm list -a -d -e | grep '%%template'))"
+    OLD_HASH="$(yadm rev-parse HEAD)"
+    yadm pull
+    NEW_HASH="$(yadm rev-parse HEAD)"
 
-    RESULT="$(yadm pull "$@")"
-    echo "$RESULT"
-    [[ "$RESULT" == "Already up to date." ]] && return
+    [[ "$OLD_HASH" == "$NEW_HASH" ]] && return
 
-    YADM_ARCHIVE_AFTER="$(sha1sum ~/.local/share/yadm/archive)"
-    if [[ $YADM_ARCHIVE_BEFORE != $YADM_ARCHIVE_AFTER ]]; then
+    if yadm diff "$NEW_HASH" "$OLD_HASH" --name-only | grep -q .local/share/yadm/archive; then
         yadm decrypt
     fi
 
-    ALT_FILES_AFTER="$(sha1sum $(command -v fd && fd -H '##' ~/.config || find ~/.config -name '*##*'))"
-    if [[ $ALT_FILES_BEFORE != $ALT_FILES_AFTER ]]; then
+    if yadm diff "$NEW_HASH" "$OLD_HASH" --name-only | grep -q '##'; then
         yadm alt
     fi
 
-    TEMPLATES_AFTER="$(sha1sum $(yadm list -a -d -e | grep '%%template'))"
-    if [[ $TEMPLATES_BEFORE != $TEMPLATES_AFTER ]]; then
+    if yadm diff "$NEW_HASH" "$OLD_HASH" --name-only | grep -q '%%template'; then
         yadm list -a -d -e | grep '%%template' | make-templates
     fi
 
-    SHELL_FILES_AFTER="$(sha1sum ~/.config/shell/*/*)"
-    if [[ $SHELL_FILES_BEFORE != $SHELL_FILES_AFTER ]]; then
+    if yadm diff "$NEW_HASH" "$OLD_HASH" --name-only | grep -q .config/shell; then
         exec $SHELL_NAME
     fi
 }
