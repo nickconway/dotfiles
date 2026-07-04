@@ -11,7 +11,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 function err() {
-    if [[ -n ${NTFY_TOKEN:-} && -n ${NTFY_TOKEN:-} ]]; then
+    if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
         curl -d "Bootstrapping failed on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
     fi
     exit 1
@@ -114,6 +114,6 @@ git pull &>/dev/null
 
 ansible-run -l localhost "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
 
-if [[ -n $NTFY_TOKEN ]]; then
+if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 fi
