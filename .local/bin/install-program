@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${LOG:-}" ]]; then
+    exec &>"/tmp/$(basename "$0").log"
+    set -x
+fi
+
+if [[ -n "${DEBUG_MODE:-}" ]]; then
+    set -x
+fi
+
+PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
+
+case "$1" in
+kmonad)
+    groupadd uinput || echo "group already exists"
+    usermod -aG input,uinput $USER
+
+    echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' >/usr/lib/udev/rules.d/60-kmonad.rules
+    modprobe uinput
+    udevadm control --reload-rules && udevadm trigger
+    ;;
+
+quickshell)
+    mkdir -p "$PROJECT_DIR"
+
+    cd "$PROJECT_DIR"
+    gh repo clone nickconway/quickshell || git clone https://github.com/nickconway/quickshell || true
+    cd quickshell
+    git pull
+    cmake -GNinja -B build -DCMAKE_BUILD_TYPE=Release -DCRASH_REPORTER=OFF
+    cmake --build build
+    sudo cmake --install build
+
+    cd "$PROJECT_DIR"
+    gh repo clone nickconway/caelestia-cli || git clone https://github.com/nickconway/caelestia-cli || true
+    cd caelestia-cli
+    git pull
+    if [[ -e /usr/bin/caelestia ]]; then
+        sudo rm /usr/bin/caelestia
+        sudo pip uninstall caelestia --break-system-packages --yes --root-user-action ignore
+        rm -rf dist
+    fi
+    python -m build --wheel
+    sudo python -m installer dist/*.whl
+    sudo cp completions/caelestia.fish /usr/share/fish/vendor_completions.d/caelestia.fish
+
+    cd "$PROJECT_DIR"
+    gh repo clone nickconway/caelestia || git clone https://github.com/nickconway/caelestia.git || true
+    cd caelestia
+    git pull
+    git pull --tags
+    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
+    cmake --build build
+    sudo cmake --install build
+
+    cd "$PROJECT_DIR"
+    gh repo clone nickconway/noctalia-shell || git clone https://github.com/nickconway/noctalia-shell || true
+    cd noctalia-shell
+    git pull
+
+    cd "$PROJECT_DIR"
+    gh repo clone nickconway/DankMaterialShell || git clone https://github.com/nickconway/DankMaterialShell || true
+    cd DankMaterialShell
+    git pull
+    sudo make install
+
+    for q in $(basename "$(dirname "$(qs list --all | grep Config | cut -d ':' -f 2)")" | xargs); do
+        qs -c $q kill &>/dev/null
+        qs -c $q -d &>/dev/null
+    done
+    ;;
+
+sol | sleep-on-lan)
+    mkdir -p $HOME/.local/sol
+    wget https://github.com/SR-G/sleep-on-lan/releases/download/1.1.1-RELEASE/SleepOnLAN-1.1.1-RELEASE.zip
+
+    mv SleepOnLAN-1.1.1-RELEASE.zip $HOME/.local/sol
+    cd $HOME/.local/sol
+    unzip ./SleepOnLAN-1.1.1-RELEASE.zip
+    rm ./SleepOnLAN-1.1.1-RELEASE.zip
+
+    cat <<EOF >/etc/systemd/system/sleep-on-lan.service
+[Unit]
+Description=sleep-on-lan
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+ExecStart=$HOME/.local/sol/linux_amd64/sol
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    systemctl daemon-reload
+    systemctl enable --now sleep-on-lan
+    ;;
+
+sunshine)
+    yay -S --needed --noconfirm sunshine
+    setcap cap_sys_admin+p "$(readlink -f "$(which sunshine)")"
+    ;;
+
+yeetmouse)
+    shift
+
+    FORCE=false
+    if [[ "${1:-}" == "--force" ]]; then
+        FORCE=true
+    fi
+
+    UNINSTALL=false
+    if [[ "${1:-}" == "--uninstall" ]]; then
+        UNINSTALL=true
+    fi
+
+    YEETMOUSE_DIR="$PROJECT_DIR/YeetMouse"
+
+    [[ -e ~/.config/yeetmouse/$HOSTNAME ]]
+
+    if [[ ! -e "$YEETMOUSE_DIR" ]]; then
+        git clone https://github.com/AndyFilter/YeetMouse "$YEETMOUSE_DIR"
+    fi
+
+    cd "$YEETMOUSE_DIR"
+    git pull
+
+    if [[ "$FORCE" == true ]] || [[ "$UNINSTALL" == true ]]; then
+        ./uninstall.sh
+    fi
+
+    if [[ "$UNINSTALL" != true ]]; then
+        if ! grep -q yeetmouse <(lsmod) || [[ "$FORCE" == "true" ]]; then
+            ./install.sh
+        fi
+    fi
+
+    yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
+    ;;
+
+zephyr | zephyr-sdk)
+    shift
+    cd /opt
+    wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/zephyr-sdk-$1_linux-x86_64.tar.xz
+    wget -O - https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$1/sha256.sum | shasum --check --ignore-missing
+
+    tar xf zephyr-sdk-${1}_linux-x86_64.tar.xz
+    rm zephyr-sdk-${1}_linux-x86_64.tar.xz
+
+    cd zephyr-sdk-$1
+    ./setup.sh
+    ;;
+esac

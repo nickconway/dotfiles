@@ -69,9 +69,10 @@ fi
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo systemctl enable --now sshd
 
-    if [[ ! -e ~/.local/source/deck-tailscale ]]; then
-        git clone https://github.com/tailscale-dev/deck-tailscale.git ~/.local/source/deck-tailscale
-        cd ~/.local/source/deck-tailscale
+    mkdir -p $PROJECT_DIR
+    if [[ ! -e $PROJECT_DIR/deck-tailscale ]]; then
+        git clone https://github.com/tailscale-dev/deck-tailscale.git $PROJECT_DIR/deck-tailscale
+        cd $PROJECT_DIR/deck-tailscale
         sudo bash tailscale.sh
     fi
     source /etc/profile.d/tailscale.sh

@@ -20,7 +20,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("flatpak run com.github.wwmm.easyeffects --gapplication-service")
     hl.exec_cmd("hostname | grep -x desktop && LOG=y hyprland-fix-monitors")
     hl.exec_cmd("steam -silent")
-    hl.exec_cmd("LOG=y install-yeetmouse")
+    hl.exec_cmd("sudo-run LOG=y install-program yeetmouse")
     hl.exec_cmd("localsend --hidden")
     hl.exec_cmd("vicinae server")
 
