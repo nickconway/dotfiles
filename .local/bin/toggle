@@ -23,11 +23,11 @@ bar)
     fi
     ;;
 
-deck-hyprland)
+steam-hyprland)
     unset LD_PRELOAD
     xhost +si:localuser:$USER
     sudo chown -f -R $USER:$USER /tmp/.X11-unix
-    $HOME/.local/bin/distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" -- Hyprland
+    $HOME/.local/bin/distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" -- start-hyprland
     ;;
 
 dnd)
