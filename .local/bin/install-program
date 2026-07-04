@@ -140,6 +140,7 @@ yeetmouse)
     fi
 
     yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
+    cp ~/.config/yeetmouse/$HOSTNAME /etc/yeetmouse.conf
     ;;
 
 zephyr | zephyr-sdk)
