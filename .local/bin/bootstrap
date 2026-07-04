@@ -11,7 +11,7 @@ if [[ -n "${DEBUG_MODE:-}" ]]; then
 fi
 
 function err() {
-    if [[ -n ${NTFY_TOKEN:-} ]]; then
+    if [[ -n ${NTFY_TOKEN:-} && -n ${NTFY_TOKEN:-} ]]; then
         curl -d "Bootstrapping failed on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
     fi
     exit 1
