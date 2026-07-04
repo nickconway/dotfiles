@@ -36,6 +36,7 @@ function opt-arg() {
 i=1
 while [[ $i -le $# ]]; do
     FOUND=
+    OPT_ARG_FOUND=
 
     if [[ "${!i}" == "--" ]]; then
         i=$((i + 1))
@@ -66,7 +67,7 @@ while [[ $i -le $# ]]; do
                     FOUND=true
 
                     if [[ -n "$OPT_ARG" ]]; then
-                        i=$((i + 1))
+                        OPT_ARG_FOUND=true
                     fi
                 fi
             done
@@ -75,6 +76,10 @@ while [[ $i -le $# ]]; do
 
     if [[ -z "$FOUND" ]]; then
         ARGS+=("${!i}")
+    fi
+
+    if [[ -n "$OPT_ARG_FOUND" ]]; then
+        i=$((i + 1))
     fi
 
     i=$((i + 1))
