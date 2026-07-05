@@ -34,6 +34,8 @@ if [[ -e ~/.local/go/go ]]; then
     export PATH="$GOROOT"/bin:$PATH
 fi
 
+export PATH="$PATH:/opt/tailscale"
+
 export ASDF_DATA_DIR="/$HOME/.asdf"
 export PATH="$ASDF_DATA_DIR/shims:$PATH"
 
