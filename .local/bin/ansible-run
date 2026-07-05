@@ -12,7 +12,7 @@ fi
 
 eval "$(get-options "-l, --hosts: HOSTS='\$ARG'" -- "$@")"
 
-if command -v systemd-inhibit &>/dev/null; then
+if [[ "$(systemd-detect-virt)" != podman ]] && command -v systemd-inhibit &>/dev/null; then
     CMD+=(systemd-inhibit)
 fi
 

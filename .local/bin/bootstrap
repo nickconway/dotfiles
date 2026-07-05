@@ -69,6 +69,7 @@ fi
 if [[ $(uname -n) == "steamdeck" ]]; then
     sudo systemctl enable --now sshd
 
+    export PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
     mkdir -p $PROJECT_DIR
     if [[ ! -e $PROJECT_DIR/deck-tailscale ]]; then
         git clone https://github.com/tailscale-dev/deck-tailscale.git $PROJECT_DIR/deck-tailscale
@@ -76,8 +77,8 @@ if [[ $(uname -n) == "steamdeck" ]]; then
         sudo bash tailscale.sh
     fi
     source /etc/profile.d/tailscale.sh
-    sudo tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
-    sudo tailscale set --auto-update
+    sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
+    sudo-run tailscale set --auto-update
 
     distrobox create -n arch -i archlinux
     distrobox enter arch
