@@ -632,7 +632,7 @@ function tu() {
         TS_FLAGS="up --ssh --accept-routes=true --operator=$(whoami) --authkey $VPN_KEY"
     fi
 
-    if [[ $HOSTNAME == "steamdeck" ]]; then
+    if command -v steamos-update 2>/dev/null; then
         TS_FLAGS+=" --advertise-tags=tag:client,tag:server"
     elif [[ $(yadm config --get-all local.class) == *"work"* ]]; then
         TS_FLAGS+=" --advertise-tags=tag:work"
