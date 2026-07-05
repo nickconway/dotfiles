@@ -1,7 +1,8 @@
 if command -v steamos-update >/dev/null; then
-    if [[ -n "$PS1" ]]; then
-        distrobox enter arch && exit || return
-    fi
+    # if [[ -n "$PS1" ]]; then
+    #     distrobox enter arch && exit || return
+    # fi
+    true
 else
     export PATH="$HOME/.local/bin:$HOME/.config/fzf/bin:$PATH"
     export PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$PATH"
