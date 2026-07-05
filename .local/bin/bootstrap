@@ -66,7 +66,7 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
     get-yadm-classes
 fi
 
-if [[ $(uname -n) == "steamdeck" ]]; then
+if command -v steamos-update &>/dev/null; then
     sudo steamos-readonly disable
     sudo pacman-key --init
     sudo pacman-key --populate archlinux
@@ -84,10 +84,6 @@ if [[ $(uname -n) == "steamdeck" ]]; then
     source /etc/profile.d/tailscale.sh
     sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
     sudo-run tailscale set --auto-update
-
-    distrobox create -n arch -i archlinux 2>/dev/null
-    distrobox enter arch
-    exit
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
@@ -119,6 +115,12 @@ git remote set-url origin git@github.com:nickconway/ansible --push
 git pull &>/dev/null
 
 ansible-run -l localhost "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
+
+if command -v steamos-update &>/dev/null; then
+    distrobox create -n arch -i archlinux 2>/dev/null
+    distrobox enter arch
+    exit
+fi
 
 if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
