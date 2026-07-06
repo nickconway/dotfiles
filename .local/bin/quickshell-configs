@@ -3,7 +3,7 @@ set -euo pipefail
 
 function choose() {
     SELECTED="$(find /etc/xdg/quickshell /usr/local /usr/share -name shell.qml -print0 | xargs -0 dirname | while read -r f; do basename "$f"; done | fzf --border-label " Choose QuickShell Config ")"
-    [[ -n "$SELECTED" ]] && echo "$SELECTED" >~/.config/quickshell/config
+    [[ -n "$SELECTED" ]] && mkdir -p ~/.config/quickshell && echo "$SELECTED" >~/.config/quickshell/config
 }
 
 function spawn() {
