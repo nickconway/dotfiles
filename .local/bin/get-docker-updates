@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 UPDATES="$(dockcheck -n | awk "x==1 {print} /Containers with updates available:/,EOF {x=1}" | grep -v 'nextcloud-aio' | grep -v "No updates installed" | awk NF)"
 UPDATES="${UPDATES//$'\n'/ }"
 

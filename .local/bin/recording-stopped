@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 eval "$(notify-send "Screen Recording" "Screen Recording Saved to $1" -e --action "xdg-open '$1'=Open" -e)" &
 pactl unload-module module-loopback
 pactl unload-module module-null-sink

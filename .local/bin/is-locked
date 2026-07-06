@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 if { pgrep -afx "qs .*caelestia.*" &>/dev/null && [[ $(qs -c caelestia ipc call lock isLocked) == true ]]; } ||
     { pgrep -afx "qs .*noctalia.*" &>/dev/null && [[ $(qs -c noctalia ipc call lockScreen isLocked) == true ]]; } ||
     { pgrep -afx "qs .*dms.*" &>/dev/null && [[ $(dms ipc call lock isLocked) == true ]]; } ||

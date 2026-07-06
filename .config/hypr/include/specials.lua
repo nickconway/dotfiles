@@ -10,7 +10,7 @@ hl.workspace_rule({
 
 hl.workspace_rule({
     workspace = "special:theme",
-    on_created_empty = "[size (monitor_w*0.75) (monitor_h*0.75); float; center] LOG=y kitty tmux new -As Theme change-theme",
+    on_created_empty = "[size (monitor_w*0.75) (monitor_h*0.75); float; center] kitty tmux new -As Theme _log change-theme",
 })
 
 hl.workspace_rule({

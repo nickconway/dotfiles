@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 [[ "$(uname)" == "Darwin" ]] && export LC_ALL=C
 PW=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1 || true)
 echo -n $PW

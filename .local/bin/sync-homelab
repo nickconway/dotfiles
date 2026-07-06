@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 function clean() {
     COUNT=0
     until [[ -z ${HEALTHCHECK_ID:-} ]] || [[ $COUNT -gt 30 ]] || curl -f "https://health.$SERVICES_BASE_DOMAIN/ping/${HEALTHCHECK_TOKEN}/${HEALTHCHECK_ID}?create=1"; do

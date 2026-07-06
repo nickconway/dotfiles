@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 function choose() {
     SELECTED="$(find /etc/xdg/quickshell /usr/local /usr/share -name shell.qml -print0 | xargs -0 dirname | while read -r f; do basename "$f"; done | fzf --border-label " Choose QuickShell Config ")"
     [[ -n "$SELECTED" ]] && echo "$SELECTED" >~/.config/quickshell/config

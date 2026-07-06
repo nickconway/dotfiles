@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 gum spin --title 'Getting Commit Message' --spinner.foreground 12 -- get-commit-message
 GIT_EDITOR="$EDITOR" git commit -a -F .git/gcai -e

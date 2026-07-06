@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
-
 RSYNC_CMD="rsync -Lauvz --progress --info=progress2"
 
 function pull-saves() {

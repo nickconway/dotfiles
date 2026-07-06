@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 function _cd() {
     local DIR
 
@@ -61,7 +52,9 @@ function _start() {
         ./setup
     fi
 
-    docker compose up -d --build
+    if docker compose stats &>/dev/null; then
+        docker compose up -d --build
+    fi
 }
 
 function _status() {

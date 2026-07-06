@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 eval "$(get-options "-a, --all: ALL=true" "-n, --no-ignore: NO_IGNORE=true" "-c, --case-sensitive: CASE_SENSITIVE=true" -- "$@")"
 
 rm -f /tmp/rg-fzf-{r,f}

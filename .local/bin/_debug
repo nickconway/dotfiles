@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PS4='> [DEBUG - Line: $LINENO - $(date +%H:%M:%S) - $(basename ${BASH_SOURCE:-bash})] '
+env SHELLOPTS="$SHELLOPTS:xtrace" bash -c "$*"

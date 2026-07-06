@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 SERVER_ID=$(
     curl -s -H "X-API-KEY: $KOMODO_API_KEY" \
         -H "X-API-SECRET: $KOMODO_API_SECRET" \

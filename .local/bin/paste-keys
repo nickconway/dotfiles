@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${LOG:-}" ]]; then
-    exec &>"/tmp/$(basename "$0").log"
-    set -x
-fi
-
-if [[ -n "${DEBUG_MODE:-}" ]]; then
-    set -x
-fi
-
 if [[ "$(hyprctl activewindow)" == *"class: kitty"* ]]; then
     wtype -M ctrl -M shift v -m ctrl -m shift
 else
