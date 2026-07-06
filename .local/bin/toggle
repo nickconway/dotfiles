@@ -8,7 +8,7 @@ bar)
     elif pgrep -afx "qs .*noctalia.*" &>/dev/null; then
         qs -c noctalia ipc call controlCenter toggle
     elif pgrep -afx "qs .*dms.*" &>/dev/null; then
-        qs -c dms ipc call control-center toggle
+        dms ipc call control-center toggle
     else
         killall waybar -SIGUSR1
     fi
@@ -27,7 +27,7 @@ dnd)
     elif pgrep -afx "qs .*noctalia.*" &>/dev/null; then
         qs -c noctalia ipc call notifications toggleDND
     elif pgrep -afx "qs .*dms.*" &>/dev/null; then
-        qs -c dms ipc call notifications toggleDoNotDisturb
+        dms ipc call notifications toggleDoNotDisturb
     else
         swaync-client -d
         if [[ $(swaync-client -D) == "false" ]]; then
@@ -39,7 +39,7 @@ dnd)
 zenbook-screen)
     shift
 
-    export XDG_RUNTIME_DIR="/run/user/$(id -u $USER)"
+    export XDG_RUNTIME_DIR="/run/user/$UID"
 
     if [[ $1 == off ]]; then
         hyprctl --instance 0 eval 'hl.monitor({ output = "eDP-2", disabled = true })'

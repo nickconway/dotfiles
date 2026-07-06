@@ -62,7 +62,7 @@ elif [[ "$OSTYPE" == darwin* ]]; then
     mkdir -p ~/Library/Caches/TemporaryItems
     export XDG_RUNTIME_DIR=~/Library/Caches/TemporaryItems
 else
-    export XDG_RUNTIME_DIR=/run/user/$(id -u)
+    export XDG_RUNTIME_DIR=/run/user/$UID
 fi
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"

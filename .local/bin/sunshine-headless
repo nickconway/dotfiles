@@ -2,11 +2,19 @@
 set -euo pipefail
 
 if [[ "$1" == "disable" ]]; then
-    hyprctl reload
+    for m in $(hyprctl monitors all -j | jq -r '.[].name' | grep -iv sunshine); do
+        hyprctl eval "hl.monitor({ output = '$m', disabled = false })"
+    done
+
+    hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
 elif [[ "$1" == "enable" ]]; then
-    for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v sunshine); do
+    for m in $(hyprctl monitors all -j | jq -r '.[].name' | grep -iv sunshine); do
         hyprctl eval "hl.monitor({ output = '$m', disabled = true })"
     done
 
-    hyprctl eval 'hl.monitor({ output = "Sunshine", mode = "3840x2160@120" })'
+    WIDTH=${SUNSHINE_CLIENT_WIDTH:-3840}
+    HEIGHT=${SUNSHINE_CLIENT_HEIGHT:-2160}
+    RR=${SUNSHINE_CLIENT_FPS:-120}
+
+    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${RR}', disabled = false })"
 fi
