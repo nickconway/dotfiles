@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+WIDTH=${SUNSHINE_CLIENT_WIDTH:-3840}
+HEIGHT=${SUNSHINE_CLIENT_HEIGHT:-2160}
+FPS=${SUNSHINE_CLIENT_FPS:-120}
+
 if [[ "$1" == "disable" ]]; then
     for m in $(hyprctl monitors all -j | jq -r '.[].name' | grep -iv sunshine); do
         hyprctl eval "hl.monitor({ output = '$m', disabled = false })"
@@ -12,9 +16,5 @@ elif [[ "$1" == "enable" ]]; then
         hyprctl eval "hl.monitor({ output = '$m', disabled = true })"
     done
 
-    WIDTH=${SUNSHINE_CLIENT_WIDTH:-3840}
-    HEIGHT=${SUNSHINE_CLIENT_HEIGHT:-2160}
-    RR=${SUNSHINE_CLIENT_FPS:-120}
-
-    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${RR}', disabled = false })"
+    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', disabled = false })"
 fi

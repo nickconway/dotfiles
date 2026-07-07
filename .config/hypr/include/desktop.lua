@@ -12,3 +12,18 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 3 silent] chromium --app='https://bluebubbles.app/web/'")
     hl.exec_cmd("[workspace 3 silent] chromium --app='https://x.com'")
 end)
+
+hl.timer(function()
+    local monitor = hl.get_monitor("DP-3")
+
+    if monitor == nil then
+        return
+    end
+
+    if monitor.width ~= 3840 then
+        hl.monitor({ output = "DP-1", mode = "1920x1080", scale = "1.33", bitdepth = 10 })
+        hl.timer(function()
+            hl.monitor({ output = "DP-1", mode = "preferred", scale = "1.33", bitdepth = 10 })
+        end, { type = "oneshot", timeout = 5000 })
+    end
+end, { timeout = 5000, type = "repeat" })
