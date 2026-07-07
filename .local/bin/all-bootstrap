@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function fail() {
-    if [[ -n $NTFY_TOKEN ]]; then
+    if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
         curl -d "Provisioning failed" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
     fi
 }
@@ -16,6 +16,6 @@ git pull &>/dev/null
 
 ansible-run "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
 
-if [[ -n $NTFY_TOKEN ]]; then
+if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
     curl -d "Provisioning complete" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
 fi

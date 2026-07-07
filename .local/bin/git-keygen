@@ -29,8 +29,10 @@ if ! [[ -e $GITEA_FILE ]]; then
         ssh-keygen -t ed25519 -f $GITEA_FILE -q -N "$1" -C "gitea $(whoami)@$NAME"
     fi
 
+    if [[ -n ${GITEA_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
     curl -s -H "Authorization: token ${GITEA_TOKEN}" \
         -H "Content-Type: application/json" \
         -X POST --data-binary "{\"title\":\"$NAME\",\"key\":\"$(cat $GITEA_FILE.pub)\"}" \
         https://git.$SERVICES_BASE_DOMAIN/api/v1/user/keys
+    fi
 fi

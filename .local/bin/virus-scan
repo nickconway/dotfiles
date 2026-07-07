@@ -63,5 +63,8 @@ tail "$DIR/.scan-log"
 
 if grep -q "Infected files: [^0]" "$DIR/.scan-log"; then
     notify-send "Virus Scan" "Infected files found" -u critical
-    curl -fsSL -d "Infected files found" "https://notifications.$SERVICES_BASE_DOMAIN/notifications" -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+
+    if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
+        curl -fsSL -d "Infected files found" "https://notifications.$SERVICES_BASE_DOMAIN/notifications" -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null
+    fi
 fi
