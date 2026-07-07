@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SESSIONS_FILE="$HOME/.cache/hyprland/sessions.json"
+
+function save() {
+    SESSION_NAME="${1:-current}"
+    SESSION_ICON="${2:-󰘚}"
+
+    if [[ -e "$SESSIONS_FILE" ]]; then
+        json="$(jq '.' "$SESSIONS_FILE")"
+    else
+        json="$(jq '.' <<<"[]")"
+    fi
+
+    session="$(jq '.[] | select(.name == "'$SESSION_NAME'")' <<<"$json")"
+
+    if [[ -z "$session" ]]; then
+        session="{}"
+    fi
+
+    session="$(jq '.name = "'$SESSION_NAME'"' <<<"$session")"
+    session="$(jq '.icon = "'$SESSION_ICON'"' <<<"$session")"
+    session="$(jq '.workspaces = []' <<<"$session")"
+
+    i=0
+    while read -r w; do
+        name=$(jq -r .name <<<"$w")
+        monitor=$(jq -r .monitor <<<"$w")
+
+        workspace="{}"
+        workspace="$(jq '.name = "'$name'"' <<<"$workspace")"
+        workspace="$(jq '.monitor = "'$monitor'"' <<<"$workspace")"
+
+        while read -r c; do
+            workspace_name=$(jq -r .workspace.name <<<"$c")
+
+            if [[ "$name" != "$workspace_name" ]]; then
+                continue
+            fi
+
+            pid=$(jq .pid <<<"$c")
+            cmd="$(cat /proc/$pid/cmdline -A | sed 's/\^@/ /g' | xargs)"
+
+            workspace="$(jq ".apps += [\"$cmd\"]" <<<"$workspace")"
+        done < <(hyprctl clients -j | jq -c '.[]')
+
+        session="$(jq ".workspaces += [$workspace]" <<<"$session")"
+        i=$((i + 1))
+    done < <(hyprctl workspaces -j | jq -c '.[]')
+
+    jq ". += [$session]" <<<"$json" >"$SESSIONS_FILE"
+}
+
+function load() {
+    if [[ ! -e "$SESSIONS_FILE" ]]; then
+        return 1
+    fi
+
+    SESSION_NAME="$1"
+    jq '.[] | select(.name == "'$SESSION_NAME'")' <<<"$SESSIONS_FILE"
+}
+
+"$@"

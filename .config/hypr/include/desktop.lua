@@ -27,3 +27,5 @@ hl.timer(function()
         end, { type = "oneshot", timeout = 5000 })
     end
 end, { timeout = 5000, type = "repeat" })
+
+hl.animation({ leaf = "borderangle", enabled = true, speed = 100, bezier = "Linear", loop = true })

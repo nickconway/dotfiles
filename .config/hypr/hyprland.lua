@@ -1,3 +1,4 @@
+require("include.utils")
 require("include.animations")
 require("include.binds")
 require("include.colors")
