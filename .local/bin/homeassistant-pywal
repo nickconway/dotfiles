@@ -9,6 +9,8 @@ fi
 
 source $HOME/.config/shell/common/encrypted.sh
 
+SCENE="pywal_${HOSTNAME//-/_}"
+
 while read -r line; do
     curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
         -d '{ "entity_id": "light.'"$(cut -d ' ' -f 1 <<<$line)"'", "rgb_color": '"$(cut -d ' ' -f 2 <<<$line)"' }' \
@@ -24,16 +26,19 @@ entities="[$(
 )]"
 entities="${entities//, \]/\]}"
 
-curl -sSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
-    -d '{ "entity_id": "scene.pywal" }' \
-    https://home.conway.dev/api/services/scene/delete -o /dev/null
+if curl -fsSL -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
+    https://home.conway.dev/api/states/scene.$SCENE -o /dev/null; then
+    curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
+        -d '{ "entity_id": "scene.'$SCENE'" }' \
+        https://home.conway.dev/api/services/scene/delete -o /dev/null
+fi
 
 sleep 3
 
-curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
-    -d '{ "scene_id": "pywal", "snapshot_entities": '"$entities"' }' \
+curl -sSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
+    -d '{ "scene_id": "'$SCENE'", "snapshot_entities": '"$entities"' }' \
     https://home.conway.dev/api/services/scene/create -o /dev/null
 
-curl -sSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
-    -d '{ "entity_id": "scene.pywal" }' \
+curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
+    -d '{ "entity_id": "scene.'$SCENE'" }' \
     https://home.conway.dev/api/services/scene/turn_on -o /dev/null
