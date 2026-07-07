@@ -7,7 +7,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 RESET='\033[0m'
 
-if [[ -n "${DEBUG_MODE:-}" ]]; then
+if [[ $- == *x* ]]; then
     export GUM_SPIN_SHOW_OUTPUT=true
     export GUM_SPIN_SHOW_STDOUT=true
 fi
@@ -15,17 +15,7 @@ fi
 shopt -s dotglob
 
 CMD_INIT="${ARGS[0]}"
-
-if [[ -p /dev/stdin ]]; then
-    readarray -t TARGETS
-fi
-
-TARGETS+=("${ARGS[@]:1}")
-
-if [[ -z "${TARGETS:-}" ]]; then
-    TARGETS+=(*)
-fi
-
+eval "$(read-array "${ARGS[@]:1}" -n TARGETS </dev/stdin)"
 TMP=$(mktemp)
 
 for D in "${TARGETS[@]}"; do
@@ -33,7 +23,7 @@ for D in "${TARGETS[@]}"; do
     INNER_CMD=("$(envsubst <<<"$CMD_INIT")")
     TITLE="$(envsubst <<<"${OG_TITLE:-}")"
 
-    CMD=("$SHELL" -lc "export DEBUG_MODE=${DEBUG_MODE:-} && { ${INNER_CMD[@]}; } &> $TMP")
+    CMD=("$SHELL" -lc "{ ${INNER_CMD[@]}; } &> $TMP")
 
     if command -v gum &>/dev/null; then
         CMD=(gum spin --title "${TITLE:-${INNER_CMD[@]}}" -- "${CMD[@]}")

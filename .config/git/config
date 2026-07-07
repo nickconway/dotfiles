@@ -81,7 +81,5 @@
     plus-empty-line-marker-style = syntax
 [include]
     path = ~/.config/git/local
-[submodule]
-	recurse = true
 [advice]
 	skippedCherryPicks = false

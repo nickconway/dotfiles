@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -p /dev/stdin ]]; then
-    readarray -t FILES
-fi
-
-FILES+=("${@}")
+eval "$(read-array "$@" -n FILES </dev/stdin)"
 
 if [[ -z "${FILES:-}" || "${#FILES}" -eq 0 ]]; then
     readarray -t FILES < <(fd --hidden '%%')

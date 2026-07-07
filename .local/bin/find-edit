@@ -3,8 +3,6 @@ set -euo pipefail
 
 eval "$(get-options "-a, --all: ALL=true" "-n, --no-ignore: NO_IGNORE=true" "-c, --case-sensitive: CASE_SENSITIVE=true" -- "$@")"
 
-rm -f /tmp/rg-fzf-{r,f}
-
 RG_CMD=(rg --column --line-number --no-heading --color=always --hidden --with-filename -g)
 
 if [[ ${ALL:-} == true ]]; then
@@ -24,11 +22,8 @@ fi
 QUERY="${ARGS[0]:-}"
 echo "$QUERY" >/tmp/rg-fzf-query
 
-if [[ -p /dev/stdin ]]; then
-    readarray -t FILES
-fi
-
-FILES+=("${ARGS[@]:1}")
+eval "$(read-array "${ARGS[@]:1}" -n FILES </dev/stdin)"
+rm -f /tmp/rg-fzf-{r,f}
 
 SELECTED="$(
     if [[ ${ALL:-} == true ]]; then

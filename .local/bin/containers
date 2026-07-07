@@ -52,7 +52,7 @@ function _start() {
         ./setup
     fi
 
-    if docker compose stats &>/dev/null; then
+    if docker compose top &>/dev/null; then
         docker compose up -d --build
     fi
 }
@@ -126,29 +126,17 @@ cd "${DOCKER_STACK_DIR:-"$HOME/Docker"}"
 CMD="$1"
 shift
 
-TARGETS=()
-
-if [[ -p /dev/stdin ]]; then
-    readarray -t TARGETS
+if [[ -z ${1:-} ]] && { [[ $CMD == dump ]] || [[ $CMD == restore ]]; }; then
+    readarray -t CONTAINERS < <(docker ps --format '{{.Names}}' | grep -v nextcloud-aio)
 fi
 
-if [[ -n "$*" ]]; then
-    TARGETS+=("${@}")
-fi
-
-if [[ $CMD == dump ]] || [[ $CMD == restore ]]; then
-    readarray -t TARGETS < <(docker ps --format '{{.Names}}' | grep -v nextcloud-aio)
-fi
-
-if [[ -z "${TARGETS:-}" ]]; then
-    TARGETS+=(*)
-fi
+eval "$(read-array "$@" -n CONTAINERS </dev/stdin)"
 
 if type "$CMD" &>/dev/null; then
     "$CMD" $*
     exit
 else
-    run -t "$(basename "$0") $CMD \$D" "$(basename "$0") _$CMD \$D" "${TARGETS[@]}"
+    run -t "$(basename "$0") $CMD \$D" "$(basename "$0") _$CMD \$D" "${CONTAINERS[@]}"
 fi
 
 if [[ -z "$*" ]] && { [[ $CMD == start ]] || [[ $CMD == stop ]]; }; then

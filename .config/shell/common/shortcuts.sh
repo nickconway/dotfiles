@@ -210,6 +210,7 @@ function gi() {
 GIT_LOG_FORMAT='%Cred%h -%C(auto)%d%Creset %s %C(bold)%Cgreen(%cd) %Cblue(%an)%Creset'
 alias gif='git update-index --assume-unchanged'
 alias gl='git pull'
+alias glr='git pull --recurse-submodules'
 alias glog='git log --graph --pretty=format:$GIT_LOG_FORMAT --abbrev-commit --date=short'
 alias glogv='_fzf_git_hashes'
 alias gm='git merge'

@@ -49,7 +49,17 @@ quickshell)
     cd "$PROJECT_DIR"
     gh repo clone nickconway/noctalia-shell || git clone https://github.com/nickconway/noctalia-shell || true
     cd noctalia-shell
+
+    git switch qs-dev
     git pull
+    rm -rf ~/.config/quickshell/noctalia
+    cp -r "$PROJECT_DIR"/noctalia-shell ~/.config/quickshell/noctalia
+
+    git switch dev
+    git pull
+    just configure release
+    just build release
+    sudo just install release
 
     cd "$PROJECT_DIR"
     gh repo clone nickconway/DankMaterialShell || git clone https://github.com/nickconway/DankMaterialShell || true
