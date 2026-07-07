@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+eval "$(get-options "-n, --name: NAME='\$ARG'" -- "$@")"
+
+AGG=()
+
+if [[ -p /dev/stdin ]]; then
+    readarray -t AGG
+fi
+
+for i in "${ARGS[@]}"; do
+    AGG+=("$i")
+done
+
+if [[ -z "${AGG[*]}" ]]; then
+    for i in *; do
+        AGG+=("$i")
+    done
+fi
+
+VAR="${NAME:-TARGETS}"
+for i in "${AGG[@]}"; do
+    echo "$VAR+=('$i')"
+done
