@@ -153,6 +153,12 @@ caelestia wallpaper -N -f "$IMG" &>/dev/null ||
         ln -sf "$IMG" ~/.local/state/caelestia/wallpaper/current
     }
 
+if [[ -e ~/Projects/thyx ]]; then
+    _cp "$IMG" ~/Projects/thyx/backgrounds/wal
+    _cp ~/.cache/wal/thyx.conf ~/Projects/thyx/theme.conf
+    ~/Projects/thyx/scripts/install --yes &>/dev/null
+fi
+
 if pgrep swaync &>/dev/null; then
     swaync-client -rs &>/dev/null
 fi

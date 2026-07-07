@@ -91,6 +91,8 @@
   "showBatteryPercentOnlyOnBattery": false,
   "showBatteryTime": false,
   "showBatteryTimeOnlyOnBattery": false,
+  "batteryPillStyle": false,
+  "batteryPillPercentSign": false,
   "showControlCenterButton": true,
   "showCapsLockIndicator": true,
   "controlCenterShowNetworkIcon": true,
@@ -215,6 +217,7 @@
   "clockCompactMode": false,
   "focusedWindowCompactMode": false,
   "focusedWindowSize": 1,
+  "focusedWindowShowIcon": true,
   "runningAppsCompactMode": true,
   "barMaxVisibleApps": 0,
   "barMaxVisibleRunningApps": 0,
@@ -377,6 +380,9 @@
   "batteryNotifyCritical": true,
   "batteryLowThreshold": 20,
   "batteryNotifyLow": false,
+  "batteryChargeLimitNotificationType": 0,
+  "batteryLowNotificationType": 0,
+  "batteryCriticalNotificationType": 0,
   "batteryAutoPowerSaver": false,
   "lockBeforeSuspend": true,
   "loginctlLockIntegration": true,
@@ -735,8 +741,5 @@
   "barInsetPaddingShared": -1,
   "barInsetPaddingSyncAll": false,
   "frameBarInsetPadding": -1,
-  "configVersion": 12,
-  "batteryChargeLimitNotificationType": 0,
-  "batteryLowNotificationType": 0,
-  "batteryCriticalNotificationType": 0
+  "configVersion": 12
 }
