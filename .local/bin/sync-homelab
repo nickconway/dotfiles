@@ -20,9 +20,9 @@ cd "$PROJECT_DIR"/homelab
 git remote set-url origin https://github.com/nickconway/homelab
 git remote set-url origin git@github.com:nickconway/homelab --push
 
-OLD_HASH="$(git rev-parse HEAD)"
+OLD_HASH="${OLD_HASH:-$(git rev-parse HEAD)}"
 retry git pull
-NEW_HASH="$(git rev-parse HEAD)"
+NEW_HASH="${NEW_HASH:-$(git rev-parse HEAD)}"
 
 if [[ ${NEW:-false} == false ]] && [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
     clean
