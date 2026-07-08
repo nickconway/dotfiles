@@ -31,14 +31,16 @@ fi
 
 echo
 
+LAST_APP=
 while read -r FILE; do
     APP="$(cut -d / -f 1 <<<"${FILE/docker\/compose\//}")"
-    if [[ -n "$APP" && -e "$DOCKER_STACK_DIR/$APP" ]]; then
+    if [[ -n "$APP" && "$APP" != "$LAST_APP" && -e "$DOCKER_STACK_DIR/$APP" ]]; then
         echo "$FILE -> $APP"
         rsync -abhruvz --backup-dir ".rsync-backup" "docker/compose/$APP/" "$DOCKER_STACK_DIR/$APP"
         containers start "$APP" </dev/null
         echo
     fi
+    LAST_APP="$APP"
 done < <(git diff --name-only "$OLD_HASH" "$NEW_HASH" | grep '^docker/compose/*')
 
 clean
