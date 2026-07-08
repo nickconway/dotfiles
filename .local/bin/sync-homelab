@@ -32,7 +32,7 @@ fi
 echo
 
 while read -r FILE; do
-    APP="$(basename "$(dirname "$FILE")")"
+    APP="$(cut -d / -f 1 <<<"${FILE/docker\/compose\//}")"
     echo "$FILE -> $APP"
     if [[ -e "$DOCKER_STACK_DIR/$APP" ]]; then
         rsync -abhruvz --backup-dir ".rsync-backup" "docker/compose/$APP/" "$DOCKER_STACK_DIR/$APP"
