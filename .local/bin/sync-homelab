@@ -32,12 +32,11 @@ fi
 echo
 
 while read -r FILE; do
-    echo "--------- $FILE ---------"
     APP="$(cut -d / -f 1 <<<"${FILE/docker\/compose\//}")"
-    echo "$FILE -> $APP"
     if [[ -e "$DOCKER_STACK_DIR/$APP" ]]; then
+        echo "$FILE -> $APP"
         rsync -abhruvz --backup-dir ".rsync-backup" "docker/compose/$APP/" "$DOCKER_STACK_DIR/$APP"
-        containers start "$APP"
+        containers start <<<"$APP"
         echo
     fi
 done < <(git diff --name-only "$OLD_HASH" "$NEW_HASH" | grep '^docker/compose/*')
