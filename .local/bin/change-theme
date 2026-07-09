@@ -134,7 +134,7 @@ fi
 
 vicinae theme set pywal &>/dev/null || true
 
-kvantummanager --set pywal || true
+kvantummanager --set pywal &>/dev/null || true
 
 echo "\$WALLPAPER = $IMG" >~/.config/hypr/include/wallpaper.conf
 
@@ -154,15 +154,19 @@ fi
 dms ipc call wallpaper set "$IMG" &>/dev/null ||
     {
         FILE="$HOME/.local/state/DankMaterialShell/session.json"
-        jq ".wallpaperPath=\"$IMG\"" "$FILE" >"$FILE.new" &&
-            mv "$FILE"{.new,}
+        if [[ -e "$FILE" ]]; then
+            jq ".wallpaperPath=\"$IMG\"" "$FILE" >"$FILE.new" &&
+                mv "$FILE"{.new,}
+        fi
     }
 dms greeter sync &>/dev/null || true
 
 caelestia wallpaper -N -f "$IMG" &>/dev/null ||
     {
-        echo "$IMG" >~/.local/state/caelestia/wallpaper/path.txt
-        ln -sf "$IMG" ~/.local/state/caelestia/wallpaper/current
+        if [[ -e "$HOME/.local/state/caelestia" ]]; then
+            echo "$IMG" >~/.local/state/caelestia/wallpaper/path.txt
+            ln -sf "$IMG" ~/.local/state/caelestia/wallpaper/current
+        fi
     }
 
 (~/Projects/thyx/scripts/install --yes &>/dev/null || true) &
