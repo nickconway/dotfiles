@@ -124,12 +124,12 @@ _cp ~/.cache/wal/vesktop.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/theme
 
 echo "\$WALLPAPER = $IMG" >~/.config/hypr/include/wallpaper.conf
 
-hyprctl hyprpaper wallpaper ", $IMG, " &>/dev/null || true
+hyprctl --instance 0 hyprpaper wallpaper ", $IMG, " &>/dev/null || true
 
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
 _cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
 
-for m in $(hyprctl monitors -j | jq '.[].name' | xargs); do
+for m in $(hyprctl --instance 0 monitors -j | jq '.[].name' | xargs); do
     [[ ${noctalia:-false} == true ]] || qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null ||
         {
             FILE="$HOME/.cache/noctalia/wallpapers.json"
@@ -166,7 +166,10 @@ fi
 gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal
 
 homeassistant-pywal &
-openrgb-pywal &
+
+if pgrep openrgb &>/dev/null; then
+    openrgb-pywal &
+fi
 
 fastfetch
 
