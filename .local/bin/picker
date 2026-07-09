@@ -9,7 +9,11 @@ function pick() {
     if [[ -t 0 ]]; then
         CMD=(fzf "${FZF_FLAGS[@]}")
     else
-        CMD=(rofi "${ROFI_FLAGS[@]}")
+        if command -v vicinae &>/dev/null; then
+            CMD=(vicinae dmenu "${VICINAE_FLAGS[@]}")
+        else
+            CMD=(rofi "${ROFI_FLAGS[@]}")
+        fi
     fi
 
     SELECTED="$("${CMD[@]}" <"$LIST")" && [[ -n "$SELECTED" ]] && echo -e "$SELECTED" | "${PROCESSING[@]}" | wl-copy -n && paste-keys
@@ -32,6 +36,11 @@ ROFI_FLAGS=(
     󰞅
     -theme-str
     'listview { columns: 6; } mode-switcher { enabled: false; } element-text { font: "NotoSans Nerd Font Propo 20"; }'
+)
+
+VICINAE_FLAGS=(
+    --placeholder
+    '...'
 )
 
 PROCESSING=(tee)
