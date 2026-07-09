@@ -148,3 +148,5 @@ vim.cmd("highlight MiniFilesBorder ctermbg=none guibg=none")
 vim.cmd("highlight MiniFilesNormal ctermbg=none guibg=none")
 vim.cmd("highlight MiniFilesCursorLine ctermbg=none guibg=none")
 vim.cmd("highlight LspInfoBorder ctermfg=none")
+
+vim.cmd("packadd cfilter")
