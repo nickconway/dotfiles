@@ -4,7 +4,7 @@
   "customThemeFile": "",
   "registryThemeVariants": {},
   "matugenScheme": "scheme-vibrant",
-  "matugenContrast": 1,
+  "matugenContrast": 0,
   "runUserMatugenTemplates": false,
   "matugenTargetMonitor": "",
   "popupTransparency": 0.6,

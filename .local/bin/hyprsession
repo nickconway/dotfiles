@@ -43,11 +43,11 @@ function save() {
             cmd="$(cat /proc/$pid/cmdline -A | sed 's/\^@/ /g' | xargs)"
 
             workspace="$(jq ".apps += [\"$cmd\"]" <<<"$workspace")"
-        done < <(hyprctl clients -j | jq -c '.[]')
+        done < <(hyprctl --instance 0 clients -j | jq -c '.[]')
 
         session="$(jq ".workspaces += [$workspace]" <<<"$session")"
         i=$((i + 1))
-    done < <(hyprctl workspaces -j | jq -c '.[]')
+    done < <(hyprctl --instance 0 workspaces -j | jq -c '.[]')
 
     jq ". += [$session]" <<<"$json" >"$SESSIONS_FILE"
 }
