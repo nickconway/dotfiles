@@ -84,10 +84,6 @@ files=(
     "$HOME/.cache/wal/pywal.kvconfig $HOME/.config/Kvantum/pywal/pywal.kvconfig"
     "$HOME/.cache/wal/pywal.svg $HOME/.config/Kvantum/pywal/pywal.svg"
     "$HOME/.cache/wal/colors-k9s.yaml $HOME/.config/k9s/skins/wal.yaml"
-    "$IMG /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png"
-    "$HOME/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf"
-    "$IMG /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png"
-    "$HOME/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof"
     "$HOME/.cache/wal/colors-gtk.css $HOME/.config/gtk-3.0/gtk.css"
     "$HOME/.cache/wal/colors-gtk.css $HOME/.config/gtk-4.0/gtk.css"
     "$HOME/.cache/wal/colors-feishin.css $HOME/.config/feishin/custom.css"
@@ -97,6 +93,15 @@ files=(
     "$HOME/.cache/wal/colors-noctalia.json $HOME/.config/noctalia/colors.json"
     "$HOME/.cache/wal/caelestia-schema.json $HOME/.local/state/caelestia/scheme.json"
 )
+
+if [[ "$(uname)" != "Darwin" ]]; then
+    files+=(
+        "$IMG /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png"
+        "$HOME/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf"
+        "$IMG /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png"
+        "$HOME/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof"
+    )
+fi
 
 if [[ -e ~/Projects/thyx/scripts/install ]]; then
     files+=("$IMG $HOME/Projects/thyx/backgrounds/wal")
