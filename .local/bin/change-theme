@@ -163,7 +163,7 @@ dms greeter sync &>/dev/null || true
 
 caelestia wallpaper -N -f "$IMG" &>/dev/null ||
     {
-        if [[ -e "$HOME/.local/state/caelestia" ]]; then
+        if [[ -e "$HOME/.local/state/caelestia/wallpaper" ]]; then
             echo "$IMG" >~/.local/state/caelestia/wallpaper/path.txt
             ln -sf "$IMG" ~/.local/state/caelestia/wallpaper/current
         fi
