@@ -713,8 +713,8 @@ alias yenc="yadm encrypt"
 
 function yec() {
     (cd && {
-        yd --name-only "$@"
-        yd --staged --name-only "$@"
+        yadm diff --name-only "$@"
+        yadm diff --staged --name-only "$@"
     } | xargs $EDITOR)
 }
 

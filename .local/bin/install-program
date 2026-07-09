@@ -4,6 +4,18 @@ set -euo pipefail
 PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
 
 case "$1" in
+frame)
+    mkdir -p "$PROJECT_DIR"
+
+    cd "$PROJECT_DIR"
+    git clone https://github.com/66HEX/frame.git &>/dev/null || true
+    cd frame
+    git pull 2>/dev/null
+    cargo xtask bundle linux
+    tar xf target/release/frame-linux-x86_64.tar.gz
+    rsync -a frame.app/ $HOME/.local
+    ;;
+
 kmonad)
     groupadd uinput || echo "group already exists"
     usermod -aG input,uinput $USER
