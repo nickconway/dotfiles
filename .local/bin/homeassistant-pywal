@@ -13,7 +13,7 @@ SCENE="pywal_${HOSTNAME//-/_}"
 
 while read -r line; do
     curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
-        -d '{ "entity_id": "light.'"$(cut -d ' ' -f 1 <<<$line)"'", "rgb_color": '"$(cut -d ' ' -f 2 <<<$line)"' }' \
+        -d '{ "brightness_pct": 100, "entity_id": "light.'"$(cut -d ' ' -f 1 <<<$line)"'", "rgb_color": '"$(cut -d ' ' -f 2 <<<$line)"' }' \
         https://home.conway.dev/api/services/light/turn_on -o /dev/null
 done < <(jq -rc '.lights[] | .name + " " + (.color | tostring)' "$FILE")
 
@@ -27,7 +27,7 @@ entities="[$(
 entities="${entities//, \]/\]}"
 
 if curl -fsSL -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
-    https://home.conway.dev/api/states/scene.$SCENE -o /dev/null; then
+    https://home.conway.dev/api/states/scene.$SCENE -o /dev/null &>/dev/null; then
     curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
         -d '{ "entity_id": "scene.'$SCENE'" }' \
         https://home.conway.dev/api/services/scene/delete -o /dev/null
