@@ -16,3 +16,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("chromium --app='https://messages.google.com/web'")
     hl.exec_cmd("chromium --app='https://x.com'")
 end)
+
+hl.timer(function()
+    if Run("grep close /proc/acpi/button/lid/*/state") ~= "" then
+        hl.exec_cmd("systemctl suspend")
+    end
+end, { timeout = 5000, type = "repeat" })
