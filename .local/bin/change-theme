@@ -52,7 +52,7 @@ if [[ -z ${INPUT} ]]; then
     fi
 fi
 
-WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a "$alpha")
+WAL_CMD=(uvx --from pywal16 wal -q -i "$INPUT" -a "$alpha")
 
 if [[ "$eight" == false ]]; then
     WAL_CMD+=(--cols16 "${METHOD:-lighten}")
