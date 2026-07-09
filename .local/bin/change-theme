@@ -9,14 +9,14 @@ function _cp() {
     if [[ ! -e "$1" ]]; then return; fi
     local DIR
     DIR="$(dirname "${@: -1}")"
-    mkdir -p "$DIR" || sudo mkdir -p "$DIR"
+    mkdir -p "$DIR" &>/dev/null || sudo mkdir -p "$DIR"
     cp "${@}" &>/dev/null || sudo cp "${@}"
 }
 
-alpha=0.5
+alpha=0.7
 
 if [[ -e ~/.cache/wal/colors.json ]]; then
-    alpha=$(cat ~/.cache/wal/colors.json | jq -r .alpha)
+    alpha=$(jq -r .alpha ~/.cache/wal/colors.json)
 fi
 
 reload=
@@ -31,6 +31,7 @@ OPTS_STRING+=("-l, --light: light=true")
 OPTS_STRING+=("-m, --method: light='\$ARG'")
 OPTS_STRING+=("-n, --noctalia: noctalia=true")
 OPTS_STRING+=("-r, --random: random=true")
+OPTS_STRING+=("-s, --show-image: show_image=true")
 OPTS_STRING+=("-R, --reload: reload=true")
 OPTS_STRING+=("-8, --eight: eight=true")
 OPTS_STRING+=("-g, --generate-only: generate_only=true")
@@ -69,14 +70,45 @@ if [[ -n ${generate_only:-} ]]; then
 fi
 
 IMG="$(cat ~/.cache/wal/wal)"
-_cp "$IMG" ~/.config/wallpaper
+
+files=(
+    "$IMG $HOME/.config/wallpaper"
+    "$HOME/.cache/wal/colors.sh $HOME/.config/shell/common/colors.sh"
+    "$HOME/.cache/wal/colors-hyprland.lua $HOME/.config/hypr/include/colors.lua"
+    "$HOME/.cache/wal/hyprvim.conf $HOME/.config/hyprvim/theme.conf"
+    "$HOME/.cache/wal/vicinae.toml $HOME/.local/share/vicinae/themes/pywal.toml"
+    "$HOME/.cache/wal/gradience.json $HOME/.config/presets/user/pywal.json"
+    "$HOME/.cache/wal/pywal.kvconfig $HOME/.config/Kvantum/pywal/pywal.kvconfig"
+    "$HOME/.cache/wal/pywal.svg $HOME/.config/Kvantum/pywal/pywal.svg"
+    "$HOME/.cache/wal/colors-k9s.yaml $HOME/.config/k9s/skins/wal.yaml"
+    "$IMG /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png"
+    "$HOME/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf"
+    "$IMG /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png"
+    "$HOME/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof"
+    "$HOME/.cache/wal/colors-gtk.css $HOME/.config/gtk-3.0/gtk.css"
+    "$HOME/.cache/wal/colors-gtk.css $HOME/.config/gtk-4.0/gtk.css"
+    "$HOME/.cache/wal/colors-feishin.css $HOME/.config/feishin/custom.css"
+    "$HOME/.cache/wal/vesktop.css $HOME/.config/vesktop/themes/pywal.theme.css"
+    "$HOME/.cache/wal/vesktop.css $HOME/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css"
+    "$HOME/.cache/wal/colors-noctalia.json $HOME/.config/noctalia/colorschemes/PyWal/PyWal.json"
+    "$HOME/.cache/wal/colors-noctalia.json $HOME/.config/noctalia/colors.json"
+    "$HOME/.cache/wal/caelestia-schema.json $HOME/.local/state/caelestia/scheme.json"
+)
+
+if [[ -e ~/Projects/thyx/scripts/install ]]; then
+    files+=("$IMG $HOME/Projects/thyx/backgrounds/wal")
+    files+=("$HOME/.cache/wal/thyx.conf $HOME/Projects/thyx/theme.conf")
+fi
 
 if [[ "$IMG" == *".png" ]]; then
-    _cp "$IMG" ~/.config/wallpaper
-    _cp ~/.config/wallpaper{,.png}
+    files+=("$HOME/.config/wallpaper $HOME/.config/wallpaper.png")
 else
     magick ~/.config/wallpaper{,.png}
 fi
+
+for line in "${files[@]}"; do
+    _cp ${line[*]}
+done
 
 magick "$IMG" -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb &
 (
@@ -92,40 +124,11 @@ else
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" || true
 fi
 
-_cp ~/.cache/wal/colors.sh ~/.config/shell/common/colors.sh
-
-_cp ~/.cache/wal/colors-hyprland.lua ~/.config/hypr/include/colors.lua
-_cp ~/.cache/wal/hyprvim.conf ~/.config/hyprvim/theme.conf
-
-_cp ~/.cache/wal/vicinae.toml ~/.local/share/vicinae/themes/pywal.toml
 vicinae theme set pywal &>/dev/null || true
 
-_cp ~/.cache/wal/gradience.json ~/.config/presets/user/pywal.json
-
-_cp ~/.cache/wal/pywal.kvconfig ~/.config/Kvantum/pywal/pywal.kvconfig
-_cp ~/.cache/wal/pywal.svg ~/.config/Kvantum/pywal/pywal.svg
 kvantummanager --set pywal || true
 
-_cp ~/.cache/wal/colors-k9s.yaml ~/.config/k9s/skins/wal.yaml
-
-_cp "$IMG" /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png
-_cp ~/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf
-
-_cp "$IMG" /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png
-_cp ~/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof
-
-_cp ~/.cache/wal/colors-gtk.css ~/.config/gtk-3.0/gtk.css
-_cp ~/.cache/wal/colors-gtk.css ~/.config/gtk-4.0/gtk.css
-
-_cp ~/.cache/wal/colors-feishin.css ~/.config/feishin/custom.css
-
-_cp ~/.cache/wal/vesktop.css ~/.config/vesktop/themes/pywal.theme.css
-_cp ~/.cache/wal/vesktop.css ~/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css
-
 echo "\$WALLPAPER = $IMG" >~/.config/hypr/include/wallpaper.conf
-
-_cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colorschemes/PyWal/PyWal.json
-_cp ~/.cache/wal/colors-noctalia.json ~/.config/noctalia/colors.json
 
 if pgrep start-hyprland &>/dev/null; then
     hyprctl --instance 0 hyprpaper wallpaper ", $IMG, " &>/dev/null || true
@@ -148,29 +151,28 @@ dms ipc call wallpaper set "$IMG" &>/dev/null ||
     }
 dms greeter sync &>/dev/null || true
 
-_cp ~/.cache/wal/caelestia-schema.json ~/.local/state/caelestia/scheme.json
 caelestia wallpaper -N -f "$IMG" &>/dev/null ||
     {
         echo "$IMG" >~/.local/state/caelestia/wallpaper/path.txt
         ln -sf "$IMG" ~/.local/state/caelestia/wallpaper/current
     }
 
-if [[ -e ~/Projects/thyx ]]; then
-    _cp "$IMG" ~/Projects/thyx/backgrounds/wal
-    _cp ~/.cache/wal/thyx.conf ~/Projects/thyx/theme.conf
-    ~/Projects/thyx/scripts/install --yes &>/dev/null
-fi
+(~/Projects/thyx/scripts/install --yes &>/dev/null || true) &
 
 if pgrep swaync &>/dev/null; then
     swaync-client -rs &>/dev/null
 fi
 
-gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal
+gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal &
 
 homeassistant-pywal &
 
 if pgrep openrgb &>/dev/null; then
     openrgb-pywal &
+fi
+
+if [[ -n ${show_image:-} ]]; then
+    kitten icat "$IMG"
 fi
 
 fastfetch
