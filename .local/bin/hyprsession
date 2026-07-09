@@ -8,9 +8,9 @@ function save() {
     SESSION_ICON="${2:-󰘚}"
 
     if [[ -e "$SESSIONS_FILE" ]]; then
-        json="$(jq '.' "$SESSIONS_FILE")"
+        json="$(jq <"$SESSIONS_FILE")"
     else
-        json="$(jq '.' <<<"[]")"
+        json="[]"
     fi
 
     session="$(jq '.[] | select(.name == "'$SESSION_NAME'")' <<<"$json")"
