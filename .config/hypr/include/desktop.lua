@@ -9,7 +9,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 2 silent] thunderbird-beta")
     hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
     hl.exec_cmd("[workspace 3 silent] chromium --app='https://messages.google.com/web'")
-    hl.exec_cmd("[workspace 3 silent] chromium --app='https://bluebubbles.app/web/'")
     hl.exec_cmd("[workspace 3 silent] chromium --app='https://x.com'")
 end)
 
