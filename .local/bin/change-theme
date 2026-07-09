@@ -14,21 +14,18 @@ function _cp() {
 }
 
 alpha=0.7
-
-if [[ -e ~/.cache/wal/colors.json ]]; then
-    alpha=$(jq -r .alpha ~/.cache/wal/colors.json)
-fi
-
 reload=
 random=
 light=
 eight=
 
-METHOD=lighten
+if [[ -e ~/.cache/wal/colors.json ]]; then
+    alpha=$(jq -r .alpha ~/.cache/wal/colors.json)
+fi
 
 OPTS_STRING+=("-a, --alpha: alpha='\$ARG'")
 OPTS_STRING+=("-l, --light: light=true")
-OPTS_STRING+=("-m, --method: light='\$ARG'")
+OPTS_STRING+=("-m, --method: method='\$ARG'")
 OPTS_STRING+=("-n, --noctalia: noctalia=true")
 OPTS_STRING+=("-r, --random: random=true")
 OPTS_STRING+=("-s, --show-image: show_image=true")
@@ -51,8 +48,8 @@ fi
 
 WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a "$alpha")
 
-if [[ "$eight" == false ]]; then
-    WAL_CMD+=(--cols16 "${METHOD:-lighten}")
+if [[ -z "$eight" ]]; then
+    WAL_CMD+=(--cols16 "${method:-darken}")
 fi
 
 if [[ $light == true ]]; then
@@ -70,6 +67,10 @@ if [[ -n ${generate_only:-} ]]; then
 fi
 
 IMG="$(cat ~/.cache/wal/wal)"
+
+if [[ -n ${show_image:-} ]]; then
+    kitten icat "$IMG"
+fi
 
 files=(
     "$IMG $HOME/.config/wallpaper"
@@ -108,7 +109,7 @@ fi
 if [[ "$IMG" == *".png" ]]; then
     files+=("$HOME/.config/wallpaper $HOME/.config/wallpaper.png")
 else
-    magick ~/.config/wallpaper{,.png}
+    magick ~/.config/wallpaper{,.png} &
 fi
 
 for line in "${files[@]}"; do
@@ -172,16 +173,12 @@ if pgrep swaync &>/dev/null; then
     swaync-client -rs &>/dev/null
 fi
 
-gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal &
+gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal &>/dev/null &
 
 homeassistant-pywal &
 
 if pgrep openrgb &>/dev/null; then
     openrgb-pywal &
-fi
-
-if [[ -n ${show_image:-} ]]; then
-    kitten icat "$IMG"
 fi
 
 fastfetch
