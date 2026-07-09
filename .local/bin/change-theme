@@ -27,7 +27,6 @@ eight=
 METHOD=lighten
 
 OPTS_STRING+=("-a, --alpha: alpha='\$ARG'")
-OPTS_STRING+=("-i, --image: INPUT='\$ARG'")
 OPTS_STRING+=("-l, --light: light=true")
 OPTS_STRING+=("-m, --method: light='\$ARG'")
 OPTS_STRING+=("-n, --noctalia: noctalia=true")
@@ -40,16 +39,14 @@ OPTS_STRING+=("-N, --no-notification: no_notification=true")
 
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 
-if [[ -z ${INPUT} ]]; then
-    if [[ "$reload" == "true" ]]; then
-        INPUT="$(cat ~/.cache/wal/wal)"
-    elif [[ "$random" == "true" ]]; then
-        INPUT="$WALLPAPER_DIR"
-    elif [[ -n "${ARGS[0]:-}" ]]; then
-        INPUT="${ARGS[0]}"
-    else
-        INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | vicinae dmenu -p "Choose a wallpaper")"
-    fi
+if [[ "$reload" == "true" ]]; then
+    INPUT="$(cat ~/.cache/wal/wal)"
+elif [[ "$random" == "true" ]]; then
+    INPUT="$WALLPAPER_DIR"
+elif [[ -n "${ARGS[0]:-}" ]]; then
+    INPUT="${ARGS[0]}"
+else
+    INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | vicinae dmenu -p "Choose a wallpaper")"
 fi
 
 WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a "$alpha")
