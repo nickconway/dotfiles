@@ -47,10 +47,10 @@ alias cat='bat --style=plain'
 alias cata='bat --style=plain --show-all'
 alias cds=$'cd "$(tmux display-message -p \'#{session_path}\')"'
 
-CMATRIX_BIN=$(which cmatrix)
+command -v cmatrix 2>/dev/null && CMATRIX_BIN=$(which cmatrix)
 function cmatrix() {
     [[ -n $TMUX ]] && tmux set status off
-    $CMATRIX_BIN -s $@
+    "${CMATRIX_BIN:-cmatrix}" -s "$@"
     [[ -n $TMUX ]] && tmux set status on
 }
 
