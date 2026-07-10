@@ -1,0 +1,28 @@
+{
+    "lights": [
+        {
+            "name": "living_room_fan_light_1",
+            "color": [{color9.saturate(100).rgb}]
+        },
+        {
+            "name": "living_room_fan_light_2",
+            "color": [{color12.saturate(100).rgb}]
+        },
+        {
+            "name": "living_room_fan_light_3",
+            "color": [{color14.saturate(100).rgb}]
+        },
+        {
+            "name": "living_room_fan_light_4",
+            "color": [{color13.saturate(100).rgb}]
+        },
+        {
+            "name": "living_room_fan_light_5",
+            "color": [{color10.saturate(100).rgb}]
+        },
+        {
+            "name": "living_room_floor_lamp",
+            "color": [{color11.saturate(100).rgb}]
+        }
+    ]
+}
