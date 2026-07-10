@@ -2,7 +2,7 @@
 set -euo pipefail
 
 EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
-RSYNC_CMD="rsync -Lauvz --progress --info=progress2"
+RSYNC_CMD="rsync -Lahuvz --progress --info=progress2"
 
 function pull-saves() {
     echo "Pulling Saves"
