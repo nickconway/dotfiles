@@ -36,6 +36,12 @@ OPTS_STRING+=("-N, --no-notification: no_notification=true")
 
 eval "$(get-options "${OPTS_STRING[@]}" -- "$@")"
 
+if [[ -t 0 ]]; then
+    CMD=(fzf)
+else
+    CMD=(vicinae dmenu -p "Choose a wallpaper")
+fi
+
 if [[ "$reload" == "true" ]]; then
     INPUT="$(cat ~/.cache/wal/wal)"
 elif [[ "$random" == "true" ]]; then
@@ -43,7 +49,7 @@ elif [[ "$random" == "true" ]]; then
 elif [[ -n "${ARGS[0]:-}" ]]; then
     INPUT="${ARGS[0]}"
 else
-    INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | vicinae dmenu -p "Choose a wallpaper")"
+    INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | "${CMD[@]}")"
 fi
 
 WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a "$alpha")
