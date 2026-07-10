@@ -1,0 +1,28 @@
+[submodule ".config/fzf-git"]
+	path = .config/fzf-git
+	url = https://github.com/nickconway/fzf-git.sh
+	branch = main
+[submodule ".config/fzf"]
+	path = .config/fzf
+	url = https://github.com/junegunn/fzf
+	branch = master
+[submodule ".config/zsh/zsh-defer"]
+	path = .config/zsh/zsh-defer
+	url = https://github.com/romkatv/zsh-defer
+	branch = master
+[submodule ".config/zsh/zsh-autosuggestions"]
+	path = .config/zsh/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+	branch = master
+[submodule ".config/zsh/zsh-completions"]
+	path = .config/zsh/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions
+	branch = master
+[submodule ".config/zsh/zsh-syntax-highlighting"]
+	path = .config/zsh/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting
+	branch = master
+[submodule ".config/zsh/fzf-tab"]
+	path = .config/zsh/fzf-tab
+	url = https://github.com/nickconway/fzf-tab
+	branch = master
