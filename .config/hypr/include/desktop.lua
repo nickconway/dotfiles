@@ -2,6 +2,10 @@ hl.workspace_rule({ workspace = "1", monitor = "DP-1", default = true })
 hl.workspace_rule({ workspace = "2", monitor = "DP-3", default = true })
 hl.workspace_rule({ workspace = "3", monitor = "DP-2", default = true })
 
+hl.monitor({ output = "DP-1", mode = "preferred", scale = "1.33", bitdepth = 10 })
+hl.monitor({ output = "DP-2", mode = "preferred", scale = "1.33", bitdepth = 10, position = "auto-left" })
+hl.monitor({ output = "DP-3", mode = "preferred", scale = "1.33", bitdepth = 10, position = "auto-right" })
+
 hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 1 silent] zen-browser")
     hl.exec_cmd("[workspace 2 silent] kitty")
@@ -13,6 +17,11 @@ hl.on("hyprland.start", function()
 end)
 
 hl.timer(function()
+    local s = hl.get_monitor("Sunshine")
+    if s then
+        hl.notification.create({ text = s.name, timeout = 5000 })
+    end
+
     local monitor = hl.get_monitor("DP-3")
 
     if monitor == nil then
