@@ -39,8 +39,6 @@ if command -v termux-reload-settings >/dev/null; then
     [[ -e ~/.config/zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.config/zsh/zsh-syntax-highlighting
     [[ -e ~/.config/zsh/zsh-defer ]] || git clone https://github.com/romkatv/zsh-defer ~/.config/zsh/zsh-defer
     [[ -e ~/.config/zsh/fzf-tab ]] || git clone https://github.com/nickconway/fzf-tab ~/.config/zsh/fzf-tab -b feat/tmux-popup-follow-cursor
-    [[ -e ~/.config/zsh/sudo.plugin.zsh ]] || curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh -o ~/.config/zsh/sudo.plugin.zsh
-    [[ -e ~/.config/zsh/command-not-found.plugin.zsh ]] || curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/command-not-found/command-not-found.plugin.zsh -o ~/.config/zsh/command-not-found.plugin.zsh
     cd ~
     GPG_TTY=$(tty)
     export GPG_TTY
