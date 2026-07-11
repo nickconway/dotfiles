@@ -3,7 +3,6 @@ set -euo pipefail
 
 if [[ $1 == "do" ]]; then
     loginctl unlock-session
-    sleep 3
     sunshine-headless enable
 elif [[ $1 == "undo" ]]; then
     sunshine-headless disable
