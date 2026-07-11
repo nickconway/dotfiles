@@ -198,5 +198,9 @@ fi
 fastfetch
 
 if [[ -z ${no_notification:-} ]]; then
-    eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 --random=Random" --action "$0 --reload=Reload")"
+    if command -v distrobox-host-exec &>/dev/null; then
+        eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 --random=Random" --action "$0 --reload=Reload")"
+    else
+        distrobox-host-exec 'eval "$(notify-send -e -h string:synchronous:theme -i "$IMG" "Theme" "Theme changed" --action "$0=Pick" --action "$0 --random=Random" --action "$0 --reload=Reload")"'
+    fi
 fi
