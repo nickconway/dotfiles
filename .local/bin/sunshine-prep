@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+WIDTH=${SUNSHINE_CLIENT_WIDTH:-3840}
+HEIGHT=${SUNSHINE_CLIENT_HEIGHT:-2160}
+FPS=${SUNSHINE_CLIENT_FPS:-120}
+
 if [[ $1 == "do" ]]; then
     loginctl unlock-session
-    sunshine-headless enable
+    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', disabled = false })"
+    hyprctl dispatch 'hl.dsp.dpms({action="off"})'
 elif [[ $1 == "undo" ]]; then
-    sunshine-headless disable
+    hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
+    hyprctl dispatch 'hl.dsp.dpms({action="on"})'
 fi
