@@ -69,12 +69,14 @@ if command -v steamos-update &>/dev/null; then
     mkdir -p $PROJECT_DIR
     if [[ ! -e $PROJECT_DIR/deck-tailscale ]]; then
         git clone https://github.com/tailscale-dev/deck-tailscale.git $PROJECT_DIR/deck-tailscale
-        cd $PROJECT_DIR/deck-tailscale
-        sudo bash tailscale.sh
     fi
-    source /etc/profile.d/tailscale.sh
+    cd $PROJECT_DIR/deck-tailscale
+    sudo bash tailscale.sh
     sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
     sudo-run tailscale set --auto-update
+
+    distrobox create -n arch -i archlinux &>/dev/null
+    exec distrobox enter arch
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
