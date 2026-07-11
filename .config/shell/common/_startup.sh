@@ -6,10 +6,6 @@ export FZF_DEFAULT_OPTS='--tmux --reverse --min-height 20 --cycle -m --pointer=â
         --gutter " "
     '
 
-if [[ -z "$NO_DISTROBOX" ]] && command -v steamos-update &>/dev/null; then
-    distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY} ${SSH_CONNECTION:+--env SSH_CONNECTION=$SSH_CONNECTION}" && exit
-fi
-
 if [[ -z "$NO_TMUX" ]]; then
     [[ "$(basename "$SHELL")" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
     if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
