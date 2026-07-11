@@ -23,6 +23,26 @@
         {
             "name": "living_room_floor_lamp",
             "color": [{color11.saturate(100).rgb}]
-        }
+        },
+        {
+            "name": "kitchen_counter_left",
+            "color": [{color9.saturate(100).rgb}]
+        },
+        {
+            "name": "kitchen_counter_right",
+            "color": [{color12.saturate(100).rgb}]
+        },
+        {
+            "name": "kitchen_island_left",
+            "color": [{color14.saturate(100).rgb}]
+        },
+        {
+            "name": "kitchen_island_middle",
+            "color": [{color13.saturate(100).rgb}]
+        },
+        {
+            "name": "kitchen_island_right",
+            "color": [{color10.saturate(100).rgb}]
+        },
     ]
 }
