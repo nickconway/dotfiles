@@ -3,3 +3,7 @@ if [[ -n "$HOMEBREW_PREFIX" ]]; then
         source "$f"
     done
 fi
+
+for f in ~/.config/zsh/{,*}/*.zsh; do
+    source "$f"
+done 2>/dev/null;
