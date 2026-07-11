@@ -175,7 +175,13 @@ caelestia wallpaper -N -f "$IMG" &>/dev/null ||
 
 (~/Projects/thyx/scripts/install --yes &>/dev/null || true) &
 
-(plasma-apply-wallpaperimage "$IMG" || true) &>/dev/null
+(
+    if command -v distrobox-host-exec &>/dev/null; then
+        distrobox-host-exec plasma-apply-wallpaperimage "$IMG" || true
+    else
+        plasma-apply-wallpaperimage "$IMG" || true
+    fi
+) &>/dev/null
 
 if pgrep swaync &>/dev/null; then
     swaync-client -rs &>/dev/null
