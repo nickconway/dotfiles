@@ -73,7 +73,7 @@ if command -v steamos-update &>/dev/null; then
     sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
     sudo-run tailscale set --auto-update
 
-    distrobox create -n arch -i archlinux &>/dev/null
+    distrobox create -i archlinux -arch --init --additional-packages "systemd" &>/dev/null
     exec distrobox enter arch
 fi
 
