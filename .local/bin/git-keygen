@@ -17,7 +17,7 @@ if ! [[ -e $GITHUB_FILE ]]; then
 
     ssh-keygen -t ed25519 -f $GITHUB_FILE -q -N "$1" -C "github $(whoami)@$NAME"
 
-    curl -s -H "Authorization: token ${GH_TOKEN}" \
+    curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
         -X POST --data-binary "{\"title\":\"$NAME\",\"key\":\"$(cat $GITHUB_FILE.pub)\"}" \
         https://api.github.com/user/keys
 fi
