@@ -175,7 +175,7 @@ caelestia wallpaper -N -f "$IMG" &>/dev/null ||
 
 (~/Projects/thyx/scripts/install --yes &>/dev/null || true) &
 
-plasma-apply-wallpaperimage "$IMG" &>/dev/null
+(plasma-apply-wallpaperimage "$IMG" || true) &>/dev/null
 
 if pgrep swaync &>/dev/null; then
     swaync-client -rs &>/dev/null

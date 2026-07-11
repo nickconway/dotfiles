@@ -43,6 +43,6 @@
         {
             "name": "kitchen_island_right",
             "color": [{color10.saturate(100).rgb}]
-        },
+        }
     ]
 }
