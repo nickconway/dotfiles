@@ -17,11 +17,6 @@ hl.on("hyprland.start", function()
 end)
 
 hl.timer(function()
-    local s = hl.get_monitor("Sunshine")
-    if s then
-        hl.notification.create({ text = s.name, timeout = 5000 })
-    end
-
     local monitor = hl.get_monitor("DP-3")
 
     if monitor == nil then
