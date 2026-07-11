@@ -108,7 +108,6 @@ if [[ "$(uname)" != "Darwin" ]]; then
 fi
 
 if [[ -e ~/Projects/thyx/scripts/install ]]; then
-    files+=("$IMG $HOME/Projects/thyx/backgrounds/wal")
     files+=("$HOME/.cache/wal/thyx.conf $HOME/Projects/thyx/theme.conf")
 fi
 
