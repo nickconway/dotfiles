@@ -19,7 +19,6 @@ steam-hyprland)
     export PATH="$PATH:$HOME/.local/bin"
     unset LD_PRELOAD
     xhost +si:localuser:$USER
-    sudo chown -f -R $USER:$USER /tmp/.X11-unix
     distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" -- start-hyprland
     ;;
 
