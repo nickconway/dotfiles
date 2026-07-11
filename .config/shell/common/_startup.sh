@@ -6,6 +6,10 @@ export FZF_DEFAULT_OPTS='--tmux --reverse --min-height 20 --cycle -m --pointer=â
         --gutter " "
     '
 
+if command -v steamos-update &>/dev/null; then
+    distrobox enter arch && exit
+fi
+
 if [[ -z "$NO_TMUX" ]]; then
     [[ "$(basename "$SHELL")" == "$SHELL_NAME" ]] && export TMUX_SHELL="$SHELL" || export TMUX_SHELL="$SHELL_NAME"
     if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
@@ -24,5 +28,5 @@ if [[ -z "$NO_TMUX" ]]; then
 fi
 
 if command -v termux-reload-settings >/dev/null; then
-    immersive-ssh && exit || return
+    immersive-ssh && exit
 fi
