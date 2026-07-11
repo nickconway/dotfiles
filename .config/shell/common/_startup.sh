@@ -7,7 +7,7 @@ export FZF_DEFAULT_OPTS='--tmux --reverse --min-height 20 --cycle -m --pointer=â
     '
 
 if command -v steamos-update &>/dev/null; then
-    distrobox enter arch && exit
+    distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" && exit
 fi
 
 if [[ -z "$NO_TMUX" ]]; then
