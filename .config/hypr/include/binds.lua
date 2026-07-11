@@ -87,7 +87,10 @@ Bind({ MainMod, "P" }, hl.dsp.exec_cmd("RBW_PROFILE=gui nohup picker password &>
 Bind({ MainMod, "SUPER_L" }, hl.dsp.exec_cmd("toggle bar"))
 Bind({ MainMod, "SUPER_R" }, hl.dsp.exec_cmd("toggle bar"))
 
-Bind({ MainMod, "SHIFT", "C" }, hl.dsp.exec_cmd("_log change-theme"))
+Bind(
+    { MainMod, "SHIFT", "C" },
+    hl.dsp.exec_cmd("if command -v skwd &>/dev/null; then skwd wall toggle; else _log change-theme; fi")
+)
 Bind({ MainMod, "Grave" }, hl.dsp.workspace.toggle_special("scratch"))
 Bind({ MainMod, "SHIFT", "U" }, hl.dsp.workspace.toggle_special("update"))
 
