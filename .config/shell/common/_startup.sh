@@ -6,7 +6,7 @@ export FZF_DEFAULT_OPTS='--tmux --reverse --min-height 20 --cycle -m --pointer=â
         --gutter " "
     '
 
-if command -v steamos-update &>/dev/null; then
+if [[ -z "$NO_DISTROBOX" ]] && command -v steamos-update &>/dev/null; then
     distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY} --env SSH_CONNECTION=$SSH_CONNECTION" && exit
 fi
 
