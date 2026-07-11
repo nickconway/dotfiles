@@ -13,3 +13,5 @@ elif [[ $1 == "undo" ]]; then
     hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
     hyprctl dispatch 'hl.dsp.dpms({action="on"})'
 fi
+
+hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false }'
