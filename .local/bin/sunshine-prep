@@ -6,6 +6,4 @@ if [[ $1 == "do" ]]; then
     sunshine-headless enable
 elif [[ $1 == "undo" ]]; then
     sunshine-headless disable
-    sleep 3
-    loginctl lock-session
 fi
