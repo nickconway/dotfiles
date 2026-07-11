@@ -18,6 +18,7 @@ steam-hyprland)
     cd "$HOME"
     export PATH="$PATH:$HOME/.local/bin"
     unset LD_PRELOAD
+    unset XDG_DESKTOP_PORTAL_DIR
     xhost +si:localuser:$USER
     distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" -- start-hyprland
     ;;
