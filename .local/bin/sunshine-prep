@@ -7,11 +7,15 @@ FPS=${SUNSHINE_CLIENT_FPS:-120}
 
 if [[ $1 == "do" ]]; then
     loginctl unlock-session
-    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', disabled = false })"
-    hyprctl dispatch 'hl.dsp.dpms({action="off"})'
-elif [[ $1 == "undo" ]]; then
-    hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
-    hyprctl dispatch 'hl.dsp.dpms({action="on"})'
-fi
+    pkill -STOP -x hypridle &>/dev/null
 
-hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false }'
+    for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
+        hyprctl eval "hl.monitor({ output = \"$m\", disabled = true })"
+    done
+
+    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}' })"
+elif [[ $1 == "undo" ]]; then
+    pkill -CONT -x hypridle &>/dev/null
+
+    hyprctl reload
+fi
