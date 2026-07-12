@@ -18,4 +18,6 @@ elif [[ $1 == "undo" ]]; then
     pkill -CONT -x hypridle &>/dev/null
 
     hyprctl reload
+
+    hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })'
 fi
