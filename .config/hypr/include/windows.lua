@@ -137,7 +137,8 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, roundi
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
 
-local game_classes = { "steam_app_.*", "gamescope.*", "lutris_.*" }
+local game_classes = { "steam_app_.*", "gamescope.*", "lutris_.*", "com.moonlight.*" }
+local game_mode_classes = { "steam_app_.*", "gamescope.*", "lutris_.*" }
 
 for _, c in ipairs(game_classes) do
     hl.window_rule({
@@ -150,7 +151,7 @@ end
 
 hl.on("window.active", function()
     for _, w in ipairs(hl.get_windows()) do
-        for _, c in ipairs(game_classes) do
+        for _, c in ipairs(game_mode_classes) do
             if w.class:match(c) then
                 toggle_game_mode(true)
                 return
