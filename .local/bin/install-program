@@ -114,8 +114,8 @@ EOF
     ;;
 
 sunshine)
-    yay -S --needed --noconfirm sunshine
-    setcap cap_sys_admin+p "$(readlink -f "$(which sunshine)")"
+    yay -S --needed --noconfirm sunshine-bin
+    sudo setcap cap_sys_admin+p "$(readlink -f "$(which sunshine)")"
     ;;
 
 yeetmouse)
