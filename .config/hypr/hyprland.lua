@@ -14,4 +14,8 @@ require("include.startup")
 require("include.windows")
 require("include.workspaces")
 
-require("include." .. Run("hostnamectl hostname"))
+local hostname = Run("hostnamectl hostname")
+
+if pcall(require, "include." .. hostname) then
+    require("include." .. hostname)
+end

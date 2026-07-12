@@ -2,9 +2,9 @@ hl.workspace_rule({ workspace = "1", monitor = "DP-1", default = true })
 hl.workspace_rule({ workspace = "2", monitor = "DP-3", default = true })
 hl.workspace_rule({ workspace = "3", monitor = "DP-2", default = true })
 
-hl.monitor({ output = "DP-1", mode = "preferred", scale = "1.33", bitdepth = 10 })
-hl.monitor({ output = "DP-2", mode = "preferred", scale = "1.33", bitdepth = 10, position = "auto-left" })
-hl.monitor({ output = "DP-3", mode = "preferred", scale = "1.33", bitdepth = 10, position = "auto-right" })
+hl.monitor({ output = "DP-1", mode = "preferred", scale = "1.33", bitdepth = 10, position = "0x0" })
+hl.monitor({ output = "DP-2", mode = "preferred", scale = "1.33", bitdepth = 10, position = "-2880x0" })
+hl.monitor({ output = "DP-3", mode = "preferred", scale = "1.33", bitdepth = 10, position = "2880x0" })
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 1 silent] zen-browser")
