@@ -11,8 +11,11 @@ moonlight)
             rg -i 'browser_download_url.*appimage' | awk '{print $2}' | xargs
     )"
 
-    curl "$URL" -o ~/.local/bin/moonlight
+    curl -fsSL "$URL" -o ~/.local/bin/moonlight
     chmod +x ~/.local/bin/moonlight
+    if [[ -e "$HOME/.var/app/com.moonlight_stream.Moonlight/config/Moonlight Game Streaming Project/config/Moonlight.conf" ]]; then
+        rsync -auhvz "$HOME/.var/app/com.moonlight_stream.Moonlight/config/Moonlight Game Streaming Project/config/Moonlight.conf" "$HOME/.config/Moonlight Game Streaming Project/Moonlight.conf"
+    fi
     ;;
 frame)
     mkdir -p "$PROJECT_DIR"
