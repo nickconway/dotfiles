@@ -57,11 +57,8 @@ fi
 
 if command -v steamos-update &>/dev/null; then
     sudo steamos-readonly disable
-    sudo pacman-key --init
-    sudo pacman-key --populate archlinux
-    sudo pacman-key --populate holo
-
     sudo systemctl enable --now sshd
+    sudo steamos-readonly enable
 
     export PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
     mkdir -p $PROJECT_DIR
@@ -74,7 +71,6 @@ if command -v steamos-update &>/dev/null; then
     sudo-run tailscale set --auto-update
 
     distrobox create -i archlinux -arch --init --additional-packages "systemd" &>/dev/null
-    exec distrobox enter arch
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then

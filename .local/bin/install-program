@@ -4,6 +4,15 @@ set -euo pipefail
 PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
 
 case "$1" in
+extest)
+    rustup target add i686-unknown-linux-gnu
+    cd "$PROJECT_DIR"
+    git clone https://github.com/Supreeeme/extest.git &>/dev/null || true
+    cd extest
+    git pull 2>/dev/null
+    cargo build --release
+    ;;
+
 moonlight)
     URL="$(
         curl -fsSL \
