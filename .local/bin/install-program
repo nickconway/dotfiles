@@ -4,6 +4,16 @@ set -euo pipefail
 PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
 
 case "$1" in
+moonlight)
+    URL="$(
+        curl -fsSL \
+            https://api.github.com/repos/moonlight-stream/moonlight-qt/releases/latest |
+            rg -i 'browser_download_url.*appimage' | awk '{print $2}' | xargs
+    )"
+
+    curl "$URL" -o ~/.local/bin/moonlight
+    chmod +x ~/.local/bin/moonlight
+    ;;
 frame)
     mkdir -p "$PROJECT_DIR"
 
