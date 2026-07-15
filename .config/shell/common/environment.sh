@@ -70,7 +70,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 command -v brew >/dev/null && export HOMEBREW_PREFIX="$(brew --prefix)"
 
 export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=~/.config/zsh/zsh-syntax-highlighting/highlighters
-[[ -n ${HOMEBREW_PREFIX:-} ]] && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
+[[ -d "${HOMEBREW_PREFIX:-}/share/zsh-syntax-highlighting/highlighters" ]] && export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/highlighters
 
 export VISUAL=nvim
 export EDITOR=nvim
