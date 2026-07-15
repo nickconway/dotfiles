@@ -78,7 +78,7 @@ export EDITOR=nvim
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [[ -n ${HOMEBREW_PREFIX:-} ]] && [[ -e "$HOMEBREW_PREFIX/opt/nvm" ]] && export NVM_DIR=$HOMEBREW_PREFIX/opt/nvm
 
-export PROJECT_DIR=~/Projects
+export PROJECT_DIR="$HOME/Projects"
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
