@@ -23,6 +23,10 @@ hl.config({
         sync_gsettings_theme = true,
     },
 
+    render = {
+        cm_auto_hdr = true,
+    },
+
     opengl = {
         nvidia_anti_flicker = true,
     },
