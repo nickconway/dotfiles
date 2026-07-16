@@ -6,5 +6,5 @@ cd "$HOME"
 unset LD_PRELOAD
 unset XDG_DESKTOP_PORTAL_DIR
 
-echo "steam-hyprland: starting session" &>/tmp/steam-hyprland.log
-distrobox enter arch --additional-flags "--env DISPLAY=${DISPLAY}" -- dbus-run-session start-hyprland &>>/tmp/steam-hyprland.log
+echo "steam-hyprland: starting session"
+start-hyprland
