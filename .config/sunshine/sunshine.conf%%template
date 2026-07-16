@@ -1,0 +1,3 @@
+csrf_allowed_origins = https://10.0.0.2:47990,https://desktop:47990,https://gamestream.${SERVICES_BASE_DOMAIN}
+global_prep_cmd = [{"do":"_log sunshine-prep do","undo":"_log sunshine-prep undo"}]
+output_name = Sunshine
