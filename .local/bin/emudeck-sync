@@ -1,19 +1,43 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
-RSYNC_CMD="rsync -Lahuvz --no-g --no-o --no-p --progress --info=progress2"
+eval "$(
+    get-options \
+        "-n, --dry-run: RSYNC_CMD+=' -n'" \
+        "-i, --init: INIT=true" \
+        -- \
+        "$@"
+)"
 
-eval "$(get-options "-n, --dry-run: RSYNC_CMD+=' -n'" -- "$@")"
+EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
+
+RSYNC_CMD=(
+    rsync
+    -Lahvz
+    --no-g
+    --no-o
+    --no-p
+    --progress
+    --info=progress2
+)
+
+if [[ -z ${INIT:-} ]]; then
+    RSYNC_CMD+=(-u)
+else
+    pull-saves
+    pull-bios
+    link-games
+    exit
+fi
 
 function pull-saves() {
     echo "Pulling Saves"
-    $RSYNC_CMD "$REMOTE_EMUDECK_DIR"/Saves/ "$EMUDECK_DIR/saves"
+    "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/Saves/ "$EMUDECK_DIR/saves"
 }
 
 function push-saves() {
     echo "Pushing Saves"
-    $RSYNC_CMD "$EMUDECK_DIR/saves/" "$REMOTE_EMUDECK_DIR"/Saves
+    "${RSYNC_CMD[@]}" "$EMUDECK_DIR/saves/" "$REMOTE_EMUDECK_DIR"/Saves
 }
 
 function sync-saves() {
@@ -24,12 +48,12 @@ function sync-saves() {
 
 function pull-games() {
     echo "Pulling Games"
-    $RSYNC_CMD "$REMOTE_EMUDECK_DIR"/Games/ "$EMUDECK_DIR/roms"
+    "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/Games/ "$EMUDECK_DIR/roms"
 }
 
 function push-games() {
     echo "Pushing Games"
-    $RSYNC_CMD "$EMUDECK_DIR/roms/" "$REMOTE_EMUDECK_DIR"/Games
+    "${RSYNC_CMD[@]}" "$EMUDECK_DIR/roms/" "$REMOTE_EMUDECK_DIR"/Games
 }
 
 function link-games() {
@@ -50,12 +74,12 @@ function sync-games() {
 
 function pull-bios() {
     echo "Pulling BIOS"
-    $RSYNC_CMD "$REMOTE_EMUDECK_DIR"/BIOS/ "$EMUDECK_DIR/bios"
+    "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/BIOS/ "$EMUDECK_DIR/bios"
 }
 
 function push-bios() {
     echo "Pushing BIOS"
-    $RSYNC_CMD "$EMUDECK_DIR/bios/" "$REMOTE_EMUDECK_DIR"/BIOS
+    "${RSYNC_CMD[@]}" "$EMUDECK_DIR/bios/" "$REMOTE_EMUDECK_DIR"/BIOS
 }
 
 function sync-bios() {
@@ -78,7 +102,7 @@ elif [[ ${#ARGS} -eq 1 ]]; then
     echo
     "${ARGS[0]}"-games
 else
-    for arg in "${ARGS:2}"; do
+    for arg in ${ARGS:2}; do
         "${ARGS[0]}"-"$arg"
         echo
     done
