@@ -16,7 +16,6 @@ RSYNC_CMD=(
     -Lahvz
     --no-g
     --no-o
-    --no-p
     --progress
     --info=progress2
 )
