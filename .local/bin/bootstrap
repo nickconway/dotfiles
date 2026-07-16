@@ -56,9 +56,13 @@ if [[ $(yadm config --get-all local.class) == "" ]]; then
 fi
 
 if command -v steamos-update &>/dev/null; then
-    sudo steamos-readonly disable
+    sudo steamos-readonly disable 2>/dev/null
+
+    sudo pacman-key --init
+    sudo pacman-key --populate archlinux
+    sudo pacman-key --populate holo
+
     sudo systemctl enable --now sshd
-    sudo steamos-readonly enable
 
     export PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
     mkdir -p $PROJECT_DIR
@@ -70,7 +74,7 @@ if command -v steamos-update &>/dev/null; then
     sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
     sudo-run tailscale set --auto-update
 
-    distrobox create -i archlinux -arch --init --additional-packages "systemd" &>/dev/null
+    distrobox create -i archlinux arch &>/dev/null
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
