@@ -11,14 +11,14 @@ if [[ -z "$NO_TMUX" ]]; then
     if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
         if [[ -z "$SSH_CONNECTION" ]]; then
             if [[ -n "$TMUX_AUTO_SESSION" ]]; then
-                command -v tmux >/dev/null && tmux -u new -e "TMUX_AUTO_SESSION=$TMUX_AUTO_SESSION" "$TMUX_SHELL" &>/dev/null && exit 0
+                command -v tmux &>/dev/null && tmux -u new -e "TMUX_AUTO_SESSION=$TMUX_AUTO_SESSION" "$TMUX_SHELL" 2>/dev/null && exit 0
             else
-                command -v tmux >/dev/null && tmux -u new -As "${TMUX_SESSION_NAME:-Main}" "$TMUX_SHELL" &>/dev/null && exit 0
+                command -v tmux &>/dev/null && tmux -u new -As "${TMUX_SESSION_NAME:-Main}" "$TMUX_SHELL" 2>/dev/null && exit 0
             fi
             # zellij a -c main
         else
             # zellij a -c ssh; exit
-            command -v tmux >/dev/null && tmux -u new -As SSH "$TMUX_SHELL" &>/dev/null && exit 0
+            command -v tmux &>/dev/null && tmux -u new -As SSH "$TMUX_SHELL" 2>/dev/null && exit 0
         fi
     fi
 fi
