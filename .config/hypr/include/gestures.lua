@@ -6,8 +6,8 @@ hl.gesture({
 
 if hl.plugin.scrolloverview then
     hl.gesture({
-        fingers = 3,
-        direction = "vertical",
+        fingers = 4,
+        direction = "up",
         action = function()
             hl.plugin.scrolloverview.overview("toggle")
         end,
