@@ -66,9 +66,10 @@ function link-games() {
 }
 
 function sync-games() {
-    pull-games
-    echo
-    push-games
+    link-games
+
+    # pull-games
+    # push-games
 }
 
 function pull-bios() {
@@ -89,21 +90,14 @@ function sync-bios() {
 
 if [[ -z "${ARGS:-}" ]]; then
     sync-saves
-    echo
     sync-bios
-    echo
-    link-games
     sync-games
-elif [[ ${#ARGS} -eq 1 ]]; then
+elif [[ ${#ARGS[@]} -eq 1 ]]; then
     "${ARGS[0]}"-saves
-    echo
     "${ARGS[0]}"-bios
-    echo
     "${ARGS[0]}"-games
 else
-    echo ${ARGS[@]:1}
     for arg in ${ARGS[@]:1}; do
-        echo $arg
-        "${ARGS[0]}"-"$arg"
+        "${ARGS[0]}-$arg"
     done
 fi
