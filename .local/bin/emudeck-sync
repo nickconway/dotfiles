@@ -1,34 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-eval "$(
-    get-options \
-        "-n, --dry-run: RSYNC_CMD+=' -n'" \
-        "-i, --init: INIT=true" \
-        -- \
-        "$@"
-)"
-
-EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
-
-RSYNC_CMD=(
-    rsync
-    -Lahvz
-    --no-g
-    --no-o
-    --progress
-    --info=progress2
-)
-
-if [[ -z ${INIT:-} ]]; then
-    RSYNC_CMD+=(-u)
-else
-    pull-saves
-    pull-bios
-    link-games
-    exit
-fi
-
 function pull-saves() {
     echo "Pulling Saves"
     "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/Saves/ "$EMUDECK_DIR/saves"
@@ -88,6 +60,34 @@ function sync-bios() {
     push-bios
 }
 
+eval "$(
+    get-options \
+        "-n, --dry-run: RSYNC_CMD+=' -n'" \
+        "-i, --init: INIT=true" \
+        -- \
+        "$@"
+)"
+
+EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
+
+RSYNC_CMD=(
+    rsync
+    -Lahvz
+    --no-g
+    --no-o
+    --progress
+    --info=progress2
+)
+
+if [[ -z ${INIT:-} ]]; then
+    RSYNC_CMD+=(-u)
+else
+    pull-saves
+    pull-bios
+    link-games
+    exit
+fi
+
 if [[ -z "${ARGS:-}" ]]; then
     sync-saves
     sync-bios
@@ -97,7 +97,7 @@ elif [[ ${#ARGS[@]} -eq 1 ]]; then
     "${ARGS[0]}"-bios
     "${ARGS[0]}"-games
 else
-    for arg in ${ARGS[@]:1}; do
+    for arg in "${ARGS[@]:1}"; do
         "${ARGS[0]}-$arg"
     done
 fi
