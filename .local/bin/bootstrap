@@ -66,13 +66,16 @@ if command -v steamos-update &>/dev/null; then
 
     export PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
     mkdir -p $PROJECT_DIR
-    if [[ ! -e $PROJECT_DIR/deck-tailscale ]]; then
-        git clone https://github.com/tailscale-dev/deck-tailscale.git $PROJECT_DIR/deck-tailscale
+
+    if ! command -v tailscale &>/dev/null; then
+        if [[ ! -e $PROJECT_DIR/deck-tailscale ]]; then
+            git clone https://github.com/tailscale-dev/deck-tailscale.git $PROJECT_DIR/deck-tailscale
+        fi
+        cd $PROJECT_DIR/deck-tailscale
+        sudo bash tailscale.sh
+        sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
+        sudo-run tailscale set --auto-update
     fi
-    cd $PROJECT_DIR/deck-tailscale
-    sudo bash tailscale.sh
-    sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
-    sudo-run tailscale set --auto-update
 
     distrobox create -i archlinux arch &>/dev/null
 fi
