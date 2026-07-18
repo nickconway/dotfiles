@@ -78,6 +78,8 @@ if [[ -n ${show_image:-} ]]; then
     kitten icat "$IMG"
 fi
 
+kitten @ --to unix:$(find /tmp/kitty-socket* | head -n 1) load-config $HOME/.config/kitty/kitty.conf &>/dev/null &
+
 files=(
     "$IMG $HOME/.config/wallpaper"
     "$HOME/.cache/wal/colors.sh $HOME/.config/shell/common/colors.sh"
