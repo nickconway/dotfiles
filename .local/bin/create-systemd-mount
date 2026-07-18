@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+eval "$(
+    get-options \
+        "-t, --type: TYPE='\$ARG'" \
+        "-o, --options: OPTIONS='\$ARG'" \
+        "-s, --timeout, --seconds: OPTIONS='\$ARG'" \
+        -- "$@"
+)"
+
+WHAT=${ARGS[0]}
+WHERE=${ARGS[1]}
+
+ESCAPED=$(systemd-escape $WHERE)
+
+if [[ $ESCAPED == -* ]]; then
+    ESCAPED=$(cut -d - -f 2- <<<"$ESCAPED")
+fi
+
+cat <<EOF | tee /etc/systemd/system/$ESCAPED.mount
+[Unit]
+Description=Mount $WHAT to $WHERE
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+What=$WHAT
+Where=$WHERE
+Options=${OPTIONS:-auto}
+Type=${TYPE:-nfs}
+TimeoutSec=${TIMEOUT:-60}
+
+[Install]
+WantedBy=default.target
+EOF
+
+systemctl enable --now $ESCAPED.mount
