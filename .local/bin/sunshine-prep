@@ -16,8 +16,7 @@ if [[ $1 == "do" ]]; then
     hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}' })"
 elif [[ $1 == "undo" ]]; then
     pkill -CONT -x hypridle &>/dev/null
-
     hyprctl reload
-
-    hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })'
 fi
+
+hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })'
