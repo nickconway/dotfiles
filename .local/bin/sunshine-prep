@@ -9,14 +9,17 @@ if [[ $1 == "do" ]]; then
     loginctl unlock-session
     pkill -STOP -x hypridle &>/dev/null
 
-    for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
-        hyprctl eval "hl.monitor({ output = \"$m\", disabled = true })"
-    done
+    hyprctl eval "$(
+        for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
+            echo "hl.monitor({ output = \"$m\", disabled = true })"
+        done
 
-    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}' })"
+        echo "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}' })"
+    )"
+
+    hyprctl dispatch 'hl.dsp.focus({ monitor = "Sunshine" })'
 elif [[ $1 == "undo" ]]; then
     pkill -CONT -x hypridle &>/dev/null
     hyprctl reload
+    hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })'
 fi
-
-hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })'
