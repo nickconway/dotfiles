@@ -28,3 +28,9 @@ hl.timer(function()
         hl.exec_cmd("systemctl suspend")
     end
 end, { timeout = 5000, type = "repeat" })
+
+Bind("F1", hl.dsp.exec_cmd("media -a volume mute"), { locked = true })
+Bind("F2", hl.dsp.exec_cmd("media -a volume lower"), { locked = true, repeating = true })
+Bind("F3", hl.dsp.exec_cmd("media -a volume raise"), { locked = true, repeating = true })
+Bind("F5", hl.dsp.exec_cmd("brightness lower"), { locked = true, repeating = true })
+Bind("F6", hl.dsp.exec_cmd("brightness raise"), { locked = true, repeating = true })
