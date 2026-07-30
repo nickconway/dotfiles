@@ -174,7 +174,9 @@ function gec() {
     {
         gd --name-only "$@"
         gd --staged --name-only "$@"
-    } | xargs $EDITOR
+    } | while read -r F; do
+        [[ -e "$F" ]] && echo "$F"
+    done | xargs $EDITOR
 }
 
 function gecu() {
@@ -715,7 +717,9 @@ function yec() {
     (cd && {
         yadm diff --name-only "$@"
         yadm diff --staged --name-only "$@"
-    } | xargs $EDITOR)
+    } | while read -r F; do
+        [[ -e "$F" ]] && echo "$F"
+    done | xargs $EDITOR)
 }
 
 function yl() {
