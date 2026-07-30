@@ -6,3 +6,4 @@ hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "Bouncy"
 hl.animation({ leaf = "border", enabled = true, speed = 15, bezier = "Bouncy" })
 hl.animation({ leaf = "fade", enabled = true, speed = 5, bezier = "Bouncy" })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "Bouncy" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 4, bezier = "Bouncy", style = "slidevert" })
