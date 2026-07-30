@@ -1,3 +1,3 @@
-csrf_allowed_origins = https://$HOSTNAME:47990,https://gamestream.${SERVICES_BASE_DOMAIN}
+csrf_allowed_origins = https://$HOSTNAME:47990,https://$HOSTNAME.gamestream.${SERVICES_BASE_DOMAIN}
 global_prep_cmd = [{"do":"_log sunshine-prep do","undo":"_log sunshine-prep undo"}]
 output_name = Sunshine
