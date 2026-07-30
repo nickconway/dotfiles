@@ -15,6 +15,7 @@
     prune = true
 [diff]
     colorMoved = default
+    submodule = log
 [rebase]
     autoStash = true
     autoSquash = true
@@ -83,3 +84,5 @@
     path = ~/.config/git/local
 [advice]
 	skippedCherryPicks = false
+[submodule]
+    recurse = true
