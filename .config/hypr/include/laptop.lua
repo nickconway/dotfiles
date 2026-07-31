@@ -12,7 +12,7 @@ hl.workspace_rule({
 })
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("zenbook-auto-backlight")
+    hl.exec_cmd("_log zenbook-auto-backlight")
 
     hl.exec_cmd("zen-browser")
     hl.exec_cmd("vesktop")
