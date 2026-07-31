@@ -83,6 +83,7 @@ hl.config({
         disable_splash_rendering = true,
         enable_swallow = true,
         swallow_regex = "^(kitty)$",
+        initial_workspace_tracking = 2,
     },
 
     input = {
