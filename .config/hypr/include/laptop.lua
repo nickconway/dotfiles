@@ -1,5 +1,4 @@
-hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = "1.6", bitdepth = 10 })
--- hl.monitor({ output = "eDP-2", mode = "preferred", position = "auto-down", scale = "1.6", bitdepth = 10 })
+hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = "1.8", bitdepth = 10 })
 hl.monitor({ output = "eDP-2", disabled = true })
 
 hl.workspace_rule({
