@@ -214,3 +214,13 @@ hl.on("window.active", function(window)
         }))
     end
 end)
+
+local float_titles = { "Extension:.*Browser" }
+
+hl.on("window.title", function(w)
+    for _, t in ipairs(float_titles) do
+        if w.title:match(t) then
+            hl.dispatch(hl.dsp.window.float({ action = "enable", window = w }))
+        end
+    end
+end)
