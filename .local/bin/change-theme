@@ -13,7 +13,7 @@ function _cp() {
     cp "${@}" &>/dev/null || sudo cp "${@}"
 }
 
-alpha=99
+alpha=100
 reload=
 random=
 light=
