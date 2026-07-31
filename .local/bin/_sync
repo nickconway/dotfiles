@@ -150,4 +150,8 @@ function emudeck() {
     fi
 }
 
+function wallpapers() {
+    rsync -ahuvz --progress --info=progress2 "$REMOTE_WALLPAPER_DIR/" "$WALLPAPER_DIR"
+}
+
 $*
