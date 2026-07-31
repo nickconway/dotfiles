@@ -14,12 +14,13 @@ if [[ $1 == "do" ]]; then
             echo "hl.monitor({ output = \"$m\", disabled = true })"
         done
 
-        echo "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}' })"
+        echo "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', scale = '1' })"
+        echo 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
+        echo 'hl.workspace_rule({ workspace = "name:game", monitor = "Sunshine", default = true })'
+        echo 'if hl.get_workspace("name:game") then hl.dispatch(hl.dsp.workspace.move({ workspace = "name:game", monitor = "Sunshine" })) end'
     )"
-
-    hyprctl dispatch 'hl.dsp.focus({ monitor = "Sunshine" })'
 elif [[ $1 == "undo" ]]; then
     pkill -CONT -x hypridle &>/dev/null
     hyprctl reload
-    hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })'
+    hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
 fi
