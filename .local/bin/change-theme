@@ -111,6 +111,7 @@ fi
 
 if [[ -e ~/Projects/thyx/scripts/install ]]; then
     files+=("$HOME/.cache/wal/thyx.conf $HOME/Projects/thyx/theme.conf")
+    files+=("$IMG $HOME/Projects/thyx/backgrounds/wallpaper")
 fi
 
 if [[ "$IMG" == *".png" ]]; then
