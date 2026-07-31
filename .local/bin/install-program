@@ -27,6 +27,7 @@ moonlight)
         rsync -auhvz "$HOME/.var/app/com.moonlight_stream.Moonlight/config/Moonlight Game Streaming Project/Moonlight.conf" "$HOME/.config/Moonlight Game Streaming Project/Moonlight.conf"
     fi
     ;;
+
 frame)
     mkdir -p "$PROJECT_DIR"
 

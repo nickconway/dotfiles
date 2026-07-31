@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+function homelab() {
+    function clean() {
+        COUNT=0
+        until [[ -z ${HEALTHCHECK_ID:-} ]] || [[ $COUNT -gt 30 ]] || curl -f "https://health.$SERVICES_BASE_DOMAIN/ping/${HEALTHCHECK_TOKEN}/${HEALTHCHECK_ID}?create=1"; do
+            sleep 5
+            COUNT=$((COUNT + 1))
+        done
+    }
+
+    eval "$(get-options "-i, --id: HEALTHCHECK_ID='\$ARG'" -- "$@")"
+
+    if [[ ! -e "$PROJECT_DIR"/homelab ]]; then
+        git clone https://github.com/nickconway/homelab "$PROJECT_DIR"/homelab --recurse-submodules
+        NEW=true
+    fi
+
+    cd "$PROJECT_DIR"/homelab
+    git remote set-url origin https://github.com/nickconway/homelab
+    git remote set-url origin git@github.com:nickconway/homelab --push
+
+    OLD_HASH="${OLD_HASH:-$(git rev-parse HEAD)}"
+    retry git pull
+    NEW_HASH="${NEW_HASH:-$(git rev-parse HEAD)}"
+
+    if [[ ${NEW:-false} == false ]] && [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
+        clean
+        exit
+    fi
+
+    echo
+
+    LAST_APP=
+    while read -r FILE; do
+        APP="$(cut -d / -f 1 <<<"${FILE/docker\/compose\//}")"
+        if [[ -n "$APP" && "$APP" != "$LAST_APP" && -e "$DOCKER_STACK_DIR/$APP" ]]; then
+            echo "$FILE -> $APP"
+            rsync -abhruvz --backup-dir ".rsync-backup" "docker/compose/$APP/" "$DOCKER_STACK_DIR/$APP"
+            containers start "$APP" </dev/null
+            echo
+        fi
+        LAST_APP="$APP"
+    done < <(git diff --name-only "$OLD_HASH" "$NEW_HASH" | grep '^docker/compose/*')
+
+    clean
+}
+
+function emudeck() {
+    function pull-saves() {
+        echo "Pulling Saves"
+        "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/Saves/ "$EMUDECK_DIR/saves"
+    }
+
+    function push-saves() {
+        echo "Pushing Saves"
+        "${RSYNC_CMD[@]}" "$EMUDECK_DIR/saves/" "$REMOTE_EMUDECK_DIR"/Saves
+    }
+
+    function sync-saves() {
+        pull-saves
+        echo
+        push-saves
+    }
+
+    function pull-games() {
+        echo "Pulling Games"
+        "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/Games/ "$EMUDECK_DIR/roms"
+    }
+
+    function push-games() {
+        echo "Pushing Games"
+        "${RSYNC_CMD[@]}" "$EMUDECK_DIR/roms/" "$REMOTE_EMUDECK_DIR"/Games
+    }
+
+    function link-games() {
+        if [[ -e "$EMUDECK_DIR/roms" ]] && [[ ! -L "$EMUDECK_DIR/roms" ]]; then
+            mv "$EMUDECK_DIR"/roms{,-bkp}
+        fi
+
+        if [[ ! -e "$EMUDECK_DIR/roms" ]]; then
+            ln -sf "$REMOTE_EMUDECK_DIR"/Games "$EMUDECK_DIR/roms"
+        fi
+    }
+
+    function sync-games() {
+        link-games
+
+        # pull-games
+        # push-games
+    }
+
+    function pull-bios() {
+        echo "Pulling BIOS"
+        "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/BIOS/ "$EMUDECK_DIR/bios"
+    }
+
+    function push-bios() {
+        echo "Pushing BIOS"
+        "${RSYNC_CMD[@]}" "$EMUDECK_DIR/bios/" "$REMOTE_EMUDECK_DIR"/BIOS
+    }
+
+    function sync-bios() {
+        pull-bios
+        echo
+        push-bios
+    }
+
+    eval "$(
+        get-options \
+            "-n, --dry-run: RSYNC_CMD+=' -n'" \
+            "-i, --init: INIT=true" \
+            -- \
+            "$@"
+    )"
+
+    EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
+
+    RSYNC_CMD=(
+        rsync
+        -Lahvz
+        --no-g
+        --no-o
+        --progress
+        --info=progress2
+    )
+
+    if [[ -z ${INIT:-} ]]; then
+        RSYNC_CMD+=(-u)
+    else
+        pull-saves
+        pull-bios
+        link-games
+        exit
+    fi
+
+    if [[ -z "${ARGS:-}" ]]; then
+        sync-saves
+        sync-bios
+        sync-games
+    elif [[ ${#ARGS[@]} -eq 1 ]]; then
+        "${ARGS[0]}"-saves
+        "${ARGS[0]}"-bios
+        "${ARGS[0]}"-games
+    else
+        for arg in "${ARGS[@]:1}"; do
+            "${ARGS[0]}-$arg"
+        done
+    fi
+}
+
+$*
