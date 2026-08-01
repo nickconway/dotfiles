@@ -6,11 +6,12 @@ HEIGHT=${SUNSHINE_CLIENT_HEIGHT:-2160}
 FPS=${SUNSHINE_CLIENT_FPS:-120}
 
 if [[ $1 == "do" ]]; then
-    loginctl unlock-session
-
     if pidof hyprlock; then
         kill $(pidof hyprlock)
+        touch /tmp/.sunshine-lock
     fi
+
+    loginctl unlock-session
 
     pkill -STOP -x hypridle &>/dev/null
 
@@ -18,13 +19,28 @@ if [[ $1 == "do" ]]; then
         for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
             echo "hl.monitor({ output = \"$m\", disabled = true })"
         done
-
-        echo "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', scale = '1' })"
-        echo 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
-        echo 'hl.workspace_rule({ workspace = "name:game", monitor = "Sunshine", default = true })'
-        echo 'if hl.get_workspace("name:game") then hl.dispatch(hl.dsp.workspace.move({ workspace = "name:game", monitor = "Sunshine" })) end'
     )"
+
+    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', scale = '1', disabled = false })"
+    hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "Sunshine", default = true })'
+
+    hyprctl eval 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
+    hyprctl eval 'if hl.get_workspace("name:game") then hl.dispatch(hl.dsp.workspace.move({ workspace = "name:game", monitor = "Sunshine" })) end'
 elif [[ $1 == "undo" ]]; then
     pkill -CONT -x hypridle &>/dev/null
-    hyprctl reload
+
+    hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
+
+    hyprctl eval "$(
+        for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
+            echo "hl.monitor({ output = \"$m\", disabled = false })"
+        done
+    )"
+
+    hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false })'
+
+    if [[ -e /tmp/.sunshine-lock ]]; then
+        rm /tmp/.sunshine-lock
+        loginctl lock-session
+    fi
 fi
