@@ -226,7 +226,7 @@ hl.on("window.title", function(w)
 end)
 
 hl.on("window.open", function(w)
-    if hl.get_active_special_workspace() then
+    if not w.floating and hl.get_active_special_workspace() then
         hl.dispatch(hl.dsp.window.move({ workspace = hl.get_active_workspace(), window = w }))
         hl.dispatch(hl.dsp.focus({ window = w }))
     end
