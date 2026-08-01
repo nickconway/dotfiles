@@ -12,6 +12,12 @@ hl.gesture({
     },
 })
 
+hl.gesture({
+    fingers = 4,
+    direction = "horizontal",
+    action = "workspace",
+})
+
 if hl.get_active_workspace().tiled_layout == "scrolling" then
     if hl.plugin.scrolloverview then
         hl.plugin.scrolloverview.gesture({ fingers = 3, direction = "vertical" })
