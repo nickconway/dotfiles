@@ -85,10 +85,12 @@ function emudeck() {
     }
 
     function sync-games() {
-        link-games
-
-        # pull-games
-        # push-games
+        if [[ -n ${LINK:-} ]]; then
+            link-games
+        else
+            pull-games
+            push-games
+        fi
     }
 
     function pull-bios() {
@@ -109,13 +111,18 @@ function emudeck() {
 
     eval "$(
         get-options \
-            "-n, --dry-run: RSYNC_CMD+=' -n'" \
             "-i, --init: INIT=true" \
+            "-l, --link: LINK=true" \
+            "-n, --dry-run: RSYNC_CMD+=' -n'" \
             -- \
             "$@"
     )"
 
     EMUDECK_DIR="$(jq -r '.storagePath' .config/EmuDeck/settings.json)/Emulation"
+
+    if [[ -L "$EMUDECK_DIR/roms" ]]; then
+        LINK=true
+    fi
 
     RSYNC_CMD=(
         rsync
@@ -131,7 +138,11 @@ function emudeck() {
     else
         pull-saves
         pull-bios
-        link-games
+        if [[ -n ${LINK:-} ]]; then
+            link-games
+        else
+            pull-games
+        fi
         exit
     fi
 

@@ -4,6 +4,10 @@ set -euo pipefail
 PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
 
 case "$1" in
+emudeck)
+    sh -c 'curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash'
+    ;;
+
 extest)
     rustup target add i686-unknown-linux-gnu
     cd "$PROJECT_DIR"
