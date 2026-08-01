@@ -7,6 +7,11 @@ FPS=${SUNSHINE_CLIENT_FPS:-120}
 
 if [[ $1 == "do" ]]; then
     loginctl unlock-session
+
+    if pidof hyprlock; then
+        kill $(pidof hyprlock)
+    fi
+
     pkill -STOP -x hypridle &>/dev/null
 
     hyprctl eval "$(
@@ -22,5 +27,4 @@ if [[ $1 == "do" ]]; then
 elif [[ $1 == "undo" ]]; then
     pkill -CONT -x hypridle &>/dev/null
     hyprctl reload
-    hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
 fi

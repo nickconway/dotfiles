@@ -1,44 +1,5 @@
 MainMod = "SUPER"
 
-local function focus_group_aware(direction)
-    local win = hl.get_active_window()
-
-    if not win then
-        hl.dispatch(hl.dsp.focus({ direction = direction }))
-        return
-    end
-
-    local group = win.group
-
-    if group then
-        if direction == "left" then
-            if group.current_index > 1 then
-                hl.dispatch(hl.dsp.group.prev())
-                return
-            end
-        elseif direction == "right" then
-            if group.current_index < group.size then
-                hl.dispatch(hl.dsp.group.next())
-                return
-            end
-        end
-    end
-
-    hl.dispatch(hl.dsp.focus({ direction = direction }))
-end
-
-local function zoom(offset)
-    local current = hl.get_config("cursor.zoom_factor")
-
-    if offset ~= nil then
-        current = current + offset
-    else
-        current = current == 1 and 1.5 or 1
-    end
-
-    hl.config({ cursor = { zoom_factor = current } })
-end
-
 Bind({ MainMod, "SHIFT", "O" }, function()
     if hl.plugin.darkwindow and BackgroundRed and BackgroundGreen and BackgroundBlue then
         hl.plugin.darkwindow.dsp_shade({
@@ -134,16 +95,16 @@ Bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightness raise"), { locked = true
 Bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightness lower"), { locked = true, repeating = true })
 
 Bind({ MainMod, "left" }, function()
-    focus_group_aware("left")
+    Focus_Group_Aware("left")
 end)
 Bind({ MainMod, "right" }, function()
-    focus_group_aware("right")
+    Focus_Group_Aware("right")
 end)
 Bind({ MainMod, "up" }, function()
-    focus_group_aware("up")
+    Focus_Group_Aware("up")
 end)
 Bind({ MainMod, "down" }, function()
-    focus_group_aware("down")
+    Focus_Group_Aware("down")
 end)
 
 Bind({ MainMod, "SHIFT", "left" }, hl.dsp.focus({ workspace = "m-1" }))
@@ -205,12 +166,12 @@ Bind({ MainMod, "SHIFT", "mouse:272" }, hl.dsp.window.resize(), { mouse = true }
 Bind({ MainMod, "mouse:273" }, hl.dsp.window.resize(), { mouse = true })
 Bind({ MainMod, "SHIFT", "mouse:273" }, hl.dsp.window.resize(), { mouse = true })
 
-Bind({ MainMod, "Z" }, zoom)
+Bind({ MainMod, "Z" }, Zoom)
 Bind({ MainMod, "SHIFT", "Z" }, function()
-    zoom(0.5)
+    Zoom(0.5)
 end)
 Bind({ MainMod, "ALT", "Z" }, function()
-    zoom(-0.5)
+    Zoom(-0.5)
 end)
 
 local StartX = 0
