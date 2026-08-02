@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+function clean() {
+    if [[ -n ${SPID:-} ]]; then
+        kill $SPID
+    fi
+}
+
+trap clean EXIT
+
+function steam-download() {
+    grep path $HOME/.local/share/Steam/steamapps/libraryfolders.vdf | awk '{print $2}' | tr -d '"' | while read -r p; do
+        while inotifywait -t 5 $p/steamapps/downloading; do
+            true
+        done
+    done
+}
+
+if pidof -q hypridle; then
+    pkill -STOP hypridle
+    $*
+    pkill -CONT hypridle
+else
+    systemd-inhibit sleep infinity &
+    SPID=$!
+    $*
+fi

@@ -3,10 +3,6 @@ set -euo pipefail
 
 eval "$(get-options "-l, --hosts: HOSTS='\$ARG'" -- "$@")"
 
-if [[ "$(systemd-detect-virt)" != podman ]] && command -v systemd-inhibit &>/dev/null; then
-    CMD+=(systemd-inhibit)
-fi
-
 PLAYBOOK="${ARGS[0]:-main.yml}"
 cd "$(dirname "$PLAYBOOK")"
 get-vars ansible

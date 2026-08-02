@@ -108,7 +108,7 @@ cd "$PROJECT_DIR"/ansible
 git remote set-url origin git@github.com:nickconway/ansible --push
 git pull &>/dev/null
 
-ansible-run -l localhost "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
+inhibit ansible-run -l localhost "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
 
 if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
     curl -d "Bootstrapping complete on $(uname -n)" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null

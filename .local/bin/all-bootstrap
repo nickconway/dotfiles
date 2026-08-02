@@ -14,7 +14,7 @@ ssh-add -L | grep -q "$(cat ~/.ssh/id_ed25519.pub)" || ssh-add ~/.ssh/id_ed25519
 cd "$PROJECT_DIR"/ansible
 git pull &>/dev/null
 
-ansible-run "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
+inhibit ansible-run "$PROJECT_DIR"/ansible/bootstrap/main.yml "$@"
 
 if [[ -n ${NTFY_TOKEN:-} && -n ${SERVICES_BASE_DOMAIN:-} ]]; then
     curl -d "Provisioning complete" https://notifications.$SERVICES_BASE_DOMAIN/notifications -H "Authorization: Bearer ${NTFY_TOKEN}" &>/dev/null

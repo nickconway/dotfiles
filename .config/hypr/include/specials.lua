@@ -5,7 +5,7 @@ hl.workspace_rule({
 
 hl.workspace_rule({
     workspace = "special:update",
-    on_created_empty = "[size (monitor_w*0.75) (monitor_h*0.75); float; center] kitty tmux new -As Upgrade -e PROMPT_GUI=y upgrade",
+    on_created_empty = "[size (monitor_w*0.75) (monitor_h*0.75); float; center] kitty tmux new -As Upgrade -e PROMPT_GUI=y inhibit upgrade",
 })
 
 hl.workspace_rule({
