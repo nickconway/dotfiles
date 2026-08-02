@@ -58,6 +58,14 @@ if hl.plugin.darkwindow ~= nil then
     })
 end
 
+hl.window_rule({
+    match = {
+        float = true,
+    },
+    rounding = 10,
+    border_size = 1,
+})
+
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.window_rule({ match = { class = ".*" }, idle_inhibit = "fullscreen" })
 
