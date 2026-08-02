@@ -21,8 +21,10 @@ if pidof -q hypridle; then
     pkill -STOP hypridle
     $*
     pkill -CONT hypridle
-else
+elif command -v systemd-inhibit &>/dev/null; then
     systemd-inhibit sleep infinity &
     SPID=$!
+    $*
+else
     $*
 fi
