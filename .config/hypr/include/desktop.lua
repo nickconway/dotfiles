@@ -13,6 +13,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
     hl.exec_cmd("[workspace 3 silent] chromium --app='https://messages.google.com/web'")
     hl.exec_cmd("[workspace 3 silent] sleep 1 && chromium --app='https://x.com'")
+
+    hl.exec_cmd("beacn-utility --background")
 end)
 
 hl.timer(function()
