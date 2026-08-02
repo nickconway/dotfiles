@@ -195,5 +195,8 @@ zephyr | zephyr-sdk)
 
     cd zephyr-sdk-$1
     ./setup.sh
+
+    cp /opt/zephyr-sdk-$1/sysroots/x86_64-pokysdk-linux/usr/share/openocd/contrib/60-openocd.rules /etc/udev/rules.d
+    udevadm control --reload
     ;;
 esac
