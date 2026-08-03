@@ -7,7 +7,7 @@ FPS=${SUNSHINE_CLIENT_FPS:-120}
 
 if [[ $1 == "do" ]]; then
     if pidof hyprlock; then
-        kill $(pidof hyprlock)
+        kill -USR1 $(pidof hyprlock)
         touch /tmp/.sunshine-lock
     fi
 
