@@ -109,11 +109,20 @@ function emudeck() {
         push-bios
     }
 
+    RSYNC_CMD=(
+        rsync
+        -Lahvz
+        --no-g
+        --no-o
+        --progress
+        --info=progress2
+    )
+
     eval "$(
         get-options \
             "-i, --init: INIT=true" \
             "-l, --link: LINK=true" \
-            "-n, --dry-run: RSYNC_CMD+=' -n'" \
+            "-n, --dry-run: RSYNC_CMD+=(-n)" \
             -- \
             "$@"
     )"
@@ -123,15 +132,6 @@ function emudeck() {
     if [[ -L "$EMUDECK_DIR/roms" ]]; then
         LINK=true
     fi
-
-    RSYNC_CMD=(
-        rsync
-        -Lahvz
-        --no-g
-        --no-o
-        --progress
-        --info=progress2
-    )
 
     if [[ -z ${INIT:-} ]]; then
         RSYNC_CMD+=(-u)
