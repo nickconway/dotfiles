@@ -219,9 +219,4 @@ else
     export MANPAGER="less -s +M +Gg"
 fi
 
-function install-udev() {
-    (cd $HOME/.config/udev && make-templates ./*)
-    sudo cp ~/.config/udev/*.rules /etc/udev/rules.d
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-}
+export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
