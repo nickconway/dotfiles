@@ -1,0 +1,2 @@
+ACTION=="add", SUBSYSTEMS=="input", ATTRS{id/vendor}=="28de", ATTRS{id/product}=="11ff", RUN+="/usr/bin/sudo -u $USER yeetmousectl apply $HOME/.config/yeetmouse/none"
+ACTION=="remove", SUBSYSTEMS=="input", ATTRS{id/vendor}=="28de", ATTRS{id/product}=="11ff", RUN+="/usr/bin/sudo -u $USER yeetmousectl apply $HOME/.config/yeetmouse/$HOSTNAME"
