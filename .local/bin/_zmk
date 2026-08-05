@@ -18,4 +18,4 @@ for f in ~/.config/zmk/*.dtsi; do
     fi
 done
 
-zmk build "$@"
+zmk "$@"
