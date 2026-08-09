@@ -20,12 +20,6 @@ hl.timer(function()
     local monitor2 = hl.get_monitor("DP-3")
 
     if (monitor and monitor.width ~= 3840) or (monitor2 and monitor2.width ~= 3840) then
-        hl.notification.create({
-            text = (monitor and monitor.name .. monitor.width or "1")
-                .. (monitor2 and monitor2.name .. monitor2.width or "2"),
-            timeout = 3000,
-        })
-
         local monitor3 = hl.get_monitor("DP-1")
 
         if monitor3 and monitor3.width ~= 1920 then
