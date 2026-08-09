@@ -26,8 +26,8 @@ if [[ $1 == "do" ]]; then
     hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', scale = '1', disabled = false })"
     hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "Sunshine", default = true })'
 
-    hyprctl eval 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
     hyprctl eval 'if hl.get_workspace("name:game") then hl.dispatch(hl.dsp.workspace.move({ workspace = "name:game", monitor = "Sunshine" })) end'
+    hyprctl eval 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
 
     yeetmousectl apply ~/.config/yeetmouse/none
 elif [[ $1 == "undo" ]]; then
@@ -35,15 +35,7 @@ elif [[ $1 == "undo" ]]; then
         pkill -CONT -x hypridle &>/dev/null
     fi
 
-    hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
-
-    hyprctl eval "$(
-        for m in $(hyprctl monitors all -j | jq -r '.[] | .name' | grep -v Sunshine); do
-            echo "hl.monitor({ output = \"$m\", disabled = false })"
-        done
-    )"
-
-    hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "1", default = false })'
+    hyprctl reload
 
     if [[ -e /tmp/.sunshine-lock ]]; then
         rm /tmp/.sunshine-lock
