@@ -84,6 +84,7 @@ hl.config({
         enable_swallow = true,
         swallow_regex = "^(kitty)$",
         initial_workspace_tracking = 2,
+        initial_workspace_token_timeout = 30,
     },
 
     input = {
