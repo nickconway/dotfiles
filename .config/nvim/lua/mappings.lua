@@ -216,3 +216,5 @@ map("n", "<leader>uv", function()
     local new_config = not vim.diagnostic.config().virtual_lines
     vim.diagnostic.config({ virtual_lines = new_config })
 end, "Toggle diagnostic virtual_lines")
+
+vim.keymap.set("n", "<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics under cursor" })
