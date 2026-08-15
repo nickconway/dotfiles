@@ -5,6 +5,8 @@ function clean() {
     if [[ -n ${SPID:-} ]]; then
         kill $SPID
     fi
+
+    rm -f /tmp/.inhibit-{lock,sleep}
 }
 
 trap clean EXIT
@@ -17,7 +19,11 @@ function steam-download() {
     done
 }
 
-if command -v systemd-inhibit &>/dev/null; then
+touch /tmp/.inhibit-{lock,sleep}
+
+if pidof -q hypridle; then
+    $*
+elif command -v systemd-inhibit &>/dev/null; then
     systemd-inhibit sleep infinity &
     SPID=$!
     $*

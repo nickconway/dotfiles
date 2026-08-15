@@ -6,16 +6,14 @@ HEIGHT=${SUNSHINE_CLIENT_HEIGHT:-2160}
 FPS=${SUNSHINE_CLIENT_FPS:-120}
 
 if [[ $1 == "do" ]]; then
+    touch /tmp/.inhibit-{lock,sleep}
+
     if pidof hyprlock; then
         kill -USR1 $(pidof hyprlock)
         touch /tmp/.sunshine-lock
     fi
 
     loginctl unlock-session
-
-    if pidof hypridle; then
-        pkill -STOP -x hypridle &>/dev/null
-    fi
 
     hyprctl eval "$(
         for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
@@ -30,11 +28,8 @@ if [[ $1 == "do" ]]; then
     hyprctl eval 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
 
     yeetmousectl apply ~/.config/yeetmouse/none
-elif [[ $1 == "undo" ]]; then
-    if pidof hypridle; then
-        pkill -CONT -x hypridle &>/dev/null
-    fi
 
+elif [[ $1 == "undo" ]]; then
     hyprctl reload
 
     if [[ -e /tmp/.sunshine-lock ]]; then
@@ -43,4 +38,6 @@ elif [[ $1 == "undo" ]]; then
     fi
 
     yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
+
+    rm -f /tmp/.inhibit-{lock,sleep}
 fi
