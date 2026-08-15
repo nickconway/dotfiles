@@ -3,7 +3,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 
     hl.exec_cmd(
-        "quickshell-configs spawn -d || (swaync & waybar & waybar-auto-hide & hyprpaper &> /tmp/hyprpaper.log &)"
+        "quickshell-configs spawn -d || (swaync & waybar & waybar-auto-hide & _log hyprpaper &)"
     )
 
     hl.exec_cmd("_log hypridle")
