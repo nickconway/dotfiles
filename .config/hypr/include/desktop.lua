@@ -9,7 +9,7 @@ hl.monitor({ output = "DP-3", mode = "3840x2160@120", scale = "1.33", bitdepth =
 hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 1 silent] zen-browser")
     hl.exec_cmd("[workspace 2 silent] vesktop")
-    hl.exec_cmd("[workspace 2 silent] thunderbird-beta")
+    hl.exec_cmd("[workspace 2 silent] betterbird")
     hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
     hl.exec_cmd("[workspace 3 silent] chromium --app='https://messages.google.com/web'")
     hl.exec_cmd("[workspace 3 silent] sleep 1 && chromium --app='https://x.com'")

@@ -15,7 +15,7 @@ hl.on("hyprland.start", function()
 
     hl.exec_cmd("zen-browser")
     hl.exec_cmd("vesktop")
-    hl.exec_cmd("thunderbird-beta")
+    hl.exec_cmd("betterbird")
     hl.exec_cmd("feishin --ozone-platform-hint=auto --password-store='kwallet6'")
     hl.exec_cmd("chromium --app='https://messages.google.com/web'")
     hl.exec_cmd("sleep 1 && chromium --app='https://x.com'")
