@@ -6,7 +6,7 @@ hl.on("hyprland.start", function()
         "quickshell-configs spawn -d || (swaync & waybar & waybar-auto-hide & hyprpaper &> /tmp/hyprpaper.log &)"
     )
 
-    hl.exec_cmd("hypridle &> /tmp/hypridle.log &")
+    hl.exec_cmd("_log hypridle")
 
     hl.exec_cmd("nm-applet --indicator")
     hl.exec_cmd("blueman-applet")

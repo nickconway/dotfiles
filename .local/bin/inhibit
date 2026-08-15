@@ -17,11 +17,7 @@ function steam-download() {
     done
 }
 
-if pidof -q hypridle; then
-    pkill -STOP hypridle
-    $*
-    pkill -CONT hypridle
-elif command -v systemd-inhibit &>/dev/null; then
+if command -v systemd-inhibit &>/dev/null; then
     systemd-inhibit sleep infinity &
     SPID=$!
     $*
