@@ -62,7 +62,6 @@ if command -v steamos-update &>/dev/null; then
 
     sudo systemctl enable --now sshd
 
-    export PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
     mkdir -p $PROJECT_DIR
 
     if ! command -v tailscale &>/dev/null; then

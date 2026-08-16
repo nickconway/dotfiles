@@ -2,9 +2,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd HYPRLAND_INSTANCE_SIGNATURE")
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 
-    hl.exec_cmd(
-        "quickshell-configs spawn -d || (swaync & waybar & waybar-auto-hide & _log hyprpaper &)"
-    )
+    hl.exec_cmd("quickshell-configs spawn -d || (swaync & waybar & waybar-auto-hide & _log hyprpaper &)")
 
     hl.exec_cmd("_log hypridle")
 
@@ -20,11 +18,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("flatpak run com.github.wwmm.easyeffects --gapplication-service")
 
     hl.exec_cmd([[
-        if \[\[ ! -e "$HOME/Projects/extest/target/i686-unknown-linux-gnu/release/libextest.so" \]\]; then
-            install-program extest
-        fi
-
-        LD_PRELOAD="$HOME/Projects/extest/target/i686-unknown-linux-gnu/release/libextest.so" steam -silent
+        install-program extest
+        LD_PRELOAD="$(xdg-user-dir PROJECTS)/extest/target/i686-unknown-linux-gnu/release/libextest.so" steam -silent
     ]])
 
     hl.exec_cmd("sudo-run _log install-program yeetmouse")

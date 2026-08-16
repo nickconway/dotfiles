@@ -29,6 +29,10 @@ else
 fi
 KERNEL=$(uname -r)
 
+export OS
+export VER
+export KERNEL
+
 if [[ -e ~/.local/go/go ]]; then
     export GOROOT=~/.local/go/go
     export PATH="$GOROOT"/bin:$PATH
@@ -78,7 +82,19 @@ export EDITOR=nvim
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [[ -n ${HOMEBREW_PREFIX:-} ]] && [[ -e "$HOMEBREW_PREFIX/opt/nvm" ]] && export NVM_DIR=$HOMEBREW_PREFIX/opt/nvm
 
-export PROJECT_DIR="$HOME/Projects"
+PROJECT_DIR="$(
+    if command -v xdg-user-dir &>/dev/null; then
+        xdg-user-dir PROJECTS
+    fi
+)"
+
+PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
+
+if [[ "$PROJECT_DIR" == "$HOME" ]]; then
+    export PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
+else
+    export PROJECT_DIR
+fi
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 

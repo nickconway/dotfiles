@@ -109,9 +109,9 @@ if [[ "$(uname)" != "Darwin" ]]; then
     )
 fi
 
-if [[ -e ~/Projects/thyx/scripts/install ]]; then
-    files+=("$HOME/.cache/wal/thyx.conf $HOME/Projects/thyx/theme.conf")
-    files+=("$HOME/.config/wallpaper.png $HOME/Projects/thyx/backgrounds/wallpaper.png")
+if [[ -e "$PROJECT_DIR"/thyx/scripts/install ]]; then
+    files+=("$HOME/.cache/wal/thyx.conf $PROJECT_DIR/thyx/theme.conf")
+    files+=("$HOME/.config/wallpaper.png $PROJECT_DIR/thyx/backgrounds/wallpaper.png")
 fi
 
 if [[ "$IMG" == *".png" ]]; then
@@ -175,7 +175,7 @@ caelestia wallpaper -N -f "$IMG" &>/dev/null ||
         fi
     }
 
-(~/Projects/thyx/scripts/install --yes &>/dev/null || true) &
+("$PROJECT_DIR"/thyx/scripts/install --yes &>/dev/null || true) &
 
 (
     if command -v distrobox-host-exec &>/dev/null && [[ "$(systemd-detect-virt)" == podman ]]; then
