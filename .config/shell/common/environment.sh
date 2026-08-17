@@ -53,7 +53,7 @@ export PATH=/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/b
 export PATH=~/.local/podman/bin:~/.cargo/bin:~/.config/fzf/bin:$PATH
 
 export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+export PATH="$PNPM_HOME/bin:$PATH"
 export PATH=~/.local/bin:$PATH
 
 export GPG_TTY=${TTY:-$(tty)}

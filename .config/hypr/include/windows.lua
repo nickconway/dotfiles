@@ -151,7 +151,9 @@ local game_mode_classes = { "steam_app_.*", "gamescope.*", "lutris_.*" }
 for _, c in ipairs(game_classes) do
     hl.window_rule({
         workspace = "name:game",
+        monitor = 1,
         opacity = "1.0 override",
+        fullscreen = true,
         match = {
             class = c,
         },
