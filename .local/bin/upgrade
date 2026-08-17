@@ -2,7 +2,7 @@
 set -euo pipefail
 
 export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$HOME"/.local/share/pnpm:$PATH
+export PATH="$HOME"/.local/share/pnpm/bin:$PATH
 command -v pnpm &>/dev/null && export PATH="$(pnpm root -g)":$PATH
 
 if command -v pacman &>/dev/null; then
