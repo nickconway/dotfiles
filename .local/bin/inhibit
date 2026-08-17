@@ -6,7 +6,7 @@ function clean() {
         kill $SPID
     fi
 
-    rm -f /tmp/.inhibit-{lock,sleep}
+    rm -f /tmp/.inhibit-sleep
 }
 
 trap clean EXIT
@@ -19,7 +19,7 @@ function steam-download() {
     done
 }
 
-touch /tmp/.inhibit-{lock,sleep}
+touch /tmp/.inhibit-sleep
 
 if pidof -q hypridle; then
     $*
