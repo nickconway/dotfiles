@@ -8,13 +8,6 @@ FPS=${SUNSHINE_CLIENT_FPS:-120}
 if [[ $1 == "do" ]]; then
     touch /tmp/.inhibit-{lock,sleep}
 
-    if pidof hyprlock; then
-        kill -USR1 $(pidof hyprlock)
-        touch /tmp/.sunshine-lock
-    fi
-
-    loginctl unlock-session
-
     hyprctl eval "$(
         for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
             echo "hl.monitor({ output = \"$m\", disabled = true })"
@@ -29,6 +22,12 @@ if [[ $1 == "do" ]]; then
 
     yeetmousectl apply ~/.config/yeetmouse/none
 
+    if pidof hyprlock; then
+        kill -USR1 $(pidof hyprlock)
+        touch /tmp/.sunshine-lock
+    fi
+
+    loginctl unlock-session
 elif [[ $1 == "undo" ]]; then
     hyprctl reload
 
