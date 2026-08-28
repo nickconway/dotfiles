@@ -8,28 +8,33 @@ FPS=${SUNSHINE_CLIENT_FPS:-120}
 if [[ $1 == "do" ]]; then
     touch /tmp/.inhibit-{lock,sleep}
 
-    hyprctl eval "$(
-        for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
-            echo "hl.monitor({ output = \"$m\", disabled = true })"
-        done
-    )"
+    if pgrep -q start-hyprland; then
+        hyprctl eval "$(
+            for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
+                echo "hl.monitor({ output = \"$m\", disabled = true })"
+            done
+        )"
 
-    hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', scale = '1', disabled = false })"
-    hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "Sunshine", default = true })'
+        hyprctl eval "hl.monitor({ output = 'Sunshine', mode = '${WIDTH}x${HEIGHT}@${FPS}', scale = '1', disabled = false })"
+        hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = "Sunshine", default = true })'
 
-    hyprctl eval 'if hl.get_workspace("name:game") then hl.dispatch(hl.dsp.workspace.move({ workspace = "name:game", monitor = "Sunshine" })) end'
-    hyprctl eval 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
+        hyprctl eval 'if hl.get_workspace("name:game") then hl.dispatch(hl.dsp.workspace.move({ workspace = "name:game", monitor = "Sunshine" })) end'
+        hyprctl eval 'hl.dispatch(hl.dsp.focus({ monitor = "Sunshine" }))'
+    fi
 
     yeetmousectl apply ~/.config/yeetmouse/none
 
     if pidof hyprlock; then
         kill -USR1 $(pidof hyprlock)
         touch /tmp/.sunshine-lock
+        hyprctl eval 'hl.clear_crashed_lockscreen()'
     fi
 
     loginctl unlock-session
 elif [[ $1 == "undo" ]]; then
-    hyprctl reload
+    if pgrep -q start-hyprland; then
+        hyprctl reload
+    fi
 
     if [[ -e /tmp/.sunshine-lock ]]; then
         rm /tmp/.sunshine-lock
