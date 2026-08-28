@@ -127,7 +127,7 @@ return {
                 end
                 -- Commands
                 if type == ":" or type == "@" then
-                    return { "cmdline", "buffer" }
+                    return { "cmdline", "path", "buffer" }
                 end
                 return {}
             end,
