@@ -9,6 +9,8 @@ if [[ $1 == "do" ]]; then
     touch /tmp/.inhibit-{lock,sleep}
 
     if pgrep --quiet start-hyprland; then
+        hyprctl monitors -j >/tmp/sunshine-monitors.json
+
         hyprctl eval "$(
             for m in $(hyprctl monitors -j | jq -r '.[] | .name' | grep -v Sunshine); do
                 echo "hl.monitor({ output = \"$m\", disabled = true })"
@@ -32,12 +34,34 @@ if [[ $1 == "do" ]]; then
 
     loginctl unlock-session
 
-    if [[ -n ${LOCKED:-} ]]; then
+    if pgrep --quiet start-hyprland && [[ -n ${LOCKED:-} ]]; then
         hyprctl eval 'hl.clear_crashed_lockscreen()'
     fi
 elif [[ $1 == "undo" ]]; then
     if pgrep --quiet start-hyprland; then
-        hyprctl reload
+        while read -r m; do
+            name=$(echo "$m" | jq -r '.name')
+            width=$(echo "$m" | jq -r '.width')
+            height=$(echo "$m" | jq -r '.height')
+            refresh=$(echo "$m" | jq -r '.refreshRate')
+            x=$(echo "$m" | jq -r '.x')
+            y=$(echo "$m" | jq -r '.y')
+            scale=$(echo "$m" | jq -r '.scale')
+
+            hyprctl eval "hl.monitor({
+                output = \"$name\",
+                disabled = false,
+                mode = \"${width}x${height}@${refresh}\",
+                position = \"${x}x${y}\",
+                scale = $scale
+            })"
+        done < <(
+            if [[ -e /tmp/sunshine-monitors.json ]]; then
+                jq -c '.[] | select(.disabled == false)' /tmp/sunshine-monitors.json
+            fi
+        )
+
+        hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
     fi
 
     if [[ -e /tmp/.sunshine-lock ]]; then
@@ -48,4 +72,5 @@ elif [[ $1 == "undo" ]]; then
     yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
 
     rm -f /tmp/.inhibit-{lock,sleep}
+    rm -f /tmp/sunshine-monitors.json
 fi
