@@ -8,6 +8,10 @@ FPS=${SUNSHINE_CLIENT_FPS:-120}
 if [[ $1 == "do" ]]; then
     touch /tmp/.inhibit-{lock,sleep}
 
+    if pgrep --quiet qs; then
+        pkill -STOP qs
+    fi
+
     if pgrep --quiet start-hyprland; then
         hyprctl monitors -j >/tmp/sunshine-monitors.json
 
@@ -61,6 +65,10 @@ elif [[ $1 == "undo" ]]; then
         )
 
         hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
+    fi
+
+    if pgrep --quiet qs; then
+        pkill -CONT qs
     fi
 
     if [[ -e /tmp/.sunshine-lock ]]; then
