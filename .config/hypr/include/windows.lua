@@ -153,7 +153,6 @@ for _, c in ipairs(game_classes) do
         workspace = "name:game",
         monitor = 0,
         opacity = "1.0 override",
-        fullscreen = true,
         match = {
             class = c,
         },
