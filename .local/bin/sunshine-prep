@@ -62,6 +62,7 @@ elif [[ $1 == "undo" ]]; then
         )
 
         hyprctl eval "hl.monitor({ output = 'Sunshine', disabled = true })"
+        hyprctl eval 'hl.workspace_rule({ workspace = "name:game", monitor = 0 })'
     fi
 
     if [[ -e /tmp/.sunshine-lock ]]; then
