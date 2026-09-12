@@ -17,8 +17,6 @@ touch .hushlogin
 mkdir -p ~/.local/bin
 curl -sSL https://raw.githubusercontent.com/nickconway/yadm/refs/heads/master/yadm -o ~/.local/bin/yadm
 
-yadm user-config nickconway &>/dev/null
-
 if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
     yadm clone https://github.com/nickconway/dotfiles --no-bootstrap
     yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
@@ -28,6 +26,10 @@ if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
 
     [[ -e ~/.config/shell/common/encrypted.sh ]] && SHELL_NAME=bash . ~/.config/shell/common/encrypted.sh
     [[ -e ~/.config/shell/common/environment.sh ]] && SHELL_NAME=bash . ~/.config/shell/common/environment.sh
+
+    if [[ $(yadm config --get-all local.class) == "" ]]; then
+        get-yadm-classes
+    fi
 fi
 
 if command -v termux-reload-settings >/dev/null; then
@@ -51,10 +53,6 @@ fi
 
 get-vars env ~/.config/env.example
 
-if [[ $(yadm config --get-all local.class) == "" ]]; then
-    get-yadm-classes
-fi
-
 if command -v steamos-update &>/dev/null; then
     if ! command -v brew &>/dev/null; then
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -73,6 +71,8 @@ if command -v steamos-update &>/dev/null; then
         sudo-run tailscale up --ssh --accept-routes --operator="$(whoami)" --qr --advertise-tags=tag:client,tag:server
         sudo-run tailscale set --auto-update
     fi
+
+    curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
 
     distrobox create -i archlinux arch &>/dev/null
 fi
