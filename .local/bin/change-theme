@@ -52,7 +52,11 @@ else
     INPUT="$(echo >/tmp/wallpaper && cd "$WALLPAPER_DIR" && fd . $WALLPAPER_DIR --type f | "${CMD[@]}")"
 fi
 
-WAL_CMD=(uvx --with colorthief --with colorz --with haishoku --from pywal16 wal -q -i "$INPUT" -a "$alpha")
+if ! command -v wal &>/dev/null; then
+    gum spin --title "Installing pywal16..." -- uv tool install pywal16
+fi
+
+WAL_CMD=(wal -q -i "$INPUT" -a "$alpha")
 
 if [[ -z "$eight" ]]; then
     WAL_CMD+=(--cols16 "${method:-darken}")

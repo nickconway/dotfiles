@@ -19,6 +19,14 @@ if command -v pacman &>/dev/null; then
     fi
 fi
 
+eval "$(
+    get-options \
+        "-n, --no-reboot: REBOOT=false" \
+        "-r, --reboot: REBOOT=true" \
+        -- \
+        "$@"
+)"
+
 topgrade -y --no-retry || true
 
 NOTIFICATION_TITLE="Upgrade"
@@ -33,5 +41,11 @@ elif [[ "$(uname -r | sed 's/\./-/g')" != *"$( ( (uname -r | grep -q cachyos && 
 fi
 
 if [[ -n "${TEXT:-}" ]]; then
-    prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$ACTIONS"
+    if [[ "${REBOOT:=}" == true ]]; then
+        systemctl reboot
+    fi
+
+    if [[ -z "${REBOOT:=}" ]]; then
+        prompt "$NOTIFICATION_TITLE" "$TEXT" "$TERM_PROMPTS" "$NOTIFICATION_PROMPTS" "$ACTIONS"
+    fi
 fi
