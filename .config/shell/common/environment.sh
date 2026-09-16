@@ -91,7 +91,7 @@ PROJECT_DIR="$(
 PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
 
 if [[ "$PROJECT_DIR" == "$HOME" ]]; then
-    export PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
+    export PROJECT_DIR="${HOME}/Projects"
 else
     export PROJECT_DIR
 fi
