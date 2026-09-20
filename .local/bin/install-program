@@ -199,9 +199,9 @@ zephyr | zephyr-sdk)
     ;;
 
 moondeck | moondeckbuddy)
-    curl -fsSL "$(curl -fsSL https://api.github.com/repos/FrogTheFrog/moondeck-buddy/releases | jq -r 'first.assets[] | select(.name | endswith("AppImage")) | .browser_download_url')" -o $HOME/.local/bin/MoonDeckBuddy
-    chmod +x $HOME/.local/bin/MoonDeckBuddy
+    curl -fsS "$(curl -fsSL https://api.github.com/repos/FrogTheFrog/moondeck-buddy/releases | jq -r '[.[] | select(.prerelease == false)] | first.assets[] | select(.name | endswith("AppImage")) | .browser_download_url')" -o $HOME/.local/bin/MoonDeckBuddy
     cd $HOME/.local/bin
+    chmod +x MoonDeckBuddy
     ln -sf MoonDeckBuddy MoonDeckStream
     ;;
 esac
