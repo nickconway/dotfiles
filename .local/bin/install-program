@@ -197,4 +197,11 @@ zephyr | zephyr-sdk)
     cp /opt/zephyr-sdk-$1/sysroots/x86_64-pokysdk-linux/usr/share/openocd/contrib/60-openocd.rules /etc/udev/rules.d
     udevadm control --reload
     ;;
+
+moondeck | moondeckbuddy)
+    curl -fsSL "$(curl -fsSL https://api.github.com/repos/FrogTheFrog/moondeck-buddy/releases | jq -r 'first.assets[] | select(.name | endswith("AppImage")) | .browser_download_url')" -o $HOME/.local/bin/MoonDeckBuddy
+    chmod +x $HOME/.local/bin/MoonDeckBuddy
+    cd $HOME/.local/bin
+    ln -sf MoonDeckBuddy MoonDeckStream
+    ;;
 esac
