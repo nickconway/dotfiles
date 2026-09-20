@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-FILE="$HOME/.cache/wal/homeassistant-$HOSTNAME.json"
+FILE="$HOME/.cache/wal/homeassistant.json"
+SCENE="pywal_${HOMEASSISTANT_ROOM//-/_}"
 
 if [[ ! -e "$FILE" ]]; then
     exit
@@ -9,20 +10,18 @@ fi
 
 source $HOME/.config/shell/common/encrypted.sh
 
-SCENE="pywal_${HOSTNAME//-/_}"
-
 while read -r line; do
     curl -fsSL -X POST -H "Authorization: Bearer $HOMEASSISTANT_API_KEY" -H "Content-Type: application/json" \
         -d '{ "brightness_pct": 100, "entity_id": "light.'"$(cut -d ' ' -f 1 <<<$line)"'", "rgb_color": '"$(cut -d ' ' -f 2 <<<$line)"' }' \
         https://home.conway.dev/api/services/light/turn_on -o /dev/null
-done < <(jq -rc '.lights[] | .name + " " + (.color | tostring)' "$FILE")
+done < <(jq -rc .$HOMEASSISTANT_ROOM'.lights[] | .name + " " + (.color | tostring)' "$FILE")
 
 entities="[$(
     while read -r line; do
         if [[ -n "$line" ]]; then
             echo "\"light.$line\""
         fi
-    done < <(jq -rc '.lights[].name' "$FILE") | xargs -I '{}' echo -n "\"{}\", "
+    done < <(jq -rc .$HOMEASSISTANT_ROOM'.lights[].name' "$FILE") | xargs -I '{}' echo -n "\"{}\", "
 )]"
 entities="${entities//, \]/\]}"
 
