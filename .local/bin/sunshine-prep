@@ -40,6 +40,13 @@ if [[ $1 == "do" ]]; then
     if pgrep --quiet start-hyprland && [[ -n ${LOCKED:-} ]]; then
         hyprctl eval 'hl.clear_crashed_lockscreen()'
     fi
+
+    LASTWAKE=$(date +%s -d "@$(($(journalctl --lines 10000 -o json | jq -rs '[.[] | select(.MESSAGE == "PM: suspend exit")] | last.__REALTIME_TIMESTAMP') / 1000000))")
+    TIME_SINCE=$(($(date +%s) - LASTWAKE))
+
+    if [[ $TIME_SINCE -lt 30 ]]; then
+        touch /tmp/.sunshine-suspend
+    fi
 elif [[ $1 == "undo" ]]; then
     if pgrep --quiet start-hyprland; then
         while read -r m; do
@@ -80,4 +87,9 @@ elif [[ $1 == "undo" ]]; then
 
     rm -f /tmp/.inhibit-{lock,sleep}
     rm -f /tmp/sunshine-monitors.json
+
+    if [[ -e /tmp/.sunshine-suspend ]]; then
+        rm /tmp/.sunshine-suspend
+        systemctl suspend
+    fi
 fi
