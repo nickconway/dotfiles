@@ -94,11 +94,16 @@ map("v", "<C-Up>", ":m '<-2<cr>gv=gv", "Move Up")
 map("i", "<esc>", "<cmd>noh<cr><esc>")
 map("n", "<esc>", function()
     vim.cmd("noh")
-    local mc = require("multicursor-nvim")
-    if not mc.cursorsEnabled() then
-        mc.enableCursors()
-    elseif mc.hasCursors() then
-        mc.clearCursors()
+
+    if pcall(require, "multicursor-nvim") then
+        local mc = require("multicursor-nvim")
+        if not mc.cursorsEnabled() then
+            mc.enableCursors()
+        elseif mc.hasCursors() then
+            mc.clearCursors()
+        else
+            -- Default <esc> handler.
+        end
     else
         -- Default <esc> handler.
     end
@@ -158,6 +163,7 @@ map("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>")
 
 map("n", "<leader>/", "*", "Search word under cursor")
 map("n", "<leader><A-/>", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], "Replace word under cursor", { silent = false })
+map("n", "<leader><leader>/", "*1Q", "Multi-cursors at word under cursor")
 
 map("n", "<leader>X", "<cmd>!chmod +x %<CR>", "Make file executable")
 
