@@ -24,6 +24,7 @@ if [[ $1 == "do" ]]; then
             echo 'hl.workspace_rule({ workspace = "name:game", monitor = "Sunshine", default = true })'
 
             echo 'if hl.get_workspace("name:game") then hl.dispatch(hl.dsp.workspace.move({ workspace = "name:game", monitor = "Sunshine" })) end'
+            echo 'hl.dsp.focus({ workspace = "name:game" })'
         )"
     fi
 
