@@ -21,8 +21,8 @@ fi
 
 eval "$(
     get-options \
-        "-n, --no-reboot: REBOOT=false" \
-        "-r, --reboot: REBOOT=true" \
+        "-n, --no-restart, --no-reboot: REBOOT=false" \
+        "-r, --restart, --reboot: REBOOT=true" \
         -- \
         "$@"
 )"
