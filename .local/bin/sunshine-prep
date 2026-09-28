@@ -42,11 +42,15 @@ if [[ $1 == "do" ]]; then
         hyprctl eval 'hl.clear_crashed_lockscreen()'
     fi
 
-    LASTWAKE=$(date +%s -d "@$(($(journalctl --lines 10000 -o json | jq -rs '[.[] | select(.MESSAGE == "PM: suspend exit")] | last.__REALTIME_TIMESTAMP') / 1000000))")
-    TIME_SINCE=$(($(date +%s) - LASTWAKE))
+    LASTWAKE="$(journalctl --lines 10000 -o json | jq -rs '[.[] | select(.MESSAGE == "PM: suspend exit")] | last.__REALTIME_TIMESTAMP')"
 
-    if [[ $TIME_SINCE -lt 30 ]]; then
-        touch /tmp/.sunshine-suspend
+    if [[ $LASTWAKE != null ]]; then
+        LASTWAKE_DATE="$(date +%s -d "@$((LASTWAKE / 1000000))")"
+        TIME_SINCE=$(($(date +%s) - LASTWAKE_DATE))
+
+        if [[ $TIME_SINCE -lt 30 ]]; then
+            touch /tmp/.sunshine-suspend
+        fi
     fi
 elif [[ $1 == "undo" ]]; then
     if pgrep --quiet start-hyprland; then
