@@ -19,7 +19,7 @@ moonlight)
     URL="$(
         curl -fsSL \
             https://api.github.com/repos/moonlight-stream/moonlight-qt/releases/latest |
-            rg -i 'browser_download_url.*appimage' | awk '{print $2}' | xargs
+            grep -i 'browser_download_url.*appimage' | awk '{print $2}' | xargs
     )"
 
     curl -fsSL "$URL" -o ~/.local/bin/moonlight
@@ -199,9 +199,18 @@ zephyr | zephyr-sdk)
     ;;
 
 moondeck | moondeckbuddy)
-    curl -fsS "$(curl -fsSL https://api.github.com/repos/FrogTheFrog/moondeck-buddy/releases | jq -r '[.[] | select(.prerelease == false)] | first.assets[] | select(.name | endswith("AppImage")) | .browser_download_url')" -o $HOME/.local/bin/MoonDeckBuddy
+    if systemctl --user --no-pager is-active moondeckbuddy; then
+        systemctl --user stop moondeckbuddy moondeckbuddy-gui-session
+    fi
+
+    URL="$(curl -fsSL https://api.github.com/repos/FrogTheFrog/moondeck-buddy/releases | jq -r 'first.assets[] | select(.name | endswith("AppImage")) | .browser_download_url')"
+    curl -fsSL -o $HOME/.local/bin/MoonDeckBuddy "$URL"
     cd $HOME/.local/bin
     chmod +x MoonDeckBuddy
     ln -sf MoonDeckBuddy MoonDeckStream
+
+    if systemctl --user --no-pager list-unit-files | grep -q moondeckbuddy; then
+        systemctl --user restart moondeckbuddy moondeckbuddy-gui-session
+    fi
     ;;
 esac
