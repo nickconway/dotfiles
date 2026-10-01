@@ -54,11 +54,11 @@ fi
 get-vars env ~/.config/env.example
 
 if command -v steamos-update &>/dev/null; then
+    sudo systemctl enable --now sshd
+
     if ! command -v brew &>/dev/null; then
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-
-    sudo systemctl enable --now sshd
 
     mkdir -p $PROJECT_DIR
 
@@ -73,8 +73,6 @@ if command -v steamos-update &>/dev/null; then
     fi
 
     curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
-
-    distrobox create -i archlinux arch &>/dev/null
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
