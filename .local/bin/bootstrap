@@ -74,6 +74,7 @@ if command -v steamos-update &>/dev/null; then
     fi
 
     curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
+    decky-plugin-install <"$HOME/.config/decky/plugins.txt"
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
