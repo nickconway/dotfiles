@@ -34,9 +34,12 @@ for f in "${LINKS[@]}"; do
                 curl -fsSL https://api.github.com/repos/"$NAME"/releases
             fi
         )"
-        URL="$(
-            jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url' <<<"$RELEASES"
-        )"
+
+        if [[ -z "$RELEASES" ]] || [[ "$RELEASES" == null ]]; then
+            URL="$(
+                jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url' <<<"$RELEASES"
+            )"
+        fi
 
         if [[ -z "$URL" ]] || [[ "$URL" == null ]]; then
             URL=
