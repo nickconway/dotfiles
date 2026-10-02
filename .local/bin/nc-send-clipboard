@@ -15,7 +15,7 @@ if command -v ss &>/dev/null; then
                 elif command -v wl-paste &>/dev/null; then
                     wl-paste
                 fi
-            } | nc -q 0 localhost $p
+            } | nc localhost $p | head -n 1
         fi
     done
 fi

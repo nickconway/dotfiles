@@ -4,25 +4,54 @@ set -euo pipefail
 TMP_DIR="$(mktemp -d)"
 cd "$TMP_DIR"
 
+function clean() {
+    find . -type f -name '*.zip' | grep -v '^.$' | while read -r f; do
+        sudo-run unzip -q -o -d "$HOME/homebrew/plugins" "$f" || true
+    done
+
+    sudo systemctl restart plugin_loader
+
+    rm -rf "$TMP_DIR"
+}
+
+trap clean EXIT
+
 eval "$(read-array "$@" -n LINKS </dev/stdin)"
 
 for f in "${LINKS[@]}"; do
+    NAME=
+    URL=
+
     if [[ "$f" == *.zip ]]; then
         NAME="$f"
         URL="$f"
     else
         NAME="$(sed 's,https://github.com/,,g' <<<"$f")"
-        URL="$(
-            curl -fsSL https://api.github.com/repos/"$NAME"/releases | jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url'
+        RELEASES="$(
+            if command -v gh &>/dev/null; then
+                gh api https://api.github.com/repos/"$NAME"/releases
+            else
+                curl -fsSL https://api.github.com/repos/"$NAME"/releases
+            fi
         )"
+        URL="$(
+            jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url' <<<"$RELEASES"
+        )"
+
+        if [[ -z "$URL" ]] || [[ "$URL" == null ]]; then
+            URL=
+
+            git clone "$f"
+            cd "$(basename "$f")"
+            pnpm i
+            pnpm build
+            sudo-run rsync -auhz ./ $HOME/homebrew/plugins/"$(basename "$f")"
+        fi
     fi
 
-    curl -fsSL -O "$URL"
+    if [[ -n "$URL" ]]; then
+        curl -fsSL -O "$URL"
+    fi
+
     echo "Downloaded $NAME"
 done
-
-find . | grep -v '^.$' | while read -r f; do
-    sudo-run unzip -q -o -d $HOME/homebrew/plugins "$f"
-done
-
-sudo systemctl restart plugin_loader
