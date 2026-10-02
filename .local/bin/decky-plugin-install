@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMP_DIR="$(mktemp -d)"
+cd "$TMP_DIR"
+
+eval "$(read-array "$@" -n LINKS </dev/stdin)"
+
+for f in "${LINKS[@]}"; do
+    if [[ "$f" == *.zip ]]; then
+        NAME="$f"
+        URL="$f"
+    else
+        NAME="$(sed 's,https://github.com/,,g' <<<"$f")"
+        URL="$(
+            curl -fsSL https://api.github.com/repos/"$NAME"/releases | jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url'
+        )"
+    fi
+
+    curl -fsSL -O "$URL"
+    echo "Downloaded $NAME"
+done
+
+find . | grep -v '^.$' | while read -r f; do
+    sudo-run unzip -q -o -d $HOME/homebrew/plugins "$f"
+done
+
+sudo systemctl restart plugin_loader
