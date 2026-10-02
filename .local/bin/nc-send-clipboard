@@ -9,6 +9,7 @@ if command -v ss &>/dev/null; then
                 if [[ -p /dev/stdin ]]; then
                     while read -r; do
                         echo "$REPLY"
+                        break
                     done
                 elif [[ -n $TMUX ]]; then
                     tmux show-buffer
