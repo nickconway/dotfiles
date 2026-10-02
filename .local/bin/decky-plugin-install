@@ -44,10 +44,13 @@ for f in "${LINKS[@]}"; do
         if [[ -z "$URL" ]] || [[ "$URL" == null ]]; then
             URL=
 
-            git clone "$f"
-            cd "$(basename "$f")"
-            pnpm i
-            pnpm build
+            {
+                git clone "$f"
+                cd "$(basename "$f")"
+                pnpm i
+                pnpm build
+            } &>/dev/null
+
             sudo-run rsync -auhz ./ $HOME/homebrew/plugins/"$(basename "$f")"
         fi
     fi
