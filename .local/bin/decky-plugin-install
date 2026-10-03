@@ -5,7 +5,7 @@ TMP_DIR="$(mktemp -d)"
 cd "$TMP_DIR"
 
 function clean() {
-    find . -type f -name '*.zip' | grep -v '^.$' | while read -r f; do
+    find . -type f -name '*.zip' | while read -r f; do
         sudo-run unzip -q -o -d "$HOME/homebrew/plugins" "$f" || true
     done
 
@@ -45,12 +45,15 @@ for f in "${LINKS[@]}"; do
             URL=
 
             git clone "$f" &>/dev/null
-            cd "$(basename "$f")"
 
-            pnpm i &>/dev/null || true
-            pnpm build &>/dev/null || true
+            (
+                cd "$(basename "$f")"
 
-            sudo-run rsync -auhz ./ $HOME/homebrew/plugins/"$(basename "$f")"
+                pnpm i &>/dev/null || true
+                pnpm build &>/dev/null || true
+
+                sudo-run rsync -auhz ./ $HOME/homebrew/plugins/"$(basename "$f")"
+            )
         fi
     fi
 
