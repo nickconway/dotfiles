@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMP_DIR="$(mktemp -d)"
+cd "$TMP_DIR"
+
+function clean() {
+    echo 'Cleaning...'
+
+    for f in $HOME/homebrew/plugins/*/plugin.json; do
+        NAME="$(jq -r .name "$f")"
+
+        if ! grep -q "$NAME" $HOME/homebrew/settings/loader.json; then
+            jq ".pluginOrder += [\"$NAME\"]" $HOME/homebrew/settings/loader.json > $HOME/homebrew/settings/loader.json.new
+            mv $HOME/homebrew/settings/loader.json{.new,}
+        fi
+    done
+
+    jq '.store = 2' $HOME/homebrew/settings/loader.json > $HOME/homebrew/settings/loader.json.new
+    mv $HOME/homebrew/settings/loader.json{.new,}
+
+    jq '.["store-url"] = "https://decky-extended-plugins.beallio.com/plugins.json"' $HOME/homebrew/settings/loader.json > $HOME/homebrew/settings/loader.json.new
+    mv $HOME/homebrew/settings/loader.json{.new,}
+
+    sudo systemctl restart plugin_loader
+
+    rm -rf "$TMP_DIR"
+}
+
+trap clean EXIT
+
+function install() {
+    NAME=
+    URL=
+
+    if [[ "$1" == *.zip ]]; then
+        NAME="$1"
+        URL="$1"
+    else
+        NAME="$(sed 's,https://github.com/,,g' <<<"$1")"
+        RELEASES="$(
+            if command -v gh &>/dev/null; then
+                gh api https://api.github.com/repos/"$NAME"/releases
+            else
+                curl -fsSL https://api.github.com/repos/"$NAME"/releases
+            fi
+        )"
+
+        if [[ -n "$RELEASES" ]] && [[ "$RELEASES" != null ]]; then
+            URL="$(
+                jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url' <<<"$RELEASES" 2>/dev/null || echo null
+            )"
+        fi
+
+        if [[ -z "$URL" ]] || [[ "$URL" == null ]]; then
+            URL=
+
+            git clone "$1" &>/dev/null
+
+            (
+                cd "$(basename "$1")"
+
+                pnpm i &>/dev/null || true
+                pnpm build &>/dev/null || true
+
+                if [[ "$PWD" == *decky-wine-cellar ]]; then
+                    project_name="$(jq -r '.name' plugin.json)"
+                    binary_name=$(awk -F ' = ' '$1 == "name" {print $2}' backend/Cargo.toml | tr -d '\"')
+                    cargo build --release --manifest-path backend/Cargo.toml
+                    mkdir -p bin
+                    cp backend/target/release/$binary_name bin/backend
+                    chmod +x bin/backend
+                fi
+
+                sudo rm -rf "$HOME/homebrew/plugins/$(basename "$1")"
+                sudo-run rsync -auhz ./ "$HOME/homebrew/plugins/$(basename "$1")"
+
+                if ! grep -q '"root"' plugin.json; then
+                    sudo chown -R $USER:$USER "$HOME/homebrew/plugins/$(basename "$1")"
+                fi
+            )
+        fi
+    fi
+
+    if [[ -n "$URL" ]]; then
+        curl -fsSL -O "$URL"
+
+        FILE="$(basename "$URL")"
+        FILES="$(unzip -lqq "$FILE")"
+        DIR_NAME="$(head -n 1 <<<"$FILES" | nth-to-end 4 | cut -d '/' -f 1)"
+
+        sudo rm -rf "$HOME/homebrew/plugins/$DIR_NAME"
+        sudo-run unzip -q -o -d "$HOME/homebrew/plugins" "$FILE"
+
+        if ! unzip -aa -p "$FILE" '*plugin.json' | grep -q '"root"'; then
+            sudo chown -R $USER:$USER "$HOME/homebrew/plugins/$DIR_NAME"
+        fi
+    fi
+
+    echo "Installed $NAME"
+}
+
+eval "$(read-array "$@" -n LINKS </dev/stdin)"
+
+for f in "${LINKS[@]}"; do
+    install "$f"
+done

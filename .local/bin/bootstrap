@@ -56,6 +56,13 @@ get-vars env ~/.config/env.example
 if command -v steamos-update &>/dev/null; then
     sudo systemctl enable --now sshd
 
+    sudo steamos-readonly disable
+    sudo pacman-key --init
+    sudo pacman-key --populate archlinux
+    sudo pacman-key --populate holo
+    sudo pacman -S --noconfirm base-devel glibc lib32-glibc linux-neptune-headers linux-api-headers
+    sudo steamos-readonly enable
+
     if ! command -v brew &>/dev/null; then
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
@@ -74,7 +81,7 @@ if command -v steamos-update &>/dev/null; then
     fi
 
     curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
-    decky-plugin-install <"$HOME/.config/decky/plugins.txt"
+    cat "$HOME/.config/decky/plugins.txt" | decky-install-plugins
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
