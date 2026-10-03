@@ -1,6 +1,27 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+function clean() {
+    if [[ -n ${TMUX:-} ]]; then
+        if ps -p $(cat "$S_FILE") &>/dev/null; then
+            kill $(cat "$S_FILE")
+        fi
+    fi
+
+    if [[ -n ${PORT:-} ]] && pgrep "nc -l -p $PORT" -f &>/dev/null; then
+        kill $(pgrep "nc -l -p $PORT" -f) &>/dev/null
+    fi
+
+    if [[ -n ${TMUX:-} ]]; then
+        tmux set status on
+        tmux bind C-Space send-prefix
+        tmux set prefix C-Space
+        rm "$S_FILE"
+    fi
+}
+
+trap clean ERR EXIT
+
 if [[ $# -gt 0 ]]; then
     SELECTED=$@
 else
@@ -58,21 +79,4 @@ if command -v ss &>/dev/null; then
     fi
 else
     ssh $SELECTED || true
-fi
-
-if [[ -n ${TMUX:-} ]]; then
-    if ps -p $(cat "$S_FILE") &>/dev/null; then
-        kill $(cat "$S_FILE")
-    fi
-fi
-
-if [[ -n ${PORT:-} ]] && pgrep "nc -l -p $PORT" -f &>/dev/null; then
-    kill $(pgrep "nc -l -p $PORT" -f) &>/dev/null
-fi
-
-if [[ -n ${TMUX:-} ]]; then
-    tmux set status on
-    tmux bind C-Space send-prefix
-    tmux set prefix C-Space
-    rm "$S_FILE"
 fi
