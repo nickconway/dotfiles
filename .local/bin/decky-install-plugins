@@ -63,18 +63,30 @@ function install() {
 
             (
                 cd "$(basename "$1")"
+                git pull &>/dev/null
 
-                pnpm i &>/dev/null || true
-                pnpm build &>/dev/null || true
+                {
+                    case "$PWD" in
+                        *decky-wine-cellar)
+                            project_name="$(jq -r '.name' plugin.json)"
+                            binary_name=$(awk -F ' = ' '$1 == "name" {print $2}' backend/Cargo.toml | tr -d '\"')
+                            cargo build --release --manifest-path backend/Cargo.toml
+                            mkdir -p bin
+                            cp backend/target/release/$binary_name bin/backend
+                            chmod +x bin/backend
+                            ;;
 
-                if [[ "$PWD" == *decky-wine-cellar ]]; then
-                    project_name="$(jq -r '.name' plugin.json)"
-                    binary_name=$(awk -F ' = ' '$1 == "name" {print $2}' backend/Cargo.toml | tr -d '\"')
-                    cargo build --release --manifest-path backend/Cargo.toml
-                    mkdir -p bin
-                    cp backend/target/release/$binary_name bin/backend
-                    chmod +x bin/backend
-                fi
+                        *)
+                            {
+                                pnpm i
+                                pnpm build
+                            } || {
+                                npm i
+                                npm run build
+                            }
+                            ;;
+                    esac
+                } &>/dev/null
 
                 sudo rm -rf "$HOME/homebrew/plugins/$(basename "$1")"
                 sudo-run rsync -auhz ./ "$HOME/homebrew/plugins/$(basename "$1")"
@@ -94,7 +106,23 @@ function install() {
         DIR_NAME="$(head -n 1 <<<"$FILES" | nth-to-end 4 | cut -d '/' -f 1)"
 
         sudo rm -rf "$HOME/homebrew/plugins/$DIR_NAME"
-        sudo-run unzip -q -o -d "$HOME/homebrew/plugins" "$FILE"
+        unzip -q -o -d "$DIR_NAME" "$FILE"
+
+        if [[ -e "$DIR_NAME/package.json" ]] && { cd "$DIR_NAME" && npm run | grep -q build; }; then
+            (
+                cd "$DIR_NAME"
+
+                {
+                    pnpm i
+                    pnpm build
+                } || {
+                    npm i
+                    npm run build
+                } &>/dev/null
+            )
+        fi
+
+        sudo mv "$DIR_NAME" "$HOME/homebrew/plugins/$DIR_NAME"
 
         if ! unzip -aa -p "$FILE" '*plugin.json' | grep -q '"root"'; then
             sudo chown -R $USER:$USER "$HOME/homebrew/plugins/$DIR_NAME"
