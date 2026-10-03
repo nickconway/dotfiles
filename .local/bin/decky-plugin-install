@@ -35,19 +35,20 @@ for f in "${LINKS[@]}"; do
             fi
         )"
 
-        if [[ -z "$RELEASES" ]] || [[ "$RELEASES" == null ]]; then
+        if [[ -n "$RELEASES" ]] && [[ "$RELEASES" != null ]]; then
             URL="$(
-                jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url' <<<"$RELEASES"
+                jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url' <<<"$RELEASES" 2>/dev/null || echo null
             )"
         fi
 
         if [[ -z "$URL" ]] || [[ "$URL" == null ]]; then
             URL=
 
-            git clone "$f"
+            git clone "$f" &>/dev/null
             cd "$(basename "$f")"
-            pnpm i
-            pnpm build
+
+            pnpm i &>/dev/null || true
+            pnpm build &>/dev/null || true
 
             sudo-run rsync -auhz ./ $HOME/homebrew/plugins/"$(basename "$f")"
         fi
