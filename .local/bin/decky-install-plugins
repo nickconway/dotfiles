@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TMP_DIR="$(mktemp -d)"
-cd "$TMP_DIR"
+mkdir -p $HOME/.cache/decky
+cd $HOME/.cache/decky
+
+sudo mkdir -p $HOME/homebrew/plugins
 
 function clean() {
     echo 'Cleaning...'
@@ -23,8 +25,6 @@ function clean() {
     mv $HOME/homebrew/settings/loader.json{.new,}
 
     sudo systemctl restart plugin_loader
-
-    rm -rf "$TMP_DIR"
 }
 
 trap clean EXIT
@@ -37,14 +37,16 @@ function install() {
         NAME="$1"
         URL="$1"
     else
-        NAME="$(sed 's,https://github.com/,,g' <<<"$1")"
-        RELEASES="$(
-            if command -v gh &>/dev/null; then
-                gh api https://api.github.com/repos/"$NAME"/releases
-            else
-                curl -fsSL https://api.github.com/repos/"$NAME"/releases
-            fi
-        )"
+        if [[ "$1" == *github* ]]; then
+            NAME="$(sed 's,https://github.com/,,g' <<<"$1")"
+            RELEASES="$(
+                if command -v gh &>/dev/null; then
+                    gh api https://api.github.com/repos/"$NAME"/releases
+                else
+                    curl -fsSL https://api.github.com/repos/"$NAME"/releases
+                fi
+            )"
+        fi
 
         if [[ -n "$RELEASES" ]] && [[ "$RELEASES" != null ]]; then
             URL="$(
@@ -55,7 +57,9 @@ function install() {
         if [[ -z "$URL" ]] || [[ "$URL" == null ]]; then
             URL=
 
-            git clone "$1" &>/dev/null
+            if [[ ! -e "$(basename "$1")" ]]; then
+                git clone "$1" &>/dev/null
+            fi
 
             (
                 cd "$(basename "$1")"

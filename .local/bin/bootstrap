@@ -80,8 +80,8 @@ if command -v steamos-update &>/dev/null; then
         sudo-run tailscale set --auto-update
     fi
 
-    curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
     cat "$HOME/.config/decky/plugins.txt" | decky-install-plugins
+    curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
