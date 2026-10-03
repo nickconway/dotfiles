@@ -61,6 +61,8 @@ function install() {
                 git clone "$1" &>/dev/null
             fi
 
+            NAME="$(jq -r .name "$(basename "$1")/plugin.json")"
+
             (
                 cd "$(basename "$1")"
                 git pull &>/dev/null
@@ -107,8 +109,9 @@ function install() {
 
         sudo rm -rf "$HOME/homebrew/plugins/$DIR_NAME"
         unzip -q -o -d "$DIR_NAME" "$FILE"
+        NAME="$(jq -r .name "$DIR_NAME"/**/plugin.json)"
 
-        if [[ -e "$DIR_NAME/package.json" ]] && { cd "$DIR_NAME" && npm run | grep -q build; }; then
+        if [[ -e "$DIR_NAME/package.json" ]] && ( cd "$DIR_NAME" && npm run | grep -q build; ); then
             (
                 cd "$DIR_NAME"
 
@@ -122,7 +125,7 @@ function install() {
             )
         fi
 
-        sudo mv "$DIR_NAME" "$HOME/homebrew/plugins/$DIR_NAME"
+        sudo-run rsync -auhz "$DIR_NAME/" "$HOME/homebrew/plugins/$DIR_NAME"
 
         if ! unzip -aa -p "$FILE" '*plugin.json' | grep -q '"root"'; then
             sudo chown -R $USER:$USER "$HOME/homebrew/plugins/$DIR_NAME"
