@@ -125,7 +125,7 @@ function install() {
             )
         fi
 
-        sudo-run rsync -auhz "$DIR_NAME/" "$HOME/homebrew/plugins/$DIR_NAME"
+        sudo-run rsync -auhz "$DIR_NAME"/*/ "$HOME/homebrew/plugins/$DIR_NAME"
 
         if ! unzip -aa -p "$FILE" '*plugin.json' | grep -q '"root"'; then
             sudo chown -R $USER:$USER "$HOME/homebrew/plugins/$DIR_NAME"
