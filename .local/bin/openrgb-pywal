@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from openrgb.utils import ModeData
 import sys
 from openrgb.utils import RGBColor
 import os
@@ -53,7 +52,12 @@ for dev in client.devices:
         color = RGBColor.fromHEX(color)
         zone.set_color(color)
 
-    mode = dev.modes[dev.active_mode]
+    direct_mode = None
+    for m in dev.modes:
+        if m.name == "Direct":
+            direct_mode = m
+
+    mode = direct_mode or dev.modes[dev.active_mode]
     mode.brightness = mode.brightness_max
 
     dev.set_mode(mode)

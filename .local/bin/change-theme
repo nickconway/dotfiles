@@ -193,6 +193,10 @@ if pgrep swaync &>/dev/null; then
     swaync-client -rs &>/dev/null
 fi
 
+if systemctl --no-pager is-active coolercontrold &>/dev/null; then
+    sudo systemctl restart coolercontrold &
+fi
+
 gcc ~/.config/darkreader/pywal.c -o ~/.config/darkreader/pywal &>/dev/null &
 
 homeassistant-pywal &
