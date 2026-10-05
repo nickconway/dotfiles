@@ -50,7 +50,7 @@ function homelab() {
 function emudeck() {
     function pull-saves() {
         echo "Pulling Saves"
-        "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/Saves/"${EMUDECK_USER:-$USER}" "$EMUDECK_DIR/saves"
+        "${RSYNC_CMD[@]}" "$REMOTE_EMUDECK_DIR"/Saves/"${EMUDECK_USER:-$USER}"/ "$EMUDECK_DIR/saves"
     }
 
     function push-saves() {
