@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function clean() {
-    if [[ -n ${TMUX:-} ]]; then
+    if [[ -n ${TMUX:-} ]] && [[ -n "${S_FILE:-}" ]]; then
         if ps -p $(cat "$S_FILE") &>/dev/null; then
             kill $(cat "$S_FILE")
         fi
@@ -16,7 +16,10 @@ function clean() {
         tmux set status on
         tmux bind C-Space send-prefix
         tmux set prefix C-Space
-        rm "$S_FILE"
+
+        if [[ -n "${S_FILE:-}" ]]; then
+            rm "$S_FILE"
+        fi
     fi
 }
 
