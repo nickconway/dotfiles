@@ -56,6 +56,4 @@ DATA="$(
     echo -n ']'
 )"
 
-echo "$DATA"
-
 curl -fsSL -X POST -H "X-Decky-Auth: $AUTH" http://localhost:1337/plugins/install -d "$DATA"
