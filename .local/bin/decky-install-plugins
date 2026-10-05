@@ -39,10 +39,13 @@ function get-url() {
 
         NAME="$(basename "$URL")"
         echo "Got $NAME" 1>&2
+    else
+        NAME="$(basename "$1")"
+        echo "Could not install $NAME" 1>&2
     fi
 }
 
-eval "$(cat "$HOME/.config/decky/plugins.txt" | read-array "$@" -n LINKS)"
+eval "$(read-array "$@" -n LINKS <"$HOME/.config/decky/plugins.txt")"
 
 DATA="$(
     echo -n '['

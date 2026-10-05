@@ -7,6 +7,10 @@ AGG=()
 
 if [[ -p /dev/stdin ]]; then
     readarray -t AGG
+elif [[ ! -t 0 ]]; then
+    while read -r; do
+        AGG+=("$REPLY")
+    done
 fi
 
 for i in "${ARGS[@]}"; do
