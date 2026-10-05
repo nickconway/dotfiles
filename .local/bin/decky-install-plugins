@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if ! systemctl list-units | grep plugin_loader; then
+    exit 0
+fi
+
 until nc -z localhost 1337; do
     sleep 5
 done
