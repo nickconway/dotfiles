@@ -31,7 +31,9 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
-        vim.hl.hl_op({ timeout = 50 })
+        if vim.hl.hl_op then
+            vim.hl.hl_op({ timeout = 50 })
+        end
         vim.cmd("!nc-send-clipboard")
     end,
     group = vim.api.nvim_create_augroup("highlight-on-yank", { clear = true }),

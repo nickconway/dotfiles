@@ -105,7 +105,7 @@ map("n", "<esc>", function()
             -- Default <esc> handler.
         end
     else
-        -- Default <esc> handler.
+        vim.api.nvim_buf_clear_namespace(0, vim.api.nvim_create_namespace("nvim.multicursor"), 0, -1)
     end
 end)
 
@@ -223,4 +223,4 @@ map("n", "<leader>uv", function()
     vim.diagnostic.config({ virtual_lines = new_config })
 end, "Toggle diagnostic virtual_lines")
 
-vim.keymap.set("n", "<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics under cursor" })
+map("n", "<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics under cursor" })
