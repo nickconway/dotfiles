@@ -1,37 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p $HOME/.cache/decky
-cd $HOME/.cache/decky
+until nc -z localhost 1337; do
+    sleep 5
+done
 
-sudo mkdir -p $HOME/homebrew/plugins
+AUTH="$(curl -fsSL http://localhost:1337/auth/token)"
 
-function clean() {
-    echo 'Cleaning...'
-
-    for f in $HOME/homebrew/plugins/*/plugin.json; do
-        NAME="$(jq -r .name "$f")"
-
-        if ! grep -q "$NAME" $HOME/homebrew/settings/loader.json; then
-            jq ".pluginOrder += [\"$NAME\"]" $HOME/homebrew/settings/loader.json > $HOME/homebrew/settings/loader.json.new
-            mv $HOME/homebrew/settings/loader.json{.new,}
-        fi
-    done
-
-    jq '.store = 2' $HOME/homebrew/settings/loader.json > $HOME/homebrew/settings/loader.json.new
-    mv $HOME/homebrew/settings/loader.json{.new,}
-
-    jq '.["store-url"] = "https://decky-extended-plugins.beallio.com/plugins.json"' $HOME/homebrew/settings/loader.json > $HOME/homebrew/settings/loader.json.new
-    mv $HOME/homebrew/settings/loader.json{.new,}
-
-    sudo systemctl restart plugin_loader
-}
-
-trap clean EXIT
-
-function install() {
+function get-url() {
     NAME=
     URL=
+    RELEASES=
 
     if [[ "$1" == *.zip ]]; then
         NAME="$1"
@@ -50,93 +29,33 @@ function install() {
 
         if [[ -n "$RELEASES" ]] && [[ "$RELEASES" != null ]]; then
             URL="$(
-                jq -r 'first.assets[] | select(.name | endswith("zip")) | .browser_download_url' <<<"$RELEASES" 2>/dev/null || echo null
+                jq -r 'first.assets[] | select(.name | endswith("zip"))| .browser_download_url' <<<"$RELEASES" 2>/dev/null | head -n 1 || echo null
             )"
         fi
-
-        if [[ -z "$URL" ]] || [[ "$URL" == null ]]; then
-            URL=
-
-            if [[ ! -e "$(basename "$1")" ]]; then
-                git clone "$1" &>/dev/null
-            fi
-
-            NAME="$(jq -r .name "$(basename "$1")/plugin.json")"
-
-            (
-                cd "$(basename "$1")"
-                git pull &>/dev/null
-
-                {
-                    case "$PWD" in
-                        *decky-wine-cellar)
-                            project_name="$(jq -r '.name' plugin.json)"
-                            binary_name=$(awk -F ' = ' '$1 == "name" {print $2}' backend/Cargo.toml | tr -d '\"')
-                            cargo build --release --manifest-path backend/Cargo.toml
-                            mkdir -p bin
-                            cp backend/target/release/$binary_name bin/backend
-                            chmod +x bin/backend
-                            ;;
-
-                        *)
-                            {
-                                pnpm i
-                                pnpm build
-                            } || {
-                                npm i
-                                npm run build
-                            }
-                            ;;
-                    esac
-                } &>/dev/null
-
-                sudo rm -rf "$HOME/homebrew/plugins/$(basename "$1")"
-                sudo-run rsync -auhz ./ "$HOME/homebrew/plugins/$(basename "$1")"
-
-                if ! grep -q '"root"' plugin.json; then
-                    sudo chown -R $USER:$USER "$HOME/homebrew/plugins/$(basename "$1")"
-                fi
-            )
-        fi
     fi
 
-    if [[ -n "$URL" ]]; then
-        curl -fsSL -O "$URL"
+    if [[ -n "$URL" ]] && [[ "$URL" != null ]]; then
+        echo "$URL"
 
-        FILE="$(basename "$URL")"
-        FILES="$(unzip -lqq "$FILE")"
-        DIR_NAME="$(head -n 1 <<<"$FILES" | nth-to-end 4 | cut -d '/' -f 1)"
-
-        sudo rm -rf "$HOME/homebrew/plugins/$DIR_NAME"
-        unzip -q -o -d "$DIR_NAME" "$FILE"
-        NAME="$(jq -r .name "$DIR_NAME"/**/plugin.json)"
-
-        if [[ -e "$DIR_NAME/package.json" ]] && ( cd "$DIR_NAME" && npm run | grep -q build; ); then
-            (
-                cd "$DIR_NAME"
-
-                {
-                    pnpm i
-                    pnpm build
-                } || {
-                    npm i
-                    npm run build
-                } &>/dev/null
-            )
-        fi
-
-        sudo-run rsync -auhz "$DIR_NAME"/*/ "$HOME/homebrew/plugins/$DIR_NAME"
-
-        if ! unzip -aa -p "$FILE" '*plugin.json' | grep -q '"root"'; then
-            sudo chown -R $USER:$USER "$HOME/homebrew/plugins/$DIR_NAME"
-        fi
+        NAME="$(basename "$URL")"
+        echo "Got $NAME" 1>&2
     fi
-
-    echo "Installed $NAME"
 }
 
-eval "$(read-array "$@" -n LINKS </dev/stdin)"
+eval "$(cat "$HOME/.config/decky/plugins.txt" | read-array "$@" -n LINKS)"
 
-for f in "${LINKS[@]}"; do
-    install "$f"
-done
+DATA="$(
+    echo -n '['
+    for f in "${LINKS[@]}"; do
+        URL="$(get-url "$f")"
+
+        if [[ -n "$URL" ]]; then
+            echo -n "\"$URL\""
+        fi
+    done | sed 's/""/", "/g'
+    echo -n ']'
+)"
+
+echo "$DATA"
+
+curl -fsSL -X POST -H "X-Decky-Auth: $AUTH" http://localhost:1337/plugins/install -d "$DATA"
