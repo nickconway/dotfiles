@@ -60,7 +60,7 @@ fi
 
 get-vars env ~/.config/env.example
 
-if command -v steamos-update &>/dev/null; then
+if command -v steamos-readonly &>/dev/null; then
     sudo systemctl enable --now sshd
 
     sudo steamos-readonly disable
