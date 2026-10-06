@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-function clean() {
-    sudo chown -R "$USER:$USER" ~/.{cache,config}/borg
-
+function healthcheck() {
     COUNT=0
     until [[ -z ${HEALTHCHECK_ID:-} ]] || [[ $COUNT -gt 30 ]] || curl -f "https://health.$SERVICES_BASE_DOMAIN/ping/${HEALTHCHECK_TOKEN}/${HEALTHCHECK_ID}?create=1"; do
         sleep 5
         COUNT=$((COUNT + 1))
     done
 }
+
+function clean() {
+    sudo chown -R "$USER:$USER" ~/.{cache,config}/borg
+}
+
+trap clean EXIT
 
 function create() {
     FILES=()
@@ -29,6 +33,8 @@ function create() {
     sudo -E "$(which borg)" create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE" "${FILES[@]}"
     sudo -E "$(which borg)" prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 6
     sudo -E "$(which borg)" compact -v --progress
+
+    healthcheck
 }
 
 function restore() {
@@ -47,7 +53,6 @@ function talos() {
     find "$BORG_REPO" -mtime +30 -type f -delete
 }
 
-trap clean EXIT ERR
 eval "$(get-options "-i, --id: HEALTHCHECK_ID='\$ARG'" -- "$@")"
 
 export BORG_EXIT_CODES=modern

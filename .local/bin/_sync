@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-function homelab() {
-    function clean() {
-        COUNT=0
-        until [[ -z ${HEALTHCHECK_ID:-} ]] || [[ $COUNT -gt 30 ]] || curl -f "https://health.$SERVICES_BASE_DOMAIN/ping/${HEALTHCHECK_TOKEN}/${HEALTHCHECK_ID}?create=1"; do
-            sleep 5
-            COUNT=$((COUNT + 1))
-        done
-    }
+function healthcheck() {
+    COUNT=0
+    until [[ -z ${HEALTHCHECK_ID:-} ]] || [[ $COUNT -gt 30 ]] || curl -f "https://health.$SERVICES_BASE_DOMAIN/ping/${HEALTHCHECK_TOKEN}/${HEALTHCHECK_ID}?create=1"; do
+        sleep 5
+        COUNT=$((COUNT + 1))
+    done
+}
 
+function homelab() {
     eval "$(get-options "-i, --id: HEALTHCHECK_ID='\$ARG'" -- "$@")"
 
     if [[ ! -e "$PROJECT_DIR"/homelab ]]; then
@@ -26,7 +26,6 @@ function homelab() {
     NEW_HASH="${NEW_HASH:-$(git rev-parse HEAD)}"
 
     if [[ ${NEW:-false} == false ]] && [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
-        clean
         exit
     fi
 
@@ -44,7 +43,7 @@ function homelab() {
         LAST_APP="$APP"
     done < <(git diff --name-only "$OLD_HASH" "$NEW_HASH" | grep '^docker/compose/*')
 
-    clean
+    healthcheck
 }
 
 function emudeck() {
@@ -55,7 +54,7 @@ function emudeck() {
 
     function push-saves() {
         echo "Pushing Saves"
-        "${RSYNC_CMD[@]}" "$EMUDECK_DIR/saves/" "$REMOTE_EMUDECK_DIR"/Saves/"${EMUDECK_USER:-$USER}" 
+        "${RSYNC_CMD[@]}" "$EMUDECK_DIR/saves/" "$REMOTE_EMUDECK_DIR"/Saves/"${EMUDECK_USER:-$USER}"
     }
 
     function sync-saves() {
