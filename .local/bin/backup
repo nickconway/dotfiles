@@ -30,7 +30,7 @@ function create() {
         sudo -E "$(which borg)" init -e repokey
     fi
 
-    sudo -E "$(which borg)" create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE" "${FILES[@]}"
+    sudo -E "$(which borg)" create --compression lz4 --stats --progress --show-rc --exclude-caches ::"$DATE" "${FILES[@]}" || [[ $? == 100 ]]
     sudo -E "$(which borg)" prune -v --progress --list --keep-daily 7 --keep-weekly 4 --keep-monthly 6
     sudo -E "$(which borg)" compact -v --progress
 
