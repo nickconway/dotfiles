@@ -1,4 +1,60 @@
 {
+    "bedroom": {
+        "lights": [
+            {
+                "name": "bedroom_ceiling",
+                "color": [{color9.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_left_lamp_1",
+                "color": [{color12.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_left_lamp_2",
+                "color": [{color14.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_left_lamp_3",
+                "color": [{color13.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_left_lamp_4",
+                "color": [{color10.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_left_lamp_5",
+                "color": [{color11.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_left_lamp_6",
+                "color": [{color9.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_right_lamp_1",
+                "color": [{color12.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_right_lamp_2",
+                "color": [{color14.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_right_lamp_3",
+                "color": [{color13.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_right_lamp_4",
+                "color": [{color10.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_right_lamp_5",
+                "color": [{color11.saturate(100).rgb}]
+            },
+            {
+                "name": "bedroom_right_lamp_6",
+                "color": [{color9.saturate(100).rgb}]
+            }
+        ]
+    },
     "great_room": {
         "lights": [
             {
