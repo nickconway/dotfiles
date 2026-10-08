@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! systemctl list-units | grep plugin_loader; then
-    exit 0
+if ! systemctl is-active plugin_loader &>/dev/null; then
+    exit 1
 fi
 
 until nc -z localhost 1337; do
     sleep 5
 done
-
-AUTH="$(curl -fsSL http://localhost:1337/auth/token)"
 
 function get-url() {
     NAME=
@@ -20,6 +18,17 @@ function get-url() {
         NAME="$1"
         URL="$1"
     else
+        case "$1" in
+
+        'https://github.com/moraroy/NonSteamLaunchersDecky')
+            echo "Got NonSteamLaunchers" 1>&2
+            echo 'https://github.com/moraroy/NonSteamLaunchersDecky/archive/refs/heads/main.zip'
+            return
+            ;;
+
+        *) ;;
+        esac
+
         if [[ "$1" == *github* ]]; then
             NAME="$(sed 's,https://github.com/,,g' <<<"$1")"
             RELEASES="$(
@@ -62,5 +71,7 @@ DATA="$(
     done | sed 's/""/", "/g'
     echo -n ']'
 )"
+
+AUTH="$(curl -fsSL http://localhost:1337/auth/token)"
 
 curl -fsSL -X POST -H "X-Decky-Auth: $AUTH" http://localhost:1337/plugins/install -d "$DATA"
