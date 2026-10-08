@@ -26,6 +26,7 @@ function homelab() {
     NEW_HASH="${NEW_HASH:-$(git rev-parse HEAD)}"
 
     if [[ ${NEW:-false} == false ]] && [[ "$OLD_HASH" == "$NEW_HASH" ]]; then
+        healthcheck
         exit
     fi
 
