@@ -87,6 +87,10 @@ if command -v steamos-readonly &>/dev/null; then
         sudo-run tailscale set --auto-update
     fi
 
+    curl -fsSL https://raw.githubusercontent.com/moraroy/NonSteamLaunchers-On-Steam-Deck/main/NonSteamLaunchers.sh -o .local/bin/NSL
+    chmod +x .local/bin/NSL
+    NSL YouTube Crunchyroll &>/tmp/NSL.log
+
     curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
     decky-install-plugins
 fi
