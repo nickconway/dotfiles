@@ -223,4 +223,4 @@ map("n", "<leader>uv", function()
     vim.diagnostic.config({ virtual_lines = new_config })
 end, "Toggle diagnostic virtual_lines")
 
-map("n", "<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics under cursor" })
+map("n", "<leader>xd", vim.diagnostic.open_float, "Open diagnostics under cursor")
