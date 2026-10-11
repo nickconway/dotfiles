@@ -75,7 +75,7 @@ while read -r LINE; do
     FILES+=("$FILE")
 done <<<"$SELECTED"
 
-ESCAPED_QUERY="$(cat /tmp/rg-fzf-query | sed 's/\([(|)]\)/\\\1/g')"
+ESCAPED_QUERY="$(sed 's/\([(|)]\)/\\\1/g' /tmp/rg-fzf-query)"
 
 echo "Opening ${#FILES[@]} file(s)"
 "$EDITOR" -c "${COMMANDS[*]}" -c bfirst -c "let @/ = '$ESCAPED_QUERY'"

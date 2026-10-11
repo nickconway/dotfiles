@@ -171,12 +171,31 @@ alias gd='git diff'
 alias gds='git diff --staged'
 
 function gec() {
-    {
+    COMMANDS=()
+
+    while read -r F; do
+        if [[ -e "$F" ]]; then
+            LINE="$(git diff --unified=0 | grep -Po '^\+\+\+ ./\K.*|^@@ -[0-9]+(,[0-9]+)? \+\K[0-9]+(,[0-9]+)?(?= @@)' | xargs | awk '{print $2}')"
+
+            ROW=$(echo $LINE | awk -F ',' '{print $1}')
+            COORDS="${ROW}G^"
+
+            COMMAND="execute \"e $F | normal $COORDS\""
+            COMMAND="${COMMAND//\#/\\#}"
+            COMMAND="${COMMAND//\%/\\\\%}"
+
+            if [[ -n "${COMMANDS:-}" ]]; then
+                COMMAND="| $COMMAND"
+            fi
+
+            COMMANDS+=("$COMMAND")
+        fi
+    done <<<"$({
         gd --name-only "$@"
         gd --staged --name-only "$@"
-    } | while read -r F; do
-        [[ -e "$F" ]] && echo "$F"
-    done | xargs $EDITOR
+    })"
+
+    "$EDITOR" -c "${COMMANDS[*]}" -c bfirst
 }
 
 function gecu() {
@@ -714,12 +733,34 @@ alias ydec="yadm decrypt"
 alias yenc="yadm encrypt"
 
 function yec() {
-    (cd && {
-        yadm diff --name-only "$@"
-        yadm diff --staged --name-only "$@"
-    } | while read -r F; do
-        [[ -e "$F" ]] && echo "$F"
-    done | xargs $EDITOR)
+    (
+        cd
+        COMMANDS=()
+
+        while read -r F; do
+            if [[ -e "$F" ]]; then
+                LINE="$(yadm diff --unified=0 | grep -Po '^\+\+\+ ./\K.*|^@@ -[0-9]+(,[0-9]+)? \+\K[0-9]+(,[0-9]+)?(?= @@)' | xargs | awk '{print $2}')"
+
+                ROW=$(echo $LINE | awk -F ',' '{print $1}')
+                COORDS="${ROW}G^"
+
+                COMMAND="execute \"e $F | normal $COORDS\""
+                COMMAND="${COMMAND//\#/\\#}"
+                COMMAND="${COMMAND//\%/\\\\%}"
+
+                if [[ -n "${COMMANDS:-}" ]]; then
+                    COMMAND="| $COMMAND"
+                fi
+
+                COMMANDS+=("$COMMAND")
+            fi
+        done <<<"$({
+            yadm diff --name-only "$@"
+            yadm diff --staged --name-only "$@"
+        })"
+
+        "$EDITOR" -c "${COMMANDS[*]}" -c bfirst
+    )
 }
 
 function yl() {
