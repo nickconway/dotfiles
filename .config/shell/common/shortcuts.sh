@@ -175,7 +175,7 @@ function gec() {
 
     while read -r F; do
         if [[ -e "$F" ]]; then
-            LINE="$(git diff --unified=0 | grep -Po '^\+\+\+ ./\K.*|^@@ -[0-9]+(,[0-9]+)? \+\K[0-9]+(,[0-9]+)?(?= @@)' | xargs | awk '{print $2}')"
+            LINE="$(git diff --unified=0 "$@" "$F" | grep -Po '^\+\+\+ ./\K.*|^@@ -[0-9]+(,[0-9]+)? \+\K[0-9]+(,[0-9]+)?(?= @@)' | xargs | awk '{print $2}')"
 
             ROW=$(echo $LINE | awk -F ',' '{print $1}')
             COORDS="${ROW}G^"
@@ -739,7 +739,7 @@ function yec() {
 
         while read -r F; do
             if [[ -e "$F" ]]; then
-                LINE="$(yadm diff --unified=0 | grep -Po '^\+\+\+ ./\K.*|^@@ -[0-9]+(,[0-9]+)? \+\K[0-9]+(,[0-9]+)?(?= @@)' | xargs | awk '{print $2}')"
+                LINE="$(yadm diff --unified=0 "$@" "$F" | grep -Po '^\+\+\+ ./\K.*|^@@ -[0-9]+(,[0-9]+)? \+\K[0-9]+(,[0-9]+)?(?= @@)' | xargs | awk '{print $2}')"
 
                 ROW=$(echo $LINE | awk -F ',' '{print $1}')
                 COORDS="${ROW}G^"
