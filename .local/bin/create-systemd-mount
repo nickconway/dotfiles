@@ -6,7 +6,6 @@ eval "$(
         "-t, --type: TYPE='\$ARG'" \
         "-o, --options: OPTIONS='\$ARG'" \
         "-s, --timeout, --seconds: OPTIONS='\$ARG'" \
-        "-u, --user: USER_MODE=true" \
         -- "$@"
 )"
 
@@ -24,11 +23,7 @@ if [[ $ESCAPED == -* ]]; then
     ESCAPED=$(cut -d - -f 2- <<<"$ESCAPED")
 fi
 
-if [[ -z ${USER_MODE:-} ]]; then
-    DIR=/etc/systemd/system
-else
-    DIR="$HOME/.config/systemd/user"
-fi
+DIR=/etc/systemd/system
 
 if [[ -e $DIR/$ESCAPED.mount ]]; then
     echo "Mount file already exists"
@@ -52,7 +47,7 @@ TimeoutSec=${TIMEOUT:-60}
 WantedBy=default.target
 EOF
 
-if ! systemctl ${USER_MODE:+--user} enable --now $ESCAPED.mount; then
-    systemctl ${USER_MODE:+--user} disable --now $ESCAPED.mount
+if ! systemctl enable --now $ESCAPED.mount; then
+    systemctl disable --now $ESCAPED.mount
     rm $DIR/$ESCAPED.mount
 fi
