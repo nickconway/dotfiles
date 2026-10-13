@@ -61,6 +61,10 @@ fi
 get-vars env ~/.config/env.example
 
 if command -v steamos-readonly &>/dev/null; then
+    if [[ ! -e /etc/sudoers.d/z_deck ]]; then
+        echo 'deck ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/z_deck
+    fi
+
     sudo systemctl enable --now sshd
 
     sudo steamos-readonly disable
