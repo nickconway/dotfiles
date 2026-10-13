@@ -52,4 +52,7 @@ TimeoutSec=${TIMEOUT:-60}
 WantedBy=default.target
 EOF
 
-systemctl ${USER_MODE:+--user} enable --now $ESCAPED.mount
+if ! systemctl ${USER_MODE:+--user} enable --now $ESCAPED.mount; then
+    systemctl ${USER_MODE:+--user} disable --now $ESCAPED.mount
+    rm $DIR/$ESCAPED.mount
+fi
