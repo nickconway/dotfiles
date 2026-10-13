@@ -24,15 +24,15 @@ if [[ $ESCAPED == -* ]]; then
     ESCAPED=$(cut -d - -f 2- <<<"$ESCAPED")
 fi
 
-if [[ -e /etc/systemd/system/$ESCAPED.mount ]]; then
-    echo "Mount file already exists"
-    exit
-fi
-
 if [[ -z ${USER_MODE:-} ]]; then
     DIR=/etc/systemd/system
 else
     DIR="$HOME/.config/systemd/user"
+fi
+
+if [[ -e $DIR/$ESCAPED.mount ]]; then
+    echo "Mount file already exists"
+    exit
 fi
 
 cat <<EOF | tee $DIR/$ESCAPED.mount
