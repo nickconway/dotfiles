@@ -6,6 +6,7 @@ eval "$(
         "-t, --type: TYPE='\$ARG'" \
         "-o, --options: OPTIONS='\$ARG'" \
         "-s, --timeout, --seconds: OPTIONS='\$ARG'" \
+        "-u, --user: USER_MODE=true" \
         -- "$@"
 )"
 
@@ -28,7 +29,13 @@ if [[ -e /etc/systemd/system/$ESCAPED.mount ]]; then
     exit
 fi
 
-cat <<EOF | tee /etc/systemd/system/$ESCAPED.mount
+if [[ -z ${USER_MODE:-} ]]; then
+    DIR=/etc/systemd/system
+else
+    DIR="$HOME/.config/systemd/user"
+fi
+
+cat <<EOF | tee $DIR/$ESCAPED.mount
 [Unit]
 Description=Mount $WHAT to $WHERE
 After=network-online.target
@@ -45,4 +52,4 @@ TimeoutSec=${TIMEOUT:-60}
 WantedBy=default.target
 EOF
 
-systemctl enable --now $ESCAPED.mount
+systemctl ${USER_MODE:+--user} enable --now $ESCAPED.mount
