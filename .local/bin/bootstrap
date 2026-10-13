@@ -91,8 +91,10 @@ if command -v steamos-readonly &>/dev/null; then
     chmod +x .local/bin/NSL
     NSL YouTube Crunchyroll &>/tmp/NSL.log
 
-    curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
-    decky-install-plugins
+    if [[ ! -e $HOME/homebrew/services/PluginLoader ]]; then
+        curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
+        decky-install-plugins
+    fi
 fi
 
 if ! command -v python >/dev/null && command -v python3 >/dev/null; then
