@@ -9,6 +9,11 @@ eval "$(
         -- "$@"
 )"
 
+if [[ -z ${ARGS:-} ]] || [[ ${#ARGS[@]} -lt 2 ]]; then
+    echo "Usage: $(basename $0) <REMOTE_LOCATION> <LOCAL_LOCATION>"
+    exit
+fi
+
 WHAT=${ARGS[0]}
 WHERE=${ARGS[1]}
 
@@ -16,6 +21,11 @@ ESCAPED=$(systemd-escape $WHERE)
 
 if [[ $ESCAPED == -* ]]; then
     ESCAPED=$(cut -d - -f 2- <<<"$ESCAPED")
+fi
+
+if [[ -e /etc/systemd/system/$ESCAPED.mount ]]; then
+    echo "Mount file already exists"
+    exit
 fi
 
 cat <<EOF | tee /etc/systemd/system/$ESCAPED.mount
