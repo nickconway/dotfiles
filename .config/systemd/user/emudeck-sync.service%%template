@@ -1,0 +1,6 @@
+[Unit]
+Description=EmuDeck sync
+
+[Service]
+Type=oneshot
+ExecStart=$HOME/.local/bin/_sync emudeck
