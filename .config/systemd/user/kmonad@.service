@@ -1,0 +1,10 @@
+[Unit]
+Description=Kmonad %i
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/sudo /usr/bin/kmonad %h/.config/kmonad/%i.kbd
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

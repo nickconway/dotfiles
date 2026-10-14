@@ -3,4 +3,4 @@ Description=EmuDeck sync
 
 [Service]
 Type=oneshot
-ExecStart=$HOME/.local/bin/_sync emudeck
+ExecStart=bash -lc "%h/.local/bin/_sync emudeck"

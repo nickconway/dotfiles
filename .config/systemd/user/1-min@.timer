@@ -1,0 +1,9 @@
+[Unit]
+Description=Run %i every minute
+
+[Timer]
+OnCalendar=*:*
+Unit=%i.service
+
+[Install]
+WantedBy=timers.target
