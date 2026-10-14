@@ -39,26 +39,17 @@ if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
     fi
 fi
 
+get-vars env ~/.config/env.example ~/.env
+
 if command -v termux-reload-settings >/dev/null; then
     apt update -y && apt upgrade -y
     pkg install openssh starship rust termux-api gnupg fzf dnsutils zsh tmux python3 yq imagemagick binutils pass bat git-delta fd ripgrep zoxide gh -y
-    mkdir -p ~/.config/zsh
-    [[ -e ~/.config/zsh/zsh-autosuggestions ]] || git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
-    [[ -e ~/.config/zsh/zsh-completions ]] || git clone https://github.com/zsh-users/zsh-completions ~/.config/zsh/zsh-completions
-    [[ -e ~/.config/zsh/zsh-syntax-highlighting ]] || git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.config/zsh/zsh-syntax-highlighting
-    [[ -e ~/.config/zsh/zsh-defer ]] || git clone https://github.com/romkatv/zsh-defer ~/.config/zsh/zsh-defer
-    [[ -e ~/.config/zsh/fzf-tab ]] || git clone https://github.com/nickconway/fzf-tab ~/.config/zsh/fzf-tab -b feat/tmux-popup-follow-cursor
     cd ~
     GPG_TTY=$(tty)
     export GPG_TTY
-    yadm decrypt
-    yadm alt
-    yadm list -a -d -e | grep '%%template' | make-templates
     chsh -s zsh
     exit
 fi
-
-get-vars env ~/.config/env.example
 
 if command -v steamos-readonly &>/dev/null; then
     if [[ ! -e /etc/sudoers.d/z_deck ]]; then

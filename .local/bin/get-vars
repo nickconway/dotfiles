@@ -27,7 +27,12 @@ function get-input() {
     INPUT="$(eval "echo $INPUT")"
 }
 
-case $1 in
+function help() {
+    echo "Usage: $(basename $0) <TYPE> <TEMPLATE_FILE> <OUTPUT_FILE>"
+    exit
+}
+
+case ${1:-} in
 env)
     FILE=${2:-env.example}
     OUTPUT=${3:-.env}
@@ -42,6 +47,8 @@ ansible)
     FILE=${2:-vars.example.yml}
     OUTPUT=${3:-vars.yml}
     ;;
+
+*) help ;;
 esac
 
 touch "$OUTPUT"
