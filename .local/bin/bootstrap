@@ -88,6 +88,10 @@ if command -v steamos-readonly &>/dev/null; then
 
     if [[ ! -e $HOME/homebrew/services/PluginLoader ]]; then
         curl -fsSL https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_prerelease.sh | sh
+        sudo systemctl stop plugin_loader
+        gh api "$(gh api "/repos/nickconway/decky-loader/actions/runs/$(gh api "/repos/nickconway/decky-loader/actions/runs" | jq '[.workflow_runs[] | select(.name == "Builder (Linux, x86_64)")] | first.id')/artifacts" | jq -r '.artifacts[].archive_download_url')" >/tmp/PluginLoader.zip
+        sudo unzip -o -d $HOME/homebrew/services /tmp/PluginLoader.zip
+        sudo systemctl start plugin_loader
         decky-install-plugins
     fi
 fi
