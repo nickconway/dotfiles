@@ -28,7 +28,7 @@ if [[ -n "${FILES:-}" ]] && [[ ${#FILES} -gt 0 ]]; then
         -c
         "':set nohlsearch | :argdo %s/$FIND/$REPLACE/g${F:-} | update'"
         -c
-        qa
+        "':noautocmd wqall'"
     )
 
     if [[ -n "$TMUX" ]]; then
