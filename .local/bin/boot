@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ENTRY="$(grep -i "$1" /boot/grub/grub.cfg | cut -d "'" -f 2)"
+if [[ $# -lt 1 ]]; then
+    ENTRY="$(grep "menuentry '" /boot/grub/grub.cfg | cut -d "'" -f 2 | fzf)"
+else
+    ENTRY="$(grep -i "$1" /boot/grub/grub.cfg | cut -d "'" -f 2)"
+fi
+
 sudo grub-reboot "$ENTRY"
 systemctl reboot
