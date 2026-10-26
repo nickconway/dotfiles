@@ -731,6 +731,7 @@ alias ycla="yadm config --add local.class"
 alias yclu="yadm config --unset-all local.class"
 alias ydec="yadm decrypt"
 alias yenc="yadm encrypt"
+alias yls=$'yadm ls-files -s | grep -v \'^16\' | awk \'{print $4}\''
 
 function yec() {
     (
