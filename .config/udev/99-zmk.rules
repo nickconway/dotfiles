@@ -1,0 +1,2 @@
+ACTION=="add", SUBSYSTEM=="*", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="615e", ATTR{power/wakeup}="enabled"
+ACTION=="add", SUBSYSTEM=="*", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="615e", RUN="/bin/bash -c 'echo enabled > /sys%E{DEVPATH}/power/wakeup'"
