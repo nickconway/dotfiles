@@ -163,7 +163,21 @@ map("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>")
 
 map("n", "<leader>/", "*", "Search word under cursor")
 map("n", "<leader><A-/>", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], "Replace word under cursor", { silent = false })
-map("n", "<leader><leader>/", "*1Q", "Multi-cursors at word under cursor")
+map("n", "<leader><leader>/", "zq*", "Multi-cursors at word under cursor")
+map(
+    "n",
+    "<leader><leader><A-/>",
+    [[:bufdo %s/\<<C-r><C-w>\>//g<Left><Left>]],
+    "Replace word under cursor (Buffers)",
+    { silent = false }
+)
+map(
+    "n",
+    "<leader><leader><leader><A-/>",
+    [[:grep! <C-r><C-w><CR>:cfdo %s/\<<C-r><C-w>\>//g<Left><Left>]],
+    "Replace word under cursor (Global)",
+    { silent = false }
+)
 
 map("n", "<leader>X", "<cmd>!chmod +x %<CR>", "Make file executable")
 
