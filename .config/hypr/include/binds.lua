@@ -268,3 +268,6 @@ end)
 Bind({ MainMod, "F" }, function()
     Focus("feishin")
 end)
+
+Bind({ "ALT", "SHIFT", "Return" }, hl.dsp.exec_cmd("handy --toggle-transcription"))
+Bind({ "ALT", "SHIFT", "Return" }, hl.dsp.exec_cmd("handy --toggle-transcription"), { release = true })

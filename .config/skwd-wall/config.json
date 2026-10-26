@@ -121,7 +121,10 @@
       "displayMode": "wall",
       "sliceSpacing": -30,
       "hexScrollStep": 1,
-      "customPresets": {}
+      "customPresets": {},
+      "gridRows": 6,
+      "gridThumbWidth": 160,
+      "gridThumbHeight": 90
     }
   },
   "wallpaperMute": true,
