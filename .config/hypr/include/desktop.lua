@@ -6,6 +6,8 @@ hl.monitor({ output = "DP-1", mode = "3840x2160@240", scale = "1.33", bitdepth =
 hl.monitor({ output = "DP-2", mode = "3840x2160@120", scale = "1.33", bitdepth = 10, position = "-2880x0" })
 hl.monitor({ output = "DP-3", mode = "3840x2160@120", scale = "1.33", bitdepth = 10, position = "2880x0" })
 
+hl.window_rule({ match = { class = "vesktop" }, workspace = 2 })
+
 hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 1 silent] zen-browser")
     hl.exec_cmd("[workspace 2 silent] vesktop")
