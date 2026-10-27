@@ -79,3 +79,18 @@ end
 Volume = function(change)
     hl.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ " .. math.abs(change) .. "%" .. (change < 0 and "-" or "+"))
 end
+
+Open = function(cmd, wait_for)
+    local is_workspace = string.find(cmd, "%[workspace", 1, false)
+    local workspace_idx = string.find(cmd, "]", 1, false)
+    local workspace = is_workspace and string.sub(cmd, 1, workspace_idx) or ""
+
+    if workspace_idx then
+        cmd = string.sub(cmd, workspace_idx + 1)
+    end
+
+    wait_for = wait_for and ("until hyprctl clients | grep -i " .. wait_for .. "; do sleep 1; done;") or ""
+
+    cmd = workspace .. " " .. wait_for .. " " .. cmd
+    hl.exec_cmd(cmd)
+end

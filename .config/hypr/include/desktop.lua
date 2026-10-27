@@ -7,14 +7,22 @@ hl.monitor({ output = "DP-2", mode = "3840x2160@120", scale = "1.33", bitdepth =
 hl.monitor({ output = "DP-3", mode = "3840x2160@120", scale = "1.33", bitdepth = 10, position = "2880x0" })
 
 hl.window_rule({ match = { class = "vesktop" }, workspace = 2 })
+hl.window_rule({ match = { class = "chrome-x.com__-Default" }, workspace = 3 })
+hl.window_rule({ match = { class = "chrome-messages.google.com__web-Default" }, workspace = 3 })
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 1 silent] zen-browser")
-    hl.exec_cmd("[workspace 2 silent] vesktop")
+
     hl.exec_cmd("[workspace 2 silent] betterbird")
+    Open("[workspace 2 silent] vesktop", "betterbird")
+
     hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
-    hl.exec_cmd("[workspace 3 silent] chromium --app='https://messages.google.com/web'")
-    hl.exec_cmd("[workspace 3 silent] sleep 1 && chromium --app='https://x.com'")
+    Open("[workspace 3 silent] chromium --app='https://x.com'", "feishin")
+    Open("[workspace 3 silent] chromium --app='https://messages.google.com/web'", "x.com")
+
+    hl.exec_cmd(
+        [[sleep 3 && pulsar-mouse-gui & until hyprctl clients | grep -i pulsar; do sleep 1; done; hyprctl dispatch 'hl.dsp.window.close({ window = "class:io.github.packerlschupfer.PulsarMouse" })' && hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })']]
+    )
 end)
 
 hl.timer(function()
