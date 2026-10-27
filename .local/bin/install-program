@@ -213,4 +213,12 @@ moondeck | moondeckbuddy)
         systemctl --user restart moondeckbuddy moondeckbuddy-gui-session
     fi
     ;;
+
+pulsar)
+    cd "$PROJECT_DIR"
+    git clone https://github.com/packerlschupfer/pulsar-mouse-linux &>/dev/null || true
+    cd pulsar-mouse-linux/packaging
+    git pull 2>/dev/null
+    makepkg -si
+    ;;
 esac
