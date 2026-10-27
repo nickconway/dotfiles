@@ -23,6 +23,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd(
         [[sleep 3 && pulsar-mouse-gui & until hyprctl clients | grep -i pulsar; do sleep 1; done; hyprctl dispatch 'hl.dsp.window.close({ window = "class:io.github.packerlschupfer.PulsarMouse" })' && hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })']]
     )
+
+    hl.exec_cmd("_log notify mouse-battery")
 end)
 
 hl.timer(function()

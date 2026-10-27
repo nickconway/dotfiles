@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "$1" in
+mouse-battery)
+    if ! command -v pulsar-mouse &>/dev/null; then
+        exit 1
+    fi
+
+    while true; do
+        BL=$(
+            if [[ $(pulsar-mouse --battery-json | jq .power_connected) == false ]]; then
+                pulsar-mouse --battery-json | jq .battery_percent || echo 100
+            else
+                echo 100
+            fi
+        )
+
+        if [[ $BL -lt 10 ]]; then
+            notify-send -u critical "Mouse Battery Level" "Battery is at $BL%"
+        fi
+
+        sleep 1
+    done
+    ;;
+
+*) notify-send $* ;;
+esac
