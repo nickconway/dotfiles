@@ -27,7 +27,7 @@ eval "$(
         "$@"
 )"
 
-topgrade -y --no-retry || true
+topgrade -y --no-retry --auto-retry 3 ${ARGS[*]} || true
 
 NOTIFICATION_TITLE="Upgrade"
 TERM_PROMPTS="Y,n"
