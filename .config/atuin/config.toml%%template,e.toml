@@ -230,3 +230,8 @@ socket_path = "$XDG_RUNTIME_DIR/atuin.sock"
 
 ## The port that should be used for TCP on non unix systems
 # tcp_port = 8889
+
+[tmux]
+enabled = true
+width = "80%"
+height = "60%"
