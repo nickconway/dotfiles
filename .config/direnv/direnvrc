@@ -81,12 +81,13 @@ use_nvm() {
 
 export-function() {
   local name=$1
-  local alias_dir="$PWD/.direnv/aliases"
+  local alias_dir="$PWD/.direnv/functions"
   mkdir -p "$alias_dir"
   PATH_add "$alias_dir"
   local target="$alias_dir/$name"
   if declare -f "$name" >/dev/null; then
-    echo "#!$SHELL" > "$target"
+    echo "#!/usr/bin/env bash" > "$target"
+    echo "set -euo pipefail" >> "$target"
     declare -f "$name" >> "$target" 2>/dev/null
     echo "$name \$*" >> "$target"
     chmod +x "$target"
@@ -105,6 +106,7 @@ export-alias() {
   fi
 
   echo "#!/usr/bin/env bash" > "$target"
+  echo "set -euo pipefail" > "$target"
   echo "PATH=$oldpath" >> "$target"
   echo "$@" >> "$target"
   chmod +x "$target"
