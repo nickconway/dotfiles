@@ -39,6 +39,7 @@ alias pf='fastfetch'
 alias ff='fastfetch'
 
 alias atuin-login='atuin login -u "$ATUIN_USER" -p "$ATUIN_PASSWORD" -k "$ATUIN_KEY"'
+alias atuin-rekey='atuin store rekey "$ATUIN_KEY"'
 
 alias bat='bat --style=plain'
 
