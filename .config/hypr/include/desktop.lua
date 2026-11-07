@@ -14,11 +14,11 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 1 silent] zen-browser")
 
     hl.exec_cmd("[workspace 2 silent] betterbird")
-    Open("[workspace 2 silent] vesktop", "betterbird")
+    Exec("[workspace 2 silent] vesktop", { wait_for = "betterbird" })
 
     hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
-    Open("[workspace 3 silent] chromium --app='https://x.com'", "feishin")
-    Open("[workspace 3 silent] chromium --app='https://messages.google.com/web'", "x.com")
+    Exec("[workspace 3 silent] chromium --app='https://x.com'", { wait_for = "feishin" })
+    Exec("[workspace 3 silent] chromium --app='https://messages.google.com/web'", { wait_for = "x.com" })
 
     hl.exec_cmd(
         [[sleep 3 && pulsar-mouse-gui & until hyprctl clients | grep -i pulsar; do sleep 1; done; hyprctl dispatch 'hl.dsp.window.close({ window = "class:io.github.packerlschupfer.PulsarMouse" })' && hyprctl dispatch 'hl.dsp.focus({ monitor = 0 })']]

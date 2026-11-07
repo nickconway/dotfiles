@@ -45,8 +45,8 @@ Bind({ MainMod, "R" }, hl.dsp.exec_cmd("toggle bit-depth"))
 
 Bind({ MainMod, "P" }, hl.dsp.exec_cmd("RBW_PROFILE=gui nohup picker password &>/dev/null"))
 
-Bind({ MainMod, "SUPER_L" }, hl.dsp.exec_cmd("toggle bar"))
-Bind({ MainMod, "SUPER_R" }, hl.dsp.exec_cmd("toggle bar"))
+Bind({ MainMod, "SUPER_L" }, hl.dsp.exec_cmd("toggle bar"), { release = true })
+Bind({ MainMod, "SUPER_R" }, hl.dsp.exec_cmd("toggle bar"), { release = true })
 
 Bind(
     { MainMod, "SHIFT", "C" },
