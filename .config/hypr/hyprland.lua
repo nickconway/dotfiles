@@ -1,7 +1,10 @@
+if pcall(require, "include.colors") then
+    require("include.colors")
+end
+
 require("include.utils")
 require("include.animations")
 require("include.binds")
-require("include.colors")
 require("include.config")
 require("include.env")
 require("include.gestures")
