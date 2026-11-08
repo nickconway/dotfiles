@@ -4,8 +4,6 @@
     "path": "$HOME/.config/darkreader/pywal",
     "type": "stdio",
     "allowed_origins": [
-        "chrome-extension://gidgehhdgebooieidpcckaphjbfcghpe/",
-        "chrome-extension://hjoipmcngnnckaljdhndonpajpnfjnpm/",
-        "chrome-extension://deiiillmdpaflfgikbeapnebbolopanc/"
+        "chrome-extension://$DARKREADER_ID/"
     ]
 }

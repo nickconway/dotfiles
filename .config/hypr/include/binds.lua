@@ -3,7 +3,8 @@ MainMod = "SUPER"
 Bind({ MainMod, "SHIFT", "O" }, function()
     if hl.plugin.darkwindow and BackgroundRed and BackgroundGreen and BackgroundBlue then
         hl.plugin.darkwindow.dsp_shade({
-            shader = "multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=["
+            shader =
+                "multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=["
                 .. BackgroundRed
                 .. " "
                 .. BackgroundGreen
@@ -169,10 +170,10 @@ Bind({ MainMod, "SHIFT", "mouse:273" }, hl.dsp.window.resize(), { mouse = true }
 Bind({ MainMod, "Z" }, Zoom)
 Bind({ MainMod, "SHIFT", "Z" }, function()
     Zoom(0.5)
-end)
+end, { repeating = true })
 Bind({ MainMod, "ALT", "Z" }, function()
     Zoom(-0.5)
-end)
+end, { repeating = true })
 
 local StartX = 0
 local StartY = 0
@@ -269,5 +270,5 @@ Bind({ MainMod, "F" }, function()
     Focus("feishin")
 end)
 
-Bind({ "ALT", "SHIFT", "Return" }, hl.dsp.exec_cmd("handy --toggle-transcription"))
-Bind({ "ALT", "SHIFT", "Return" }, hl.dsp.exec_cmd("handy --toggle-transcription"), { release = true })
+Bind({ "ALT", "SHIFT", "SPACE" }, hl.dsp.exec_cmd("handy --toggle-transcription"))
+Bind({ "ALT", "SHIFT", "SPACE" }, hl.dsp.exec_cmd("handy --toggle-transcription"), { release = true })

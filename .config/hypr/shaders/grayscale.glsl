@@ -1,4 +1,4 @@
-uniform float scale;
+uniform float amount;
 
 void windowShader(inout vec4 color) {
     float shade = (color.r + color.g + color.b) / 3.0;
@@ -8,7 +8,7 @@ void windowShader(inout vec4 color) {
 
     vec3 difference = c - gray;
 
-    vec3 result = c - (scale * difference);
+    vec3 result = c - (amount * difference);
 
     color.rgb = result;
 }

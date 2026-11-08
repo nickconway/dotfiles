@@ -36,6 +36,11 @@
     --mention-foreground: {color3};
 }
 
-body, .bg__960e4, .layers__960e4, .appMount__51fd7, .app__160d8, .tabBody__133bf {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+body, #app-mount, .container_H5ozaj, .actionButton_5GqXgh, .scrollableContainer_2x8-Qn, .channelTextArea_z_gUBg, .chatContent_z_gUBg, .bg__960e4, .layers__960e4, .appMount__51fd7, .app__160d8, .tabBody__133bf, .images-dark, .base_pog620, .tabBody_zrUwGA, .refresh-active-now, .itemCard_-7KzVR, .sidebarList_pog62O, .privateChannels_u88IQl, .scroller_Bce46W, .panels_pog62O {
+    background-color: {background} !important;
+}
+
+.images-dark::after, .sidebar_pog620::after, .children_ybUK7Z::after {
+    background-color: transparent !important;
+    opacity: 0 !important;
 }

@@ -112,13 +112,11 @@ quickshell)
     ;;
 
 sol | sleep-on-lan)
-    mkdir -p $HOME/.local/sol
-    wget https://github.com/SR-G/sleep-on-lan/releases/download/1.1.1-RELEASE/SleepOnLAN-1.1.1-RELEASE.zip
-
-    mv SleepOnLAN-1.1.1-RELEASE.zip $HOME/.local/sol
-    cd $HOME/.local/sol
-    unzip ./SleepOnLAN-1.1.1-RELEASE.zip
-    rm ./SleepOnLAN-1.1.1-RELEASE.zip
+    mkdir -p /opt/sleep-on-lan
+    curl -fsSL https://github.com/SR-G/sleep-on-lan/releases/download/1.1.1-RELEASE/SleepOnLAN-1.1.1-RELEASE.zip -o /opt/sleep-on-lan/sol.zip
+    cd /opt/sleep-on-lan
+    unzip ./sol.zip
+    rm ./sol.zip
 
     cat <<EOF >/etc/systemd/system/sleep-on-lan.service
 [Unit]
@@ -127,7 +125,7 @@ StartLimitIntervalSec=500
 StartLimitBurst=5
 
 [Service]
-ExecStart=$HOME/.local/sol/linux_amd64/sol
+ExecStart=/opt/sleep-on-lan/linux_amd64/sol
 Restart=on-failure
 RestartSec=5s
 
@@ -145,17 +143,7 @@ sunshine)
     ;;
 
 yeetmouse)
-    shift
-
-    FORCE=false
-    if [[ "${1:-}" == "--force" ]]; then
-        FORCE=true
-    fi
-
-    UNINSTALL=false
-    if [[ "${1:-}" == "--uninstall" ]]; then
-        UNINSTALL=true
-    fi
+    eval "$(get-options "-f, --force: FORCE=true" "-u, --uninstall: UNINSTALL=true" -- "$@")"
 
     YEETMOUSE_DIR="$PROJECT_DIR/YeetMouse"
 
@@ -168,18 +156,24 @@ yeetmouse)
     cd "$YEETMOUSE_DIR"
     git pull
 
-    if [[ "$FORCE" == true ]] || [[ "$UNINSTALL" == true ]]; then
+    if [[ "${FORCE:-}" == true ]] || [[ "${UNINSTALL:-}" == true ]]; then
         ./uninstall.sh
     fi
 
-    if [[ "$UNINSTALL" != true ]]; then
-        if ! grep -q yeetmouse <(lsmod) || [[ "$FORCE" == "true" ]]; then
-            ./install.sh
+    if [[ "${UNINSTALL:-}" != true ]]; then
+        if ! grep -q yeetmouse <(lsmod) || [[ "${FORCE:-}" == "true" ]]; then
+            if command -v pacman &>/dev/null; then
+                make pkgarch
+                sudo pacman -U yeetmouse*.zst
+                sudo modprobe yeetmouse
+                sudo usermod -a -G yeetmouse "$USER"
+            else
+                ./install.sh
+                yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
+                cp ~/.config/yeetmouse/$HOSTNAME /etc/yeetmouse.conf
+            fi
         fi
     fi
-
-    yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
-    cp ~/.config/yeetmouse/$HOSTNAME /etc/yeetmouse.conf
     ;;
 
 zephyr | zephyr-sdk)

@@ -10,7 +10,9 @@ function healthcheck() {
 }
 
 function clean() {
-    sudo chown -R "$USER:$USER" ~/.{cache,config}/borg
+    if [[ -e ~/.cache/borg ]]; then
+        sudo chown -R "$USER:$USER" ~/.{cache,config}/borg
+    fi
 }
 
 trap clean EXIT

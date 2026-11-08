@@ -28,7 +28,7 @@
     --theme-colors-foreground: {foreground};
     --theme-colors-foreground-muted: {color8};
 
-    --theme-colors-background-alternate: {background.lighten(5%)};
+    --theme-colors-background-alternate: {background.darken(10%)};
 
     --theme-colors-primary: {color1};
     --theme-colors-primary-filled: {color1};

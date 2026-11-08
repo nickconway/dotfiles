@@ -154,7 +154,7 @@ function gcf() {
 alias gcm='git commit -m'
 
 function gcl() {
-    gh repo clone "$@" -- --recurse-submodules || git clone --recurse-submodules "$@"
+    gh repo clone "$@" -- --recurse-submodules || gt repo clone "$@" -- --recurse-submodules || git clone --recurse-submodules "$@"
 }
 
 function gco() {
@@ -579,8 +579,8 @@ function repos() {
     (
         set -euo pipefail
         cd "$PROJECT_DIR" || return
-        gh repo list --json name -q ".[].name" | run "gh repo $*"
-        curl -fsSL -H "Authorization: token $GITEA_TOKEN" "https://git.$SERVICES_BASE_DOMAIN/api/v1/user/repos?page=1&limit=10000" | jq -r '.[].ssh_url' | run "git $*"
+        gh repo list --json name -q ".[].name" --limit 1000 | run '[[ -e $D ]] || gh repo '$*' $D'
+        gt repo list --json full_name -q ".[].full_name" --limit 1000 | run '[[ -e $(basename $D) ]] || gt repo '$*' $D'
     )
 }
 

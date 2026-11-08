@@ -66,10 +66,6 @@ function show() {
 
 function all-volume() {
     case ${1:-} in
-    show)
-        notify-send "Current volume: $(pamixer --get-volume)%" -h string:synchronous:audio -h int:value:$(pamixer --get-volume) -e
-        ;;
-
     raise)
         pamixer -u
         pamixer -i ${2:-1}
@@ -83,6 +79,11 @@ function all-volume() {
     mute)
         pamixer -t
         ;;
+
+    show | *)
+        notify-send "Current volume: $(pamixer --get-volume)%" -h string:synchronous:audio -h int:value:$(pamixer --get-volume) -e
+        ;;
+
     esac
 }
 
@@ -93,15 +94,17 @@ function volume() {
     fi
 
     case ${1:-} in
-    show)
-        VOL=$(cut -f 1 -d . <<<$(echo "$(playerctl volume) * 100" | bc))
-        notify-send "Current volume: $VOL%" -h string:synchronous:audio -h int:value:$VOL -e
-        ;;
-
     raise) ARG=0.05+ ;;
     lower) ARG=0.05- ;;
+    show | *)
+        VOL=$(cut -f 1 -d . <<<$(echo "$(playerctl volume) * 100" | bc))
+        notify-send "Current volume for $PLAYER: $VOL%" -h string:synchronous:audio -h int:value:$VOL -e
+        ;;
     esac
-    "${PLAYERCTL_CMD[@]}" volume "$ARG"
+
+    if [[ -n "${ARG:-}" ]]; then
+        "${PLAYERCTL_CMD[@]}" volume ${ARG}
+    fi
 }
 
 if type "${ARGS[0]:-}" &>/dev/null; then

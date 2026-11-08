@@ -52,6 +52,10 @@ hl.config({
             ignore_opacity = true,
         },
 
+        motion_blur = {
+            enabled = true
+        },
+
         dim_special = 0,
     },
 

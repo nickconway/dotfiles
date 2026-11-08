@@ -1,10 +1,8 @@
 hl.on("hyprland.start", function()
-    hl.exec_cmd("dbus-update-activation-environment --systemd HYPRLAND_INSTANCE_SIGNATURE")
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
 
-    hl.exec_cmd("quickshell-configs spawn -d || (swaync & waybar & waybar-auto-hide & _log hyprpaper &)")
-
-    hl.exec_cmd("_log hypridle")
+    hl.exec_cmd(
+        "quickshell-configs spawn -d || if command -v noctalia; then noctalia & else (swaync & waybar & waybar-auto-hide & _log hyprpaper & _log hypridle &); fi")
 
     hl.exec_cmd("nm-applet --indicator")
     hl.exec_cmd("blueman-applet")

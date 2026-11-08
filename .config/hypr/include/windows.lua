@@ -13,6 +13,7 @@ local function toggle_game_mode(mode)
         decoration = {
             shadow = { enabled = false },
             blur = { enabled = false },
+            motion_blur = { enabled = false },
             rounding = 0,
         },
     }
@@ -30,7 +31,8 @@ if hl.plugin.darkwindow ~= nil then
     if BackgroundRed then
         hl.window_rule({
             match = { fullscreen = "false" },
-            ["darkwindow:shade"] = "multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=["
+            ["darkwindow:shade"] =
+                "multi-chroma count=2 similarity[0]=0.1 similarity[1]=0.02 amount[0]=1.4 amount[1]=1.4 targetOpacity[0]=0.83 targetOpacity[1]=0.83 bg[0]=["
                 .. BackgroundRed
                 .. " "
                 .. BackgroundGreen
@@ -145,19 +147,17 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, roundi
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
 
-local game_classes = { "steam_app_.*", "gamescope.*", "lutris_.*", "com.moonlight.*" }
-local game_mode_classes = { "steam_app_.*", "gamescope.*", "lutris_.*" }
+local game_classes = "^(steam_app|gamescope|lutris|com.moonlight).*$"
+local game_mode_classes = { "steam_app*", "gamescope.*", "lutris.*" }
 
-for _, c in ipairs(game_classes) do
-    hl.window_rule({
-        workspace = "name:game",
-        monitor = 0,
-        opacity = "1.0 override",
-        match = {
-            class = c,
-        },
-    })
-end
+hl.window_rule({
+    workspace = "name:game",
+    monitor = 0,
+    opacity = "1.0 override",
+    match = {
+        class = game_classes,
+    },
+})
 
 hl.on("window.active", function()
     for _, w in ipairs(hl.get_windows()) do
@@ -174,12 +174,10 @@ end)
 
 hl.on("window.active", function(window)
     local ws = hl.get_active_workspace()
-    if ws == nil or ws.tiled_layout ~= "scrolling" then
-        return
-    end
 
-    if
-        window == nil
+    if ws == nil
+        or ws.tiled_layout ~= "scrolling"
+        or window == nil
         or window.floating
         or window.workspace == nil
         or window.layout == nil
@@ -234,6 +232,8 @@ hl.on("window.title", function(w)
         end
     end
 end)
+
+hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0 })
 
 hl.on("window.open", function(w)
     if not w.floating and hl.get_active_special_workspace() then
