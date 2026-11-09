@@ -148,7 +148,7 @@ hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_s
 hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
 
 local game_classes = "^(steam_app|gamescope|lutris|com.moonlight).*$"
-local game_mode_classes = { "steam_app*", "gamescope.*", "lutris.*" }
+local game_mode_classes = { "steam_app.*", "gamescope.*", "lutris.*" }
 
 hl.window_rule({
     workspace = "name:game",
