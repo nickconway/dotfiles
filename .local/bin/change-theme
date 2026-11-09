@@ -173,6 +173,9 @@ if [[ ${noctalia:-false} == false ]]; then
         }
 fi
 
+command -v noctalia-greeter &>/dev/null && sudo noctalia-greeter passwordless-sync enable "$USER" &>/dev/null
+command -v noctalia &>/dev/null && noctalia msg greeter-sync &>/dev/null
+
 dms ipc call wallpaper set "$IMG" &>/dev/null ||
     {
         FILE="$HOME/.local/state/DankMaterialShell/session.json"
