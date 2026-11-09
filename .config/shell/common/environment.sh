@@ -236,3 +236,5 @@ else
 fi
 
 export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
+
+export GITEA_CLI_HOST=git.$SERVICES_BASE_DOMAIN
