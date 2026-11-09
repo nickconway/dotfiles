@@ -51,8 +51,10 @@ Bind({ MainMod, "SUPER_R" }, hl.dsp.exec_cmd("toggle bar"), { release = true })
 
 Bind(
     { MainMod, "SHIFT", "C" },
-    hl.dsp.exec_cmd("if command -v skwd &>/dev/null; then skwd wall toggle; else _log change-theme; fi")
+    hl.dsp.exec_cmd(
+        "if command -v skwd &>/dev/null; then skwd wall toggle; else hyprctl dispatch \"hl.dsp.workspace.toggle_special('theme')\"; fi")
 )
+
 Bind({ MainMod, "Grave" }, hl.dsp.workspace.toggle_special("scratch"))
 Bind({ MainMod, "SHIFT", "U" }, hl.dsp.workspace.toggle_special("update"))
 

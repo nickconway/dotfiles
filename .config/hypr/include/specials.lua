@@ -9,7 +9,7 @@ hl.on("workspace.created", function()
                 "[size (monitor_w*0.75) (monitor_h*0.75); float; center] kitty tmux new -As Upgrade -e PROMPT_GUI=y inhibit upgrade"
             )
         elseif ws.name == "special:theme" then
-            Exec("[size (monitor_w*0.75) (monitor_h*0.75); float; center] kitty tmux new -As Theme _log change-theme")
+            Exec("[size (monitor_w*0.75) (monitor_h*0.75); float; center] kitty tmux new -As Theme change-theme")
         elseif ws.name == "special:audio" then
             Exec("[size (monitor_w*0.75) (monitor_h*0.75); float; center] pavucontrol")
         elseif ws.name == "special:top" then
