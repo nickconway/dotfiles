@@ -31,6 +31,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("openrgb --startminimized --server")
     hl.exec_cmd("opendeck --hide")
 
+    hl.exec_cmd("pulsar-mouse-gui --start-hidden")
+    hl.exec_cmd("_log notify mouse-battery")
     hl.exec_cmd("_log ups-commands")
 
     hl.exec_cmd("hyprctl output create headless Sunshine")

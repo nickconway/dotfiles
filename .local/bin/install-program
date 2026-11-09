@@ -169,10 +169,12 @@ yeetmouse)
                 sudo usermod -a -G yeetmouse "$USER"
             else
                 ./install.sh
-                yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
-                cp ~/.config/yeetmouse/$HOSTNAME /etc/yeetmouse.conf
             fi
         fi
+
+        sudo systemctl enable --now yeetmouse.service
+        yeetmousectl apply ~/.config/yeetmouse/$HOSTNAME
+        sudo cp ~/.config/yeetmouse/$HOSTNAME /etc/yeetmouse.conf
     fi
     ;;
 
