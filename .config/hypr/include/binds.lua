@@ -163,9 +163,9 @@ Bind({ MainMod, "mouse_down" }, hl.dsp.focus({ workspace = "e+1" }))
 Bind({ MainMod, "mouse_up" }, hl.dsp.focus({ workspace = "e-1" }))
 
 Bind({ MainMod, "mouse:272" }, hl.dsp.window.drag(), { mouse = true })
-Bind({ MainMod, "SHIFT", "mouse:272" }, hl.dsp.window.resize(), { mouse = true })
+Bind({ MainMod, "SHIFT", "mouse:272" }, hl.dsp.window.resize({ keep_aspect_ratio = true }), { mouse = true })
 Bind({ MainMod, "mouse:273" }, hl.dsp.window.resize(), { mouse = true })
-Bind({ MainMod, "SHIFT", "mouse:273" }, hl.dsp.window.resize(), { mouse = true })
+Bind({ MainMod, "SHIFT", "mouse:273" }, hl.dsp.window.resize({ keep_aspect_ratio = true }), { mouse = true })
 
 Bind({ MainMod, "Z" }, Zoom)
 Bind({ MainMod, "SHIFT", "Z" }, function()
@@ -210,8 +210,8 @@ local function cloneEnd()
     hl.dispatch(hl.dsp.exec_cmd("kitty", { float = true, move = { x, y }, size = { w, h } }))
 end
 
-Bind({ MainMod, "ALT", "mouse:272" }, cloneStart, { description = "Start dragging a kitty", mouse = true })
-Bind({ MainMod, "ALT", "mouse:272" }, cloneEnd, { description = "End dragging a kitty", mouse = true, release = true })
+Bind({ MainMod, "ALT", "mouse:272" }, cloneStart, { description = "Start dragging a kitty" })
+Bind({ MainMod, "ALT", "mouse:272" }, cloneEnd, { description = "End dragging a kitty", release = true })
 
 Bind({ MainMod, "SHIFT", "T" }, function()
     local ws = hl.get_active_workspace()
