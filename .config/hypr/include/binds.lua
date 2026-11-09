@@ -66,7 +66,7 @@ Bind({ MainMod, "O" }, function()
     if ws.tiled_layout == "scrolling" then
         hl.plugin.scrolloverview.overview("toggle")
     else
-        hl.dsp.exec_cmd("hyprctl dispatch overview:toggle")
+        hl.plugin.overview.toggle(arg)
     end
 end)
 
