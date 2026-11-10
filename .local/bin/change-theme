@@ -5,6 +5,20 @@ if [[ -e ~/.env ]]; then
     source ~/.env
 fi
 
+PROJECT_DIR="$(
+    if command -v xdg-user-dir &>/dev/null; then
+        xdg-user-dir PROJECTS
+    fi
+)"
+
+PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
+
+if [[ "$PROJECT_DIR" == "$HOME" ]]; then
+    export PROJECT_DIR="${HOME}/Projects"
+else
+    export PROJECT_DIR
+fi
+
 function _cp() {
     if [[ ! -e "$1" ]]; then return; fi
     local DIR
