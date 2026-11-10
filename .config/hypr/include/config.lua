@@ -86,7 +86,7 @@ hl.config({
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
         enable_swallow = true,
-        swallow_regex = "^(kitty)$",
+        swallow_regex = "(kitty|ghostty|[Kk]onsole|Alacritty|gnome-terminal|xfce[0-9]?-terminal)",
         initial_workspace_tracking = 2,
         initial_workspace_token_timeout = 30,
     },

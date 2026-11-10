@@ -26,9 +26,9 @@ hl.layer_rule({ match = { namespace = "quickshell" }, blur = true })
 hl.layer_rule({ match = { namespace = "quickshell" }, blur_popups = true })
 hl.layer_rule({ match = { namespace = "quickshell" }, ignore_alpha = 1 })
 
-hl.layer_rule({ match = { namespace = "noctalia-background-.*$" }, blur = true })
-hl.layer_rule({ match = { namespace = "noctalia-background-.*$" }, blur_popups = true })
-hl.layer_rule({ match = { namespace = "noctalia-background-.*$" }, ignore_alpha = 0.5 })
+hl.layer_rule({ match = { namespace = "noctalia.*$" }, blur = true })
+hl.layer_rule({ match = { namespace = "noctalia.*$" }, blur_popups = true })
+hl.layer_rule({ match = { namespace = "noctalia.*$" }, ignore_alpha = 0.5 })
 
 hl.layer_rule({ match = { namespace = "dms.*" }, blur = true })
 hl.layer_rule({ match = { namespace = "dms.*" }, blur_popups = true })

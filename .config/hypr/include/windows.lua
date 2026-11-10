@@ -68,84 +68,60 @@ hl.window_rule({
     border_size = 1,
 })
 
-hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
-hl.window_rule({ match = { class = ".*" }, idle_inhibit = "fullscreen" })
+hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize", idle_inhibit = "fullscreen" })
 
-hl.window_rule({ match = { class = "^(xwaylandvideobridge)$" }, opacity = "0.0 override" })
-hl.window_rule({ match = { class = "^(xwaylandvideobridge)$" }, no_anim = true })
-hl.window_rule({ match = { class = "^(xwaylandvideobridge)$" }, no_initial_focus = true })
-hl.window_rule({ match = { class = "^(xwaylandvideobridge)$" }, max_size = { 1, 1 } })
+hl.window_rule({ match = { class = "^(xwaylandvideobridge)$" }, opacity = "0.0 override", no_anim = true, no_initial_focus = true, max_size = { 1, 1 }, no_blur = true })
 
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, float = true })
 hl.window_rule({ match = { class = "^(pinentry-gtk)$" }, float = true })
 
-hl.window_rule({ match = { class = "^(xwaylandvideobridge)$" }, no_blur = true })
-
 hl.window_rule({ match = { class = "^(chromium)$" }, opacity = "1.0 override 0.9 override" })
+
 hl.window_rule({
     match = { class = "^(chromium)$, match:title ^(.*YouTube.*)$" },
     opacity = "1.0 override 1.0 override",
 })
-hl.window_rule({ match = { class = "^(zen-alpha)$" }, opacity = "1.0 override 0.9 override" })
+
+hl.window_rule({ match = { class = "^(zen)$" }, opacity = "1.0 override 0.9 override" })
+
 hl.window_rule({
-    match = { class = "^(zen-alpha)$, match:title ^(.*YouTube.*)$" },
+    match = { class = "^(zen)$, match:title ^(.*YouTube.*)$" },
     opacity = "1.0 override 1.0 override",
 })
+
 hl.window_rule({ match = { class = "^(Brave-browser-beta)$" }, opacity = "1.0 override 0.9 override" })
+
 hl.window_rule({
     match = { class = "^(Brave-browser-beta)$, match:title ^(.*YouTube.*)$" },
     opacity = "1.0 override 1.0 override",
 })
 
-hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, float = true })
-hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, pin = true })
-hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, opacity = "1.0 override" })
 hl.window_rule({
     match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" },
+    float = true,
+    pin = true,
+    opacity = "1.0 override",
     move = { "(monitor_w - window_w - 30)", "(monitor_h - window_h-30)" },
+    no_initial_focus = true,
+    keep_aspect_ratio = true
 })
-hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, no_initial_focus = true })
-hl.window_rule({ match = { title = "^([Pp]icture(-| )in(-| )[Pp]icture)$" }, keep_aspect_ratio = true })
 
-hl.window_rule({ match = { title = "^(Discord Popout)$" }, float = true })
-hl.window_rule({ match = { title = "^(Discord Popout)$" }, pin = true })
-hl.window_rule({ match = { title = "^(Discord Popout)$" }, opacity = "1.0 override" })
-hl.window_rule({
-    match = { title = "^(Discord Popout)$" },
-    move = { "(monitor_w - window_w-30)", "(monitor_h - window_h-30)" },
-})
-hl.window_rule({ match = { title = "^(Discord Popout)$" }, no_initial_focus = true })
+hl.window_rule({ match = { title = "^(Discord Popout)$" }, float = true, pin = true, opacity = "1.0 override", move = { "(monitor_w - window_w-30)", "(monitor_h - window_h-30)" }, no_initial_focus = true })
 
 hl.window_rule({ match = { title = "^(_crx_.*)$" }, float = true })
 
-hl.window_rule({ match = { title = "^(Floating Window - Show Me The Key)$" }, float = true })
-hl.window_rule({ match = { title = "^(Floating Window - Show Me The Key)$" }, pin = true })
-hl.window_rule({ match = { title = "^(Floating Window - Show Me The Key)$" }, no_blur = true })
-hl.window_rule({ match = { title = "^(Floating Window - Show Me The Key)$" }, size = { 600, 64 } })
-hl.window_rule({
-    match = { title = "^(Floating Window - Show Me The Key)$" },
-    move = { "(monitor_w - window_w - 30)", "(monitor_h - window_h-30)" },
-})
+hl.window_rule({ match = { title = "^(Floating Window - Show Me The Key)$" }, float = true, pin = true, no_blur = true, size = { 600, 64 }, move = { "(monitor_w - window_w - 30)", "(monitor_h - window_h-30)" } })
 
-hl.window_rule({ match = { class = "^(steam)$, match:title ^(notificationtoasts)" }, no_initial_focus = true })
-hl.window_rule({ match = { class = "^(steam)$, match:title ^(notificationtoasts)" }, pin = true })
+hl.window_rule({ match = { class = "^(steam)$, match:title ^(notificationtoasts)" }, no_initial_focus = true, pin = true })
 
-hl.window_rule({ match = { class = "^(mpv)$" }, center = true })
-hl.window_rule({ match = { class = "^(mpv)$" }, float = true })
-hl.window_rule({ match = { class = "^(mpv)$" }, keep_aspect_ratio = true })
-hl.window_rule({ match = { class = "^(feh)$" }, center = true })
-hl.window_rule({ match = { class = "^(feh)$" }, float = true })
-hl.window_rule({ match = { class = "^(feh)$" }, keep_aspect_ratio = true })
-hl.window_rule({ match = { class = "^(com.gabm.satty)$" }, center = true })
-hl.window_rule({ match = { class = "^(com.gabm.satty)$" }, float = true })
-hl.window_rule({ match = { class = "^(com.gabm.satty)$" }, keep_aspect_ratio = true })
+hl.window_rule({ match = { class = "^(mpv)$" }, center = true, float = true, keep_aspect_ratio = true })
+hl.window_rule({ match = { class = "^(feh)$" }, center = true, float = true, keep_aspect_ratio = true })
+hl.window_rule({ match = { class = "^(com.gabm.satty)$" }, center = true, float = true, keep_aspect_ratio = true })
 
 hl.window_rule({ match = { modal = "true" }, float = true })
 
-hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, rounding = 0 })
-hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]s[false]" }, border_size = 0, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]s[false]" }, border_size = 0, rounding = 0 })
 
 local game_classes = "^(steam_app|gamescope|lutris|com.moonlight).*$"
 local game_mode_classes = { "steam_app.*", "gamescope.*", "lutris.*" }
@@ -154,8 +130,15 @@ hl.window_rule({
     workspace = "name:game",
     monitor = 0,
     opacity = "1.0 override",
+    content = "game",
+    decorate = false,
+    fullscreen_state = 2,
+    size = { "monitor_w", "monitor_h" },
+    sync_fullscreen = true,
     match = {
         class = game_classes,
+        title = "^(.+)$",
+        initial_title = "negative:^(.*\\\\home\\\\.*)$",
     },
 })
 
