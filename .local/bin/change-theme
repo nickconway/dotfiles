@@ -99,49 +99,49 @@ fi
 kitten @ --to unix:$(find /tmp/kitty-socket* | head -n 1) load-config $HOME/.config/kitty/kitty.conf &>/dev/null &
 
 files=(
-    "$IMG $HOME/.config/wallpaper"
-    "$HOME/.cache/wal/colors.sh $HOME/.config/shell/common/colors.sh"
-    "$HOME/.cache/wal/colors-hyprland.lua $HOME/.config/hypr/include/colors.lua"
-    "$HOME/.cache/wal/hyprvim.conf $HOME/.config/hyprvim/theme.conf"
-    "$HOME/.cache/wal/vicinae.toml $HOME/.local/share/vicinae/themes/pywal.toml"
-    "$HOME/.cache/wal/gradience.json $HOME/.config/presets/user/pywal.json"
-    "$HOME/.cache/wal/pywal.kvconfig $HOME/.config/Kvantum/pywal/pywal.kvconfig"
-    "$HOME/.cache/wal/pywal.svg $HOME/.config/Kvantum/pywal/pywal.svg"
-    "$HOME/.cache/wal/colors-k9s.yaml $HOME/.config/k9s/skins/wal.yaml"
-    "$HOME/.cache/wal/colors-gtk.css $HOME/.config/gtk-3.0/gtk.css"
-    "$HOME/.cache/wal/colors-gtk.css $HOME/.config/gtk-4.0/gtk.css"
-    "$HOME/.cache/wal/colors-feishin.css $HOME/.config/feishin/custom.css"
-    "$HOME/.cache/wal/vesktop.css $HOME/.config/vesktop/themes/pywal.theme.css"
-    "$HOME/.cache/wal/vesktop.css $HOME/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css"
-    "$HOME/.cache/wal/colors-noctalia.json $HOME/.config/noctalia/colorschemes/PyWal/PyWal.json"
-    "$HOME/.cache/wal/colors-noctalia.json $HOME/.config/noctalia/colors.json"
-    "$HOME/.cache/wal/caelestia-schema.json $HOME/.local/state/caelestia/scheme.json"
-    "$IMG /var/lib/coolercontrol/plugins/coolerdash/user-background-image"
-    "$IMG /var/lib/coolercontrol/plugins/coolerdash/user-shutdown-image"
+    "$IMG;$HOME/.config/wallpaper"
+    "$HOME/.cache/wal/colors.sh;$HOME/.config/shell/common/colors.sh"
+    "$HOME/.cache/wal/colors-hyprland.lua;$HOME/.config/hypr/include/colors.lua"
+    "$HOME/.cache/wal/hyprvim.conf;$HOME/.config/hyprvim/theme.conf"
+    "$HOME/.cache/wal/vicinae.toml;$HOME/.local/share/vicinae/themes/pywal.toml"
+    "$HOME/.cache/wal/gradience.json;$HOME/.config/presets/user/pywal.json"
+    "$HOME/.cache/wal/pywal.kvconfig;$HOME/.config/Kvantum/pywal/pywal.kvconfig"
+    "$HOME/.cache/wal/pywal.svg;$HOME/.config/Kvantum/pywal/pywal.svg"
+    "$HOME/.cache/wal/colors-k9s.yaml;$HOME/.config/k9s/skins/wal.yaml"
+    "$HOME/.cache/wal/colors-gtk.css;$HOME/.config/gtk-3.0/gtk.css"
+    "$HOME/.cache/wal/colors-gtk.css;$HOME/.config/gtk-4.0/gtk.css"
+    "$HOME/.cache/wal/colors-feishin.css;$HOME/.config/feishin/custom.css"
+    "$HOME/.cache/wal/vesktop.css;$HOME/.config/vesktop/themes/pywal.theme.css"
+    "$HOME/.cache/wal/vesktop.css;$HOME/.var/app/dev.vencord.Vesktop/config/vesktop/themes/pywal.theme.css"
+    "$HOME/.cache/wal/colors-noctalia.json;$HOME/.config/noctalia/colorschemes/PyWal/PyWal.json"
+    "$HOME/.cache/wal/colors-noctalia.json;$HOME/.config/noctalia/colors.json"
+    "$HOME/.cache/wal/caelestia-schema.json;$HOME/.local/state/caelestia/scheme.json"
+    "$IMG;/var/lib/coolercontrol/plugins/coolerdash/user-background-image"
+    "$IMG;/var/lib/coolercontrol/plugins/coolerdash/user-shutdown-image"
 )
 
 if [[ "$(uname)" != "Darwin" ]]; then
     files+=(
-        "$IMG /usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png"
-        "$HOME/.cache/wal/sugar-candy.conf /usr/share/sddm/themes/sugar-candy/theme.conf"
-        "$IMG /usr/share/sddm/themes/ltmnight/Backgrounds/bg.png"
-        "$HOME/.cache/wal/hyprltm.conf /usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof"
+        "$IMG;/usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png"
+        "$HOME/.cache/wal/sugar-candy.conf;/usr/share/sddm/themes/sugar-candy/theme.conf"
+        "$IMG;/usr/share/sddm/themes/ltmnight/Backgrounds/bg.png"
+        "$HOME/.cache/wal/hyprltm.conf;/usr/share/sddm/themes/ltmnight/Themes/hyprltm.cof"
     )
 fi
 
 if [[ -e "$PROJECT_DIR"/thyx/scripts/install ]]; then
-    files+=("$HOME/.cache/wal/thyx.conf $PROJECT_DIR/thyx/theme.conf")
-    files+=("$HOME/.config/wallpaper.png $PROJECT_DIR/thyx/backgrounds/wallpaper.png")
+    files+=("$HOME/.cache/wal/thyx.conf;$PROJECT_DIR/thyx/theme.conf")
+    files+=("$HOME/.config/wallpaper.png;$PROJECT_DIR/thyx/backgrounds/wallpaper.png")
 fi
 
 if [[ "$IMG" == *".png" ]]; then
-    files+=("$HOME/.config/wallpaper $HOME/.config/wallpaper.png")
+    files+=("$HOME/.config/wallpaper;$HOME/.config/wallpaper.png")
 else
     magick ~/.config/wallpaper{,.png} &
 fi
 
 for line in "${files[@]}"; do
-    _cp ${line[*]}
+    _cp "$(echo ${line[*]} | cut -f 1 -d ';')" "$(echo ${line[*]} | cut -f 2 -d ';')"
 done
 
 magick "$IMG" -strip -resize 1000 -gravity center -extent 1000 -quality 90 ~/.cache/wal/wal.thmb &
