@@ -25,7 +25,7 @@ chmod +x ~/.local/bin/yadm
 
 if ! [[ -e ~/.local/share/yadm/nickconway.git ]]; then
     yadm user-config nickconway
-    yadm clone https://github.com/nickconway/dotfiles --no-bootstrap
+    yadm clone https://github.com/nickconway/dotfiles --no-bootstrap --recurse-submodules
     yadm remote set-url origin git@github.com:nickconway/dotfiles.git --push
     yadm decrypt
     yadm alt
