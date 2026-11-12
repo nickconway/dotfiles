@@ -11,14 +11,32 @@ hl.window_rule({ match = { class = "chrome-x.com__-Default" }, workspace = 3 })
 hl.window_rule({ match = { class = "chrome-messages.google.com__web-Default" }, workspace = 3 })
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("[workspace 1 silent] zen-browser")
+    hl.exec_cmd("zen-browser", {
+        workspace = "1 silent"
+    })
 
-    hl.exec_cmd("[workspace 2 silent] betterbird")
-    Exec("[workspace 2 silent] vesktop", { wait_for = "betterbird" })
+    hl.exec_cmd("betterbird", {
+        workspace = "2 silent"
+    })
 
-    hl.exec_cmd("[workspace 3 silent] feishin --ozone-platform-hint=auto --password-store='kwallet6'")
-    Exec("[workspace 3 silent] chromium --app='https://x.com'", { wait_for = "feishin" })
-    Exec("[workspace 3 silent] chromium --app='https://messages.google.com/web'", { wait_for = "x.com" })
+    Exec("vesktop", {
+        rules = { workspace = "2 silent" },
+        wait_for = "betterbird"
+    })
+
+    hl.exec_cmd("feishin --ozone-platform-hint=auto --password-store='kwallet6'", {
+        workspace = "3 silent"
+    })
+
+    Exec("chromium --app='https://x.com'", {
+        rules = { workspace = "3 silent" },
+        wait_for = "feishin"
+    })
+
+    Exec("chromium --app='https://messages.google.com/web'", {
+        rules = { workspace = "3 silent" },
+        wait_for = "x.com"
+    })
 end)
 
 hl.timer(function()

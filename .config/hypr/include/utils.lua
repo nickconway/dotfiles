@@ -83,17 +83,10 @@ end
 Exec = function(cmd, opts)
     opts = opts or {}
 
-    local has_hl_cmd = string.find(cmd, "^%[", 1, false)
-    local end_idx = string.find(cmd, "]", 1, false)
-    local hl_cmd = has_hl_cmd and string.sub(cmd, 1, end_idx) or ""
-
-    if end_idx then
-        cmd = string.sub(cmd, end_idx + 1)
-    end
-
-    local wait_for = opts.wait_for and ("until hyprctl clients | grep -i " .. opts.wait_for .. "; do sleep 1; done;")
+    local wait_for = opts.wait_for and
+        ("until hyprctl clients | grep -i " .. opts.wait_for .. "; do sleep 1; done;")
         or ""
 
-    cmd = hl_cmd .. " " .. wait_for .. " " .. cmd
-    hl.exec_cmd(cmd)
+    cmd = wait_for .. " " .. cmd
+    hl.exec_cmd(cmd, opts.rules or {})
 end
