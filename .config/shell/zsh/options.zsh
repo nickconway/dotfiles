@@ -119,6 +119,8 @@ if [[ -e ~/.config/zsh/fzf-tab/fzf-tab.zsh ]]; then
 
     zstyle ':fzf-tab:*' switch-group '<' '>'
     zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+    autoload -U compinit; compinit
 fi
 
 set -o vi
