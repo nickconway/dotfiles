@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ $# -lt 1 ]]; then
-    ENTRY="$(grep "menuentry '" /boot/grub/grub.cfg | cut -d "'" -f 2 | fzf)"
-else
-    ENTRY="$(grep -i "$1" /boot/grub/grub.cfg | cut -d "'" -f 2)"
-fi
+if command -v grub-reboot &>/dev/null; then
+    if [[ $# -lt 1 ]]; then
+        ENTRY="$(grep "menuentry '" /boot/grub/grub.cfg | cut -d "'" -f 2 | fzf)"
+    else
+        ENTRY="$(grep -i "$1" /boot/grub/grub.cfg | cut -d "'" -f 2)"
+    fi
 
-sudo grub-reboot "$ENTRY"
-systemctl reboot
+    sudo grub-reboot "$ENTRY"
+    systemctl reboot
+elif command -v limine &>/dev/null; then
+    limine-entry-tool --scan
+fi
