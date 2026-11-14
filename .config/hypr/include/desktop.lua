@@ -6,9 +6,9 @@ hl.monitor({ output = "DP-1", mode = "3840x2160@240", scale = "1.33", bitdepth =
 hl.monitor({ output = "DP-2", mode = "3840x2160@120", scale = "1.33", bitdepth = 10, position = "-2880x0" })
 hl.monitor({ output = "DP-3", mode = "3840x2160@120", scale = "1.33", bitdepth = 10, position = "2880x0" })
 
-hl.window_rule({ match = { class = "vesktop" }, workspace = 2 })
-hl.window_rule({ match = { class = "chrome-x.com__-Default" }, workspace = 3 })
-hl.window_rule({ match = { class = "chrome-messages.google.com__web-Default" }, workspace = 3 })
+hl.window_rule({ match = { class = "vesktop" }, workspace = "2 silent" })
+hl.window_rule({ match = { class = "chrome-x.com__-Default" }, workspace = "3 silent" })
+hl.window_rule({ match = { class = "chrome-messages.google.com__web-Default" }, workspace = "3 silent" })
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("zen-browser", {
