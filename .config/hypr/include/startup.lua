@@ -15,10 +15,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("kdeconnect-indicator")
     hl.exec_cmd("flatpak run com.github.wwmm.easyeffects --gapplication-service")
 
-    hl.exec_cmd([[
-        install-program extest
-        LD_PRELOAD="$(xdg-user-dir PROJECTS)/extest/target/i686-unknown-linux-gnu/release/libextest.so" steam -silent
-    ]])
+    hl.exec_cmd('LD_PRELOAD="/usr/lib/libextest.so" steam -silent')
 
     hl.exec_cmd("sudo-run _log install-program yeetmouse")
     hl.exec_cmd("localsend --hidden")
