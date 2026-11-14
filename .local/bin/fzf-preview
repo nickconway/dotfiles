@@ -8,7 +8,7 @@ if tmux has-session -t "$file" 2>/dev/null; then
     tmux capture-pane -ep -t "$file"
     exit
 elif [[ -d "$file" ]]; then
-    if commnd -v eza &>/dev/null; then
+    if command -v eza &>/dev/null; then
         eza -1 --icons always --color always "$file"
     else
         ls -1 -h --color "$file"
