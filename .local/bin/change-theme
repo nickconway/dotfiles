@@ -171,16 +171,20 @@ fi
 if [[ ${noctalia:-false} == false ]]; then
     noctalia msg wallpaper-set "$IMG" &>/dev/null || {
         FILE="$HOME/.local/state/noctalia/settings.toml"
-        yq ".wallpaper.default.path=\"$IMG\"" "$FILE" >"$FILE.new"
-        mv "$FILE"{.new,}
+        if [[ -e "$FILE" ]]; then
+            yq ".wallpaper.default.path=\"$IMG\"" "$FILE" >"$FILE.new"
+            mv "$FILE"{.new,}
+        fi
     } ||
         {
             if pgrep start-hyprland &>/dev/null; then
                 for m in $(hyprctl --instance 0 monitors -j | jq '.[].name' | xargs); do
                     FILE="$HOME/.cache/noctalia/wallpapers.json"
                     qs -c noctalia ipc call wallpaper set "$IMG" $m &>/dev/null || {
-                        jq ".wallpapers[\"$m\"]=\"i\"" "$FILE" >"$FILE.new"
-                        mv "$FILE"{.new,}
+                        if [[ -e "$FILE" ]]; then
+                            jq ".wallpapers[\"$m\"]=\"i\"" "$FILE" >"$FILE.new"
+                            mv "$FILE"{.new,}
+                        fi
                     }
                 done
             fi
