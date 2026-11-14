@@ -90,3 +90,36 @@ Exec = function(cmd, opts)
     cmd = wait_for .. " " .. cmd
     hl.exec_cmd(cmd, opts.rules or {})
 end
+
+GameMode = function(mode)
+    local options = {
+        general = {
+            gaps_in = 0,
+            gaps_out = 0,
+            border_size = 0,
+        },
+
+        animations = {
+            enabled = false,
+        },
+
+        decoration = {
+            shadow = { enabled = false },
+            blur = { enabled = false },
+            motion_blur = { enabled = false },
+            rounding = 0,
+        },
+    }
+
+    local current_mode = (hl.get_config("animations.enabled") == false)
+
+    if mode == nil and current_mode == true then
+        hl.exec_cmd("hyprctl reload")
+    elseif mode == nil and current_mode == false then
+        hl.config(options)
+    elseif mode == true and current_mode == false then
+        hl.config(options)
+    elseif mode == false and current_mode == true then
+        hl.exec_cmd("hyprctl reload")
+    end
+end
