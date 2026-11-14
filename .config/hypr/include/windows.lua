@@ -206,6 +206,8 @@ hl.on("window.active", function(window)
     end
 end)
 
+hl.window_rule({ match = { class = "steam", title = "Friends List" }, float = true })
+
 local float_titles = { "Extension:.*Browser" }
 
 hl.on("window.title", function(w)
