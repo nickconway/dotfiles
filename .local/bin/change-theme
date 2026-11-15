@@ -116,6 +116,7 @@ files=(
     "$HOME/.cache/wal/colors-noctalia.json;$HOME/.config/noctalia/colorschemes/PyWal/PyWal.json"
     "$HOME/.cache/wal/colors-noctalia.json;$HOME/.config/noctalia/colors.json"
     "$HOME/.cache/wal/caelestia-schema.json;$HOME/.local/state/caelestia/scheme.json"
+    "$HOME/.cache/wal/hyprfm.toml;$HOME/.config/hyprfm/themes/pywal.toml"
     "$IMG;/var/lib/coolercontrol/plugins/coolerdash/user-background-image"
     "$IMG;/var/lib/coolercontrol/plugins/coolerdash/user-shutdown-image"
 )

@@ -21,7 +21,7 @@ end)
 Bind({ MainMod, "Return" }, hl.dsp.exec_cmd("TMUX_AUTO_SESSION=y kitty"))
 
 Bind({ MainMod, "Q" }, hl.dsp.window.close())
-Bind({ MainMod, "E" }, hl.dsp.exec_cmd("nautilus -w"))
+Bind({ MainMod, "E" }, hl.dsp.exec_cmd("hyprfm"))
 Bind({ MainMod, "SHIFT", "B" }, hl.dsp.exec_cmd("zen-browser"))
 Bind({ MainMod, "SHIFT", "F" }, hl.dsp.window.float())
 Bind({ "ALT", "Tab" }, hl.dsp.exec_cmd("rofi -show window -config ~/.config/rofi/styles/style_2.rasi"))
