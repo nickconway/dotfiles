@@ -67,7 +67,12 @@ else
 fi
 
 if ! command -v wal &>/dev/null; then
-    gum spin --title "Installing pywal16..." -- uv tool install pywal16
+    if command -v gum &>/dev/null; then
+        gum spin --title "Installing pywal16..." -- uv tool install pywal16
+    else
+        echo "Installing pywal16..."
+        uv tool install pywal16
+    fi
 fi
 
 WAL_CMD=(wal -q -i "$INPUT" -a "$alpha")
