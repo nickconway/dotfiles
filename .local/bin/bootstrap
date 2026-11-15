@@ -73,7 +73,7 @@ if command -v steamos-readonly &>/dev/null; then
 
     export PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:~/.local/homebrew/bin:$PATH"
 
-    brew install -y gh nvim netcat
+    brew install -y gh nvim netcat imagemagick
 
     mkdir -p $PROJECT_DIR
 
