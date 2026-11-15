@@ -101,7 +101,7 @@ if [[ -n ${show_image:-} ]]; then
     kitten icat "$IMG"
 fi
 
-kitten @ --to unix:$(find /tmp/kitty-socket* | head -n 1) load-config $HOME/.config/kitty/kitty.conf &>/dev/null &
+kitten @ --to unix:$(find /tmp -wholename '/tmp/kitty-socket*' 2>/dev/null | head -n 1) load-config $HOME/.config/kitty/kitty.conf &>/dev/null &
 
 files=(
     "$IMG;$HOME/.config/wallpaper"
@@ -126,7 +126,7 @@ files=(
     "$IMG;/var/lib/coolercontrol/plugins/coolerdash/user-shutdown-image"
 )
 
-if [[ "$(uname)" != "Darwin" ]]; then
+if [[ "$(uname)" != "Darwin" ]] && ! command -v steamos-readonly &>/dev/null; then
     files+=(
         "$IMG;/usr/share/sddm/themes/sugar-candy/Backgrounds/bg.png"
         "$HOME/.cache/wal/sugar-candy.conf;/usr/share/sddm/themes/sugar-candy/theme.conf"
