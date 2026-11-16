@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+[[ -n ${HOMEASSISTANT_ROOM:-} ]]
+
 FILE="$HOME/.cache/wal/homeassistant.json"
 SCENE="pywal_${HOMEASSISTANT_ROOM//-/_}"
 
