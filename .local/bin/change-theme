@@ -5,6 +5,11 @@ if [[ -e ~/.env ]]; then
     source ~/.env
 fi
 
+{
+    sleep 1
+    hyprctl --instance 0 eval 'if hl.get_active_special_workspace().name == "special:theme" then hl.dispatch(hl.dsp.workspace.toggle_special("theme")) end'
+} &>/dev/null &
+
 PROJECT_DIR="$(
     if command -v xdg-user-dir &>/dev/null; then
         xdg-user-dir PROJECTS

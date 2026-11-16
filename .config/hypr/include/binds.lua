@@ -158,8 +158,8 @@ end
 
 Bind({ MainMod, "SHIFT", "CTRL", "left" }, workspace("previous"))
 Bind({ MainMod, "SHIFT", "CTRL", "right" }, workspace("next"))
-Bind({ MainMod, "CTRL", "left" }, hl.dsp.focus({ workspace = "r-1" }))
-Bind({ MainMod, "CTRL", "right" }, hl.dsp.focus({ workspace = "r+1" }))
+Bind({ MainMod, "CTRL", "left" }, hl.dsp.focus({ workspace = "m-1" }))
+Bind({ MainMod, "CTRL", "right" }, hl.dsp.focus({ workspace = "m+1" }))
 
 Bind({ MainMod, "mouse_down" }, hl.dsp.focus({ workspace = "e+1" }))
 Bind({ MainMod, "mouse_up" }, hl.dsp.focus({ workspace = "e-1" }))
