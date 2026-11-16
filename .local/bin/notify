@@ -17,10 +17,10 @@ mouse-battery)
         )
 
         if [[ $BL -lt 10 ]]; then
-            notify-send -u critical "Mouse Battery Level" "Battery is at $BL%"
+            notify-send -h string:synchronous:mouse-battery -u critical "Mouse Battery Level" "Battery is at $BL%"
         fi
 
-        sleep 1
+        sleep 60
     done
     ;;
 
